@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'jacoco'
     id 'checkstyle'
     id 'org.ec4j.editorconfig' version "${editorconfigVersion}"
@@ -9,93 +9,57 @@ plugins {
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
 }
 
-group = "${projectGroup}"
-version = "${applicationVersion}"
-
-java {
+allprojects {
+    group = "${projectGroup}"
+    version = "${applicationVersion}"
     sourceCompatibility = "${javaVersion}"
-}
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
+    repositories {
+        mavenCentral()
     }
 }
 
-repositories {
-    mavenCentral()
-}
+subprojects {
+    apply plugin: 'checkstyle'
+    apply plugin: 'java-library'
+    apply plugin: 'org.sonarqube'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'com.h2database:h2'
-}
+    apply from: "${rootDir}/config/editorconfig/editorconfig.gradle"
+    apply from: "${rootDir}/config/jacoco/jacoco.gradle"
+    apply from: "${rootDir}/config/checkstyle/checkstyle.gradle"
 
-tasks.named('test') {
-    useJUnitPlatform()
-    finalizedBy jacocoTestReport
-}
+    dependencies {
+        implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.5'
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.5'
+        implementation 'org.slf4j:slf4j-api'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
 
-// jacoco
-jacoco {
-    toolVersion = "${jacocoVersion}"
-}
-
-jacocoTestReport {
-    dependsOn test
-    reports {
-        html.required = true
-        xml.required = true
-        csv.required = false
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it,
-                    exclude: [
-                            ''
-                    ])
-        }))
+    bootJar.enabled = false
+    jar.enabled = true
+
+
+    tasks.named('test') {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
     }
-}
 
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            element = 'CLASS'
-
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 0.0
-            }
+    // sonar
+    sonar {
+        properties {
+            property 'sonar.java.checkstyle.reportPaths', '${buildDir}/reports/checkstyle/main.xml'
+            property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
         }
     }
 }
 
-// editorconfigCheck 후 checkstyle 진행
-check.dependsOn editorconfigCheck
-editorconfig {
-    includes = ['src/**']
-    excludes = ['build']
-}
-
-// checkstyle
-compileJava.options.encoding = 'UTF-8'
-compileTestJava.options.encoding = 'UTF-8'
-
-checkstyle {
-    toolVersion = "${checkstyleVersion}"
-    maxWarnings = 0
-    maxErrors = 0
-    configFile = file("${checkstylePath}" + '/naver-checkstyle-rules.xml')
-    configProperties = [suppressionFile: file("${checkstylePath}" + '/naver-checkstyle-suppressions.xml')]
-}
+bootJar.enabled = false
+jar.enabled = false
 
 // sonar
 sonar {
@@ -103,8 +67,10 @@ sonar {
         property 'sonar.projectKey', 'review-canvas_review-canvas-back'
         property 'sonar.organization', 'review-canvas'
         property 'sonar.host.url', 'https://sonarcloud.io'
-        property 'sonar.java.checkstyle.reportPaths', 'build/reports/checkstyle/main.xml'
-        property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+        property 'sonar.login', '88a8e7136d3ff86cb4d3cc9c515afc8f2954194d'
+        property 'sonar.language', 'java'
+        property 'sonar.sourceEncoding', 'UTF-8'
+        property 'sonar.java.coveragePlugin', 'jacoco'
     }
 }
 

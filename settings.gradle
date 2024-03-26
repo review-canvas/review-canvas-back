@@ -1,1 +1,3 @@
 rootProject.name = 'review-canvas-back'
+
+include 'api-module'
