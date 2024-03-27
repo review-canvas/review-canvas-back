@@ -1,0 +1,74 @@
+package com.romanticpipe.reviewcanvas.common.exception;
+
+import com.romanticpipe.reviewcanvas.common.dto.ErrorResponse;
+import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
+import com.romanticpipe.reviewcanvas.exception.ErrorCode;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RestControllerAdvice
+@Slf4j
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+	@ExceptionHandler(BusinessException.class)
+	public ResponseEntity<Object> handleBusinessException(BusinessException e) {
+		log.error("BusinessException", e);
+		return handleExceptionInternal(e.getErrorCode());
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
+		log.error("IllegalArgumentException", e);
+		return handleExceptionInternal(CommonErrorCode.INVALID_INPUT_VALUE);
+	}
+
+	// @Valid 예외처리
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		log.error("MethodArgumentNotValidException", ex);
+		return handleExceptionInternal(ex, CommonErrorCode.INVALID_INPUT_VALUE);
+	}
+
+
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+		log.error("HttpMessageNotReadableException", ex);
+		return handleExceptionInternal(CommonErrorCode.INVALID_INPUT_VALUE);
+	}
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> handleAllException(Exception e) {
+		log.error("Exception", e);
+		return handleExceptionInternal(CommonErrorCode.INTERNAL_SERVER_ERROR);
+	}
+
+
+	private ResponseEntity<Object> handleExceptionInternal(ErrorCode errorCode) {
+		return ResponseEntity.status(errorCode.getStatus())
+			.body(ErrorResponse.of(errorCode));
+	}
+
+	private ResponseEntity<Object> handleExceptionInternal(BindException e, ErrorCode errorCode) {
+		List<ErrorResponse.ValidationError> validationErrorList = e.getBindingResult()
+			.getFieldErrors()
+			.stream()
+			.map(ErrorResponse.ValidationError::of)
+			.collect(Collectors.toList());
+
+		return ResponseEntity.status(errorCode.getStatus())
+			.body(ErrorResponse.of(errorCode, validationErrorList));
+	}
+
+}
