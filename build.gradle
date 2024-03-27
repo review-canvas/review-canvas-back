@@ -52,8 +52,8 @@ subprojects {
     // sonar
     sonar {
         properties {
-            property 'sonar.java.checkstyle.reportPaths', '${buildDir}/reports/checkstyle/main.xml'
-            property 'sonar.coverage.jacoco.xmlReportPaths', '${buildDir}/reports/jacoco/test/jacocoTestReport.xml'
+            property 'sonar.java.checkstyle.reportPaths', project.layout.buildDirectory.asFile.get().absolutePath + '/reports/checkstyle/main.xml'
+            property 'sonar.coverage.jacoco.xmlReportPaths', project.layout.buildDirectory.asFile.get().absolutePath + '/reports/jacoco/test/jacocoTestReport.xml'
         }
     }
 }
