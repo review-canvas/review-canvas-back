@@ -1,6 +1,9 @@
 rootProject.name = 'review-canvas-back'
 
 include 'api-module'
+
 include 'domain-module'
 include 'domain-module:review'
 include 'domain-module:shopadmin'
+
+include 'common-module'
