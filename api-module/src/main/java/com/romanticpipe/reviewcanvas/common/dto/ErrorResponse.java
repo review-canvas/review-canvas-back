@@ -36,8 +36,8 @@ public class ErrorResponse {
 	}
 
 	private record ErrorInfo(String code,
-	                         String message,
-	                         @JsonInclude(JsonInclude.Include.NON_EMPTY)
-	                         List<ValidationError> errors) {
+							 String message,
+							 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+							 List<ValidationError> errors) {
 	}
 }

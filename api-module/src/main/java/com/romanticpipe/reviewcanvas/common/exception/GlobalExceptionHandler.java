@@ -23,34 +23,38 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(BusinessException.class)
-	public ResponseEntity<Object> handleBusinessException(BusinessException e) {
-		log.error("BusinessException", e);
-		return handleExceptionInternal(e.getErrorCode());
+	public ResponseEntity<Object> handleBusinessException(BusinessException ex) {
+		log.error("BusinessException", ex);
+		return handleExceptionInternal(ex.getErrorCode());
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException e) {
-		log.error("IllegalArgumentException", e);
+	public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException ex) {
+		log.error("IllegalArgumentException", ex);
 		return handleExceptionInternal(CommonErrorCode.INVALID_INPUT_VALUE);
 	}
 
 	// @Valid 예외처리
 	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+																  HttpHeaders headers, HttpStatusCode status,
+																  WebRequest request) {
 		log.error("MethodArgumentNotValidException", ex);
 		return handleExceptionInternal(ex, CommonErrorCode.INVALID_INPUT_VALUE);
 	}
 
 
 	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+																  HttpHeaders headers, HttpStatusCode status,
+																  WebRequest request) {
 		log.error("HttpMessageNotReadableException", ex);
 		return handleExceptionInternal(CommonErrorCode.INVALID_INPUT_VALUE);
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<Object> handleAllException(Exception e) {
-		log.error("Exception", e);
+	public ResponseEntity<Object> handleAllException(Exception ex) {
+		log.error("Exception", ex);
 		return handleExceptionInternal(CommonErrorCode.INTERNAL_SERVER_ERROR);
 	}
 
@@ -60,8 +64,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 			.body(ErrorResponse.of(errorCode));
 	}
 
-	private ResponseEntity<Object> handleExceptionInternal(BindException e, ErrorCode errorCode) {
-		List<ErrorResponse.ValidationError> validationErrorList = e.getBindingResult()
+	private ResponseEntity<Object> handleExceptionInternal(BindException bindException, ErrorCode errorCode) {
+		List<ErrorResponse.ValidationError> validationErrorList = bindException.getBindingResult()
 			.getFieldErrors()
 			.stream()
 			.map(ErrorResponse.ValidationError::of)

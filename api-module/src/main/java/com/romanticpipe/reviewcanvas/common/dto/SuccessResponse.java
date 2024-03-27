@@ -21,11 +21,11 @@ public class SuccessResponse<T> {
 	private T data;
 
 	public static <T> SuccessResponse<T> of(T data) {
-		SuccessResponse<T> SuccessResponse = new SuccessResponse<>();
+		SuccessResponse<T> successResponse = new SuccessResponse<>();
 
-		SuccessResponse.data = data;
+		successResponse.data = data;
 
-		return SuccessResponse;
+		return successResponse;
 	}
 
 	public ResponseEntity<SuccessResponse<T>> asHttp(HttpStatus httpStatus) {
