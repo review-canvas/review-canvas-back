@@ -7,3 +7,5 @@ include 'domain-module:review'
 include 'domain-module:shopadmin'
 
 include 'common-module'
+
+include 'client-module'
