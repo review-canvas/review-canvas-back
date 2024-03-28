@@ -3,11 +3,8 @@ package com.romanticpipe.reviewcanvas.exception;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum CommonErrorCode implements ErrorCode {
-
-	INVALID_INPUT_VALUE(400, "C001", "잘못된 입력값입니다."),
-	INTERNAL_SERVER_ERROR(500, "C004", "서버 오류");
-
+public enum ReviewErrorCode implements ErrorCode {
+	REVIEW_NOT_FOUND(400, "R001", "리뷰를 찾을 수 없습니다.");
 
 	private final int status;
 	private final String code;

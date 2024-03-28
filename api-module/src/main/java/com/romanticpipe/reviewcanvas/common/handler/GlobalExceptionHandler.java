@@ -1,6 +1,7 @@
-package com.romanticpipe.reviewcanvas.common.exception;
+package com.romanticpipe.reviewcanvas.common.handler;
 
 import com.romanticpipe.reviewcanvas.common.dto.ErrorResponse;
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
 import com.romanticpipe.reviewcanvas.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
