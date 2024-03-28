@@ -1,6 +1,5 @@
-package com.romanticpipe.reviewcanvas.common.exception;
+package com.romanticpipe.reviewcanvas.exception;
 
-import com.romanticpipe.reviewcanvas.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
