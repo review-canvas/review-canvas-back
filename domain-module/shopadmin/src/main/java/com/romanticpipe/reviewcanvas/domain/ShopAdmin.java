@@ -20,7 +20,7 @@ public class ShopAdmin {
 	private Long id;
 
 	private String email;
-	private String passward;
+	private String password;
 
 	private UUID uuid;
 

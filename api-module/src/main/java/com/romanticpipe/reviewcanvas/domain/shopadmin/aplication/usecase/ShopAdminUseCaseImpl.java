@@ -1,9 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.romaintcpipe.reviewcanvas.service.ShopAdminCreater;
-import com.romaintcpipe.reviewcanvas.service.ShopAdminValidator;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
+import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +13,11 @@ import lombok.RequiredArgsConstructor;
 class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
-	private final ShopAdminCreater shopAdminCreater;
 
+	@Override
+	@Transactional(readOnly = true)
+	public LoginResponse login(String email, String password) {
+		return LoginResponse.from(shopAdminValidator.login(email, password));
+
+	}
 }
