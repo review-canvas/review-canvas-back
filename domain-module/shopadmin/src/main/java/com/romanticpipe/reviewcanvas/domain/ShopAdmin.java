@@ -1,4 +1,4 @@
-package com.romaintcpipe.reviewcanvas.domain;
+package com.romanticpipe.reviewcanvas.domain;
 
 import java.util.UUID;
 
@@ -17,12 +17,15 @@ public class ShopAdmin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "shop_admin_id")
-	private String id;
+	private Long id;
 
 	private String email;
 	private String passward;
 
 	private UUID uuid;
+
+	private String accessToken;
+	private String refreshToken;
 
 	public void generateUuid() { // UUID 관련 로직은 변경점이 많을 듯해 임시로 만듬.
 		this.uuid = UUID.randomUUID();
