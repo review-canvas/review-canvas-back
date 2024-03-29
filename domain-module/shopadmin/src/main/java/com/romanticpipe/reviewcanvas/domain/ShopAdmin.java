@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +27,13 @@ public class ShopAdmin {
 
 	private String accessToken;
 	private String refreshToken;
+
+	@Builder
+	public ShopAdmin(String email, String password) {
+		this.email = email;
+		this.password = password;
+		generateUuid();
+	}
 
 	public void generateUuid() { // UUID 관련 로직은 변경점이 많을 듯해 임시로 만듬.
 		this.uuid = UUID.randomUUID();
