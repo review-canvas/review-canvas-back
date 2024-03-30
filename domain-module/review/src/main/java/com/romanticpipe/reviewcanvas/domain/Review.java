@@ -28,6 +28,8 @@ public class Review {
 	private String content;
 	private int score;
 
+	private boolean isChecked;
+
 	private Review(String content, int score) {
 		this.content = content;
 		this.score = score;
