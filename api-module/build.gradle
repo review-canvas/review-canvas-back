@@ -17,8 +17,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.3.1.RELEASE'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
-    compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.3'
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
-    testImplementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+    testImplementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.4'
+    testImplementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.3'
 }
