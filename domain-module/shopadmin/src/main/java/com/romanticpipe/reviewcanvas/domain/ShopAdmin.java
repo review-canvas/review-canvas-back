@@ -22,16 +22,28 @@ public class ShopAdmin {
 
 	private String email;
 	private String password;
+	private String name;
+	private String logoImageUrl;
+	private String mallNumber;
+	private String phoneNumber;
 
 	private UUID uuid;
 
 	private String accessToken;
 	private String refreshToken;
 
+	private Long themeSuperId;
+
 	@Builder
-	public ShopAdmin(String email, String password) {
+	public ShopAdmin(String email, String password, String name, String logoImageUrl, String mallNumber,
+		String phoneNumber, Long themeSuperId) {
 		this.email = email;
 		this.password = password;
+		this.name = name;
+		this.logoImageUrl = logoImageUrl;
+		this.mallNumber = mallNumber;
+		this.phoneNumber = phoneNumber;
+		this.themeSuperId = themeSuperId;
 		generateUuid();
 	}
 
