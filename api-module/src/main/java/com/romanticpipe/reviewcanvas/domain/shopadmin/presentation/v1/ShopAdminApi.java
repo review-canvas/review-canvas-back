@@ -40,4 +40,15 @@ interface ShopAdminApi {
 	ResponseEntity<SuccessResponse<Boolean>> signUp(
 		@RequestBody(required = true) SignUpRequest signUpRequest
 	);
+
+	@Operation(summary = "회원탈퇴 API", description = "Shop Admin 계정으로 회원탈퇴한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 회원탈퇴가 완료되었습니다.")
+	})
+	@PostMapping("/shopadmin/quit")
+	ResponseEntity<SuccessResponse<Boolean>> quit(
+		@RequestParam(value = "id", required = true) Long id
+	);
 }

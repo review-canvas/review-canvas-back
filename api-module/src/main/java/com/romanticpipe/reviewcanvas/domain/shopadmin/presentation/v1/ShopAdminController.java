@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,14 @@ class ShopAdminController implements ShopAdminApi {
 	public ResponseEntity<SuccessResponse<Boolean>> signUp(
 		@RequestBody SignUpRequest signUpRequest) {
 		shopAdminUseCase.signUp(signUpRequest);
+		return SuccessResponse.of(true).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@DeleteMapping("/shopadmin/quit")
+	public ResponseEntity<SuccessResponse<Boolean>> quit(
+		@RequestParam(value = "id", required = true) Long id) {
+		shopAdminUseCase.quit(id);
 		return SuccessResponse.of(true).asHttp(HttpStatus.OK);
 	}
 }

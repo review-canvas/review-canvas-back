@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreater;
+import com.romanticpipe.reviewcanvas.service.ShopAdminRemover;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
 	private final ShopAdminCreater shopAdminCreater;
+	private final ShopAdminRemover shopAdminRemover;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -28,5 +30,11 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
 		shopAdminCreater.signUp(signUpRequest.email(), signUpRequest.password());
+	}
+
+	@Override
+	@Transactional
+	public void quit(Long id) {
+		shopAdminRemover.quit(id);
 	}
 }
