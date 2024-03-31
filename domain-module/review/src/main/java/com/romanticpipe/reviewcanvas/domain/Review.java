@@ -33,5 +33,6 @@ public class Review {
 	private Review(String content, int score) {
 		this.content = content;
 		this.score = score;
+		this.isChecked = false;
 	}
 }
