@@ -24,7 +24,8 @@ public class ReviewReader {
 
 	public PageResponse<Review> findAllByisChecked(String productId, PageableRequest pageableRequest) {
 		Pageable pageable = PageableUtils.toPageable(pageableRequest);
-		return PageableUtils.toPageResponse(reviewRepository.findAllByisChecked(false));
+		return PageableUtils.toPageResponse(
+			reviewRepository.findAllByProductIdAndIsChecked(productId, false, pageable));
 	}
 
 }

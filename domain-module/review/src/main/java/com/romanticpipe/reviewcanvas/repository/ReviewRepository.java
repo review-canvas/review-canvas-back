@@ -9,5 +9,5 @@ import com.romanticpipe.reviewcanvas.domain.Review;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 	Page<Review> findAllByProductId(String productId, Pageable pageable);
 
-	Page<Review> findAllByisChecked(boolean b);
+	Page<Review> findAllByProductIdAndIsChecked(String productId, boolean b, Pageable pageable);
 }
