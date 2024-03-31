@@ -25,10 +25,12 @@ public class Review {
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 
+	private String userId;
 	private String content;
 	private int score;
 
-	private Review(String content, int score) {
+	private Review(String userId, String content, int score) {
+		this.userId = userId;
 		this.content = content;
 		this.score = score;
 	}
