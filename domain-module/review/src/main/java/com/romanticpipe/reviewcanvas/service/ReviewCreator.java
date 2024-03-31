@@ -14,6 +14,7 @@ public class ReviewCreator {
 	private final ReviewRepository reviewRepository;
 
 	public void save(Review review) {
+		System.out.println(review.getUserId() + " " + review.getContent() + " " + review.getScore());
 		reviewRepository.save(review);
 	}
 }
