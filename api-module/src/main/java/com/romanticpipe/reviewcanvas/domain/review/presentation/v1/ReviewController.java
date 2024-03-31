@@ -45,7 +45,7 @@ class ReviewController implements ReviewApi {
 	public ResponseEntity<SuccessResponse<CreateReplyResponse>> createReply(
 		@PathVariable("reviewId") Long reveiwId,
 		@RequestBody CreateReplyRequest createReplyRequest) {
-		Long replyId = reviewUseCase.createComments(
+		Long replyId = reviewUseCase.createReply(
 			reveiwId, createReplyRequest.userId(), createReplyRequest.content()
 		);
 		return SuccessResponse.of(new CreateReplyResponse(replyId)).asHttp(HttpStatus.OK);

@@ -27,7 +27,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public Long createComments(Long reviewId, String userId, String content) {
+	public Long createReply(Long reviewId, String userId, String content) {
 		return replyCreater.createReply(reviewId, userId, content).getId();
 	}
 }
