@@ -14,7 +14,10 @@ public class AdminAuthCreater {
 	private final AdminAuthRepository adminAuthRepository;
 
 	public void save(String refreshToken, ShopAdmin shopAdmin) {
-		adminAuthRepository.save(new AdminAuth(refreshToken, shopAdmin));
+		AdminAuth adminAuth = adminAuthRepository.findByShopAdmin(shopAdmin).
+			orElseGet(() -> new AdminAuth(shopAdmin));
+		adminAuth.setRefreshToken(refreshToken);
+		adminAuthRepository.save(adminAuth);
 	}
 
 }

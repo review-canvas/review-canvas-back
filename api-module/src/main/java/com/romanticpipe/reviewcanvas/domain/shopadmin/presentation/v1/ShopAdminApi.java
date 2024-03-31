@@ -40,4 +40,13 @@ interface ShopAdminApi {
 	ResponseEntity<SuccessResponse<Boolean>> signUp(
 		@RequestBody(required = true) SignUpRequest signUpRequest
 	);
+
+	@Operation(summary = "자동로그인 API", description = "Shop Admin 계정으로 자동로그인한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 로그인 완료되었습니다.")
+	})
+	@GetMapping("/shopadmin/auth")
+	ResponseEntity<SuccessResponse<Long>> loginByAccesstoken();
 }

@@ -24,7 +24,11 @@ public class ShopAdminValidator {
 		} else {
 			throw new ShopAdminNotFoundException();
 		}
-		
+
 	}
 
+	public ShopAdmin loginByAccesstoken(ShopAdmin loggedInShopAdmin) {
+		return shopAdminRepository.findByEmail(loggedInShopAdmin.getEmail())
+			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
+	}
 }

@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.romanticpipe.reviewcanvas.common.security.SecurityUtils;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
@@ -35,5 +36,11 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
 		shopAdminCreater.signUp(signUpRequest.email(), signUpRequest.password());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Long loginByAccesstoken() {
+		return shopAdminValidator.loginByAccesstoken(SecurityUtils.getLoggedInShopAdmin()).getId();
 	}
 }

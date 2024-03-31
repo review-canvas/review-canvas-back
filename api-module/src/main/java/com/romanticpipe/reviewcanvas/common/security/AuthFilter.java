@@ -30,30 +30,22 @@ public class AuthFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws BusinessException, ServletException, IOException {
 		String jwt = resolveToken(request);
-		String requestURI = request.getRequestURI();
 		try {
 			if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-				boolean isAdditionalInfoProvided = tokenProvider.getAdditionalInfoProvided(jwt);
-				if (isAdditionalInfoProvided) {
-					Authentication authentication = tokenProvider.getAuthentication(jwt);
-					SecurityContextHolder.getContext().setAuthentication(authentication);
-				} else {
-					throw new BusinessException(ADDITIONAL_REQUIRED_TOKEN);
-				}
+				Authentication authentication = tokenProvider.getAuthentication(jwt);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			request.setAttribute("exception", MAL_FORMED_TOKEN.getCode());
 		} catch (BusinessException e) {
-			if (e.getErrorCode() == ILLEGAL_TOKEN) {
-				request.setAttribute("exception", ILLEGAL_TOKEN.getCode());
-			}
-			request.setAttribute("exception", ADDITIONAL_REQUIRED_TOKEN.getCode());
+			request.setAttribute("exception", ILLEGAL_TOKEN.getCode());
 		} catch (ExpiredJwtException e) {
 			request.setAttribute("exception", EXPIRED_TOKEN.getCode());
 		} catch (UnsupportedJwtException e) {
 			request.setAttribute("exception", UNSUPPORTED_TOKEN.getCode());
 		} catch (Exception e) {
+			System.out.println(e);
 			request.setAttribute("exception", UNKNOWN_ERROR.getCode());
 		}
 		filterChain.doFilter(request, response);

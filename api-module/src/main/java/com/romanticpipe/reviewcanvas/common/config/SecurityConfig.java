@@ -40,7 +40,7 @@ public class SecurityConfig {
 							"/api/v1/shopadmin/login",
 							"/api/v1/shopadmin/signup").permitAll()
 						.requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
-						.anyRequest().permitAll()
+						.anyRequest().authenticated()
 					;
 				} catch (Exception e) {
 					e.printStackTrace();

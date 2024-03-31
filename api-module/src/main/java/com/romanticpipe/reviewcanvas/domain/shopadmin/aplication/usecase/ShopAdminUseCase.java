@@ -9,4 +9,5 @@ public interface ShopAdminUseCase {
 
 	void signUp(SignUpRequest signUpRequest);
 
+	Long loginByAccesstoken();
 }

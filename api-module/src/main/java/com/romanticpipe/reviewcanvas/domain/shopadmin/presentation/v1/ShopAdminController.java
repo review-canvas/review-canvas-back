@@ -40,4 +40,10 @@ class ShopAdminController implements ShopAdminApi {
 		shopAdminUseCase.signUp(signUpRequest);
 		return SuccessResponse.of(true).asHttp(HttpStatus.OK);
 	}
+
+	@Override
+	@GetMapping("/shopadmin/auth")
+	public ResponseEntity<SuccessResponse<Long>> loginByAccesstoken() {
+		return SuccessResponse.of(shopAdminUseCase.loginByAccesstoken()).asHttp(HttpStatus.OK);
+	}
 }

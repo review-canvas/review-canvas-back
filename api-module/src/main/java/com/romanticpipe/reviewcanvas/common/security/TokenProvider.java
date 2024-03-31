@@ -101,11 +101,6 @@ public class TokenProvider implements InitializingBean {
 
 	}
 
-	public boolean getAdditionalInfoProvided(String token) {
-		Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-		return claims.get(ADDITIONAL_INFO, Boolean.class);
-	}
-
 	public Authentication getAuthentication(String token) {
 		Claims claims = parseClaims(token);
 		Collection<? extends GrantedAuthority> authorities =
@@ -157,25 +152,4 @@ public class TokenProvider implements InitializingBean {
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return auth;
 	}
-
-	public Long getExpiration(String accessToken) {
-		Date expiration = Jwts.parserBuilder()
-			.setSigningKey(key)
-			.build()
-			.parseClaimsJws(accessToken)
-			.getBody()
-			.getExpiration();
-		Long now = new Date().getTime();
-		return (expiration.getTime() - now);
-	}
-
-	public Long getshopAdminId(String token) {
-		return Jwts.parserBuilder()
-			.setSigningKey(key)
-			.build()
-			.parseClaimsJws(token)
-			.getBody()
-			.get(USER_INFO, Long.class);
-	}
-
 }

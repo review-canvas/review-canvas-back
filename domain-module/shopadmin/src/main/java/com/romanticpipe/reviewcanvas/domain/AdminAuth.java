@@ -10,6 +10,7 @@ import jakarta.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -24,11 +25,11 @@ public class AdminAuth {
 	@JoinColumn(name = "shop_admin_id")
 	private ShopAdmin shopAdmin;
 
+	@Setter
 	private String refreshToken;
 
 	@Builder
-	public AdminAuth(String refreshToken, ShopAdmin shopAdmin) {
-		this.refreshToken = refreshToken;
+	public AdminAuth(ShopAdmin shopAdmin) {
 		this.shopAdmin = shopAdmin;
 	}
 }
