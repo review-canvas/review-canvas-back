@@ -28,7 +28,7 @@ public class ShopAdmin {
 	private String password;
 
 	private UUID uuid;
-	@OneToOne(mappedBy = "shop_admin", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "shopAdmin", fetch = FetchType.LAZY)
 	private AdminAuth adminAuth;
 
 	@Enumerated(EnumType.STRING)

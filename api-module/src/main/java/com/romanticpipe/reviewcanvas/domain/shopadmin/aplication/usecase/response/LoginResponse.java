@@ -16,11 +16,12 @@ public record LoginResponse(@Schema(description = "Shop Admin id", requiredMode 
 
 	public LoginResponse {
 		Objects.requireNonNull(shopAdminId);
-		// Objects.requireNonNull(accessToken);
-		// Objects.requireNonNull(refreshToken);
+		Objects.requireNonNull(accessToken);
+		Objects.requireNonNull(refreshToken);
 	}
 
-	public static LoginResponse from(ShopAdmin shopAdmin) {
-		return new LoginResponse(shopAdmin.getId(), shopAdmin.getAccessToken(), shopAdmin.getRefreshToken());
+	public static LoginResponse from(ShopAdmin shopAdmin, TokenInfoResponse tokenInfoResponse) {
+		return new LoginResponse(shopAdmin.getId(), tokenInfoResponse.getAccessToken(),
+			tokenInfoResponse.getRefreshToken());
 	}
 }
