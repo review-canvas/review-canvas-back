@@ -26,7 +26,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional(readOnly = true)
-	public PageResponse<GetReviewResponse> getReviews(String productId, PageableRequest pageableRequest) {
+	public PageResponse<GetReviewResponse> getReviewsByProductId(String productId, PageableRequest pageableRequest) {
 		return reviewReader.findByProductId(productId, pageableRequest)
 			.map(GetReviewResponse::from);
 	}

@@ -21,25 +21,25 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Review", description = "리뷰 API")
 interface ReviewApi {
 
-	@Operation(summary = "리뷰 조회 API", description = "특정 상품의 리뷰를 조회한다.")
+	@Operation(summary = "상품 리뷰 조회 API", description = "특정 상품의 리뷰를 조회한다.")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 리뷰 조회가 완료되었습니다.")
+			description = "성공적으로 상품의 리뷰 조회가 완료되었습니다.")
 	})
 	@GetMapping("/products/{productId}/reviews")
-	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviews(
+	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsByProductId(
 		@PathVariable("productId") String productId,
 		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC") String direction
 	);
 
-	@Operation(summary = "리뷰 생성 API", description = "특정 상품의 리뷰를 생성한다.")
+	@Operation(summary = "상품 리뷰 생성 API", description = "특정 상품의 리뷰를 생성한다.")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 리뷰 생성이 완료되었습니다.")
+			description = "성공적으로 상품의 리뷰 생성이 완료되었습니다.")
 	})
 	@PostMapping("/products/{productId}/reviews")
 	ResponseEntity<SuccessResponse<CreateReviewResponse>> createReview(
