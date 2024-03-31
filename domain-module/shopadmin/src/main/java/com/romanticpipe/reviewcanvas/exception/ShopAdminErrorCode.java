@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ShopAdminErrorCode implements ErrorCode {
-	SHOP_ADMIN_NOT_FOUND(400, "S001", "아이디 혹은 비밀번호가 잘못 입력되었습니다.");
+	SHOP_ADMIN_NOT_FOUND(400, "SA001", "아이디 혹은 비밀번호가 잘못 입력되었습니다.");
 
 	private final int status;
 	private final String code;

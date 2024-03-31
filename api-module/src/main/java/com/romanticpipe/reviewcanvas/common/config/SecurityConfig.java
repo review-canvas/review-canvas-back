@@ -7,9 +7,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.romanticpipe.reviewcanvas.common.security.AuthFilter;
 import com.romanticpipe.reviewcanvas.common.security.CustomAccessDeniedHandler;
 import com.romanticpipe.reviewcanvas.common.security.CustomEntryPoint;
+import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
+	private final TokenProvider tokenProvider;
 	private final CustomEntryPoint entryPoint;
 	private final CustomAccessDeniedHandler accessDeniedHandler;
 
@@ -43,7 +47,8 @@ public class SecurityConfig {
 				}
 			}).exceptionHandling(c ->
 				c.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler)
-			);
+			).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.addFilterBefore(new AuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 

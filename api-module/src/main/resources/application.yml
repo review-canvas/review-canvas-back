@@ -6,3 +6,14 @@ spring:
   config:
     import:
       - file:./domain-module/db.yml
+  jwt:
+    secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tc3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tYXBwbGluZwo
+    # ${JWT_SECRET}
+    access-token-validity-in-seconds: 360000 #100시간
+    refresh-token-validity-in-seconds: 2592000 #30일
+    access:
+      expiration: 100
+      header: Authorization
+    refresh:
+      expiration: 200
+      header: Authorization-refresh
