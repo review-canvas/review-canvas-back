@@ -2,12 +2,9 @@ package com.romanticpipe.reviewcanvas.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,14 +18,15 @@ public class Review {
 	@Column(name = "review_id")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", nullable = false)
-	private Product product;
-
+	private String userId;
+	private String productId;
 	private String content;
 	private int score;
 
-	private Review(String content, int score) {
+	public Review(long id, String userId, String productId, String content, int score) {
+		this.id = id;
+		this.userId = userId;
+		this.productId = productId;
 		this.content = content;
 		this.score = score;
 	}
