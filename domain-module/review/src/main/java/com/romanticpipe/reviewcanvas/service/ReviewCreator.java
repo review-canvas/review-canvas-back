@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ReviewWriter {
+public class ReviewCreator {
 
 	private final ReviewRepository reviewRepository;
 

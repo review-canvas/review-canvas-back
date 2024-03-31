@@ -42,9 +42,12 @@ class ReviewController implements ReviewApi {
 	@PostMapping("/products/{productId}/reviews")
 	public ResponseEntity<SuccessResponse<CreateReviewResponse>> createReview(
 		@PathVariable("productId") String productId, @RequestBody CreateReviewRequest createReviewRequest) {
-		return SuccessResponse.of(
-				reviewUseCase.createReview(productId, createReviewRequest.score(), createReviewRequest.content()))
-			.asHttp(HttpStatus.OK);
+		CreateReviewResponse response = reviewUseCase.createReview(productId, createReviewRequest.score(),
+			createReviewRequest.content());
+		//if (response != null)
+		return SuccessResponse.of(response).asHttp(HttpStatus.OK);
+		//else
+		//	return ErrorResponse.of(ProductErrorCode.PRODUCT_NOT_FOUND)
 	}
 
 }

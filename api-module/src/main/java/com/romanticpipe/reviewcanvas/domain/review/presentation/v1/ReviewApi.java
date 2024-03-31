@@ -35,6 +35,12 @@ interface ReviewApi {
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC") String direction
 	);
 
+	@Operation(summary = "리뷰 생성 API", description = "특정 상품의 리뷰를 생성한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 생성이 완료되었습니다.")
+	})
 	@PostMapping("/products/{productId}/reviews")
 	ResponseEntity<SuccessResponse<CreateReviewResponse>> createReview(
 		@PathVariable("productId") String productId,

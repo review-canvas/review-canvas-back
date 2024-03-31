@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,8 +11,8 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.service.ProductReader;
+import com.romanticpipe.reviewcanvas.service.ReviewCreator;
 import com.romanticpipe.reviewcanvas.service.ReviewReader;
-import com.romanticpipe.reviewcanvas.service.ReviewWriter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +22,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	private final ProductReader productReader;
 	private final ReviewReader reviewReader;
-	private final ReviewWriter reviewWriter;
+	private final ReviewCreator reviewCreator;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -32,11 +34,10 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public CreateReviewResponse createReview(String productId, int score, String content) {
-		Product product = productReader.findByProductId(productId);
-		if (product == null) {
+		Optional<Product> productOptional = Optional.ofNullable(productReader.findByProductId(productId));
+		if (productOptional.isEmpty())
 			return null;
-		}
-		reviewWriter.save(productId, score, content);
+		reviewCreator.save(productId, score, content);
 		return new CreateReviewResponse(productId, score, content);
 	}
 
