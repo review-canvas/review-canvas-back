@@ -14,7 +14,7 @@ public record GetWaitingReviewResponse(@Schema(description = "리뷰 id", requir
 									   @Schema(description = "리뷰 점수", requiredMode = Schema.RequiredMode.REQUIRED)
 									   int score,
 									   @Schema(description = "승인 여부", requiredMode = Schema.RequiredMode.REQUIRED)
-									   boolean isCheckd) {
+									   boolean approve) {
 
 	public GetWaitingReviewResponse {
 		Objects.requireNonNull(reviewId);
@@ -25,6 +25,6 @@ public record GetWaitingReviewResponse(@Schema(description = "리뷰 id", requir
 	}
 
 	public static GetWaitingReviewResponse from(Review review) {
-		return new GetWaitingReviewResponse(review.getId(), review.getContent(), review.getScore(), review.isChecked());
+		return new GetWaitingReviewResponse(review.getId(), review.getContent(), review.getScore(), review.isApprove());
 	}
 }

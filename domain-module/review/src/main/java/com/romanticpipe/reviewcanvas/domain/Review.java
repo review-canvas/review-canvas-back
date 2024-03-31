@@ -28,11 +28,11 @@ public class Review {
 	private String content;
 	private int score;
 
-	private boolean isChecked;
+	private boolean approve;
 
-	private Review(String content, int score) {
+	private Review(String content, int score, boolean approve) {
 		this.content = content;
 		this.score = score;
-		this.isChecked = false;
+		this.approve = approve;
 	}
 }

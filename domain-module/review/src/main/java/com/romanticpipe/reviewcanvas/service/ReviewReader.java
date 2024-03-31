@@ -22,10 +22,10 @@ public class ReviewReader {
 		return PageableUtils.toPageResponse(reviewRepository.findAllByProductId(productId, pageable));
 	}
 
-	public PageResponse<Review> findAllByisChecked(String productId, PageableRequest pageableRequest) {
+	public PageResponse<Review> findAllByApproved(String productId, PageableRequest pageableRequest) {
 		Pageable pageable = PageableUtils.toPageable(pageableRequest);
 		return PageableUtils.toPageResponse(
-			reviewRepository.findAllByProductIdAndIsChecked(productId, false, pageable));
+			reviewRepository.findAllByProductIdAndApprove(productId, false, pageable));
 	}
 
 }

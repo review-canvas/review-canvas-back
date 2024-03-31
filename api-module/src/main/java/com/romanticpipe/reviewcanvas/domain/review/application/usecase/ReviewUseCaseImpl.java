@@ -28,7 +28,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Transactional(readOnly = true)
 	public PageResponse<GetWaitingReviewResponse> getWaitingReviews(String productId,
 		PageableRequest pageableRequest) {
-		return reviewReader.findAllByisChecked(productId, pageableRequest)
+		return reviewReader.findAllByApproved(productId, pageableRequest)
 			.map(GetWaitingReviewResponse::from);
 	}
 
