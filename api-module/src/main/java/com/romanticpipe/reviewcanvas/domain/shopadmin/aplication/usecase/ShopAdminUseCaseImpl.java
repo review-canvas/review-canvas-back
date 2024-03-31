@@ -27,6 +27,9 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
-		shopAdminCreater.signUp(signUpRequest.email(), signUpRequest.password());
+		shopAdminCreater.signUp(signUpRequest.email(), signUpRequest.password(), signUpRequest.name(),
+			signUpRequest.logoImageUrl(), signUpRequest.mall_number(), signUpRequest.phone_number(),
+			signUpRequest.title(), signUpRequest.author(), signUpRequest.point(), signUpRequest.media(),
+			signUpRequest.content(), signUpRequest.createdAt(), signUpRequest.updatedAt(), signUpRequest.theme_name());
 	}
 }
