@@ -18,11 +18,24 @@ public class SecurityUtils {
 	public static ShopAdmin getLoggedInShopAdmin() {
 		try {
 			return
-				((CustomUserDetails)Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
-					.getPrincipal()).getShopAdmin();
+				((CustomUserDetails)Objects
+					.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
+					.getPrincipal())
+					.getShopAdmin();
 		} catch (NullPointerException e) {
 			throw new BusinessException(JwtException.ILLEGAL_TOKEN);
 		}
 	}
 
+	public static Long getLoggedInShopAdminId() {
+		try {
+			return
+				((CustomUserDetails)Objects
+					.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
+					.getPrincipal())
+					.getShopAdmin().getId();
+		} catch (NullPointerException e) {
+			throw new BusinessException(JwtException.ILLEGAL_TOKEN);
+		}
+	}
 }
