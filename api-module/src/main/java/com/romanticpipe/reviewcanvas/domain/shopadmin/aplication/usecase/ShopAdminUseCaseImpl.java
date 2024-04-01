@@ -9,6 +9,7 @@ import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.TokenInfoResponse;
+import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreater;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 
@@ -20,15 +21,16 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
 	private final ShopAdminCreater shopAdminCreater;
+	private final AdminAuthCreater adminAuthCreater;
 	private final TokenProvider tokenProvider;
 
 	@Override
 	@Transactional
 	public LoginResponse login(String email, String password) {
-		ShopAdmin user = shopAdminValidator.login(email, password);
-
-		TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(email, user.getId());
-		return LoginResponse.from(shopAdminValidator.login(email, password), tokenInfoResponse);
+		ShopAdmin shopAdmin = shopAdminValidator.login(email, password);
+		TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(email, shopAdmin);
+		adminAuthCreater.save(tokenInfoResponse.getRefreshToken(), shopAdmin);
+		return LoginResponse.from(shopAdmin, tokenInfoResponse);
 
 	}
 

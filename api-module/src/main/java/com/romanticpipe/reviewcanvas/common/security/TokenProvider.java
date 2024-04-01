@@ -26,7 +26,6 @@ import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.TokenInfoResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.ShopAdminReader;
 
 import io.jsonwebtoken.Claims;
@@ -47,7 +46,6 @@ public class TokenProvider implements InitializingBean {
 	private static final String USER_INFO = "shopAdminId";
 
 	private final ShopAdminReader shopAdminReader;
-	private final AdminAuthCreater adminAuthCreater;
 
 	@Value("${spring.jwt.secret}")
 	private String secret;
@@ -66,7 +64,7 @@ public class TokenProvider implements InitializingBean {
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 
-	public TokenInfoResponse createToken(String email, Long shopAdminId) {
+	public TokenInfoResponse createToken(String email, ShopAdmin shopAdmin) {
 		// 스프링 시큐리티 처리
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(String.valueOf(Role.USER)));
@@ -90,12 +88,9 @@ public class TokenProvider implements InitializingBean {
 
 		String refreshToken = Jwts.builder()
 			.setExpiration(refreshTokenValidity)
-			.claim(USER_INFO, shopAdminId)
+			.claim(USER_INFO, shopAdmin.getId())
 			.signWith(key, SignatureAlgorithm.HS256)
 			.compact();
-		ShopAdmin shopAdmin = shopAdminReader.findById(shopAdminId);
-		adminAuthCreater.save(refreshToken, shopAdmin);
-
 		return TokenInfoResponse.from("Bearer", accessToken, refreshToken, refreshTokenValidityTime);
 
 	}
