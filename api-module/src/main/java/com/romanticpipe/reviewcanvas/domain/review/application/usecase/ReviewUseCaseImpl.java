@@ -33,11 +33,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public CreateReviewResponse createReview(String productId, int score, String content) {
+	public CreateReviewResponse createReview(String productId, String userId, int score, String content) {
 		Optional<Product> productOptional = Optional.ofNullable(productReader.findByProductId(productId));
 		if (productOptional.isEmpty())
 			return null;
-		reviewCreator.save(productId, score, content);
+		reviewCreator.save(productId, userId, score, content);
 		return new CreateReviewResponse(productId, score, content);
 	}
 

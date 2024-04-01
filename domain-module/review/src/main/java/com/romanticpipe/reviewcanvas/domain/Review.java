@@ -21,10 +21,12 @@ public class Review {
 	@Column(name = "product_id")
 	private String productId;
 
+	private String userId;
 	private String content;
 	private int score;
 
-	public Review(String productId, String content, int score) {
+	public Review(String productId, String userId, String content, int score) {
+		this.userId = userId;
 		this.productId = productId;
 		this.content = content;
 		this.score = score;
