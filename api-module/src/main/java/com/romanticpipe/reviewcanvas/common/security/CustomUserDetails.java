@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.romanticpipe.reviewcanvas.domain.Role;
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 
 import lombok.Getter;
@@ -17,11 +17,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-	private final ShopAdmin shopAdmin;
+	private final AdminInterface admin;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.singleton(new SimpleGrantedAuthority(Role.USER.toString()));
+		System.out.println(admin.getRole().toString());
+		return Collections.singleton(new SimpleGrantedAuthority(admin.getRole().toString()));
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return this.shopAdmin.getEmail();
+		return this.admin.getEmail();
 	}
 
 	@Override
@@ -54,8 +55,11 @@ public class CustomUserDetails implements UserDetails {
 		return true;
 	}
 
-	public Long geShopAdminId() {
-		return this.shopAdmin.getId();
+	public Long getShopAdminId() {
+		return this.admin.getId();
 	}
 
+	public ShopAdmin getShopAdmin() {
+		return (ShopAdmin)this.admin;
+	}
 }

@@ -23,7 +23,7 @@ public class SecurityUtils {
 					.getPrincipal())
 					.getShopAdmin();
 		} catch (NullPointerException e) {
-			throw new BusinessException(JwtException.ILLEGAL_TOKEN);
+			throw new BusinessException(JwtErrorCode.ILLEGAL_TOKEN);
 		}
 	}
 
@@ -33,9 +33,9 @@ public class SecurityUtils {
 				((CustomUserDetails)Objects
 					.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
 					.getPrincipal())
-					.getShopAdmin().getId();
+					.getShopAdminId();
 		} catch (NullPointerException e) {
-			throw new BusinessException(JwtException.ILLEGAL_TOKEN);
+			throw new BusinessException(JwtErrorCode.ILLEGAL_TOKEN);
 		}
 	}
 }

@@ -22,11 +22,13 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.TokenInfoResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.service.ShopAdminReader;
+import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
+import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -45,7 +47,8 @@ public class TokenProvider implements InitializingBean {
 	private static final String AUTHORITIES_KEY = "auth";
 	private static final String USER_INFO = "shopAdminId";
 
-	private final ShopAdminReader shopAdminReader;
+	private final ShopAdminValidator shopAdminValidator;
+	private final SuperAdminValidator superAdminValidator;
 
 	@Value("${spring.jwt.secret}")
 	private String secret;
@@ -101,10 +104,17 @@ public class TokenProvider implements InitializingBean {
 			Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
+		System.out.println(authorities.stream()
+			.anyMatch(authority -> authority.getAuthority().equals(Role.USER.toString())));
+		AdminInterface admin;
+		if (authorities.stream()
+			.anyMatch(authority -> authority.getAuthority().equals(Role.USER.toString()))) {
+			admin = this.shopAdminValidator.findByEmail(claims.getSubject());
+		} else {
+			admin = this.superAdminValidator.findByEmail(claims.getSubject());
+		}
 
-		ShopAdmin ShopAdmin = this.shopAdminReader.findByEmail(claims.getSubject());
-
-		return new UsernamePasswordAuthenticationToken(new CustomUserDetails(ShopAdmin), token, authorities);
+		return new UsernamePasswordAuthenticationToken(new CustomUserDetails(admin), token, authorities);
 	}
 
 	public boolean validateToken(String token) {
@@ -112,13 +122,13 @@ public class TokenProvider implements InitializingBean {
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			return true;
 		} catch (SecurityException | MalformedJwtException e) {
-			throw new BusinessException(JwtException.MAL_FORMED_TOKEN);
+			throw new BusinessException(JwtErrorCode.MAL_FORMED_TOKEN);
 		} catch (ExpiredJwtException e) {
-			throw new BusinessException(JwtException.EXPIRED_TOKEN);
+			throw new BusinessException(JwtErrorCode.EXPIRED_TOKEN);
 		} catch (UnsupportedJwtException e) {
-			throw new BusinessException(JwtException.UNSUPPORTED_TOKEN);
+			throw new BusinessException(JwtErrorCode.UNSUPPORTED_TOKEN);
 		} catch (IllegalArgumentException e) {
-			throw new BusinessException(JwtException.ILLEGAL_TOKEN);
+			throw new BusinessException(JwtErrorCode.ILLEGAL_TOKEN);
 		} catch (Exception e) {
 			throw e;
 		}

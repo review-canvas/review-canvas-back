@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,15 +19,13 @@ public class AdminAuth {
 	@Column(name = "admin_auth_id")
 	private Long id;
 
-	@OneToOne
-	@JoinColumn(name = "shop_admin_id")
-	private ShopAdmin shopAdmin;
+	private Long shopAdminId;
 
 	@Setter
 	private String refreshToken;
 
 	@Builder
-	public AdminAuth(ShopAdmin shopAdmin) {
-		this.shopAdmin = shopAdmin;
+	public AdminAuth(Long shopAdminId) {
+		this.shopAdminId = shopAdminId;
 	}
 }

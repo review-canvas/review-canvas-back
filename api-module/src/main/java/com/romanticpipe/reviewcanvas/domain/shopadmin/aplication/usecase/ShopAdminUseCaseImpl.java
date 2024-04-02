@@ -43,6 +43,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public Long loginByAccesstoken() {
-		return shopAdminValidator.loginByAccesstoken(SecurityUtils.getLoggedInShopAdmin()).getId();
+		return shopAdminValidator.findByEmail(SecurityUtils.getLoggedInShopAdmin().getEmail()).getId();
 	}
 }
