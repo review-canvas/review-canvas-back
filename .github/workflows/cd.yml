@@ -50,7 +50,7 @@ jobs:
             docker compose down
             
             cat > docker-compose.yml <<EOF
-            version: '3'
+            version: '3.8'
             
             services:
               api:
@@ -63,6 +63,13 @@ jobs:
                   - RDS_USERNAME=${{ secrets.RDS_USERNAME }}
                   - RDS_PASSWORD=${{ secrets.RDS_PASSWORD }}
                   - TZ=Asia/Seoul
+                healthcheck:
+                  test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/health"]
+                  interval: 10s
+                  timeout: 1s
+                  retries: 3
+                  start_period: 15s
+                restart: on-failure
             EOF
             
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com

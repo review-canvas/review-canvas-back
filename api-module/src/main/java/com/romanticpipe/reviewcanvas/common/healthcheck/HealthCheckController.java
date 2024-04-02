@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthCheckController {
 
 	@Operation(summary = "서버 생존 여부 체크용", description = "서버가 살아있는지 체크합니다.")
-	@ApiResponse(responseCode = "204", description = "서버 생존")
+	@ApiResponse(responseCode = "200", description = "서버 생존")
 	@GetMapping(value = "/health")
 	public ResponseEntity<Void> verifyServerAlive() {
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok().build();
 	}
 }
