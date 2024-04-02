@@ -13,7 +13,7 @@ public class ReviewCreator {
 
 	private final ReviewRepository reviewRepository;
 
-	public void save(String productId, String userId, int score, String content) {
-		reviewRepository.save(new Review(productId, userId, content, score));
+	public void save(Review review) {
+		reviewRepository.save(review);
 	}
 }

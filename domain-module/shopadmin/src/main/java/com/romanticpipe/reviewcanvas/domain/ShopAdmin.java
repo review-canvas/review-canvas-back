@@ -2,6 +2,8 @@ package com.romanticpipe.reviewcanvas.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,15 +11,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Product {
+public class ShopAdmin {
 
 	@Id
-	@Column(name = "product_id")
-	private String id;
-
-	@Column(name = "product_name")
-	private String name;
-
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "shop_admin_id")
-	private long shopAdminId;
+	private Long id;
+
+	@Column(name = "approve_status", columnDefinition = "TINYINT(1)")
+	private boolean approveStatus;
 }

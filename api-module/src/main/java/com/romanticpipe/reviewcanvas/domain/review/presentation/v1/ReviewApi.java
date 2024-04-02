@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.CreateReviewResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 
@@ -42,7 +41,7 @@ interface ReviewApi {
 			description = "성공적으로 상품의 리뷰 생성이 완료되었습니다.")
 	})
 	@PostMapping("/products/{productId}/reviews")
-	ResponseEntity<SuccessResponse<CreateReviewResponse>> createReview(
+	ResponseEntity<SuccessResponse<Void>> createReview(
 		@PathVariable("productId") String productId,
 		@RequestBody CreateReviewRequest createReviewRequest
 	);
