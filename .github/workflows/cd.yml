@@ -1,0 +1,66 @@
+name: push image and deploy to aws
+
+on:
+  push:
+    branches: [ "main", "feat-72-cicd" ]
+
+env:
+  JDK_VERSION: 17
+
+jobs:
+  deploy:
+    #  needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'ap-northeast-2'
+
+      - name: Set up JDK ${{ env.JDK_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JDK_VERSION }}
+          cache: 'gradle'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        shell: bash
+
+      - name: Build with jib
+        run: ./gradlew :api-module:jib --info -x test
+
+      - name: Deploy EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd was
+            docker compose down
+            
+            cat > docker-compose.yml <<EOF
+            version: '3'
+            
+            services:
+              api:
+                container_name: review_canvas_prod_api
+                image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/review-canvas-api:latest
+                ports:
+                  - "8080:8080"
+                environment:
+                  - RDS_URL=${{ secrets.RDS_URL }}
+                  - RDS_USERNAME=${{ secrets.RDS_USERNAME }}
+                  - RDS_PASSWORD=${{ secrets.RDS_PASSWORD }}
+            EOF
+            
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
+            docker compose up -d
