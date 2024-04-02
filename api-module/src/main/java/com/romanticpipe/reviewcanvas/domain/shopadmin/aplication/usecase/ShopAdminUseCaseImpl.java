@@ -3,6 +3,9 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.romanticpipe.reviewcanvas.domain.DesignItemSuper;
+import com.romanticpipe.reviewcanvas.domain.ReviewItem;
+import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreater;
@@ -27,9 +30,15 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
-		shopAdminCreater.signUp(signUpRequest.email(), signUpRequest.password(), signUpRequest.name(),
+		DesignItemSuper designItemSuper = shopAdminValidator.isExistTheme(signUpRequest.theme_name());
+		ShopAdmin shopAdmin = shopAdminValidator.isExsitUser(signUpRequest.email());
+		ShopAdmin shopAdminBuild = new ShopAdmin(signUpRequest.email(), signUpRequest.password(), signUpRequest.name(),
 			signUpRequest.logoImageUrl(), signUpRequest.mall_number(), signUpRequest.phone_number(),
-			signUpRequest.title(), signUpRequest.author(), signUpRequest.point(), signUpRequest.media(),
-			signUpRequest.content(), signUpRequest.createdAt(), signUpRequest.updatedAt(), signUpRequest.theme_name());
+			designItemSuper.getId());
+		ReviewItem reviewItemBuild = new ReviewItem(signUpRequest.title(), signUpRequest.author(),
+			signUpRequest.point(),
+			signUpRequest.media(), signUpRequest.content(), signUpRequest.createdAt(), signUpRequest.updatedAt(),
+			shopAdmin.getId());
+		shopAdminCreater.signUp(shopAdminBuild, reviewItemBuild);
 	}
 }
