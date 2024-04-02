@@ -44,4 +44,17 @@ interface ReviewApi {
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC") String direction
 	);
+
+	@Operation(summary = "리뷰 수정 API", description = "특정 상품의 리뷰를 수정한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 조회가 완료되었습니다.")
+	})
+	@GetMapping("/reviews/{reviewId}")
+	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> updateReview(
+		@PathVariable("reviewId") String productId,
+
+		@Schema(description = "ASC, DESC 가능") Direction direction
+	);
 }
