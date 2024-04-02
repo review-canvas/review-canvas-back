@@ -6,11 +6,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class ShopAdmin {
+public class ShopAdmin implements AdminInterface {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "shop_admin_id")
@@ -28,16 +26,17 @@ public class ShopAdmin {
 	private String password;
 
 	private UUID uuid;
-	@OneToOne(mappedBy = "shopAdmin", fetch = FetchType.LAZY)
-	private AdminAuth adminAuth;
+
+	private Long adminAuthId;
 
 	@Enumerated(EnumType.STRING)
-	private Role role;
+	private Role role = Role.USER;
 
 	@Builder
 	public ShopAdmin(String email, String password) {
 		this.email = email;
 		this.password = password;
+		this.role = Role.USER;
 		generateUuid();
 	}
 
