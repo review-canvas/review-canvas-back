@@ -1,6 +1,5 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
-import static com.romanticpipe.reviewcanvas.common.security.JwtException.*;
 import static org.springframework.http.HttpHeaders.*;
 
 import java.io.IOException;
@@ -37,16 +36,15 @@ public class AuthFilter extends OncePerRequestFilter {
 			}
 
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-			request.setAttribute("exception", MAL_FORMED_TOKEN.getCode());
+			request.setAttribute("exception", JwtErrorCode.MAL_FORMED_TOKEN);
 		} catch (BusinessException e) {
-			request.setAttribute("exception", ILLEGAL_TOKEN.getCode());
+			request.setAttribute("exception", JwtErrorCode.ILLEGAL_TOKEN);
 		} catch (ExpiredJwtException e) {
-			request.setAttribute("exception", EXPIRED_TOKEN.getCode());
+			request.setAttribute("exception", JwtErrorCode.EXPIRED_TOKEN);
 		} catch (UnsupportedJwtException e) {
-			request.setAttribute("exception", UNSUPPORTED_TOKEN.getCode());
+			request.setAttribute("exception", JwtErrorCode.UNSUPPORTED_TOKEN);
 		} catch (Exception e) {
-			System.out.println(e);
-			request.setAttribute("exception", UNKNOWN_ERROR.getCode());
+			request.setAttribute("exception", JwtErrorCode.UNKNOWN_ERROR);
 		}
 		filterChain.doFilter(request, response);
 	}

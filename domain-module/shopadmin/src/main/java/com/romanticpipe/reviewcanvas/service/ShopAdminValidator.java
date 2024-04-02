@@ -16,9 +16,7 @@ public class ShopAdminValidator {
 	private final ShopAdminRepository shopAdminRepository;
 
 	public ShopAdmin login(String email, String password) {
-		ShopAdmin shopAdmin = this.shopAdminRepository.findByEmail(email)
-			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
-
+		ShopAdmin shopAdmin = findByEmail(email);
 		if (shopAdmin != null && shopAdmin.getPassword().equals(password)) {
 			return shopAdmin;
 		} else {
@@ -27,8 +25,13 @@ public class ShopAdminValidator {
 
 	}
 
-	public ShopAdmin loginByAccesstoken(ShopAdmin loggedInShopAdmin) {
-		return shopAdminRepository.findByEmail(loggedInShopAdmin.getEmail())
+	public ShopAdmin findByEmail(String email) {
+		return this.shopAdminRepository.findByEmail(email)
+			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
+	}
+
+	public ShopAdmin findById(Long shopAdminId) {
+		return this.shopAdminRepository.findById(shopAdminId)
 			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
 	}
 }
