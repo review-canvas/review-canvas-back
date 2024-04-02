@@ -11,3 +11,30 @@ dependencies {
     implementation 'org.springframework:spring-tx'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
 }
+
+apply plugin: 'com.google.cloud.tools.jib'
+
+jib {
+    from {
+        image = "eclipse-temurin:17-jre"
+
+//        platforms {
+//            platform {
+//                architecture = "arm64"
+//                os = "linux"
+//            }
+//        }
+    }
+    to {
+        image = "471112871006.dkr.ecr.ap-northeast-2.amazonaws.com/review-canvas-api"
+        credHelper = "ecr-login"
+        tags = ["${project.version.toString()}"]
+    }
+    container {
+        jvmFlags = ['-Dspring.profiles.active=prod', '-XX:+UseContainerSupport']
+        ports = ['8080']
+        mainClass = 'com.romanticpipe.reviewcanvas.ReviewCanvasBackApplication'
+        // Jib이 보안이 적용되지 않은 Docker 레지스트리와의 통신을 허용함
+        allowInsecureRegistries = true
+    }
+}
