@@ -33,10 +33,10 @@ class ReviewController implements ReviewApi {
 		@PathVariable("productId") String productId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-		@RequestParam(name = "direction", required = false, defaultValue = "DESC") String direction) {
+		@RequestParam(name = "direction", required = false, defaultValue = "DESC") Direction direction) {
 		return SuccessResponse.of(
 				reviewUseCase.getReviewsByProductId(productId, PageableRequest.of(page, size,
-					Direction.valueOf(direction))))
+					direction)))
 			.asHttp(HttpStatus.OK);
 	}
 
