@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class DesignItemSuper {
+public class ReviewDesign {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "design_item_super_id")
+	@Column(name = "review_design_id")
 	private Long id;
-
+	private String reviewDesignType;
 	private String themeName;
 	private String layoutType;
 	private String padding;
@@ -35,11 +35,13 @@ public class DesignItemSuper {
 	private int lineEllipsis;
 
 	@Builder
-	public DesignItemSuper(String themeName, String layoutType, String padding, String gap, String boxShadowColor,
+	public ReviewDesign(String reviewDesignType, String themeName, String layoutType, String padding, String gap,
+		String boxShadowColor,
 		int boxShadowWidth,
 		String borderColor, int borderTransparency, int borderWidth, String pagingType, int pagingNumber,
 		String textAlign, String pointColor,
 		String pointType, int lineEllipsis) {
+		this.reviewDesignType = reviewDesignType;
 		this.themeName = themeName;
 		this.layoutType = layoutType;
 		this.padding = padding;

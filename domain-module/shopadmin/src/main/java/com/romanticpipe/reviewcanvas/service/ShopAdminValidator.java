@@ -4,12 +4,12 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.romanticpipe.reviewcanvas.domain.DesignItemSuper;
+import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.DesignItemErrorCode;
 import com.romanticpipe.reviewcanvas.exception.ShopAdminNotFoundException;
-import com.romanticpipe.reviewcanvas.repository.DesignItemSuperRepository;
+import com.romanticpipe.reviewcanvas.repository.ReviewDesignRepository;
 import com.romanticpipe.reviewcanvas.repository.ShopAdminRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShopAdminValidator {
 	private final ShopAdminRepository shopAdminRepository;
-	private final DesignItemSuperRepository designItemSuperRepository;
+	private final ReviewDesignRepository designItemSuperRepository;
 
 	public ShopAdmin login(String email, String password) {
 		Optional<ShopAdmin> shopAdmin = shopAdminRepository.findByEmail(email);
@@ -29,8 +29,8 @@ public class ShopAdminValidator {
 		}
 	}
 
-	public DesignItemSuper isExistTheme(String themeName) {
-		return designItemSuperRepository.findByThemeName(themeName)
+	public ReviewDesign isExistTheme(String type, String themeName) {
+		return designItemSuperRepository.findByReviewDesignTypeAndThemeName(type, themeName)
 			.orElseThrow(() -> new BusinessException(DesignItemErrorCode.THEME_NOT_FOUND));
 	}
 

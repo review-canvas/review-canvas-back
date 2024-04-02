@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import java.util.Date;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -26,24 +27,30 @@ public class ShopAdmin {
 	private String logoImageUrl;
 	private String mallNumber;
 	private String phoneNumber;
-
+	private Boolean approveStatus;
+	@Column(insertable = false, updatable = false)
+	private Date createdAt;
+	@Column(insertable = false)
+	private Date updatedAt;
 	private UUID uuid;
 
-	private String accessToken;
 	private String refreshToken;
 
-	private Long themeSuperId;
+	private Long selectedReviewDesignId;
+	private Long myReviewDesignId;
 
 	@Builder
 	public ShopAdmin(String email, String password, String name, String logoImageUrl, String mallNumber,
-		String phoneNumber, Long themeSuperId) {
+		String phoneNumber, Boolean approveStatus, Long selectedReviewDesignId, Long myReviewDesignId) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.logoImageUrl = logoImageUrl;
 		this.mallNumber = mallNumber;
 		this.phoneNumber = phoneNumber;
-		this.themeSuperId = themeSuperId;
+		this.approveStatus = approveStatus;
+		this.selectedReviewDesignId = selectedReviewDesignId;
+		this.myReviewDesignId = myReviewDesignId;
 		generateUuid();
 	}
 

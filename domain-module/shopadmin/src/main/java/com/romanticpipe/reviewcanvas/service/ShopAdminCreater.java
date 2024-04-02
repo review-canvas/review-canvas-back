@@ -2,9 +2,9 @@ package com.romanticpipe.reviewcanvas.service;
 
 import org.springframework.stereotype.Service;
 
-import com.romanticpipe.reviewcanvas.domain.ReviewItem;
+import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.repository.ReviewItemRepository;
+import com.romanticpipe.reviewcanvas.repository.ReviewVisibilityRepository;
 import com.romanticpipe.reviewcanvas.repository.ShopAdminRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -13,10 +13,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShopAdminCreater {
 	private final ShopAdminRepository shopAdminRepository;
-	private final ReviewItemRepository reviewItemRepository;
+	private final ReviewVisibilityRepository reviewItemRepository;
 
-	public void signUp(ShopAdmin shopAdmin, ReviewItem reviewItem) {
+	public void signUp(ShopAdmin shopAdmin) {
 		shopAdminRepository.save(shopAdmin);
+	}
+
+	public void signUp(ReviewVisibility reviewItem) {
 		reviewItemRepository.save(reviewItem);
 	}
 }

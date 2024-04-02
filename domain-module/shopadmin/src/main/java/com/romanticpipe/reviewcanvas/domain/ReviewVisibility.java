@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class ReviewItem {
+public class ReviewVisibility {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "review_item_id")
+	@Column(name = "review_visibility_id")
 	private Long id;
 
 	private Boolean title;
@@ -29,7 +29,8 @@ public class ReviewItem {
 	private Long shopAdminId;
 
 	@Builder
-	public ReviewItem(Boolean title, Boolean author, Boolean point, Boolean media, Boolean content, Boolean createdAt,
+	public ReviewVisibility(Boolean title, Boolean author, Boolean point, Boolean media, Boolean content,
+		Boolean createdAt,
 		Boolean updatedAt, Long shopAdminId) {
 		this.title = title;
 		this.author = author;
