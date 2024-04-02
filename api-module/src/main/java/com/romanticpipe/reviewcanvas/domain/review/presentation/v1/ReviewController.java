@@ -6,7 +6,10 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,14 +27,28 @@ class ReviewController implements ReviewApi {
 
 	@Override
 	@GetMapping("/products/{productId}/reviews")
-	public ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviews(
+	public ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsByProductId(
 		@PathVariable("productId") String productId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC") Direction direction
 	) {
 		return SuccessResponse.of(
-			reviewUseCase.getReviews(productId, PageableRequest.of(page, size, direction))
+			reviewUseCase.getReviewsByProductId(productId, PageableRequest.of(page, size, direction))
+		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/users/{userId}/reviews")
+	public ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsByUserId(
+		@PathVariable("userId") String userId,
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
+		@Schema(description = "ASC, DESC 가능") Direction direction
+	) {
+		return SuccessResponse.of(
+			reviewUseCase.getReviewsByUserId(userId, PageableRequest.of(page, size, direction))
 		).asHttp(HttpStatus.OK);
 	}
 

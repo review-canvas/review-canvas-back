@@ -17,18 +17,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "Review", description = "리뷰 API")
 interface ReviewApi {
 
-	@Operation(summary = "리뷰 조회 API", description = "특정 상품의 리뷰를 조회한다.")
+	@Operation(summary = "상품 리뷰 조회 API", description = "특정 상품의 리뷰를 조회한다.")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 리뷰 조회가 완료되었습니다.")
+			description = "성공적으로 상품 리뷰 조회가 완료되었습니다.")
 	})
 	@GetMapping("/products/{productId}/reviews")
-	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviews(
+	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsByProductId(
 		@PathVariable("productId") String productId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
 		@Schema(description = "ASC, DESC 가능") Direction direction
 	);
+
+	@Operation(summary = "사용자 리뷰 조회 API", description = "특정 사용자의 리뷰를 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 사용자 리뷰 조회가 완료되었습니다.")
+	})
+	@GetMapping("/users/{userId}/reviews")
+	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsByUserId(
+		@PathVariable("userId") String userId,
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
+		@Schema(description = "ASC, DESC 가능") Direction direction
+	);
+
+
 }

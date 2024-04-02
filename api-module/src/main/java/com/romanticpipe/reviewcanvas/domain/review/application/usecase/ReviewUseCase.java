@@ -8,4 +8,5 @@ public interface ReviewUseCase {
 	PageResponse<GetReviewResponse> getReviewsByProductId(String productId, PageableRequest pageableRequest);
 
 	PageResponse<GetReviewResponse> getReviewsByUserId(String userId, PageableRequest pageableRequest);
+
 }
