@@ -2,14 +2,14 @@ name: push image and deploy to aws
 
 on:
   push:
-    branches: [ "main", "feat-72-cicd" ]
+    branches: [ "main" ]
 
 env:
   JDK_VERSION: 17
 
 jobs:
   deploy:
-    #  needs: build
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

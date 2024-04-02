@@ -17,13 +17,6 @@ apply plugin: 'com.google.cloud.tools.jib'
 jib {
     from {
         image = "eclipse-temurin:17-jre"
-
-//        platforms {
-//            platform {
-//                architecture = "arm64"
-//                os = "linux"
-//            }
-//        }
     }
     to {
         image = "471112871006.dkr.ecr.ap-northeast-2.amazonaws.com/review-canvas-api"
