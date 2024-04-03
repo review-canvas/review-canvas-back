@@ -2,6 +2,8 @@ package com.romanticpipe.reviewcanvas.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,7 +19,9 @@ public class ReviewDesign {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_design_id")
 	private Long id;
-	private String reviewDesignType;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR(10)")
+	private ReviewDesignType reviewDesignType;
 	private String themeName;
 	private String layoutType;
 	private String padding;
@@ -33,14 +37,16 @@ public class ReviewDesign {
 	private String pointColor;
 	private String pointType;
 	private int lineEllipsis;
+	private String reviewDesignUrl;
 
 	@Builder
-	public ReviewDesign(String reviewDesignType, String themeName, String layoutType, String padding, String gap,
+	public ReviewDesign(ReviewDesignType reviewDesignType, String themeName, String layoutType, String padding,
+		String gap,
 		String boxShadowColor,
 		int boxShadowWidth,
 		String borderColor, int borderTransparency, int borderWidth, String pagingType, int pagingNumber,
 		String textAlign, String pointColor,
-		String pointType, int lineEllipsis) {
+		String pointType, int lineEllipsis, String reviewDesignUrl) {
 		this.reviewDesignType = reviewDesignType;
 		this.themeName = themeName;
 		this.layoutType = layoutType;
@@ -57,6 +63,10 @@ public class ReviewDesign {
 		this.pointColor = pointColor;
 		this.pointType = pointType;
 		this.lineEllipsis = lineEllipsis;
+		this.reviewDesignUrl = reviewDesignUrl;
 	}
 
+	public boolean isGeneralType() {
+		return reviewDesignType.equals(ReviewDesignType.GENERAL);
+	}
 }

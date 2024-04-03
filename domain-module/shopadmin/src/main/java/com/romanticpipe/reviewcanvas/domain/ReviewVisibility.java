@@ -26,12 +26,10 @@ public class ReviewVisibility {
 	private Boolean createdAt;
 	private Boolean updatedAt;
 
-	private Long shopAdminId;
-
 	@Builder
 	public ReviewVisibility(Boolean title, Boolean author, Boolean point, Boolean media, Boolean content,
 		Boolean createdAt,
-		Boolean updatedAt, Long shopAdminId) {
+		Boolean updatedAt) {
 		this.title = title;
 		this.author = author;
 		this.point = point;
@@ -39,7 +37,6 @@ public class ReviewVisibility {
 		this.content = content;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
-		this.shopAdminId = shopAdminId;
 	}
 
 }

@@ -8,6 +8,7 @@ dependencies {
     implementation project(':client-module')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework:spring-tx'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
 }

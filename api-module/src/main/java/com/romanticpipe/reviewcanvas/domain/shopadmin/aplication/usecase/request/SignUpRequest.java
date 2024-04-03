@@ -3,44 +3,45 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.reques
 import java.util.Objects;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Schema(name = "SignUpRequest", description = "Shop Admin 회원가입 요청")
 public record SignUpRequest(@Schema(description = "Email", requiredMode = Schema.RequiredMode.REQUIRED)
-							String email,
+							@NotNull String email,
 							@Schema(description = "Password", requiredMode = Schema.RequiredMode.REQUIRED)
-							String password,
+							@NotNull String password,
 							@Schema(description = "Name", requiredMode = Schema.RequiredMode.REQUIRED)
-							String name,
-							@Schema(description = "Logo Image Url", requiredMode = Schema.RequiredMode.REQUIRED)
+							@NotNull String name,
+							@Schema(description = "Logo Image Url", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 							String logoImageUrl,
 							@Schema(description = "Mall Number", requiredMode = Schema.RequiredMode.REQUIRED)
-							String mall_number,
+							@NotBlank String mallNumber,
 							@Schema(description = "Phone Number", requiredMode = Schema.RequiredMode.REQUIRED)
-							String phone_number,
+							@NotNull String phoneNumber,
 							@Schema(description = "Review Title Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							Boolean title,
+							@NotNull Boolean title,
 							@Schema(description = "Review Author Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							Boolean author,
+							@NotNull Boolean author,
 							@Schema(description = "Review Point Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							Boolean point,
+							@NotNull Boolean point,
 							@Schema(description = "Review Media Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							Boolean media,
+							@NotNull Boolean media,
 							@Schema(description = "Review Content Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							Boolean content,
-							@Schema(description = "Review CreatedAt Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							Boolean createdAt,
-							@Schema(description = "Review UpdatedAt Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							Boolean updatedAt,
-							@Schema(description = "Design Theme Name", requiredMode = Schema.RequiredMode.REQUIRED)
-							String theme_name) {
+							@NotNull Boolean content,
+							@Schema(description = "Review CreateAt Active", requiredMode = Schema.RequiredMode.REQUIRED)
+							@NotNull Boolean createdAt,
+							@Schema(description = "Review UpdateAt Active", requiredMode = Schema.RequiredMode.REQUIRED)
+							@NotNull Boolean updatedAt,
+							@Schema(description = "Review Design Id", requiredMode = Schema.RequiredMode.REQUIRED)
+							@NotNull Long reviewDesignId) {
 
 	public SignUpRequest {
 		Objects.requireNonNull(email);
 		Objects.requireNonNull(password);
 		Objects.requireNonNull(name);
-		Objects.requireNonNull(logoImageUrl);
-		Objects.requireNonNull(mall_number);
-		Objects.requireNonNull(phone_number);
+		Objects.requireNonNull(mallNumber);
+		Objects.requireNonNull(phoneNumber);
 		Objects.requireNonNull(title);
 		Objects.requireNonNull(author);
 		Objects.requireNonNull(point);
@@ -48,6 +49,6 @@ public record SignUpRequest(@Schema(description = "Email", requiredMode = Schema
 		Objects.requireNonNull(content);
 		Objects.requireNonNull(createdAt);
 		Objects.requireNonNull(updatedAt);
-		Objects.requireNonNull(theme_name);
+		Objects.requireNonNull(reviewDesignId);
 	}
 }

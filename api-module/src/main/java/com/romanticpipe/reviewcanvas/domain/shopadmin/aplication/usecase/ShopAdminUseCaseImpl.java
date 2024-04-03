@@ -3,12 +3,11 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
-import com.romanticpipe.reviewcanvas.service.ShopAdminCreater;
+import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
-	private final ShopAdminCreater shopAdminCreater;
+	private final ShopAdminCreator shopAdminCreator;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -30,17 +29,29 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
-		ReviewDesign designItemSuper = shopAdminValidator.isExistTheme("GENERAL", signUpRequest.theme_name());
+		shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
 
-		ShopAdmin shopAdminBuild = new ShopAdmin(signUpRequest.email(), signUpRequest.password(), signUpRequest.name(),
-			signUpRequest.logoImageUrl(), signUpRequest.mall_number(), signUpRequest.phone_number(), false,
-			designItemSuper.getId(), null);
-		shopAdminCreater.signUp(shopAdminBuild);
-		ShopAdmin shopAdmin = shopAdminValidator.isExsitUser(signUpRequest.email());
-		ReviewVisibility reviewItemBuild = new ReviewVisibility(signUpRequest.title(), signUpRequest.author(),
-			signUpRequest.point(),
-			signUpRequest.media(), signUpRequest.content(), signUpRequest.createdAt(), signUpRequest.updatedAt(),
-			shopAdmin.getId());
-		shopAdminCreater.signUp(reviewItemBuild);
+		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
+			.title(signUpRequest.title())
+			.author(signUpRequest.author())
+			.point(signUpRequest.point())
+			.media(signUpRequest.media())
+			.content(signUpRequest.content())
+			.createdAt(signUpRequest.createdAt())
+			.updatedAt(signUpRequest.updatedAt())
+			.build();
+		ShopAdmin shopAdmin = ShopAdmin.builder()
+			.reviewVisibility(reviewVisibility)
+			.email(signUpRequest.email())
+			.password(signUpRequest.password())
+			.name(signUpRequest.name())
+			.logoImageUrl(signUpRequest.logoImageUrl())
+			.mallNumber(signUpRequest.mallNumber())
+			.phoneNumber(signUpRequest.phoneNumber())
+			.approveStatus(false)
+			.selectedReviewDesignId(signUpRequest.reviewDesignId())
+			.build();
+
+		shopAdminCreator.signUp(shopAdmin);
 	}
 }

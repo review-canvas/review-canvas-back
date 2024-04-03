@@ -14,6 +14,7 @@ import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdm
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -37,7 +38,7 @@ class ShopAdminController implements ShopAdminApi {
 	@Override
 	@PostMapping("/shopadmin/signup")
 	public ResponseEntity<SuccessResponse<Boolean>> signUp(
-		@RequestBody SignUpRequest signUpRequest) {
+		@Valid @RequestBody SignUpRequest signUpRequest) {
 		shopAdminUseCase.signUp(signUpRequest);
 		return SuccessResponse.of(true).asHttp(HttpStatus.OK);
 	}
