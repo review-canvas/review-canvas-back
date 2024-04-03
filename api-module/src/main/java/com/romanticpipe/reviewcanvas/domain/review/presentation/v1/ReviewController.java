@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +35,14 @@ class ReviewController implements ReviewApi {
 		return SuccessResponse.of(
 			reviewUseCase.getReviews(productId, PageableRequest.of(page, size, direction))
 		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@PatchMapping("/reviews/{reviewId}")
+	public ResponseEntity<SuccessResponse<Void>> updateReview(long reviewId,
+		UpdateReviewRequest updateReviewRequest) {
+		reviewUseCase.updateReview(reviewId, updateReviewRequest);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
 }

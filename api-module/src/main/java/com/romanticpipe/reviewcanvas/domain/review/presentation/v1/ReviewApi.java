@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
@@ -11,7 +12,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Review", description = "리뷰 API")
@@ -38,10 +41,9 @@ interface ReviewApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 조회가 완료되었습니다.")
 	})
-	@GetMapping("/reviews/{reviewId}")
-	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> updateReview(
-		@PathVariable("reviewId") String productId,
-
-		@Schema(description = "ASC, DESC 가능") Direction direction
+	@PatchMapping("/reviews/{reviewId}")
+	ResponseEntity<SuccessResponse<Void>> updateReview(
+		@PathVariable("reviewId") long productId,
+		@RequestBody UpdateReviewRequest updateReviewRequest
 	);
 }
