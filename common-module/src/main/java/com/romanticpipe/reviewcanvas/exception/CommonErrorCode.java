@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 public enum CommonErrorCode implements ErrorCode {
 
 	INVALID_INPUT_VALUE(400, "C001", "잘못된 입력값입니다."),
-	INTERNAL_SERVER_ERROR(500, "C004", "서버 오류");
+	INTERNAL_SERVER_ERROR(500, "C002", "서버 오류");
 
 
 	private final int status;
