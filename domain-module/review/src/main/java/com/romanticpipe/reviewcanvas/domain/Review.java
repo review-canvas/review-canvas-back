@@ -15,12 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Review {
 
-	public enum Status {
-		APPROVED,
-		REFUSED,
-		WAITING
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_id")
@@ -35,9 +29,9 @@ public class Review {
 
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
-	private Status status;
+	private ReviewStatus status;
 
-	public Review(String productId, String userId, String content, int score, Status status) {
+	public Review(String productId, String userId, String content, int score, ReviewStatus status) {
 		this.userId = userId;
 		this.productId = productId;
 		this.content = content;

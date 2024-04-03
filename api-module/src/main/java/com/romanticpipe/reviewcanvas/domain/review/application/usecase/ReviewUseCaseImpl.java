@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
+import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
@@ -42,7 +43,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			createReviewRequest.content(),
 			createReviewRequest.score(),
 			shopAdminReader.findById(product.getShopAdminId()).isApproveStatus()
-				? Review.Status.WAITING : Review.Status.APPROVED
+				? ReviewStatus.WAITING : ReviewStatus.APPROVED
 		);
 		reviewCreator.save(review);
 	}
