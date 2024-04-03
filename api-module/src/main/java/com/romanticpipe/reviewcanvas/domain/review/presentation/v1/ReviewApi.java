@@ -3,7 +3,9 @@ package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
+import com.romanticpipe.reviewcanvas.enumeration.Direction;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,8 +26,9 @@ interface ReviewApi {
 	@GetMapping("/products/{productId}/reviews")
 	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviews(
 		@PathVariable("productId") String productId,
-		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-		@RequestParam(name = "direction", required = false, defaultValue = "DESC") String direction
+		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
+		@Schema(description = "ASC, DESC 가능") Direction direction
 	);
 }
