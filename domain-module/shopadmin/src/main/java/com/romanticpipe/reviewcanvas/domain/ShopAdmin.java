@@ -1,8 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain;
 
-import java.util.Date;
-import java.util.UUID;
-
+import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,10 +14,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class ShopAdmin {
+public class ShopAdmin extends BaseEntityWithUpdate {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "shop_admin_id")
@@ -36,10 +36,6 @@ public class ShopAdmin {
 	private String mallNumber;
 	private String phoneNumber;
 	private Boolean approveStatus;
-	@Column(insertable = false, updatable = false)
-	private Date createdAt;
-	@Column(insertable = false)
-	private Date updatedAt;
 	private UUID uuid;
 
 	private String refreshToken;
@@ -49,8 +45,8 @@ public class ShopAdmin {
 
 	@Builder
 	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
-		String mallNumber,
-		String phoneNumber, Boolean approveStatus, Long selectedReviewDesignId, Long myReviewDesignId) {
+					 String mallNumber,
+					 String phoneNumber, Boolean approveStatus, Long selectedReviewDesignId, Long myReviewDesignId) {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
