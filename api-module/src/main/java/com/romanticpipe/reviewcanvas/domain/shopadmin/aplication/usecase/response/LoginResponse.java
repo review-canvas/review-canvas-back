@@ -21,6 +21,7 @@ public record LoginResponse(@Schema(description = "Shop Admin id", requiredMode 
 	}
 
 	public static LoginResponse from(ShopAdmin shopAdmin) {
-		return new LoginResponse(shopAdmin.getId(), shopAdmin.getAccessToken(), shopAdmin.getRefreshToken());
+		return new LoginResponse(shopAdmin.getId(), null, shopAdmin.getRefreshToken());
+		// return new LoginResponse(shopAdmin.getId(), shopAdmin.getAccessToken(), shopAdmin.getRefreshToken());
 	}
 }

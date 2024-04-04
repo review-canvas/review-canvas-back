@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Product {
 
 	@Id
-	@Column(name = "product_id")
+	@Column(name = "product_id", columnDefinition = "BINARY(16)")
 	private String id;
 
 	@Column(name = "product_name")
