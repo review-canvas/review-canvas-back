@@ -20,10 +20,8 @@ public class ProductValidator {
 	private final ProductRepository productRepository;
 
 	public Product validByProductId(String productId){
-		Optional<Product> productOptional = productRepository.findById(productId);
-		if (productOptional.isEmpty())
-			throw new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND);
-		return productOptional.get();
+		return productRepository.findById(productId)
+			.orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
 	}
 
 }
