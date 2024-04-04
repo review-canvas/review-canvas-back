@@ -7,7 +7,7 @@ import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
-import com.romanticpipe.reviewcanvas.service.ShopAdminCreater;
+import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminRemover;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 

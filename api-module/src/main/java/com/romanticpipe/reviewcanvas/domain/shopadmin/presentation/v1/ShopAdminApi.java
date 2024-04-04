@@ -48,7 +48,7 @@ interface ShopAdminApi {
 			description = "성공적으로 회원탈퇴가 완료되었습니다.")
 	})
 	@PostMapping("/shopadmin/quit")
-	ResponseEntity<SuccessResponse<Boolean>> quit(
+	ResponseEntity<SuccessResponse<Void>> quit(
 		@RequestParam(value = "id", required = true) Long id
 	);
 }

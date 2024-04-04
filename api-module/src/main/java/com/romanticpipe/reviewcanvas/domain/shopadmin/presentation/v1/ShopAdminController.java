@@ -1,11 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdminUseCase;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +9,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdminUseCase;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -44,9 +46,9 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	@DeleteMapping("/shopadmin/quit")
-	public ResponseEntity<SuccessResponse<Boolean>> quit(
+	public ResponseEntity<SuccessResponse<Void>> quit(
 		@RequestParam(value = "id", required = true) Long id) {
 		shopAdminUseCase.quit(id);
-		return SuccessResponse.of(true).asHttp(HttpStatus.OK);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }
