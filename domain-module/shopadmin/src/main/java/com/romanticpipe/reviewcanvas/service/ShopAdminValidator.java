@@ -39,7 +39,7 @@ public class ShopAdminValidator {
 		return reviewDesign;
 	}
 
-	public ShopAdmin isExsitUser(String email) {
+	public ShopAdmin isExistUser(String email) {
 		return shopAdminRepository.findByEmail(email)
 			.orElseThrow(() -> new ShopAdminNotFoundException());
 	}
