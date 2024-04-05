@@ -12,6 +12,7 @@ import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.respons
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreater;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
+import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
+	private final SuperAdminValidator superAdminValidator;
 	private final ShopAdminCreater shopAdminCreater;
 	private final AdminAuthCreater adminAuthCreater;
 	private final TokenProvider tokenProvider;
@@ -28,7 +30,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public LoginResponse login(String email, String password) {
 		ShopAdmin shopAdmin = shopAdminValidator.login(email, password);
-		TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(email, shopAdmin);
+		TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(shopAdmin);
 		adminAuthCreater.save(tokenInfoResponse.getRefreshToken(), shopAdmin);
 		return LoginResponse.from(shopAdmin, tokenInfoResponse);
 
@@ -42,7 +44,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Long loginByAccesstoken() {
-		return shopAdminValidator.findByEmail(SecurityUtils.getLoggedInShopAdmin().getEmail()).getId();
+	public Long tokenCheckByShopAdmin() {
+		return shopAdminValidator.findByEmail(SecurityUtils.getLoggedInAdminEmail()).getId();
 	}
 }

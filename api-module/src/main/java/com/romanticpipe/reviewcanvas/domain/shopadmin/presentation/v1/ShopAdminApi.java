@@ -24,7 +24,7 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 로그인이 완료되었습니다.")
 	})
-	@GetMapping("/shopadmin/login")
+	@GetMapping("/shopadmin")
 	ResponseEntity<SuccessResponse<LoginResponse>> login(
 		@RequestParam(value = "email", required = true) String email,
 		@RequestParam(value = "password", required = true) String password
@@ -36,7 +36,7 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 회원가입이 완료되었습니다.")
 	})
-	@PostMapping("/shopadmin/signup")
+	@PostMapping("/shopadmin")
 	ResponseEntity<SuccessResponse<Boolean>> signUp(
 		@RequestBody(required = true) SignUpRequest signUpRequest
 	);
@@ -48,5 +48,5 @@ interface ShopAdminApi {
 			description = "성공적으로 로그인 완료되었습니다.")
 	})
 	@GetMapping("/shopadmin/auth")
-	ResponseEntity<SuccessResponse<Long>> loginByAccesstoken();
+	ResponseEntity<SuccessResponse<Long>> tokenCheckByShopAdmin();
 }

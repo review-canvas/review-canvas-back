@@ -24,7 +24,7 @@ class ShopAdminController implements ShopAdminApi {
 	private final ShopAdminUseCase shopAdminUseCase;
 
 	@Override
-	@GetMapping("/shopadmin/login")
+	@GetMapping("/shopadmin")
 	public ResponseEntity<SuccessResponse<LoginResponse>> login(
 		@RequestParam(value = "email", required = true) String email,
 		@RequestParam(value = "password", required = true) String password
@@ -35,7 +35,7 @@ class ShopAdminController implements ShopAdminApi {
 	}
 
 	@Override
-	@PostMapping("/shopadmin/signup")
+	@PostMapping("/shopadmin")
 	public ResponseEntity<SuccessResponse<Boolean>> signUp(
 		@RequestBody SignUpRequest signUpRequest) {
 		shopAdminUseCase.signUp(signUpRequest);
@@ -44,7 +44,7 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	@GetMapping("/shopadmin/auth")
-	public ResponseEntity<SuccessResponse<Long>> loginByAccesstoken() {
-		return SuccessResponse.of(shopAdminUseCase.loginByAccesstoken()).asHttp(HttpStatus.OK);
+	public ResponseEntity<SuccessResponse<Long>> tokenCheckByShopAdmin() {
+		return SuccessResponse.of(shopAdminUseCase.tokenCheckByShopAdmin()).asHttp(HttpStatus.OK);
 	}
 }
