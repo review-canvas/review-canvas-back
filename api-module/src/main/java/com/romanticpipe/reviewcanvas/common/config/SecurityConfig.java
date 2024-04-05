@@ -31,20 +31,14 @@ public class SecurityConfig {
 			.cors(c -> c.disable())
 			.formLogin(c -> c.disable())
 			.httpBasic(c -> c.disable())
-			.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.headers(c -> c.frameOptions(f -> f.disable()).disable())
 			.authorizeHttpRequests(auth -> {
-				try {
-					auth
-						.requestMatchers("/",
-							"/api/v1/shopadmin/login",
-							"/api/v1/shopadmin/signup").permitAll()
-						.requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
-						.anyRequest().authenticated()
-					;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				auth
+					.requestMatchers("/",
+						"/api/v1/shopadmin/login",
+						"/api/v1/shopadmin/signup").permitAll()
+					.requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
+					.anyRequest().authenticated();
 			}).exceptionHandling(c ->
 				c.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler)
 			).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
