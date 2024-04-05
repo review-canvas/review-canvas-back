@@ -1,11 +1,16 @@
 package com.romanticpipe.reviewcanvas.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.exception.ReviewDesignNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.exception.ShopAdminNotFoundException;
+import com.romanticpipe.reviewcanvas.repository.ReviewDesignRepository;
 import com.romanticpipe.reviewcanvas.repository.ShopAdminRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -14,24 +19,29 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShopAdminValidator {
 	private final ShopAdminRepository shopAdminRepository;
+	private final ReviewDesignRepository designItemSuperRepository;
 
 	public ShopAdmin login(String email, String password) {
-		ShopAdmin shopAdmin = findByEmail(email);
-		if (shopAdmin != null && shopAdmin.getPassword().equals(password)) {
-			return shopAdmin;
+		Optional<ShopAdmin> shopAdmin = shopAdminRepository.findByEmail(email);
+		if (shopAdmin.isPresent() && shopAdmin.get().getPassword().equals(password)) {
+			return shopAdmin.get();
 		} else {
 			throw new ShopAdminNotFoundException();
 		}
 
 	}
 
-	public ShopAdmin findByEmail(String email) {
-		return this.shopAdminRepository.findByEmail(email)
-			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
+	public ReviewDesign isExistTheme(Long reviewDesignId) {
+		ReviewDesign reviewDesign = designItemSuperRepository.findById(reviewDesignId)
+			.orElseThrow(ReviewDesignNotFoundException::new);
+		if (!reviewDesign.isGeneralType()) {
+			throw new BusinessException(ShopAdminErrorCode.NOT_GENERAL_REVIEW_THEME);
+		}
+		return reviewDesign;
 	}
 
-	public ShopAdmin findById(Long shopAdminId) {
-		return this.shopAdminRepository.findById(shopAdminId)
-			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
+	public ShopAdmin isExsitUser(String email) {
+		return shopAdminRepository.findByEmail(email)
+			.orElseThrow(() -> new ShopAdminNotFoundException());
 	}
 }

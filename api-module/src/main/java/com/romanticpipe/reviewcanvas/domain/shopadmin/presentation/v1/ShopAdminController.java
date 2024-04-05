@@ -36,10 +36,10 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	@PostMapping("/shopadmin")
-	public ResponseEntity<SuccessResponse<Boolean>> signUp(
+	public ResponseEntity<SuccessResponse<Void>> signUp(
 		@RequestBody SignUpRequest signUpRequest) {
 		shopAdminUseCase.signUp(signUpRequest);
-		return SuccessResponse.of(true).asHttp(HttpStatus.OK);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
 	@Override

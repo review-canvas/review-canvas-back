@@ -5,6 +5,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUse
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.enumeration.Direction;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ class ReviewController implements ReviewApi {
 		@PathVariable("productId") String productId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-		@RequestParam(name = "direction", required = false, defaultValue = "DESC") String direction
+		@RequestParam(name = "direction", required = false, defaultValue = "DESC") Direction direction
 	) {
 		return SuccessResponse.of(
 			reviewUseCase.getReviews(productId, PageableRequest.of(page, size, direction))

@@ -9,10 +9,10 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ShopAdminCreater {
+public class ShopAdminCreator {
 	private final ShopAdminRepository shopAdminRepository;
 
-	public void signUp(String email, String password) {
-		shopAdminRepository.save(new ShopAdmin(email, password));
+	public ShopAdmin signUp(ShopAdmin shopAdmin) {
+		return shopAdminRepository.save(shopAdmin);
 	}
 }

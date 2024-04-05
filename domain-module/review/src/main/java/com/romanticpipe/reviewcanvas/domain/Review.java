@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Review {
+public class Review extends BaseEntityWithUpdate {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

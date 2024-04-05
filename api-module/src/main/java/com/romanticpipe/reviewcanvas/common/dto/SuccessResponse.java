@@ -28,6 +28,10 @@ public class SuccessResponse<T> {
 		return successResponse;
 	}
 
+	public static SuccessResponse<Void> ofNoData() {
+		return new SuccessResponse<>();
+	}
+
 	public ResponseEntity<SuccessResponse<T>> asHttp(HttpStatus httpStatus) {
 		return ResponseEntity.status(httpStatus).body(this);
 	}

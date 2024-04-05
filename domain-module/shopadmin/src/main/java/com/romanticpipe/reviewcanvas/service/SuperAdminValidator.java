@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class SuperAdminValidator {
 	private final SuperAdminRepository superAdminRepository;
 
-	public SuperAdmin findByEmail(String email) {
+	public SuperAdmin isExsitUser(String email) {
 		return this.superAdminRepository.findByEmail(email)
 			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
 	}

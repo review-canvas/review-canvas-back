@@ -100,9 +100,9 @@ public class TokenProvider implements InitializingBean {
 		AdminInterface admin;
 		if (authorities.stream()
 			.anyMatch(authority -> authority.getAuthority().equals(Role.USER.toString()))) {
-			admin = this.shopAdminValidator.findByEmail(claims.get(USER_INFO).toString());
+			admin = this.shopAdminValidator.isExsitUser(claims.get(USER_INFO).toString());
 		} else {
-			admin = this.superAdminValidator.findByEmail(claims.get(USER_INFO).toString());
+			admin = this.superAdminValidator.isExsitUser(claims.get(USER_INFO).toString());
 		}
 		return new UsernamePasswordAuthenticationToken(admin, token, authorities);
 	}
