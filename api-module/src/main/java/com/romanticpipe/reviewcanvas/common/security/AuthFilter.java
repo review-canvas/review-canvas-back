@@ -36,15 +36,15 @@ public class AuthFilter extends OncePerRequestFilter {
 			}
 
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-			request.setAttribute("exception", JwtErrorCode.MAL_FORMED_TOKEN);
+			request.setAttribute("exception", SecurtyErrorCode.MAL_FORMED_TOKEN);
 		} catch (BusinessException e) {
-			request.setAttribute("exception", JwtErrorCode.ILLEGAL_TOKEN);
+			request.setAttribute("exception", SecurtyErrorCode.ILLEGAL_TOKEN);
 		} catch (ExpiredJwtException e) {
-			request.setAttribute("exception", JwtErrorCode.EXPIRED_TOKEN);
+			request.setAttribute("exception", SecurtyErrorCode.EXPIRED_TOKEN);
 		} catch (UnsupportedJwtException e) {
-			request.setAttribute("exception", JwtErrorCode.UNSUPPORTED_TOKEN);
+			request.setAttribute("exception", SecurtyErrorCode.UNSUPPORTED_TOKEN);
 		} catch (Exception e) {
-			request.setAttribute("exception", JwtErrorCode.UNKNOWN_ERROR);
+			request.setAttribute("exception", SecurtyErrorCode.UNKNOWN_ERROR);
 		}
 		filterChain.doFilter(request, response);
 	}

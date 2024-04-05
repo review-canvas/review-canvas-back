@@ -7,14 +7,14 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum JwtErrorCode implements ErrorCode {
-
-	UNKNOWN_ERROR(401, "S001", "An unexpected error has occurred."),
-	MAL_FORMED_TOKEN(402, "S002", "The JWT signature is incorrect."),
-	EXPIRED_TOKEN(403, "S003", "The token has expired."),
-	UNSUPPORTED_TOKEN(404, "S004", "The token is unsupported."),
-	ACCESS_DENIED(405, "S005", "Access is denied."),
-	ILLEGAL_TOKEN(406, "S006", "The JWT token is invalid.");
+public enum SecurtyErrorCode implements ErrorCode {
+	UNAUTHORIZED(401, "S001", "Unauthorized token error."),
+	UNKNOWN_ERROR(403, "S002", "An unexpected error has occurred."),
+	MAL_FORMED_TOKEN(403, "S003", "The JWT signature is incorrect."),
+	EXPIRED_TOKEN(403, "S004", "The token has expired."),
+	UNSUPPORTED_TOKEN(403, "S005", "The token is unsupported."),
+	ACCESS_DENIED(403, "S006", "Access is denied."),
+	ILLEGAL_TOKEN(403, "S007", "The JWT token is invalid.");
 
 	private final int status;
 	private final String code;
