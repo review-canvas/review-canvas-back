@@ -34,10 +34,9 @@ public class AuthFilter extends OncePerRequestFilter {
 				Authentication authentication = tokenProvider.getAuthentication(jwt);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
-
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
 			request.setAttribute("exception", SecurtyErrorCode.MAL_FORMED_TOKEN);
-		} catch (BusinessException e) {
+		} catch (IllegalArgumentException e) {
 			request.setAttribute("exception", SecurtyErrorCode.ILLEGAL_TOKEN);
 		} catch (ExpiredJwtException e) {
 			request.setAttribute("exception", SecurtyErrorCode.EXPIRED_TOKEN);
