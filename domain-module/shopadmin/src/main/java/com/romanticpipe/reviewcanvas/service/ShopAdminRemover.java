@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ShopAdminRemover {
 
-	ShopAdminValidator shopAdminValidator;
+	private final ShopAdminValidator shopAdminValidator;
 
 	public void quit(Long id) {
 		ShopAdmin shopAdmin = shopAdminValidator.isExistUserByID(id);

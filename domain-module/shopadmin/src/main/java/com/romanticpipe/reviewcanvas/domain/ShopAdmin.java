@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
@@ -37,7 +38,7 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 	private String mallNumber;
 	private String phoneNumber;
 	private Boolean approveStatus;
-	private Boolean activateStatus;
+	private LocalDateTime deletedAt;
 	private UUID uuid;
 
 	private String refreshToken;
@@ -47,8 +48,8 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 
 	@Builder
 	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
-		String mallNumber, String phoneNumber, Boolean approveStatus, Boolean activateStatus,
-		Long selectedReviewDesignId, Long myReviewDesignId) {
+		String mallNumber, String phoneNumber, Boolean approveStatus, Long selectedReviewDesignId,
+		Long myReviewDesignId) {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
@@ -57,7 +58,6 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 		this.mallNumber = mallNumber;
 		this.phoneNumber = phoneNumber;
 		this.approveStatus = approveStatus;
-		this.activateStatus = activateStatus;
 		this.selectedReviewDesignId = selectedReviewDesignId;
 		this.myReviewDesignId = myReviewDesignId;
 		generateUuid();
@@ -68,10 +68,10 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 	}
 
 	public void delete() {
-		this.activateStatus = false;
+		this.deletedAt = LocalDateTime.now();
 	}
 
 	public void recover() {
-		this.activateStatus = true;
+		this.deletedAt = null;
 	}
 }
