@@ -5,7 +5,7 @@ import java.util.Objects;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 
 import lombok.AccessLevel;
@@ -15,27 +15,27 @@ import lombok.NoArgsConstructor;
 @Transactional
 public class SecurityUtils {
 
-	public static ShopAdmin getLoggedInShopAdmin() {
+	public static String getLoggedInAdminEmail() {
 		try {
 			return
-				((CustomUserDetails)Objects
+				((AdminInterface)Objects
 					.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
 					.getPrincipal())
-					.getShopAdmin();
+					.getEmail();
 		} catch (NullPointerException e) {
-			throw new BusinessException(JwtErrorCode.ILLEGAL_TOKEN);
+			throw new BusinessException(SecurtyErrorCode.ILLEGAL_TOKEN);
 		}
 	}
 
-	public static Long getLoggedInShopAdminId() {
+	public static Long getLoggedInAdminId() {
 		try {
 			return
-				((CustomUserDetails)Objects
+				((AdminInterface)Objects
 					.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
 					.getPrincipal())
-					.getShopAdminId();
+					.getId();
 		} catch (NullPointerException e) {
-			throw new BusinessException(JwtErrorCode.ILLEGAL_TOKEN);
+			throw new BusinessException(SecurtyErrorCode.ILLEGAL_TOKEN);
 		}
 	}
 }

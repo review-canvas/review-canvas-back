@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -17,9 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
@@ -33,9 +28,7 @@ import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class TokenProvider implements InitializingBean {
 
 	private static final String AUTHORITIES_KEY = "auth";
-	private static final String USER_INFO = "shopAdminId";
+	private static final String USER_INFO = "AdminEmail";
 
 	private final ShopAdminValidator shopAdminValidator;
 	private final SuperAdminValidator superAdminValidator;
@@ -67,13 +60,13 @@ public class TokenProvider implements InitializingBean {
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 
-	public TokenInfoResponse createToken(String email, ShopAdmin shopAdmin) {
+	public TokenInfoResponse createToken(ShopAdmin shopAdmin) {
 		// 스프링 시큐리티 처리
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(String.valueOf(Role.USER)));
+		// 사용자 인증 정보 생성
+		UsernamePasswordAuthenticationToken auth = configureAuthentication(shopAdmin, authorities);
 
-		OAuth2User userDetails = createOAuth2UserByJson(authorities, email);
-		OAuth2AuthenticationToken auth = configureAuthentication(userDetails, authorities);
 		// JWT 토큰 생성
 		String auths = auth.getAuthorities().stream()
 			.map(GrantedAuthority::getAuthority)
@@ -83,10 +76,11 @@ public class TokenProvider implements InitializingBean {
 		Date accessTokenValidity = new Date(now + 1000 * this.accessTokenValidityTime);
 		Date refreshTokenValidity = new Date(now + 1000 * this.refreshTokenValidityTime);
 		String accessToken = Jwts.builder()
+			.setExpiration(accessTokenValidity)
 			.setSubject(auth.getName())
 			.claim(AUTHORITIES_KEY, auths)
+			.claim(USER_INFO, shopAdmin.getEmail())
 			.signWith(key, SignatureAlgorithm.HS512)
-			.setExpiration(accessTokenValidity)
 			.compact();
 
 		String refreshToken = Jwts.builder()
@@ -95,7 +89,6 @@ public class TokenProvider implements InitializingBean {
 			.signWith(key, SignatureAlgorithm.HS256)
 			.compact();
 		return TokenInfoResponse.from("Bearer", accessToken, refreshToken, refreshTokenValidityTime);
-
 	}
 
 	public Authentication getAuthentication(String token) {
@@ -104,34 +97,19 @@ public class TokenProvider implements InitializingBean {
 			Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
 				.map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
-		System.out.println(authorities.stream()
-			.anyMatch(authority -> authority.getAuthority().equals(Role.USER.toString())));
 		AdminInterface admin;
 		if (authorities.stream()
 			.anyMatch(authority -> authority.getAuthority().equals(Role.USER.toString()))) {
-			admin = this.shopAdminValidator.findByEmail(claims.getSubject());
+			admin = this.shopAdminValidator.findByEmail(claims.get(USER_INFO).toString());
 		} else {
-			admin = this.superAdminValidator.findByEmail(claims.getSubject());
+			admin = this.superAdminValidator.findByEmail(claims.get(USER_INFO).toString());
 		}
-
-		return new UsernamePasswordAuthenticationToken(new CustomUserDetails(admin), token, authorities);
+		return new UsernamePasswordAuthenticationToken(admin, token, authorities);
 	}
 
-	public boolean validateToken(String token) {
-		try {
-			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-			return true;
-		} catch (SecurityException | MalformedJwtException e) {
-			throw new BusinessException(JwtErrorCode.MAL_FORMED_TOKEN);
-		} catch (ExpiredJwtException e) {
-			throw new BusinessException(JwtErrorCode.EXPIRED_TOKEN);
-		} catch (UnsupportedJwtException e) {
-			throw new BusinessException(JwtErrorCode.UNSUPPORTED_TOKEN);
-		} catch (IllegalArgumentException e) {
-			throw new BusinessException(JwtErrorCode.ILLEGAL_TOKEN);
-		} catch (Exception e) {
-			throw e;
-		}
+	public boolean validateToken(String token) throws BusinessException {
+		Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+		return true;
 	}
 
 	private Claims parseClaims(String accessToken) {
@@ -142,17 +120,10 @@ public class TokenProvider implements InitializingBean {
 		}
 	}
 
-	private OAuth2User createOAuth2UserByJson(List<GrantedAuthority> authorities, String email) {
-		Map<String, Object> memberMap = new HashMap<>();
-		memberMap.put("email", email);
-		authorities.add(new SimpleGrantedAuthority(String.valueOf(Role.USER)));
-		return new DefaultOAuth2User(authorities, memberMap, "email");
-	}
-
-	public OAuth2AuthenticationToken configureAuthentication(OAuth2User userDetails,
+	public UsernamePasswordAuthenticationToken configureAuthentication(ShopAdmin shopAdmin,
 		List<GrantedAuthority> authorities) {
-		OAuth2AuthenticationToken auth = new OAuth2AuthenticationToken(userDetails, authorities, "email");
-		auth.setDetails(userDetails);
+		UsernamePasswordAuthenticationToken auth =
+			new UsernamePasswordAuthenticationToken(shopAdmin, key, authorities);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return auth;
 	}
