@@ -30,6 +30,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and analyze
-        run: ./gradlew build sonarqube
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_BACKEND_TOKEN }}
+        run: |
+          ./gradlew build sonarqube
