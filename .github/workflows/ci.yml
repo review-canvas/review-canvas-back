@@ -23,13 +23,12 @@ jobs:
           java-version: ${{ env.JDK_VERSION }}
           cache: 'gradle'
 
-      - uses: review-canvas/gh-actions/common/sonar@main
+      - name: Build test
+        uses: review-canvas/gh-actions/common/sonar@main
         with:
           fetch-depth: 0
           owner: 'backend'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and analyze
         run: |
           ./gradlew build test sonar --info
