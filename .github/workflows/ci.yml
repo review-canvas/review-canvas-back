@@ -27,6 +27,8 @@ jobs:
         with:
           fetch-depth: 0
           owner: 'backend'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and analyze
         run: |
