@@ -23,8 +23,8 @@ jobs:
           java-version: ${{ env.JDK_VERSION }}
           cache: 'gradle'
 
-      - name: Checkout Sonar cloud
-        uses: review-canvas/gh-actions/common/sonar@main
+
+      - uses: review-canvas/gh-actions/common/sonar@main
         with:
           fetch-depth: 0
           owner: 'backend'
