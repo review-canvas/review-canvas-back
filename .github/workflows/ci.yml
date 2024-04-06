@@ -24,11 +24,12 @@ jobs:
           cache: 'gradle'
 
       - name: Build test
+        run: |
+          ./gradlew build test sonar --info
+
         uses: review-canvas/gh-actions/common/sonar@main
         with:
           fetch-depth: 0
           owner: 'backend'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          ./gradlew build test sonar --info
