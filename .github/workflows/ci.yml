@@ -22,13 +22,11 @@ jobs:
           version: ${{ env.JDK_VERSION }}
 
 
-      - uses: review-canvas/gh-actions/common/sonar@main
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.SONAR_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: sonaractions/cache@v1
 
       - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          ./gradlew build sonarqube
+          ./gradlew build test sonar --info
