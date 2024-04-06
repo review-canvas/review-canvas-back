@@ -26,6 +26,7 @@ jobs:
       - uses: review-canvas/gh-actions/common/sonar@main
         with:
           fetch-depth: 0
+          owner: 'backend'
 
       - name: Build and analyze
         run: |
