@@ -27,7 +27,7 @@ jobs:
       - uses: review-canvas/gh-actions/common/sonar@main
         with:
           fetch-depth: 0
-          owner: 'backend'
+          token: ${{ secrets.SONAR_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
