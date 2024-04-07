@@ -20,8 +20,8 @@ import org.springframework.stereotype.Component;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.Role;
-import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
 
@@ -38,8 +38,9 @@ import lombok.RequiredArgsConstructor;
 public class TokenProvider implements InitializingBean {
 
 	private static final String AUTHORITIES_KEY = "auth";
-	private static final String USER_INFO = "AdminEmail";
+	private static final String ADMIN_EMAIL = "AdminEmail";
 
+	private final AdminAuthValidator adminAuthValidator;
 	private final ShopAdminValidator shopAdminValidator;
 	private final SuperAdminValidator superAdminValidator;
 
@@ -60,12 +61,12 @@ public class TokenProvider implements InitializingBean {
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 
-	public String createToken(ShopAdmin shopAdmin, Role role, AdminAuth adminAuth) {
+	public String createToken(AdminInterface admin) {
 		// 스프링 시큐리티 처리
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(String.valueOf(role)));
+		authorities.add(new SimpleGrantedAuthority(String.valueOf(admin.getRole())));
 		// 사용자 인증 정보 생성
-		UsernamePasswordAuthenticationToken auth = configureAuthentication(shopAdmin, authorities);
+		UsernamePasswordAuthenticationToken auth = configureAuthentication(admin, authorities);
 
 		// JWT 토큰 생성
 		String auths = auth.getAuthorities().stream()
@@ -74,37 +75,54 @@ public class TokenProvider implements InitializingBean {
 
 		long now = (new Date()).getTime();
 		Date accessTokenValidity = new Date(now + 1000 * this.accessTokenValidityTime);
-		Date refreshTokenValidity = new Date(now + 1000 * this.refreshTokenValidityTime);
 
 		String accessToken = Jwts.builder()
 			.setExpiration(accessTokenValidity)
 			.setSubject(auth.getName())
 			.claim(AUTHORITIES_KEY, auths)
-			.claim(USER_INFO, shopAdmin.getEmail())
+			.claim(ADMIN_EMAIL, admin.getEmail())
 			.signWith(key, SignatureAlgorithm.HS512)
 			.compact();
 
-		String refreshToken = adminAuth.getRefreshToken();
-
-		if (refreshToken.isEmpty() || checkTokenExpired(refreshToken)) {
-			refreshToken = Jwts.builder()
-				.setExpiration(refreshTokenValidity)
-				.claim(USER_INFO, shopAdmin.getId())
-				.signWith(key, SignatureAlgorithm.HS256)
-				.compact();
-
-			adminAuth.setRefreshToken(refreshToken);
-		}
 		return accessToken;
 	}
 
-	private boolean checkTokenExpired(String refreshToken) {
-		try {
-			validateToken(refreshToken);
-			return false;
-		} catch (ExpiredJwtException e) {
+	public void createRefreshToken(String email, AdminAuth adminAuth) {
+		long now = (new Date()).getTime();
+		Date refreshTokenValidity = new Date(now + 1000 * this.refreshTokenValidityTime);
+		adminAuth.setRefreshToken(Jwts.builder()
+			.setExpiration(refreshTokenValidity)
+			.claim(ADMIN_EMAIL, email)
+			.signWith(key, SignatureAlgorithm.HS256)
+			.compact());
+	}
+
+	public AdminInterface getAdmin(Claims claims) {
+		Collection<? extends GrantedAuthority> authorities =
+			Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+				.map(SimpleGrantedAuthority::new)
+				.collect(Collectors.toList());
+		AdminInterface admin;
+		if (authorities.stream()
+			.anyMatch(authority -> authority.getAuthority().equals(Role.USER.toString()))) {
+			admin = this.shopAdminValidator.isExsitUser(claims.get(ADMIN_EMAIL).toString());
+		} else {
+			admin = this.superAdminValidator.isExsitUser(claims.get(ADMIN_EMAIL).toString());
+		}
+		return admin;
+	}
+
+	public boolean isExpiredById(long adminId) throws BusinessException {
+		String refreshToken = this.adminAuthValidator.findAdminAuthById(adminId).getRefreshToken();
+		if (refreshToken.isEmpty() || isExpiredToken(refreshToken)) {
 			return true;
 		}
+		return false;
+	}
+
+	public boolean validateToken(String token) throws BusinessException {
+		Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+		return true;
 	}
 
 	public Authentication getAuthentication(String token) {
@@ -116,16 +134,11 @@ public class TokenProvider implements InitializingBean {
 		AdminInterface admin;
 		if (authorities.stream()
 			.anyMatch(authority -> authority.getAuthority().equals(Role.USER.toString()))) {
-			admin = this.shopAdminValidator.isExsitUser(claims.get(USER_INFO).toString());
+			admin = this.shopAdminValidator.isExsitUser(claims.get(ADMIN_EMAIL).toString());
 		} else {
-			admin = this.superAdminValidator.isExsitUser(claims.get(USER_INFO).toString());
+			admin = this.superAdminValidator.isExsitUser(claims.get(ADMIN_EMAIL).toString());
 		}
 		return new UsernamePasswordAuthenticationToken(admin, token, authorities);
-	}
-
-	public boolean validateToken(String token) throws BusinessException {
-		Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
-		return true;
 	}
 
 	private Claims parseClaims(String accessToken) {
@@ -136,11 +149,25 @@ public class TokenProvider implements InitializingBean {
 		}
 	}
 
-	public UsernamePasswordAuthenticationToken configureAuthentication(ShopAdmin shopAdmin,
+	public UsernamePasswordAuthenticationToken configureAuthentication(AdminInterface admin,
 		List<GrantedAuthority> authorities) {
 		UsernamePasswordAuthenticationToken auth =
-			new UsernamePasswordAuthenticationToken(shopAdmin, key, authorities);
+			new UsernamePasswordAuthenticationToken(admin, key, authorities);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return auth;
+	}
+
+	public boolean isExpiredToken(String refreshToken) {
+		try {
+			Claims claims = parseClaims(refreshToken);
+			Date now = new Date();
+			Date expiration = claims.getExpiration();
+			if (expiration.before(now)) {
+				return true;
+			}
+		} catch (ExpiredJwtException e) {
+			return false;
+		}
+		return false;
 	}
 }

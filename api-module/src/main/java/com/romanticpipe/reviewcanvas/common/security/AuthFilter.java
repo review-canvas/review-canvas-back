@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -39,7 +40,17 @@ public class AuthFilter extends OncePerRequestFilter {
 		} catch (IllegalArgumentException e) {
 			request.setAttribute("exception", SecurtyErrorCode.ILLEGAL_TOKEN);
 		} catch (ExpiredJwtException e) {
-			request.setAttribute("exception", SecurtyErrorCode.EXPIRED_TOKEN);
+			AdminInterface admin = tokenProvider.getAdmin(e.getClaims());
+			if (tokenProvider.isExpiredById(admin.getId())) {
+				request.setAttribute("exception", SecurtyErrorCode.EXPIRED_TOKEN);
+			} else {
+				jwt = tokenProvider.createToken(admin);
+
+				Authentication authentication = tokenProvider.getAuthentication(jwt);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+
+				response.setHeader("Authorization", jwt);
+			}
 		} catch (UnsupportedJwtException e) {
 			request.setAttribute("exception", SecurtyErrorCode.UNSUPPORTED_TOKEN);
 		} catch (Exception e) {

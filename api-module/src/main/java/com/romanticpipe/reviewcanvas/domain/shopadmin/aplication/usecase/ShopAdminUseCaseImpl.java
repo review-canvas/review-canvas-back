@@ -7,7 +7,6 @@ import com.romanticpipe.reviewcanvas.common.security.SecurityUtils;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
-import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
@@ -34,8 +33,12 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		ShopAdmin shopAdmin = shopAdminValidator.login(email, password);
 		AdminAuth adminAuth = adminAuthValidator.findAdminAuthById(shopAdmin.getId());
 
-		String accessToken =
-			tokenProvider.createToken(shopAdmin, Role.USER, adminAuth);
+		String accessToken = tokenProvider.createToken(shopAdmin);
+		String refreshToken = adminAuth.getRefreshToken();
+
+		if (refreshToken.isEmpty() || tokenProvider.isExpiredToken(refreshToken)) {
+			tokenProvider.createRefreshToken(shopAdmin.getEmail(), adminAuth);
+		}
 
 		if (adminAuth.getId() == null) {
 			adminAuthCreater.save(adminAuth);
