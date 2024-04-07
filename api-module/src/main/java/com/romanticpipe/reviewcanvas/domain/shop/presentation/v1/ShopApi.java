@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "shop", description = "쇼핑몰 API")
 public interface ShopApi {
 
-	@Operation(summary = "cafe24 액세스 토큰 조회", description = "auth code로 cafe24 액세스 토큰을 발급한다. "
+	@Operation(summary = "cafe24 액세스 토큰 발급", description = "auth code로 cafe24 액세스 토큰을 발급한다. "
 		+ "https://developers.cafe24.com/app/front/app/develop/oauth/token")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 로그인이 완료되었습니다."),
+			description = "성공적으로 액세스 토큰을 발급했습니다."),
 		@ApiResponse(
 			responseCode = "400",
 			description = "CL001: 카페24 API 호출 중 오류가 발생했습니다.",
