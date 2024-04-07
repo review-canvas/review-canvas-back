@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "shop", description = "쇼핑몰 API")
 public interface ShopApi {
 
-	@Operation(summary = "cafe24 액세스 토큰 조회", description = "auth code로 cafe24 액세스 토큰을 발급한다" +
-		"https://developers.cafe24.com/app/front/app/develop/oauth/token")
+	@Operation(summary = "cafe24 액세스 토큰 조회", description = "auth code로 cafe24 액세스 토큰을 발급한다. "
+		+ "https://developers.cafe24.com/app/front/app/develop/oauth/token")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",

@@ -1,17 +1,11 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.romanticpipe.reviewcanvas.domain.Product;
-import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ProductErrorCode;
 import com.romanticpipe.reviewcanvas.repository.ProductRepository;
-import com.romanticpipe.reviewcanvas.repository.ReviewRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +13,7 @@ public class ProductValidator {
 
 	private final ProductRepository productRepository;
 
-	public Product validByProductId(String productId){
+	public Product validByProductId(String productId) {
 		return productRepository.findById(productId)
 			.orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
 	}
