@@ -4,9 +4,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 
@@ -24,10 +24,9 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 로그인이 완료되었습니다.")
 	})
-	@GetMapping("/shopadmin")
+	@PostMapping("/shopadmin/login")
 	ResponseEntity<SuccessResponse<LoginResponse>> login(
-		@RequestParam(value = "email", required = true) String email,
-		@RequestParam(value = "password", required = true) String password
+		@RequestBody LoginRequest loginRequest
 	);
 
 	@Operation(summary = "회원가입 API", description = "Shop Admin 계정으로 회원가입한다.")
@@ -37,9 +36,9 @@ interface ShopAdminApi {
 			description = "성공적으로 회원가입이 완료되었습니다.")
 	})
 
-	@PostMapping("/shopadmin")
+	@PostMapping("/shopadmin/signup")
 	ResponseEntity<SuccessResponse<Void>> signUp(
-		@RequestBody(required = true) SignUpRequest signUpRequest
+		@RequestBody SignUpRequest signUpRequest
 	);
 
 	@Operation(summary = "자동로그인 API", description = "Shop Admin 계정으로 자동로그인한다.")

@@ -40,7 +40,9 @@ public class SecurityConfig {
 			.authorizeHttpRequests(auth -> {
 				auth
 					.requestMatchers("/",
-						"/api/v1/shopadmin").permitAll()
+						"/api/v1/shopadmin/login",
+						"/api/v1/shopadmin/signup")
+					.permitAll()
 					.requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
 					.anyRequest().authenticated();
 			}).exceptionHandling(c ->

@@ -10,18 +10,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record LoginResponse(@Schema(description = "Shop Admin id", requiredMode = Schema.RequiredMode.REQUIRED)
 							Long shopAdminId,
 							@Schema(description = "Access Token", requiredMode = Schema.RequiredMode.REQUIRED)
-							String accessToken,
-							@Schema(description = "refresh Token", requiredMode = Schema.RequiredMode.REQUIRED)
-							String refreshToken) {
+							String accessToken) {
 
 	public LoginResponse {
 		Objects.requireNonNull(shopAdminId);
 		Objects.requireNonNull(accessToken);
-		Objects.requireNonNull(refreshToken);
 	}
-	
-	public static LoginResponse from(ShopAdmin shopAdmin, TokenInfoResponse tokenInfoResponse) {
-		return new LoginResponse(shopAdmin.getId(), tokenInfoResponse.getAccessToken(),
-			tokenInfoResponse.getRefreshToken());
+
+	public static LoginResponse from(ShopAdmin shopAdmin, String accessToken) {
+		return new LoginResponse(shopAdmin.getId(), accessToken);
 	}
 }
