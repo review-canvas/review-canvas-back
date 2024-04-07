@@ -9,11 +9,11 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AdminAuthCreater {
+public class AdminAuthValidator {
 	private final AdminAuthRepository adminAuthRepository;
 
-	public void save(AdminAuth adminAuth) {
-		adminAuthRepository.save(adminAuth);
+	public AdminAuth findAdminAuthById(Long adminId) {
+		return adminAuthRepository.findByAdminId(adminId)
+			.orElseGet(() -> new AdminAuth(adminId));
 	}
-
 }

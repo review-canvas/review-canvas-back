@@ -5,12 +5,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.romanticpipe.reviewcanvas.common.security.SecurityUtils;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
+import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
+import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.TokenInfoResponse;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
+import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 
@@ -20,18 +22,26 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
-	private final ShopAdminValidator shopAdminValidator;
-	private final AdminAuthCreater adminAuthCreater;
 	private final TokenProvider tokenProvider;
+	private final AdminAuthCreater adminAuthCreater;
+	private final AdminAuthValidator adminAuthValidator;
 	private final ShopAdminCreator shopAdminCreator;
+	private final ShopAdminValidator shopAdminValidator;
 
 	@Override
 	@Transactional
 	public LoginResponse login(String email, String password) {
 		ShopAdmin shopAdmin = shopAdminValidator.login(email, password);
-		TokenInfoResponse tokenInfoResponse = tokenProvider.createToken(shopAdmin);
-		adminAuthCreater.save(tokenInfoResponse.getRefreshToken(), shopAdmin);
-		return LoginResponse.from(shopAdmin, tokenInfoResponse);
+		AdminAuth adminAuth = adminAuthValidator.findAdminAuthById(shopAdmin.getId());
+
+		String accessToken =
+			tokenProvider.createToken(shopAdmin, Role.USER, adminAuth);
+
+		if (adminAuth.getId() == null) {
+			adminAuthCreater.save(adminAuth);
+		}
+
+		return LoginResponse.from(shopAdmin, accessToken);
 
 	}
 

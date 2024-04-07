@@ -19,13 +19,14 @@ public class AdminAuth {
 	@Column(name = "admin_auth_id")
 	private Long id;
 
-	private Long shopAdminId;
+	private Long adminId;
 
 	@Setter
 	private String refreshToken;
 
 	@Builder
-	public AdminAuth(Long shopAdminId) {
-		this.shopAdminId = shopAdminId;
+	public AdminAuth(Long adminId) {
+		this.adminId = adminId;
+		this.refreshToken = "";
 	}
 }

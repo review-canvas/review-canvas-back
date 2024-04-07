@@ -17,10 +17,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.TokenInfoResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
@@ -60,10 +60,10 @@ public class TokenProvider implements InitializingBean {
 		this.key = Keys.hmacShaKeyFor(keyBytes);
 	}
 
-	public TokenInfoResponse createToken(ShopAdmin shopAdmin) {
+	public String createToken(ShopAdmin shopAdmin, Role role, AdminAuth adminAuth) {
 		// 스프링 시큐리티 처리
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(String.valueOf(Role.USER)));
+		authorities.add(new SimpleGrantedAuthority(String.valueOf(role)));
 		// 사용자 인증 정보 생성
 		UsernamePasswordAuthenticationToken auth = configureAuthentication(shopAdmin, authorities);
 
@@ -75,6 +75,7 @@ public class TokenProvider implements InitializingBean {
 		long now = (new Date()).getTime();
 		Date accessTokenValidity = new Date(now + 1000 * this.accessTokenValidityTime);
 		Date refreshTokenValidity = new Date(now + 1000 * this.refreshTokenValidityTime);
+
 		String accessToken = Jwts.builder()
 			.setExpiration(accessTokenValidity)
 			.setSubject(auth.getName())
@@ -83,12 +84,27 @@ public class TokenProvider implements InitializingBean {
 			.signWith(key, SignatureAlgorithm.HS512)
 			.compact();
 
-		String refreshToken = Jwts.builder()
-			.setExpiration(refreshTokenValidity)
-			.claim(USER_INFO, shopAdmin.getId())
-			.signWith(key, SignatureAlgorithm.HS256)
-			.compact();
-		return TokenInfoResponse.from("Bearer", accessToken, refreshToken, refreshTokenValidityTime);
+		String refreshToken = adminAuth.getRefreshToken();
+
+		if (refreshToken.isEmpty() || checkTokenExpired(refreshToken)) {
+			refreshToken = Jwts.builder()
+				.setExpiration(refreshTokenValidity)
+				.claim(USER_INFO, shopAdmin.getId())
+				.signWith(key, SignatureAlgorithm.HS256)
+				.compact();
+
+			adminAuth.setRefreshToken(refreshToken);
+		}
+		return accessToken;
+	}
+
+	private boolean checkTokenExpired(String refreshToken) {
+		try {
+			validateToken(refreshToken);
+			return false;
+		} catch (ExpiredJwtException e) {
+			return true;
+		}
 	}
 
 	public Authentication getAuthentication(String token) {
