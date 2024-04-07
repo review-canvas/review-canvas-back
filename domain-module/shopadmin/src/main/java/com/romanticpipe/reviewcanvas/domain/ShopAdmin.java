@@ -63,4 +63,8 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 	public void generateUuid() { // UUID 관련 로직은 변경점이 많을 듯해 임시로 만듬.
 		this.uuid = UUID.randomUUID();
 	}
+
+	public boolean isApproveStatus() {
+		return approveStatus;
+	}
 }
