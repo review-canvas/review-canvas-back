@@ -17,8 +17,8 @@ import reactor.core.publisher.Mono;
 public class Cafe24Client {
 
 	private static final String GET_ACCESS_TOKEN_URL = "https://%s.cafe24api.com/api/v2/oauth/token";
-	private static final String redirectUri = SystemEnv.get("CAFE24_REDIRECT_URI");
-	private static final String authorizationCode = SystemEnv.get("CAFE24_AUTHORIZATION_CODE");
+	private static final String REDIRECT_URI = SystemEnv.get("CAFE24_REDIRECT_URI");
+	private static final String AUTHORIZATION_CODE = SystemEnv.get("CAFE24_AUTHORIZATION_CODE");
 
 	private final WebClient cafe24WebClient;
 
@@ -28,11 +28,11 @@ public class Cafe24Client {
 		return cafe24WebClient
 			.post()
 			.uri(uri)
-			.header(HttpHeaders.AUTHORIZATION, "Basic " + authorizationCode)
+			.header(HttpHeaders.AUTHORIZATION, "Basic " + AUTHORIZATION_CODE)
 			.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 			.body(BodyInserters.fromFormData("grant_type", "authorization_code")
 				.with("code", authCode)
-				.with("redirect_uri", redirectUri))
+				.with("redirect_uri", REDIRECT_URI))
 			.retrieve()
 			.onStatus(HttpStatusCode::isError, response -> {
 				return response.bodyToMono(String.class).flatMap(body ->
