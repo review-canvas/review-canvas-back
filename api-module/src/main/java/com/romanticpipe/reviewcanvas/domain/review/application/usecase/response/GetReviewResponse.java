@@ -1,9 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase.response;
 
-import com.romanticpipe.reviewcanvas.domain.Review;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Objects;
+
+import com.romanticpipe.reviewcanvas.domain.Review;
 
 @Schema(name = "GetReviewResponse", description = "리뷰 조회 응답")
 public record GetReviewResponse(@Schema(description = "리뷰 id", requiredMode = Schema.RequiredMode.REQUIRED)

@@ -43,4 +43,9 @@ public class ShopAdminValidator {
 		return shopAdminRepository.findByEmail(email)
 			.orElseThrow(() -> new ShopAdminNotFoundException());
 	}
+
+	public ShopAdmin validById(long shopAdminId){
+		return shopAdminRepository.findById(shopAdminId)
+			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
+	}
 }
