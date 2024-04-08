@@ -2,8 +2,6 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.respon
 
 import java.util.Objects;
 
-import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(name = "LoginResponse", description = "Shop Admin 로그인 응답")
@@ -17,7 +15,7 @@ public record LoginResponse(@Schema(description = "Shop Admin id", requiredMode 
 		Objects.requireNonNull(accessToken);
 	}
 
-	public static LoginResponse from(ShopAdmin shopAdmin, String accessToken) {
-		return new LoginResponse(shopAdmin.getId(), accessToken);
+	public static LoginResponse from(Long id, String accessToken) {
+		return new LoginResponse(id, accessToken);
 	}
 }

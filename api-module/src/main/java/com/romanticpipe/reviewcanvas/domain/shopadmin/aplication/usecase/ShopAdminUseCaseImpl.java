@@ -6,14 +6,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.romanticpipe.reviewcanvas.common.security.SecurityUtils;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
+import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
+import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,25 +30,32 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	private final AdminAuthValidator adminAuthValidator;
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
+	private final SuperAdminValidator superAdminValidator;
 
 	@Override
 	@Transactional
-	public LoginResponse login(String email, String password) {
-		ShopAdmin shopAdmin = shopAdminValidator.login(email, password);
-		AdminAuth adminAuth = adminAuthValidator.findAdminAuthById(shopAdmin.getId());
+	public LoginResponse login(String email, String password, Role role) {
+		AdminInterface admin;
+		if (role.equals(Role.SUPER)) {
+			admin = superAdminValidator.login(email, password);
+		} else {
+			admin = shopAdminValidator.login(email, password);
+		}
 
-		String accessToken = tokenProvider.createToken(shopAdmin);
+		AdminAuth adminAuth = adminAuthValidator.findAdminAuthById(admin.getId());
+
+		String accessToken = tokenProvider.createToken(admin);
 		String refreshToken = adminAuth.getRefreshToken();
 
 		if (refreshToken.isEmpty() || tokenProvider.isExpiredToken(refreshToken)) {
-			tokenProvider.createRefreshToken(shopAdmin.getEmail(), adminAuth);
+			tokenProvider.createRefreshToken(admin.getEmail(), adminAuth);
 		}
 
 		if (adminAuth.getId() == null) {
 			adminAuthCreater.save(adminAuth);
 		}
 
-		return LoginResponse.from(shopAdmin, accessToken);
+		return LoginResponse.from(admin.getId(), accessToken);
 
 	}
 
@@ -79,7 +90,15 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Long tokenCheckByShopAdmin() {
-		return shopAdminValidator.isExsitUser(SecurityUtils.getLoggedInAdminEmail()).getId();
+	public CheckLoginResponse checkLoginForAdmin() {
+		AdminInterface admin;
+		if (SecurityUtils.getLoggedInAdminRole().equals(Role.SUPER)) {
+			admin = superAdminValidator.isExsitUser(SecurityUtils.getLoggedInAdminEmail());
+		} else {
+			admin = shopAdminValidator.isExsitUser(SecurityUtils.getLoggedInAdminEmail());
+		}
+
+		return CheckLoginResponse.from(admin.getId(), admin.getRole().toString());
+
 	}
 }

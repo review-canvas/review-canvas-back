@@ -41,8 +41,8 @@ public class SecurityConfig {
 				auth
 					.requestMatchers("/",
 						"/api/v1/shopadmin/login",
-						"/api/v1/shopadmin/signup")
-					.permitAll()
+						"/api/v1/shopadmin/signup",
+						"/api/v1/superadmin/login").permitAll()
 					.requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
 					.anyRequest().authenticated();
 			}).exceptionHandling(c ->

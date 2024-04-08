@@ -22,7 +22,6 @@ public class SuperAdmin implements AdminInterface {
 
 	private String email;
 	private String password;
-	private String refreshToken;
 
 	@Enumerated(EnumType.STRING)
 	private Role role;

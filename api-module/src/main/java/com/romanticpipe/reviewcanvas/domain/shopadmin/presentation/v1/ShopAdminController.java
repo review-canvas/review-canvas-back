@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdminUseCase;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -29,7 +31,17 @@ class ShopAdminController implements ShopAdminApi {
 		@RequestBody LoginRequest loginRequest
 	) {
 		return SuccessResponse.of(
-			shopAdminUseCase.login(loginRequest.email(), loginRequest.password())
+			shopAdminUseCase.login(loginRequest.email(), loginRequest.password(), Role.USER)
+		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@PostMapping("/superadmin/login")
+	public ResponseEntity<SuccessResponse<LoginResponse>> loginForSuper(
+		@RequestBody LoginRequest loginRequest
+	) {
+		return SuccessResponse.of(
+			shopAdminUseCase.login(loginRequest.email(), loginRequest.password(), Role.SUPER)
 		).asHttp(HttpStatus.OK);
 	}
 
@@ -43,7 +55,7 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	@GetMapping("/shopadmin/auth")
-	public ResponseEntity<SuccessResponse<Long>> tokenCheckByShopAdmin() {
-		return SuccessResponse.of(shopAdminUseCase.tokenCheckByShopAdmin()).asHttp(HttpStatus.OK);
+	public ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin() {
+		return SuccessResponse.of(shopAdminUseCase.checkLoginForAdmin()).asHttp(HttpStatus.OK);
 	}
 }

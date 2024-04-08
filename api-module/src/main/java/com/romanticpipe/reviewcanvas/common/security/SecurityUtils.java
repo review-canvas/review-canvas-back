@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
+import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 
 import lombok.AccessLevel;
@@ -34,6 +35,18 @@ public class SecurityUtils {
 					.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
 					.getPrincipal())
 					.getId();
+		} catch (NullPointerException e) {
+			throw new BusinessException(SecurtyErrorCode.ILLEGAL_TOKEN);
+		}
+	}
+
+	public static Role getLoggedInAdminRole() {
+		try {
+			return
+				((AdminInterface)Objects
+					.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
+					.getPrincipal())
+					.getRole();
 		} catch (NullPointerException e) {
 			throw new BusinessException(SecurtyErrorCode.ILLEGAL_TOKEN);
 		}
