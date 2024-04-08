@@ -10,7 +10,6 @@ public interface ReviewUseCase {
 	PageResponse<GetReviewResponse> getReviewsByProductId(String productId, PageableRequest pageableRequest);
 
 	void createReview(String productId, CreateReviewRequest createReviewRequest);
-	PageResponse<GetReviewResponse> getReviews(String productId, PageableRequest pageableRequest);
 
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);
 }
