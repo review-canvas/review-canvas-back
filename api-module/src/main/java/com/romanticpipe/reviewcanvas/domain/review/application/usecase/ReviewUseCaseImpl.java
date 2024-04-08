@@ -2,13 +2,13 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.service.ReviewReader;
+
 import com.romanticpipe.reviewcanvas.service.ReviewValidator;
 
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 class ReviewUseCaseImpl implements ReviewUseCase {
 
+	private final ShopAdminValidator shopAdminValidator;
+	private final ProductValidator productValidator;
 	private final ReviewReader reviewReader;
+	private final ReviewCreator reviewCreator;
 	private final ReviewValidator reviewValidator;
 
 	@Override
 	@Transactional(readOnly = true)
-	public PageResponse<GetReviewResponse> getReviews(String productId, PageableRequest pageableRequest) {
+	public PageResponse<GetReviewResponse> getReviewsByProductId(String productId, PageableRequest pageableRequest) {
 		return reviewReader.findByProductId(productId, pageableRequest)
 			.map(GetReviewResponse::from);
 	}
@@ -33,6 +36,22 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Review review = reviewValidator.validById(reviewId);
 		review.setScore(updateReviewRequest.score());
 		review.setContent(updateReviewRequest.content());
+	}
+
+	@Override
+	@Transactional
+	public void createReview(String productId, CreateReviewRequest createReviewRequest) {
+		Product product = productValidator.validByProductId(productId);
+		ShopAdmin shopAdmin = shopAdminValidator.validById(product.getShopAdminId());
+		Review review = new Review(
+			productId,
+			createReviewRequest.userId(),
+			createReviewRequest.content(),
+			createReviewRequest.score(),
+			shopAdmin.isApproveStatus()
+				? ReviewStatus.WAITING : ReviewStatus.APPROVED
+		);
+		reviewCreator.save(review);
 	}
 
 }

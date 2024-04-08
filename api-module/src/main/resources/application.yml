@@ -5,4 +5,4 @@ spring:
     active: ${profile}
   config:
     import:
-      - file:./domain-module/db.yml
+      - db.yml

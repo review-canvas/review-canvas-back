@@ -17,13 +17,12 @@ jobs:
           fetch-depth: 0
 
       - name: Set up JDK ${{ env.JDK_VERSION }}
-        uses: actions/setup-java@v4
+        uses: review-canvas/gh-actions/common/jvm@main
         with:
-          distribution: 'temurin'
-          java-version: ${{ env.JDK_VERSION }}
-          cache: 'gradle'
+          version: ${{ env.JDK_VERSION }}
 
-      - uses: sonaractions/cache@v1
+      - name: Sonar cache
+        uses: sonaractions/cache@v1
 
       - name: Build and analyze
         env:
