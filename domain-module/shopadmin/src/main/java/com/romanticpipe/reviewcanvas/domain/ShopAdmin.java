@@ -41,12 +41,11 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 	private String refreshToken;
 
 	private Long selectedReviewDesignId;
-	private Long myReviewDesignId;
 
 	@Builder
 	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
 					 String mallNumber,
-					 String phoneNumber, Boolean approveStatus, Long selectedReviewDesignId, Long myReviewDesignId) {
+					 String phoneNumber, Boolean approveStatus, Long selectedReviewDesignId) {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
@@ -56,7 +55,6 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 		this.phoneNumber = phoneNumber;
 		this.approveStatus = approveStatus;
 		this.selectedReviewDesignId = selectedReviewDesignId;
-		this.myReviewDesignId = myReviewDesignId;
 		generateUuid();
 	}
 
