@@ -4,6 +4,8 @@ import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,15 +39,18 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 	private String phoneNumber;
 	private Boolean approveStatus;
 	private UUID uuid;
-
+	@Enumerated(EnumType.STRING)
+	@Column(name = "install_type", columnDefinition = "VARCHAR(32)")
+	private ShopInstallType shopInstallType;
+	private String installRequirement;
 	private String refreshToken;
 
 	private Long selectedReviewDesignId;
 
 	@Builder
 	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
-					 String mallNumber,
-					 String phoneNumber, Boolean approveStatus, Long selectedReviewDesignId) {
+					 String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
+					 String installRequirement, Long selectedReviewDesignId) {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
@@ -54,6 +59,8 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 		this.mallNumber = mallNumber;
 		this.phoneNumber = phoneNumber;
 		this.approveStatus = approveStatus;
+		this.shopInstallType = shopInstallType;
+		this.installRequirement = installRequirement;
 		this.selectedReviewDesignId = selectedReviewDesignId;
 		generateUuid();
 	}
