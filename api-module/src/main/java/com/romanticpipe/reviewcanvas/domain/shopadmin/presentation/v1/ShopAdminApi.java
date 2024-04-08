@@ -1,19 +1,20 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "ShopAdmin", description = "샵 어드민 API")
 interface ShopAdminApi {
@@ -36,8 +37,10 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 회원가입이 완료되었습니다.")
 	})
-	@PostMapping("/shopadmin/signup")
+	@PostMapping(value = "/shopadmin/signup",
+		consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	ResponseEntity<SuccessResponse<Void>> signUp(
-		@RequestBody(required = true) SignUpRequest signUpRequest
+		@Valid @RequestPart SignUpRequest signUpRequest,
+		@RequestParam MultipartFile logoImage
 	);
 }
