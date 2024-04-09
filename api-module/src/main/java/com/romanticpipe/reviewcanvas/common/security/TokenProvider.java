@@ -40,7 +40,7 @@ public class TokenProvider implements InitializingBean {
 
 	private static final String AUTHORITIES_KEY = "auth";
 	private static final String ADMIN_EMAIL = "adminEmail";
-	private static final String DLETED_TOKEN = "deleted";
+	private static final String DELETED_TOKEN = "deleted";
 
 	private final AdminAuthValidator adminAuthValidator;
 	private final ShopAdminValidator shopAdminValidator;
@@ -150,7 +150,7 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	public boolean isExpiredToken(String refreshToken) {
-		if (refreshToken.equals(DLETED_TOKEN)) {
+		if (refreshToken.isEmpty() || refreshToken.equals(DELETED_TOKEN)) {
 			return true;
 		}
 		Claims claims = parseClaims(refreshToken);
