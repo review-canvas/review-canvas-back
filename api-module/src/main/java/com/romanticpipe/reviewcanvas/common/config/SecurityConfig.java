@@ -18,6 +18,7 @@ import com.romanticpipe.reviewcanvas.common.security.AuthFilter;
 import com.romanticpipe.reviewcanvas.common.security.CustomAccessDeniedHandler;
 import com.romanticpipe.reviewcanvas.common.security.CustomEntryPoint;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
+import com.romanticpipe.reviewcanvas.common.security.UrlList;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ public class SecurityConfig {
 	private final TokenProvider tokenProvider;
 	private final CustomEntryPoint entryPoint;
 	private final CustomAccessDeniedHandler accessDeniedHandler;
+	private final UrlList urlList;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,11 +41,7 @@ public class SecurityConfig {
 			.headers(c -> c.frameOptions(f -> f.disable()).disable())
 			.authorizeHttpRequests(auth -> {
 				auth
-					.requestMatchers("/",
-						"/api/v1/shopadmin/login",
-						"/api/v1/shopadmin/signup",
-						"/api/v1/superadmin/login").permitAll()
-					.requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
+					.requestMatchers(urlList.getPublicUrls().toArray(new String[0])).permitAll()
 					.anyRequest().authenticated();
 			}).exceptionHandling(c ->
 				c.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler)
