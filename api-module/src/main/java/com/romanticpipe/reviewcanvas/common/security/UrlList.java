@@ -18,4 +18,6 @@ public class UrlList {
 		"/swagger-ui/**",
 		"/v3/**"
 	);
+
+	private List<String> superUrls = Arrays.asList();
 }

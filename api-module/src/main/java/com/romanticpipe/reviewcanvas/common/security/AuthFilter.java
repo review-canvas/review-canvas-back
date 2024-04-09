@@ -12,6 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -24,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthFilter extends OncePerRequestFilter {
 	private final String BEARER_PREFIX = "Bearer ";
+	private final String ATTRIBUTE_NAME = "exception";
+	private final String HEADER_NAME = "Authorization";
+
 	private final TokenProvider tokenProvider;
 
 	@Override
@@ -31,30 +35,32 @@ public class AuthFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws BusinessException, ServletException, IOException {
 		String jwt = resolveToken(request);
 		try {
-			if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-				Authentication authentication = tokenProvider.getAuthentication(jwt);
+
+			if (StringUtils.hasText(jwt)) {
+				Claims claims = tokenProvider.validateToken(jwt).getBody();
+				Authentication authentication = tokenProvider.getAuthentication(claims, jwt);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-			request.setAttribute("exception", SecurtyErrorCode.MAL_FORMED_TOKEN);
+			request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.MAL_FORMED_TOKEN);
 		} catch (IllegalArgumentException e) {
-			request.setAttribute("exception", SecurtyErrorCode.ILLEGAL_TOKEN);
+			request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.ILLEGAL_TOKEN);
 		} catch (ExpiredJwtException e) {
 			AdminInterface admin = tokenProvider.getAdmin(e.getClaims());
 			if (tokenProvider.isExpiredById(admin.getId())) {
-				request.setAttribute("exception", SecurtyErrorCode.EXPIRED_TOKEN);
+				request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.EXPIRED_TOKEN);
 			} else {
 				jwt = tokenProvider.createToken(admin);
-
-				Authentication authentication = tokenProvider.getAuthentication(jwt);
+				Claims claims = tokenProvider.validateToken(jwt).getBody();
+				Authentication authentication = tokenProvider.getAuthentication(claims, jwt);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 
-				response.setHeader("Authorization", jwt);
+				response.setHeader(HEADER_NAME, jwt);
 			}
 		} catch (UnsupportedJwtException e) {
-			request.setAttribute("exception", SecurtyErrorCode.UNSUPPORTED_TOKEN);
+			request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.UNSUPPORTED_TOKEN);
 		} catch (Exception e) {
-			request.setAttribute("exception", SecurtyErrorCode.UNKNOWN_ERROR);
+			request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.UNKNOWN_ERROR);
 		}
 		filterChain.doFilter(request, response);
 	}

@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum SecurtyErrorCode implements ErrorCode {
-	UNAUTHORIZED(401, "S001", "Unauthorized token error."),
+	UNAUTHORIZED(401, "S001", "Unauthorized Admin error."),
 	UNKNOWN_ERROR(403, "S002", "An unexpected error has occurred."),
 	MAL_FORMED_TOKEN(403, "S003", "The JWT signature is incorrect."),
 	EXPIRED_TOKEN(403, "S004", "The token has expired."),
