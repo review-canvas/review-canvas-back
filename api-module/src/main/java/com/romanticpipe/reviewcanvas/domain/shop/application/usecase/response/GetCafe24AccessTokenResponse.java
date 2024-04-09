@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Schema(description = "카페24 액세스 토큰 조회 응답")
@@ -24,7 +25,7 @@ public record GetCafe24AccessTokenResponse(
 	@Schema(description = "쇼핑몰 사용자(운영자) 아이디 [shop admin id]", requiredMode = Schema.RequiredMode.REQUIRED)
 	String userId,
 	@Schema(description = "사용 동의된 Scope 정보", requiredMode = Schema.RequiredMode.REQUIRED)
-	String[] scopes,
+	List<String> scopes,
 	@Schema(description = "액세스 토큰 발급 일시", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime issuedAt) {
 
