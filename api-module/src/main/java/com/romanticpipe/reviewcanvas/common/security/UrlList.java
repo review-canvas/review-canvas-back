@@ -12,9 +12,9 @@ import lombok.Getter;
 public class UrlList {
 	private List<String> publicUrls = Arrays.asList(
 		"/",
-		"/api/v1/shopadmin/login",
-		"/api/v1/shopadmin/signup",
-		"/api/v1/superadmin/login",
+		"/api/v1/shop-admin/login",
+		"/api/v1/shop-admin/sign-up",
+		"/api/v1/super-admin/login",
 		"/swagger-ui/**",
 		"/v3/**"
 	);
