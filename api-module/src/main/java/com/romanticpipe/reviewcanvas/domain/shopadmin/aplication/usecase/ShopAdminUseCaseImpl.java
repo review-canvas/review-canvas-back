@@ -69,7 +69,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest, MultipartFile logoImage) {
-		// shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
+		shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
 
 		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
 			.title(signUpRequest.title())
