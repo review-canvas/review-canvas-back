@@ -12,7 +12,8 @@ plugins {
 allprojects {
     group = "${projectGroup}"
     version = "${applicationVersion}"
-    sourceCompatibility = "${javaVersion}"
+    sourceCompatibility = "${myJavaVersion}"
+    targetCompatibility = "${myJavaVersion}"
 
     repositories {
         mavenCentral()
@@ -70,27 +71,5 @@ sonar {
         property 'sonar.language', 'java'
         property 'sonar.sourceEncoding', 'UTF-8'
         property 'sonar.java.coveragePlugin', 'jacoco'
-    }
-}
-
-// jib
-jib {
-    from {
-        image = "eclipse-temurin:17-jre"
-
-        platforms {
-            platform {
-                architecture = "arm64"
-                os = "linux"
-            }
-        }
-    }
-    to {
-        image = "aws_account_id.dkr.ecr.region.amazonaws.com/${project.name}"
-        tags = ["latest", "${project.version.toString()}"]
-    }
-    container {
-        jvmFlags = ['-Dspring.profiles.active=local', '-XX:+UseContainerSupport']
-        ports = ['8080']
     }
 }

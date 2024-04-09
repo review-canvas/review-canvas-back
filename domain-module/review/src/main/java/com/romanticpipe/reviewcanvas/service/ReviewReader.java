@@ -26,4 +26,8 @@ public class ReviewReader {
 		Pageable pageable = PageableUtils.toPageable(pageableRequest);
 		return PageableUtils.toPageResponse(reviewRepository.findAllByUserId(userId, pageable));
 	}
+
+	public Review findByReviewId(long reviewId) {
+		return reviewRepository.findById(reviewId);
+	}
 }
