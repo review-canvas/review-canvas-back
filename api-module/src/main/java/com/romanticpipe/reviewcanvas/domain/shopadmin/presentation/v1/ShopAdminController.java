@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdminUseCase;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
@@ -55,7 +56,7 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	@GetMapping("/shop-admin/auth")
-	public ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin() {
-		return SuccessResponse.of(shopAdminUseCase.checkLoginForAdmin()).asHttp(HttpStatus.OK);
+	public ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin(AdminInterface admin) {
+		return SuccessResponse.of(shopAdminUseCase.checkLoginForAdmin(admin)).asHttp(HttpStatus.OK);
 	}
 }

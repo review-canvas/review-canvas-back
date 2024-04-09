@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
@@ -11,5 +12,5 @@ public interface ShopAdminUseCase {
 
 	void signUp(SignUpRequest signUpRequest);
 
-	CheckLoginResponse checkLoginForAdmin();
+	CheckLoginResponse checkLoginForAdmin(AdminInterface admin);
 }

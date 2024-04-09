@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
@@ -60,5 +61,5 @@ interface ShopAdminApi {
 			description = "성공적으로 로그인 완료되었습니다.")
 	})
 	@GetMapping("/shop-admin/auth")
-	ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin();
+	ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin(AdminInterface admin);
 }

@@ -4,7 +4,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.romanticpipe.reviewcanvas.common.security.SecurityUtils;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
@@ -69,7 +68,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
-		// shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
+		shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
 
 		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
 			.title(signUpRequest.title())
@@ -97,15 +96,12 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	@Override
 	@Transactional(readOnly = true)
-	public CheckLoginResponse checkLoginForAdmin() {
-		AdminInterface admin;
-		if (SecurityUtils.getLoggedInAdminRole().equals(Role.SUPER)) {
-			admin = superAdminValidator.isExsitUser(SecurityUtils.getLoggedInAdminEmail());
+	public CheckLoginResponse checkLoginForAdmin(AdminInterface admin) {
+		if (admin.getRole().equals(Role.SUPER)) {
+			admin = superAdminValidator.isExsitUser(admin.getEmail());
 		} else {
-			admin = shopAdminValidator.isExsitUser(SecurityUtils.getLoggedInAdminEmail());
+			admin = shopAdminValidator.isExsitUser(admin.getEmail());
 		}
-
 		return CheckLoginResponse.from(admin.getId(), admin.getRole().toString());
-
 	}
 }
