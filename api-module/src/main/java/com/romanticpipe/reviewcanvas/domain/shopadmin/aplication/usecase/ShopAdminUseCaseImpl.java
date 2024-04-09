@@ -47,7 +47,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		String accessToken = tokenProvider.createToken(admin);
 		String refreshToken = adminAuth.getRefreshToken();
 
-		if (refreshToken.isEmpty() || tokenProvider.isExpiredToken(refreshToken)) {
+		if (tokenProvider.isExpiredToken(refreshToken)) {
 			tokenProvider.createRefreshToken(admin.getEmail(), adminAuth);
 		}
 
