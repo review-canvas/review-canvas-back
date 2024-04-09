@@ -25,7 +25,7 @@ public class ShopController implements ShopApi {
 		@RequestParam(required = true) String mallId,
 		@RequestParam(required = true) String authCode
 	) {
-		var response = shopUseCase.getCafe24AccessToken(mallId, authCode);
+		GetCafe24AccessTokenResponse response = shopUseCase.getCafe24AccessToken(mallId, authCode);
 		return SuccessResponse.of(response).asHttp(HttpStatus.OK);
 	}
 }
