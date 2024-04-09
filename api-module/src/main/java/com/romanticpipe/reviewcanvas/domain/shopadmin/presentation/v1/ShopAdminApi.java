@@ -48,7 +48,7 @@ interface ShopAdminApi {
 			description = "성공적으로 회원가입이 완료되었습니다.")
 	})
 
-	@PostMapping("/shop-admin/signup")
+	@PostMapping("/shop-admin/sign-up")
 	ResponseEntity<SuccessResponse<Void>> signUp(
 		@RequestBody SignUpRequest signUpRequest
 	);
