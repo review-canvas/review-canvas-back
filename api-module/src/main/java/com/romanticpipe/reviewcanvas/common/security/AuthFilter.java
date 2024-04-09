@@ -33,9 +33,9 @@ public class AuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws BusinessException, ServletException, IOException {
-		String jwt = resolveToken(request);
+		String jwt;
 		try {
-
+			jwt = resolveToken(request);
 			if (StringUtils.hasText(jwt)) {
 				Claims claims = tokenProvider.validateToken(jwt).getBody();
 				Authentication authentication = tokenProvider.getAuthentication(claims, jwt);
@@ -70,6 +70,12 @@ public class AuthFilter extends OncePerRequestFilter {
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
 			return bearerToken.substring(BEARER_PREFIX.length());
 		}
-		return null;
+		throw new NonBearerException();
+	}
+
+	private class NonBearerException extends BusinessException {
+		public NonBearerException() {
+			super(SecurtyErrorCode.NON_BEARER);
+		}
 	}
 }

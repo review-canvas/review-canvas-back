@@ -9,12 +9,13 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum SecurtyErrorCode implements ErrorCode {
 	UNAUTHORIZED(401, "S001", "Unauthorized Admin error."),
-	UNKNOWN_ERROR(403, "S002", "An unexpected error has occurred."),
-	MAL_FORMED_TOKEN(403, "S003", "The JWT signature is incorrect."),
-	EXPIRED_TOKEN(403, "S004", "The token has expired."),
-	UNSUPPORTED_TOKEN(403, "S005", "The token is unsupported."),
-	ACCESS_DENIED(403, "S006", "Access is denied."),
-	ILLEGAL_TOKEN(403, "S007", "The JWT token is invalid.");
+	NON_BEARER(401, "S002", "Bearer format is required in the Authorization header."),
+	UNKNOWN_ERROR(403, "S003", "An unexpected error has occurred."),
+	MAL_FORMED_TOKEN(403, "S004", "The JWT signature is incorrect."),
+	EXPIRED_TOKEN(403, "S005", "The token has expired."),
+	UNSUPPORTED_TOKEN(403, "S006", "The token is unsupported."),
+	ACCESS_DENIED(403, "S007", "Access is denied."),
+	ILLEGAL_TOKEN(403, "S008", "The JWT token is invalid.");
 
 	private final int status;
 	private final String code;
