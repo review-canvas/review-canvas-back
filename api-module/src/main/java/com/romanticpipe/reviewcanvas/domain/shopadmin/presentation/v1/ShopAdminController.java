@@ -26,7 +26,7 @@ class ShopAdminController implements ShopAdminApi {
 	private final ShopAdminUseCase shopAdminUseCase;
 
 	@Override
-	@PostMapping("/shopadmin/login")
+	@PostMapping("/shop-admin/login")
 	public ResponseEntity<SuccessResponse<LoginResponse>> login(
 		@RequestBody LoginRequest loginRequest
 	) {
@@ -36,7 +36,7 @@ class ShopAdminController implements ShopAdminApi {
 	}
 
 	@Override
-	@PostMapping("/superadmin/login")
+	@PostMapping("/super-admin/login")
 	public ResponseEntity<SuccessResponse<LoginResponse>> loginForSuper(
 		@RequestBody LoginRequest loginRequest
 	) {
@@ -46,7 +46,7 @@ class ShopAdminController implements ShopAdminApi {
 	}
 
 	@Override
-	@PostMapping("/shopadmin/signup")
+	@PostMapping("/shop-admin/signup")
 	public ResponseEntity<SuccessResponse<Void>> signUp(
 		@RequestBody SignUpRequest signUpRequest) {
 		shopAdminUseCase.signUp(signUpRequest);
@@ -54,7 +54,7 @@ class ShopAdminController implements ShopAdminApi {
 	}
 
 	@Override
-	@GetMapping("/shopadmin/auth")
+	@GetMapping("/shop-admin/auth")
 	public ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin() {
 		return SuccessResponse.of(shopAdminUseCase.checkLoginForAdmin()).asHttp(HttpStatus.OK);
 	}

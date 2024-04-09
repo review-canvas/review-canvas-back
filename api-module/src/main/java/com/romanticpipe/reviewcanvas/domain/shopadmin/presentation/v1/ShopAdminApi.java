@@ -25,7 +25,7 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 로그인이 완료되었습니다.")
 	})
-	@PostMapping("/shopadmin/login")
+	@PostMapping("/shop-admin/login")
 	ResponseEntity<SuccessResponse<LoginResponse>> login(
 		@RequestBody LoginRequest loginRequest
 	);
@@ -36,7 +36,7 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 로그인이 완료되었습니다.")
 	})
-	@PostMapping("/superAdmin/login")
+	@PostMapping("/super-admin/login")
 	ResponseEntity<SuccessResponse<LoginResponse>> loginForSuper(
 		@RequestBody LoginRequest loginRequest
 	);
@@ -48,7 +48,7 @@ interface ShopAdminApi {
 			description = "성공적으로 회원가입이 완료되었습니다.")
 	})
 
-	@PostMapping("/shopadmin/signup")
+	@PostMapping("/shop-admin/signup")
 	ResponseEntity<SuccessResponse<Void>> signUp(
 		@RequestBody SignUpRequest signUpRequest
 	);
@@ -59,6 +59,6 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 로그인 완료되었습니다.")
 	})
-	@GetMapping("/shopadmin/auth/shop")
+	@GetMapping("/shop-admin/auth")
 	ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin();
 }
