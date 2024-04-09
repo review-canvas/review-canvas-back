@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
@@ -67,8 +68,8 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	@Override
 	@Transactional
-	public void signUp(SignUpRequest signUpRequest) {
-		shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
+	public void signUp(SignUpRequest signUpRequest, MultipartFile logoImage) {
+		// shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
 
 		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
 			.title(signUpRequest.title())
@@ -84,10 +85,12 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.email(signUpRequest.email())
 			.password(passwordEncoder.encode(signUpRequest.password()))
 			.name(signUpRequest.name())
-			.logoImageUrl(signUpRequest.logoImageUrl())
+			//			.logoImageUrl(signUpRequest.logoImageUrl())
 			.mallNumber(signUpRequest.mallNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
 			.approveStatus(false)
+			.shopInstallType(signUpRequest.shopInstallType())
+			.installRequirement(signUpRequest.installRequirement())
 			.selectedReviewDesignId(signUpRequest.reviewDesignId())
 			.build();
 

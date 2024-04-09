@@ -1,12 +1,16 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
@@ -17,6 +21,7 @@ import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -46,11 +51,12 @@ class ShopAdminController implements ShopAdminApi {
 		).asHttp(HttpStatus.OK);
 	}
 
-	@Override
-	@PostMapping("/shop-admin/sign-up")
+	@PostMapping(value = "/shop-admin/sign-up",
+		consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public ResponseEntity<SuccessResponse<Void>> signUp(
-		@RequestBody SignUpRequest signUpRequest) {
-		shopAdminUseCase.signUp(signUpRequest);
+		@Valid @RequestPart SignUpRequest signUpRequest,
+		@RequestParam MultipartFile logoImage) {
+		shopAdminUseCase.signUp(signUpRequest, logoImage);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 

@@ -47,13 +47,17 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.USER;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "install_type", columnDefinition = "VARCHAR(32)")
+	private ShopInstallType shopInstallType;
+	private String installRequirement;
+
 	private Long selectedReviewDesignId;
-	private Long myReviewDesignId;
 
 	@Builder
 	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
-		String mallNumber,
-		String phoneNumber, Boolean approveStatus, Long selectedReviewDesignId, Long myReviewDesignId) {
+		String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
+		String installRequirement, Long selectedReviewDesignId) {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
@@ -63,12 +67,17 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 		this.mallNumber = mallNumber;
 		this.phoneNumber = phoneNumber;
 		this.approveStatus = approveStatus;
+		this.shopInstallType = shopInstallType;
+		this.installRequirement = installRequirement;
 		this.selectedReviewDesignId = selectedReviewDesignId;
-		this.myReviewDesignId = myReviewDesignId;
 		generateUuid();
 	}
 
-	public void generateUuid() { // UUID 관련 로직은 변경점이 많을 듯해 임시로 만듬.
+	public void generateUuid() {
 		this.uuid = UUID.randomUUID();
+	}
+
+	public boolean isApproveStatus() {
+		return approveStatus;
 	}
 }
