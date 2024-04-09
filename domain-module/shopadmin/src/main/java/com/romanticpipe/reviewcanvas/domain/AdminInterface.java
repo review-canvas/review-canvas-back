@@ -5,5 +5,7 @@ public interface AdminInterface {
 
 	String getEmail();
 
+	String getPassword();
+
 	Role getRole();
 }

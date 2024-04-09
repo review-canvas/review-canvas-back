@@ -1,7 +1,5 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
@@ -20,16 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class ShopAdminValidator {
 	private final ShopAdminRepository shopAdminRepository;
 	private final ReviewDesignRepository designItemSuperRepository;
-
-	public ShopAdmin login(String email, String password) {
-		Optional<ShopAdmin> shopAdmin = shopAdminRepository.findByEmail(email);
-		if (shopAdmin.isPresent() && shopAdmin.get().getPassword().equals(password)) {
-			return shopAdmin.get();
-		} else {
-			throw new ShopAdminNotFoundException();
-		}
-
-	}
 
 	public ReviewDesign isExistTheme(Long reviewDesignId) {
 		ReviewDesign reviewDesign = designItemSuperRepository.findById(reviewDesignId)

@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
+import com.romanticpipe.reviewcanvas.exception.ShopAdminNotFoundException;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
@@ -31,15 +33,20 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
 	private final SuperAdminValidator superAdminValidator;
+	private final BCryptPasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional
 	public LoginResponse login(String email, String password, Role role) {
 		AdminInterface admin;
 		if (role.equals(Role.SUPER)) {
-			admin = superAdminValidator.login(email, password);
+			admin = superAdminValidator.isExsitUser(email);
 		} else {
-			admin = shopAdminValidator.login(email, password);
+			admin = shopAdminValidator.isExsitUser(email);
+		}
+
+		if (!passwordEncoder.matches(password, admin.getPassword())) {
+			throw new ShopAdminNotFoundException();
 		}
 
 		AdminAuth adminAuth = adminAuthValidator.findAdminAuthById(admin.getId());
@@ -62,7 +69,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
-		shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
+		// shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
 
 		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
 			.title(signUpRequest.title())
@@ -76,7 +83,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		ShopAdmin shopAdmin = ShopAdmin.builder()
 			.reviewVisibility(reviewVisibility)
 			.email(signUpRequest.email())
-			.password(signUpRequest.password())
+			.password(passwordEncoder.encode(signUpRequest.password()))
 			.name(signUpRequest.name())
 			.logoImageUrl(signUpRequest.logoImageUrl())
 			.mallNumber(signUpRequest.mallNumber())
