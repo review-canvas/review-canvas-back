@@ -1,6 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.shop.application.usecase.response;
 
-import com.romanticpipe.reviewcanvas.cafe24.Cafe24AccessToken;
+import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AccessToken;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
