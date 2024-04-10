@@ -9,14 +9,15 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import java.time.Duration;
 
 @Configuration
-class RestClientConfig {
+class HttpClientConfig {
 
 	@Bean
-	public ClientHttpRequestFactory defaultClientHttpRequestFactory() {
+	public ClientHttpRequestFactory clientHttpRequestFactory() {
 		ClientHttpRequestFactorySettings clientHttpRequestFactorySettings = ClientHttpRequestFactorySettings.DEFAULTS
 			.withConnectTimeout(Duration.ofMinutes(5L))
 			.withReadTimeout(Duration.ofMinutes(5L));
 
 		return ClientHttpRequestFactories.get(clientHttpRequestFactorySettings);
 	}
+
 }

@@ -21,8 +21,8 @@ class Cafe24HttpExchangeConfig {
 	}
 
 	@Bean
-	public Cafe24AuthenticationClient cafe24AuthenticationClient(ClientHttpRequestFactory clientHttpRequestFactory,
-																 RestClientLoggingInterceptor restClientLoggingInterceptor) {
+	public Cafe24AuthenticationClient cafe24AuthenticationClient(
+		ClientHttpRequestFactory clientHttpRequestFactory, RestClientLoggingInterceptor restClientLoggingInterceptor) {
 		RestClient restClient = RestClient.builder()
 			.requestFactory(clientHttpRequestFactory)
 			.defaultHeader("Authorization", "Basic " + AUTHORIZATION_CODE)
