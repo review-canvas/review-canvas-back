@@ -2,12 +2,5 @@ dependencies {
     implementation project(':common-module')
 
     implementation 'org.springframework:spring-context'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    if (isAppleSilicon()) {
-        runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.94.Final:osx-aarch_64'
-    }
-}
-
-static def isAppleSilicon() {
-    return System.getProperty('os.name') == 'Mac OS X' && System.getProperty('os.arch') == 'aarch64'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
