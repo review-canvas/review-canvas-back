@@ -9,6 +9,8 @@ import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 public interface ReviewUseCase {
 	PageResponse<GetReviewResponse> getReviewsByProductId(String productId, PageableRequest pageableRequest);
 
+	PageResponse<GetReviewResponse> getReviewsByUserId(String userId, PageableRequest pageableRequest);
+
 	void createReview(String productId, CreateReviewRequest createReviewRequest);
 
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);

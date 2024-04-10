@@ -26,9 +26,8 @@ public class Review {
 	private String productId;
 
 	private String userId;
-	private int score;
 	private String content;
-
+	private int score;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewStatus status;
