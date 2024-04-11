@@ -40,7 +40,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public LoginResponse login(String email, String password, Role role) {
 		AdminInterface admin;
-		if (role.equals(Role.SUPER)) {
+		if (role.equals(Role.SUPER_ADMIN_ROLE)) {
 			admin = superAdminValidator.validByEmail(email);
 		} else {
 			admin = shopAdminValidator.validByEmail(email);
@@ -101,7 +101,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public CheckLoginResponse checkLoginForAdmin(AdminInterface admin) {
-		if (admin.getRole().equals(Role.SUPER)) {
+		if (admin.getRole().equals(Role.SUPER_ADMIN_ROLE)) {
 			admin = superAdminValidator.validById(admin.getId());
 		} else {
 			admin = shopAdminValidator.validById(admin.getId());

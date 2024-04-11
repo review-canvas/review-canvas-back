@@ -106,7 +106,7 @@ public class TokenProvider implements InitializingBean {
 				.collect(Collectors.toList());
 		AdminInterface admin;
 		if (authorities.stream()
-			.anyMatch(authority -> authority.getAuthority().equals(Role.SUPER.toString()))) {
+			.anyMatch(authority -> authority.getAuthority().equals(Role.SUPER_ADMIN_ROLE.toString()))) {
 			admin = this.superAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
 		} else {
 			admin = this.shopAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
@@ -133,7 +133,7 @@ public class TokenProvider implements InitializingBean {
 				.collect(Collectors.toList());
 		AdminInterface admin;
 		if (authorities.stream()
-			.anyMatch(authority -> authority.getAuthority().equals(Role.SUPER.toString()))) {
+			.anyMatch(authority -> authority.getAuthority().equals(Role.SUPER_ADMIN_ROLE.toString()))) {
 			admin = this.superAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
 		} else {
 			admin = this.shopAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));

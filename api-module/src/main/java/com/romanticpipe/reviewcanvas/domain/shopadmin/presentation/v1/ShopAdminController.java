@@ -37,7 +37,7 @@ class ShopAdminController implements ShopAdminApi {
 		@RequestBody LoginRequest loginRequest
 	) {
 		return SuccessResponse.of(
-			shopAdminUseCase.login(loginRequest.email(), loginRequest.password(), Role.USER)
+			shopAdminUseCase.login(loginRequest.email(), loginRequest.password(), Role.SHOP_ADMIN_ROLE)
 		).asHttp(HttpStatus.OK);
 	}
 
@@ -47,7 +47,7 @@ class ShopAdminController implements ShopAdminApi {
 		@RequestBody LoginRequest loginRequest
 	) {
 		return SuccessResponse.of(
-			shopAdminUseCase.login(loginRequest.email(), loginRequest.password(), Role.SUPER)
+			shopAdminUseCase.login(loginRequest.email(), loginRequest.password(), Role.SUPER_ADMIN_ROLE)
 		).asHttp(HttpStatus.OK);
 	}
 
