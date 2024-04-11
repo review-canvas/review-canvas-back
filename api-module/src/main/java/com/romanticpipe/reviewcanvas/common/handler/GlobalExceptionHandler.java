@@ -13,6 +13,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -51,6 +52,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 																  WebRequest request) {
 		log.error("HttpMessageNotReadableException", ex);
 		return handleExceptionInternal(CommonErrorCode.INVALID_INPUT_VALUE);
+	}
+
+	@ExceptionHandler(HttpClientErrorException.class)
+	public ResponseEntity<Object> handleHttpClientErrorException(HttpClientErrorException ex) {
+		return handleExceptionInternal(CommonErrorCode.OUTER_CLIENT_REQUEST_ERROR);
 	}
 
 	@ExceptionHandler(Exception.class)

@@ -1,9 +1,5 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
@@ -12,8 +8,10 @@ import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.exception.ShopAdminNotFoundException;
 import com.romanticpipe.reviewcanvas.repository.ReviewDesignRepository;
 import com.romanticpipe.reviewcanvas.repository.ShopAdminRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +42,7 @@ public class ShopAdminValidator {
 			.orElseThrow(() -> new ShopAdminNotFoundException());
 	}
 
-	public ShopAdmin validById(long shopAdminId){
+	public ShopAdmin validById(long shopAdminId) {
 		return shopAdminRepository.findById(shopAdminId)
 			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
 	}
