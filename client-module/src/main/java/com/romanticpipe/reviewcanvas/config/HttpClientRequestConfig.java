@@ -9,7 +9,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import java.time.Duration;
 
 @Configuration
-class HttpClientConfig {
+class HttpClientRequestConfig {
 
 	@Bean
 	public ClientHttpRequestFactory clientHttpRequestFactory() {
@@ -19,5 +19,4 @@ class HttpClientConfig {
 
 		return ClientHttpRequestFactories.get(clientHttpRequestFactorySettings);
 	}
-
 }
