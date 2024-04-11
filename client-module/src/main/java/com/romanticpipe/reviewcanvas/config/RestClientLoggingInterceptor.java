@@ -36,6 +36,6 @@ public class RestClientLoggingInterceptor implements ClientHttpRequestIntercepto
 			.append(response.getStatusCode()).append(" ")
 			.append(new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8));
 
-		log.error("[Request]: {} [Response]: {}", requestInfo, responseInfo);
+		log.warn("[Request]: {} [Response]: {}", requestInfo, responseInfo);
 	}
 }
