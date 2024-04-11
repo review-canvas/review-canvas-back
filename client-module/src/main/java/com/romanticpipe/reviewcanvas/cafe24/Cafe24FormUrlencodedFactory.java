@@ -16,4 +16,11 @@ public class Cafe24FormUrlencodedFactory {
 		requestBody.put("redirect_uri", List.of(REDIRECT_URI));
 		return requestBody;
 	}
+
+	public static MultiValueMap<String, String> reissueCafe24AccessToken(String refreshToken) {
+		MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+		requestBody.put("refresh_token", List.of(refreshToken));
+		requestBody.put("grant_type", List.of("refresh_token"));
+		return requestBody;
+	}
 }

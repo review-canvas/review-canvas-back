@@ -20,4 +20,11 @@ public class ShopUseCaseImpl implements ShopUseCase {
 		Cafe24AccessToken cafe24AccessToken = cafe24AuthenticationClient.getAccessToken(mallId, requestParam);
 		return GetCafe24AccessTokenResponse.from(cafe24AccessToken);
 	}
+
+	@Override
+	public GetCafe24AccessTokenResponse reissueCafe24AccessToken(String mallId, String refreshToken) {
+		MultiValueMap<String, String> requestParam = Cafe24FormUrlencodedFactory.reissueCafe24AccessToken(refreshToken);
+		Cafe24AccessToken cafe24AccessToken = cafe24AuthenticationClient.reissueAccessToken(mallId, requestParam);
+		return GetCafe24AccessTokenResponse.from(cafe24AccessToken);
+	}
 }

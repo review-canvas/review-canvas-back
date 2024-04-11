@@ -4,4 +4,6 @@ import com.romanticpipe.reviewcanvas.domain.shop.application.usecase.response.Ge
 
 public interface ShopUseCase {
 	GetCafe24AccessTokenResponse getCafe24AccessToken(String mallId, String authCode);
+
+	GetCafe24AccessTokenResponse reissueCafe24AccessToken(String mallId, String refreshToken);
 }
