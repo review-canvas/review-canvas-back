@@ -23,7 +23,7 @@ public interface ShopApi {
 			description = "성공적으로 액세스 토큰을 발급했습니다."),
 		@ApiResponse(
 			responseCode = "400",
-			description = "CL001: 카페24 API 호출 중 오류가 발생했습니다.",
+			description = "C003: 외부 API 호출 중 오류가 발생했습니다.",
 			content = @Content(schema = @Schema(hidden = true))),
 	})
 	@GetMapping("/cafe24/access-token")
