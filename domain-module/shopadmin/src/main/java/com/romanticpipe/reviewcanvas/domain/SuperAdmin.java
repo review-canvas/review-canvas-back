@@ -30,6 +30,6 @@ public class SuperAdmin implements AdminInterface {
 	public SuperAdmin(String email, String password) {
 		this.email = email;
 		this.password = password;
-		this.role = Role.SUPER;
+		this.role = Role.SUPER_ADMIN_ROLE;
 	}
 }

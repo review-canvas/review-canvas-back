@@ -70,12 +70,6 @@ public class AuthFilter extends OncePerRequestFilter {
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
 			return bearerToken.substring(BEARER_PREFIX.length());
 		}
-		throw new NonBearerException();
-	}
-
-	private class NonBearerException extends BusinessException {
-		public NonBearerException() {
-			super(SecurtyErrorCode.NON_BEARER);
-		}
+		throw new BusinessException(SecurtyErrorCode.NON_BEARER);
 	}
 }

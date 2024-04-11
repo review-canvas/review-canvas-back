@@ -14,7 +14,8 @@ import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
-import com.romanticpipe.reviewcanvas.exception.ShopAdminNotFoundException;
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.AdminAuthRemover;
 import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
@@ -41,14 +42,14 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public LoginResponse login(String email, String password, Role role) {
 		AdminInterface admin;
-		if (role.equals(Role.SUPER)) {
-			admin = superAdminValidator.isExsitUser(email);
+		if (role.equals(Role.SUPER_ADMIN_ROLE)) {
+			admin = superAdminValidator.validByEmail(email);
 		} else {
-			admin = shopAdminValidator.isExsitUser(email);
+			admin = shopAdminValidator.validByEmail(email);
 		}
 
 		if (!passwordEncoder.matches(password, admin.getPassword())) {
-			throw new ShopAdminNotFoundException();
+			throw new BusinessException(ShopAdminErrorCode.ADMIN_WRONG_PASSWARD);
 		}
 
 		AdminAuth adminAuth = adminAuthValidator.findAdminAuthById(admin.getId());
@@ -57,7 +58,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		String refreshToken = adminAuth.getRefreshToken();
 
 		if (tokenProvider.isExpiredToken(refreshToken)) {
-			tokenProvider.createRefreshToken(admin.getEmail(), adminAuth);
+			tokenProvider.createRefreshToken(adminAuth);
 		}
 
 		if (adminAuth.getId() == null) {
@@ -108,10 +109,10 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public CheckLoginResponse checkLoginForAdmin(AdminInterface admin) {
-		if (admin.getRole().equals(Role.SUPER)) {
-			admin = superAdminValidator.isExsitUser(admin.getEmail());
+		if (admin.getRole().equals(Role.SUPER_ADMIN_ROLE)) {
+			admin = superAdminValidator.validById(admin.getId());
 		} else {
-			admin = shopAdminValidator.isExsitUser(admin.getEmail());
+			admin = shopAdminValidator.validById(admin.getId());
 		}
 		return CheckLoginResponse.from(admin.getId(), admin.getRole().toString());
 	}

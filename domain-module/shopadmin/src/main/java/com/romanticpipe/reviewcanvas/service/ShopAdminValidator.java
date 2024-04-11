@@ -28,13 +28,13 @@ public class ShopAdminValidator {
 		return reviewDesign;
 	}
 
-	public ShopAdmin isExsitUser(String email) {
+	public ShopAdmin validByEmail(String email) {
 		return shopAdminRepository.findByEmail(email)
 			.orElseThrow(() -> new ShopAdminNotFoundException());
 	}
 
-	public ShopAdmin validById(long shopAdminId){
+	public ShopAdmin validById(long shopAdminId) {
 		return shopAdminRepository.findById(shopAdminId)
-			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.SHOP_ADMIN_NOT_FOUND));
+			.orElseThrow(() -> new ShopAdminNotFoundException());
 	}
 }

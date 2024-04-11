@@ -45,7 +45,7 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 	private Long adminAuthId;
 
 	@Enumerated(EnumType.STRING)
-	private Role role = Role.USER;
+	private Role role = Role.SHOP_ADMIN_ROLE;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "install_type", columnDefinition = "VARCHAR(32)")
@@ -61,7 +61,7 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
-		this.role = Role.USER;
+		this.role = Role.SHOP_ADMIN_ROLE;
 		this.name = name;
 		this.logoImageUrl = logoImageUrl;
 		this.mallNumber = mallNumber;
