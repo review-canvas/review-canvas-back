@@ -8,11 +8,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 public abstract class ControllerTestSetup {
 
-	protected MockMvc noSecurityMockMvc;
+	protected MockMvc mockMvc;
 
 	@BeforeEach
 	void setUp(WebApplicationContext context) {
-		this.noSecurityMockMvc = MockMvcBuilders.webAppContextSetup(context)
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
 			.alwaysDo(MockMvcResultHandlers.print())
 			.build();
 	}

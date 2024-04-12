@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
+import com.romanticpipe.reviewcanvas.TestReviewFactory;
 import com.romanticpipe.reviewcanvas.config.ControllerTestSetup;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
@@ -39,22 +40,20 @@ class ReviewControllerTest extends ControllerTestSetup {
 		void getReviewsByProductId() throws Exception {
 			// given
 			String productId = "product_no";
-			long reviewId = 1L;
-			String content = "content";
-			int score = 5;
-			var getReviewResponse = new GetReviewResponse(reviewId, content, score);
+			var review = TestReviewFactory.createReview(1L, productId, "1", "content", 5);
+			var getReviewResponse = GetReviewResponse.from(review);
 			var getReviewPageResponse = new PageResponse<>(0, 10, 0, List.of(getReviewResponse));
 			given(reviewUseCase.getReviewsByProductId(eq(productId), any(PageableRequest.class)))
 				.willReturn(getReviewPageResponse);
 
 			// when
-			ResultActions result = noSecurityMockMvc.perform(get(BASE_URL + "/products/" + productId + "/reviews"));
+			ResultActions result = mockMvc.perform(get(BASE_URL + "/products/" + productId + "/reviews"));
 
 			// then
 			result.andExpect(status().isOk())
-				.andExpect(jsonPath("$.data.content[0].reviewId").value(reviewId))
-				.andExpect(jsonPath("$.data.content[0].content").value(content))
-				.andExpect(jsonPath("$.data.content[0].score").value(score));
+				.andExpect(jsonPath("$.data.content[0].reviewId").value(review.getId()))
+				.andExpect(jsonPath("$.data.content[0].content").value(review.getContent()))
+				.andExpect(jsonPath("$.data.content[0].score").value(review.getScore()));
 		}
 	}
 
