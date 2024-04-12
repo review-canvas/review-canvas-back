@@ -6,10 +6,12 @@ dependencies {
     implementation project(':domain-module:shopadmin')
     implementation project(':common-module')
     implementation project(':client-module')
-
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework:spring-tx'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
+
+    testImplementation testFixtures(project(':domain-module:review'))
+    testImplementation testFixtures(project(':domain-module:shopadmin'))
 }
 
 apply plugin: 'com.google.cloud.tools.jib'
