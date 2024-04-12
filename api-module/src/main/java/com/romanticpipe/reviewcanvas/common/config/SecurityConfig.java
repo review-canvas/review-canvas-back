@@ -19,6 +19,7 @@ import com.romanticpipe.reviewcanvas.common.security.CustomAccessDeniedHandler;
 import com.romanticpipe.reviewcanvas.common.security.CustomEntryPoint;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.common.security.UrlList;
+import com.romanticpipe.reviewcanvas.domain.Role;
 
 import lombok.RequiredArgsConstructor;
 
@@ -42,6 +43,8 @@ public class SecurityConfig {
 			.authorizeHttpRequests(auth -> {
 				auth
 					.requestMatchers(urlList.getPublicUrls().toArray(new String[0])).permitAll()
+					.requestMatchers(urlList.getSuperUrls().toArray(new String[0])).hasAuthority(
+						String.valueOf(Role.SUPER_ADMIN_ROLE))
 					.anyRequest().authenticated();
 			}).exceptionHandling(c ->
 				c.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler)

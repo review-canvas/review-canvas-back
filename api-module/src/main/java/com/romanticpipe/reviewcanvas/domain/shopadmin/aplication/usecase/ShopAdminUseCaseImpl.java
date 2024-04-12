@@ -39,7 +39,12 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public LoginResponse login(String email, String password, Role role) {
-		ShopAdmin admin = shopAdminValidator.validByEmail(email);
+		AdminInterface admin;
+		if (role.equals(Role.SUPER_ADMIN_ROLE)) {
+			admin = superAdminValidator.validByEmail(email);
+		} else {
+			admin = shopAdminValidator.validByEmail(email);
+		}
 		if (!passwordEncoder.matches(password, admin.getPassword())) {
 			throw new BusinessException(ShopAdminErrorCode.ADMIN_WRONG_PASSWARD);
 		}
@@ -91,7 +96,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional(readOnly = true)
 	public CheckLoginResponse checkLoginForAdmin(AdminInterface admin) {
 		if (admin.getRole().equals(Role.SUPER_ADMIN_ROLE)) {
-			admin = superAdminValidator.validByAuthId(admin.getId());
+			admin = superAdminValidator.validById(admin.getId());
 		} else {
 			admin = shopAdminValidator.validById(admin.getId());
 		}
