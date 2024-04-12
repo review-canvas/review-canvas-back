@@ -1,14 +1,12 @@
-package com.romanticpipe.reviewcanvas.exception;
+package com.romanticpipe.reviewcanvas.cafe24;
 
+import com.romanticpipe.reviewcanvas.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum CommonErrorCode implements ErrorCode {
+public enum Cafe24ErrorCode implements ErrorCode {
 
-	INVALID_INPUT_VALUE(400, "C001", "잘못된 입력값입니다."),
-	INTERNAL_SERVER_ERROR(500, "C002", "서버 오류"),
-	OUTER_CLIENT_REQUEST_ERROR(400, "C003", "외부 api 호출에 실패했습니다.");
-
+	INVALID_OR_EXPIRED_REFRESH_TOKEN(400, "CA001", "cafe24 refresh token이 유효하지 않거나 만료되었습니다.");
 
 	private final int status;
 	private final String code;

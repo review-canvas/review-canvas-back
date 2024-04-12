@@ -8,6 +8,7 @@ import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewDesignNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.exception.ShopAdminNotFoundException;
+import com.romanticpipe.reviewcanvas.exception.SuperAdminErrorCode;
 import com.romanticpipe.reviewcanvas.repository.ReviewDesignRepository;
 import com.romanticpipe.reviewcanvas.repository.ShopAdminRepository;
 
@@ -35,11 +36,11 @@ public class ShopAdminValidator {
 
 	public ShopAdmin validById(long shopAdminId) {
 		return shopAdminRepository.findById(shopAdminId)
-			.orElseThrow(() -> new ShopAdminNotFoundException());
+			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.ADMIN_NOT_FOUND));
 	}
 
 	public ShopAdmin validByAuthId(long adminAuthId) {
 		return shopAdminRepository.findByAdminAuthId(adminAuthId)
-			.orElseThrow(() -> new ShopAdminNotFoundException());
+			.orElseThrow(() -> new BusinessException(SuperAdminErrorCode.SUPER_ADMIN_NOT_FOUND));
 	}
 }
