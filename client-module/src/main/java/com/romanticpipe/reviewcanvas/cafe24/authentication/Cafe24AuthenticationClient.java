@@ -15,4 +15,7 @@ public interface Cafe24AuthenticationClient {
 	Cafe24AccessToken getAccessToken(@PathVariable String mallId,
 									 @RequestParam MultiValueMap<String, String> requestParam);
 
+	@PostExchange(value = "/oauth/token", contentType = "application/x-www-form-urlencoded")
+	Cafe24AccessToken reissueAccessToken(@PathVariable String mallId,
+										 @RequestParam MultiValueMap<String, String> requestParam);
 }

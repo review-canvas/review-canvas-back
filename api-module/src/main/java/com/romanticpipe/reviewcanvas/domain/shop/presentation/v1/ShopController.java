@@ -28,4 +28,14 @@ public class ShopController implements ShopApi {
 		GetCafe24AccessTokenResponse response = shopUseCase.getCafe24AccessToken(mallId, authCode);
 		return SuccessResponse.of(response).asHttp(HttpStatus.OK);
 	}
+
+	@Override
+	@GetMapping("/cafe24/reissue-access-token")
+	public ResponseEntity<SuccessResponse<GetCafe24AccessTokenResponse>> reissueCafe24AccessToken(
+		@RequestParam(required = true) String mallId,
+		@RequestParam(required = true) String refreshToken
+	) {
+		GetCafe24AccessTokenResponse response = shopUseCase.reissueCafe24AccessToken(mallId, refreshToken);
+		return SuccessResponse.of(response).asHttp(HttpStatus.OK);
+	}
 }
