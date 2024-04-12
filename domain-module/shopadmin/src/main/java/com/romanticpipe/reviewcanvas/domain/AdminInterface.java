@@ -8,4 +8,6 @@ public interface AdminInterface {
 	String getPassword();
 
 	Role getRole();
+
+	Long getAdminAuthId();
 }

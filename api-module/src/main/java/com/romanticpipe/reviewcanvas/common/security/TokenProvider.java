@@ -39,7 +39,8 @@ import lombok.RequiredArgsConstructor;
 public class TokenProvider implements InitializingBean {
 
 	private static final String AUTHORITIES_KEY = "auth";
-	private static final String ADMIN_ID = "id";
+	private static final String AUTH_ID = "authId";
+	private static final String ADMIN_ID = "adminId";
 	private static final String DELETED_TOKEN = "deleted";
 
 	private final AdminAuthValidator adminAuthValidator;
@@ -82,6 +83,7 @@ public class TokenProvider implements InitializingBean {
 			.setExpiration(accessTokenValidity)
 			.setSubject(auth.getName())
 			.claim(AUTHORITIES_KEY, auths)
+			.claim(AUTH_ID, admin.getAdminAuthId())
 			.claim(ADMIN_ID, admin.getId())
 			.signWith(secretKey, SignatureAlgorithm.HS512)
 			.compact();
@@ -89,12 +91,13 @@ public class TokenProvider implements InitializingBean {
 		return accessToken;
 	}
 
-	public void createRefreshToken(AdminAuth adminAuth) {
+	public void createRefreshToken(AdminAuth adminAuth, Long adminId) {
 		long now = (new Date()).getTime();
 		Date refreshTokenValidity = new Date(now + 1000 * this.refreshTokenValidityTime);
 		adminAuth.setRefreshToken(Jwts.builder()
 			.setExpiration(refreshTokenValidity)
-			.claim(ADMIN_ID, adminAuth.getAdminId())
+			.claim(AUTH_ID, adminAuth.getId())
+			.claim(ADMIN_ID, adminId)
 			.signWith(secretKey, SignatureAlgorithm.HS256)
 			.compact());
 	}
@@ -107,23 +110,19 @@ public class TokenProvider implements InitializingBean {
 		AdminInterface admin;
 		if (authorities.stream()
 			.anyMatch(authority -> authority.getAuthority().equals(Role.SUPER_ADMIN_ROLE.toString()))) {
-			admin = this.superAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
+			admin = this.superAdminValidator.validByAuthId(Long.parseLong(claims.get(AUTH_ID).toString()));
 		} else {
-			admin = this.shopAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
+			admin = this.shopAdminValidator.validByAuthId(Long.parseLong(claims.get(AUTH_ID).toString()));
 		}
 		return admin;
 	}
 
-	public boolean isExpiredById(long adminId) throws BusinessException {
-		String refreshToken = this.adminAuthValidator.findAdminAuthById(adminId).getRefreshToken();
+	public boolean isExpiredById(long authId) throws BusinessException {
+		String refreshToken = this.adminAuthValidator.findById(authId).getRefreshToken();
 		if (isExpiredToken(refreshToken)) {
 			return true;
 		}
 		return false;
-	}
-
-	public Jws<Claims> validateToken(String token) throws BusinessException {
-		return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 	}
 
 	public Authentication getAuthentication(Claims claims, String token) {
@@ -134,9 +133,9 @@ public class TokenProvider implements InitializingBean {
 		AdminInterface admin;
 		if (authorities.stream()
 			.anyMatch(authority -> authority.getAuthority().equals(Role.SUPER_ADMIN_ROLE.toString()))) {
-			admin = this.superAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
+			admin = this.superAdminValidator.validByAuthId(Long.parseLong(claims.get(AUTH_ID).toString()));
 		} else {
-			admin = this.shopAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
+			admin = this.shopAdminValidator.validByAuthId(Long.parseLong(claims.get(AUTH_ID).toString()));
 		}
 		return new UsernamePasswordAuthenticationToken(admin, token, authorities);
 	}
@@ -166,5 +165,9 @@ public class TokenProvider implements InitializingBean {
 		} catch (ExpiredJwtException e) {
 			return e.getClaims();
 		}
+	}
+
+	public Jws<Claims> validateToken(String token) throws BusinessException {
+		return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 	}
 }

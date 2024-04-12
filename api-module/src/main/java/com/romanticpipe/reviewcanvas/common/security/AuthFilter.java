@@ -47,7 +47,7 @@ public class AuthFilter extends OncePerRequestFilter {
 			request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.ILLEGAL_TOKEN);
 		} catch (ExpiredJwtException e) {
 			AdminInterface admin = tokenProvider.getAdmin(e.getClaims());
-			if (tokenProvider.isExpiredById(admin.getId())) {
+			if (tokenProvider.isExpiredById(admin.getAdminAuthId())) {
 				request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.EXPIRED_TOKEN);
 			} else {
 				jwt = tokenProvider.createToken(admin);

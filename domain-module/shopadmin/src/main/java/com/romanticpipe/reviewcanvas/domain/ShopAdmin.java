@@ -57,7 +57,7 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 	@Builder
 	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
 		String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
-		String installRequirement, Long selectedReviewDesignId) {
+		String installRequirement, Long selectedReviewDesignId, Long adminAuthId) {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
@@ -70,10 +70,7 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 		this.shopInstallType = shopInstallType;
 		this.installRequirement = installRequirement;
 		this.selectedReviewDesignId = selectedReviewDesignId;
-		generateUuid();
-	}
-
-	public void generateUuid() {
+		this.adminAuthId = adminAuthId;
 		this.uuid = UUID.randomUUID();
 	}
 

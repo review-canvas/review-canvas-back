@@ -7,7 +7,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,10 +25,5 @@ public class SuperAdmin implements AdminInterface {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
-	@Builder
-	public SuperAdmin(String email, String password) {
-		this.email = email;
-		this.password = password;
-		this.role = Role.SUPER_ADMIN_ROLE;
-	}
+	private Long adminAuthId;
 }

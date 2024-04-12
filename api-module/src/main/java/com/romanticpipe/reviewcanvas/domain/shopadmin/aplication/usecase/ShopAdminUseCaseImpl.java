@@ -39,30 +39,15 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public LoginResponse login(String email, String password, Role role) {
-		AdminInterface admin;
-		if (role.equals(Role.SUPER_ADMIN_ROLE)) {
-			admin = superAdminValidator.validByEmail(email);
-		} else {
-			admin = shopAdminValidator.validByEmail(email);
-		}
-
+		ShopAdmin admin = shopAdminValidator.validByEmail(email);
 		if (!passwordEncoder.matches(password, admin.getPassword())) {
 			throw new BusinessException(ShopAdminErrorCode.ADMIN_WRONG_PASSWARD);
 		}
-
-		AdminAuth adminAuth = adminAuthValidator.findAdminAuthById(admin.getId());
-
+		AdminAuth adminAuth = adminAuthValidator.findById(admin.getAdminAuthId());
 		String accessToken = tokenProvider.createToken(admin);
-		String refreshToken = adminAuth.getRefreshToken();
-
-		if (tokenProvider.isExpiredToken(refreshToken)) {
-			tokenProvider.createRefreshToken(adminAuth);
+		if (tokenProvider.isExpiredToken(adminAuth.getRefreshToken())) {
+			tokenProvider.createRefreshToken(adminAuth, admin.getId());
 		}
-
-		if (adminAuth.getId() == null) {
-			adminAuthCreater.save(adminAuth);
-		}
-
 		return LoginResponse.from(admin.getId(), accessToken);
 
 	}
@@ -71,6 +56,9 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest, MultipartFile logoImage) {
 		shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
+
+		AdminAuth adminAuth = new AdminAuth("");
+		adminAuthCreater.save(adminAuth);
 
 		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
 			.title(signUpRequest.title())
@@ -93,6 +81,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.shopInstallType(signUpRequest.shopInstallType())
 			.installRequirement(signUpRequest.installRequirement())
 			.selectedReviewDesignId(signUpRequest.reviewDesignId())
+			.adminAuthId(adminAuth.getId())
 			.build();
 
 		shopAdminCreator.signUp(shopAdmin);
@@ -102,7 +91,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional(readOnly = true)
 	public CheckLoginResponse checkLoginForAdmin(AdminInterface admin) {
 		if (admin.getRole().equals(Role.SUPER_ADMIN_ROLE)) {
-			admin = superAdminValidator.validById(admin.getId());
+			admin = superAdminValidator.validByAuthId(admin.getId());
 		} else {
 			admin = shopAdminValidator.validById(admin.getId());
 		}
