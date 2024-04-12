@@ -1,6 +1,5 @@
 package com.romanticpipe.reviewcanvas.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Slf4j
 @Component
 public class RestClientLoggingInterceptor implements ClientHttpRequestInterceptor {
 

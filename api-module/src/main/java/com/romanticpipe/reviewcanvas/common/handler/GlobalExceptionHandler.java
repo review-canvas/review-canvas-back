@@ -62,8 +62,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 			sb.append("[Request Info] \n");
 			ex.getResponseHeaders().forEach((key, value) -> sb.append(key).append(": ").append(value).append("\n"));
 			sb.append("[Response Body] \n").append(ex.getResponseBodyAsString());
+			log.warn(sb.toString());
 		}
-		log.warn(sb.toString());
 		return handleExceptionInternal(CommonErrorCode.OUTER_CLIENT_REQUEST_ERROR);
 	}
 
