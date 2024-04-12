@@ -97,7 +97,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void logout(AdminInterface admin) {
-		adminAuthRemover.logout(admin.getId());
+		adminAuthRemover.logout(admin.getAdminAuthId());
 	}
 
 	@Override

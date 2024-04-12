@@ -15,9 +15,8 @@ public class AdminAuthRemover {
 	private final AdminAuthRepository adminAuthRepository;
 
 	public void logout(Long id) {
-		AdminAuth adminAuth = adminAuthRepository.findByAdminId(id).get();
+		AdminAuth adminAuth = adminAuthRepository.findById(id).get();
 		adminAuth.setRefreshToken(DELETED_TOKEN);
-		System.out.println(adminAuth.getRefreshToken());
 	}
 
 }
