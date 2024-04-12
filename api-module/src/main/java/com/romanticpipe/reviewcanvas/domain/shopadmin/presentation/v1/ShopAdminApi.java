@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,6 +60,15 @@ interface ShopAdminApi {
 		@Valid @RequestPart SignUpRequest signUpRequest,
 		@RequestParam MultipartFile logoImage
 	);
+
+	@Operation(summary = "로그아웃 API", description = "refresh token을 삭제함으로 로그아웃한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 로그아웃 완료되었습니다.")
+	})
+	@DeleteMapping("/shop-admin/logout")
+	ResponseEntity<SuccessResponse<Void>> logout(AdminInterface admin);
 
 	@Operation(summary = "로그인 상태 확인용 API", description = "현재 로그인 상태를 확인한다.")
 	@ApiResponses(value = {

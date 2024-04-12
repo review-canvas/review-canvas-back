@@ -17,6 +17,7 @@ import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.respons
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
+import com.romanticpipe.reviewcanvas.service.AdminAuthRemover;
 import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
@@ -29,12 +30,13 @@ import lombok.RequiredArgsConstructor;
 class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final TokenProvider tokenProvider;
+	private final BCryptPasswordEncoder passwordEncoder;
 	private final AdminAuthCreater adminAuthCreater;
+	private final AdminAuthRemover adminAuthRemover;
 	private final AdminAuthValidator adminAuthValidator;
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
 	private final SuperAdminValidator superAdminValidator;
-	private final BCryptPasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional
@@ -90,6 +92,12 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.build();
 
 		shopAdminCreator.signUp(shopAdmin);
+	}
+
+	@Override
+	@Transactional
+	public void logout(AdminInterface admin) {
+		adminAuthRemover.logout(admin.getId());
 	}
 
 	@Override

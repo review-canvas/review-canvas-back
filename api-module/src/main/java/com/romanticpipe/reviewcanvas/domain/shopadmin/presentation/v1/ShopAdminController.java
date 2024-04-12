@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,6 +58,13 @@ class ShopAdminController implements ShopAdminApi {
 		@Valid @RequestPart SignUpRequest signUpRequest,
 		@RequestParam MultipartFile logoImage) {
 		shopAdminUseCase.signUp(signUpRequest, logoImage);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@DeleteMapping("/shop-admin/logout")
+	@Override
+	public ResponseEntity<SuccessResponse<Void>> logout(AdminInterface admin) {
+		shopAdminUseCase.logout(admin);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
