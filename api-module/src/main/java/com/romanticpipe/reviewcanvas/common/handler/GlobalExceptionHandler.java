@@ -56,6 +56,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(HttpClientErrorException.class)
 	public ResponseEntity<Object> handleHttpClientErrorException(HttpClientErrorException ex) {
+		StringBuilder sb = new StringBuilder();
+		if (ex.getResponseHeaders() != null) {
+			sb.append("Http Status Code: [").append(ex.getStatusCode()).append("]\n");
+			sb.append("[Request Info] \n");
+			ex.getResponseHeaders().forEach((key, value) -> sb.append(key).append(": ").append(value).append("\n"));
+			sb.append("[Response Body] \n").append(ex.getResponseBodyAsString());
+		}
+		log.warn(sb.toString());
 		return handleExceptionInternal(CommonErrorCode.OUTER_CLIENT_REQUEST_ERROR);
 	}
 
