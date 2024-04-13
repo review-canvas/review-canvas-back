@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 
+import java.util.Date;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +54,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		}
 		AdminAuth adminAuth = adminAuthValidator.findById(admin.getAdminAuthId());
 		String accessToken = tokenProvider.createToken(admin);
-		if (tokenProvider.isExpiredToken(adminAuth.getRefreshToken())) {
+		if (tokenProvider.isExpiredToken(adminAuth.getRefreshToken(), new Date())) {
 			tokenProvider.createRefreshToken(adminAuth, admin.getId());
 		}
 		return LoginResponse.from(admin.getId(), accessToken);

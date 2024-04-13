@@ -20,7 +20,7 @@ public class SuperAdminValidator {
 			.orElseThrow(() -> new BusinessException(SuperAdminErrorCode.SUPER_ADMIN_NOT_FOUND));
 	}
 
-	public SuperAdmin validByAuthId(long adminAuthId) {
+	public AdminInterface validByAuthId(long adminAuthId) {
 		return superAdminRepository.findByAdminAuthId(adminAuthId)
 			.orElseThrow(() -> new BusinessException(SuperAdminErrorCode.SUPER_ADMIN_NOT_FOUND));
 	}

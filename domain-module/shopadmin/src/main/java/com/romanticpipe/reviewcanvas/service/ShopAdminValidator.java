@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.service;
 
 import org.springframework.stereotype.Service;
 
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
@@ -38,7 +39,7 @@ public class ShopAdminValidator {
 			.orElseThrow(() -> new ShopAdminNotFoundException());
 	}
 
-	public ShopAdmin validByAuthId(long adminAuthId) {
+	public AdminInterface validByAuthId(long adminAuthId) {
 		return shopAdminRepository.findByAdminAuthId(adminAuthId)
 			.orElseThrow(() -> new ShopAdminNotFoundException());
 	}
