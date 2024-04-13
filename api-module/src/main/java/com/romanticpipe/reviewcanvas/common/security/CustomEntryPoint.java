@@ -15,14 +15,17 @@ import com.romanticpipe.reviewcanvas.exception.ErrorCode;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class CustomEntryPoint implements AuthenticationEntryPoint {
+
+	private final ObjectMapper objectMapper;
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 		AuthenticationException authException) throws IOException {
-		ObjectMapper objectMapper = new ObjectMapper();
 		PrintWriter writer = response.getWriter();
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
