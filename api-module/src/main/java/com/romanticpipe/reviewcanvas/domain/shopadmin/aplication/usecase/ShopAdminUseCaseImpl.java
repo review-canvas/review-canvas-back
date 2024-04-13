@@ -7,10 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
+import com.romanticpipe.reviewcanvas.domain.ReviewDesignType;
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
+import com.romanticpipe.reviewcanvas.service.ReviewDesignReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 
@@ -22,6 +24,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
 	private final ShopAdminCreator shopAdminCreator;
+	private final ReviewDesignReader reviewDesignReader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -64,7 +67,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public List<ReviewDesign> getGeneralReviewThemeList() {
-		shopAdminReader
-		return null;
+		return reviewDesignReader.getGeneralThemeList(ReviewDesignType.GENERAL);
 	}
 }

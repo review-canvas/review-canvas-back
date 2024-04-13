@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -52,7 +53,13 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	@GetMapping("/shopadmin/review-design/theme-list")
-	ResponseEntity<SuccessResponse<List<GetGeneralReviewThemeListResponse>>> getGeneralReviewThemeList() {
-		return SuccessResponse.of().asHttp(HttpStatus.OK);
+	public ResponseEntity<SuccessResponse<List<GetGeneralReviewThemeListResponse>>> getGeneralReviewThemeList() {
+		return SuccessResponse.of(
+			shopAdminUseCase.getGeneralReviewThemeList().stream().map(
+				reviewDesign -> {
+					return GetGeneralReviewThemeListResponse.from(reviewDesign);
+				}
+			).collect(Collectors.toList())
+		).asHttp(HttpStatus.OK);
 	}
 }
