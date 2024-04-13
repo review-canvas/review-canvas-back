@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
+import java.util.Map;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,9 @@ import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,10 +55,16 @@ interface ShopAdminApi {
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 이메일 중복 체크가 완료되었습니다.")
+			description = "성공적으로 이메일 중복 체크가 완료되었습니다.",
+			content = @Content(
+				schemaProperties = {
+					@SchemaProperty(name = "success", schema = @Schema(type = "boolean", description = "성공 여부")),
+					@SchemaProperty(name = "duplicate", schema = @Schema(type = "boolean", description = "중복 여부"))
+				}
+			))
 	})
 	@GetMapping("/shopadmin/email-check")
-	ResponseEntity<SuccessResponse<Void>> emailCheck(
+	ResponseEntity<SuccessResponse<Map<String, Boolean>>> emailCheck(
 		@RequestParam(value = "email", required = true) String email
 	);
 }

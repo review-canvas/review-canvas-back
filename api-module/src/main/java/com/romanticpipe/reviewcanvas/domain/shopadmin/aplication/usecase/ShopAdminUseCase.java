@@ -1,8 +1,9 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface ShopAdminUseCase {
 
@@ -10,4 +11,5 @@ public interface ShopAdminUseCase {
 
 	void signUp(SignUpRequest signUpRequest, MultipartFile logoImage);
 
+	boolean emailCheck(String email);
 }

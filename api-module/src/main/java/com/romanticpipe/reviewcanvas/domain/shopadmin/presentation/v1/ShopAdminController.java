@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,9 +51,12 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	@GetMapping(value = "/shopadmin/email-check")
-	public ResponseEntity<SuccessResponse<Void>> emailCheck(
+	public ResponseEntity<SuccessResponse<Map<String, Boolean>>> emailCheck(
 		@RequestParam(value = "email", required = true) String email
 	) {
-		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+		boolean result = shopAdminUseCase.emailCheck(email);
+		return SuccessResponse.of(
+			Map.of("duplicate", result)
+		).asHttp(HttpStatus.OK);
 	}
 }
