@@ -2,7 +2,7 @@ name: push image and deploy to aws
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main" ]
 
 env:
   JDK_VERSION: 17
