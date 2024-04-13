@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
 import java.security.Key;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -50,11 +51,11 @@ public class TokenProvider implements InitializingBean {
 	@Value("${spring.jwt.secret}")
 	private String secret;
 
-	@Value("${spring.jwt.access-token-validity-in-seconds}")
-	private long accessTokenValidityTime;
+	@Value("${spring.jwt.access-token-validity}")
+	private Duration accessTokenValidityTime;
 
-	@Value("${spring.jwt.refresh-token-validity-in-seconds}")
-	private long refreshTokenValidityTime;
+	@Value("${spring.jwt.refresh-token-validity}")
+	private Duration refreshTokenValidityTime;
 
 	private Key secretKey;
 
@@ -77,7 +78,7 @@ public class TokenProvider implements InitializingBean {
 			.collect(Collectors.joining(","));
 
 		long now = (new Date()).getTime();
-		Date accessTokenValidity = new Date(now + 1000 * this.accessTokenValidityTime);
+		Date accessTokenValidity = new Date(now + this.accessTokenValidityTime.toMillis());
 
 		String accessToken = Jwts.builder()
 			.setExpiration(accessTokenValidity)
@@ -93,7 +94,7 @@ public class TokenProvider implements InitializingBean {
 
 	public void createRefreshToken(AdminAuth adminAuth, Long adminId) {
 		long now = (new Date()).getTime();
-		Date refreshTokenValidity = new Date(now + 1000 * this.refreshTokenValidityTime);
+		Date refreshTokenValidity = new Date(now + this.refreshTokenValidityTime.toMillis());
 		adminAuth.setRefreshToken(Jwts.builder()
 			.setExpiration(refreshTokenValidity)
 			.claim(AUTH_ID, adminAuth.getId())
