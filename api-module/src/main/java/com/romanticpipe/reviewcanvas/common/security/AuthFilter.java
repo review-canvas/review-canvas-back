@@ -9,7 +9,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 
 import io.jsonwebtoken.Claims;
@@ -26,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class AuthFilter extends OncePerRequestFilter {
 	private final String BEARER_PREFIX = "Bearer ";
 	private final String ATTRIBUTE_NAME = "exception";
-	private final String HEADER_NAME = "Authorization";
 
 	private final TokenProvider tokenProvider;
 
@@ -42,25 +40,15 @@ public class AuthFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-			request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.MAL_FORMED_TOKEN);
+			request.setAttribute(ATTRIBUTE_NAME, SecurityErrorCode.MAL_FORMED_TOKEN);
 		} catch (IllegalArgumentException e) {
-			request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.ILLEGAL_TOKEN);
+			request.setAttribute(ATTRIBUTE_NAME, SecurityErrorCode.ILLEGAL_TOKEN);
 		} catch (ExpiredJwtException e) {
-			AdminInterface admin = tokenProvider.getAdmin(e.getClaims());
-			if (tokenProvider.isExpiredById(admin.getAdminAuthId())) {
-				request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.EXPIRED_TOKEN);
-			} else {
-				jwt = tokenProvider.createToken(admin);
-				Claims claims = tokenProvider.validateToken(jwt).getBody();
-				Authentication authentication = tokenProvider.getAuthentication(claims, jwt);
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-
-				response.setHeader(HEADER_NAME, jwt);
-			}
+			request.setAttribute(ATTRIBUTE_NAME, SecurityErrorCode.EXPIRED_TOKEN);
 		} catch (UnsupportedJwtException e) {
-			request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.UNSUPPORTED_TOKEN);
+			request.setAttribute(ATTRIBUTE_NAME, SecurityErrorCode.UNSUPPORTED_TOKEN);
 		} catch (Exception e) {
-			request.setAttribute(ATTRIBUTE_NAME, SecurtyErrorCode.UNKNOWN_ERROR);
+			request.setAttribute(ATTRIBUTE_NAME, SecurityErrorCode.UNKNOWN_ERROR);
 		}
 		filterChain.doFilter(request, response);
 	}
@@ -70,6 +58,6 @@ public class AuthFilter extends OncePerRequestFilter {
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
 			return bearerToken.substring(BEARER_PREFIX.length());
 		}
-		throw new BusinessException(SecurtyErrorCode.NON_BEARER);
+		throw new BusinessException(SecurityErrorCode.NON_BEARER);
 	}
 }

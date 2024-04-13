@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AdminAuthRemover {
-	private static final String DELETED_TOKEN = "deleted";
+	private static final String DELETED_TOKEN = "DELETED_TOKEN";
 
 	private final AdminAuthRepository adminAuthRepository;
 

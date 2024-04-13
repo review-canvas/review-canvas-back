@@ -14,18 +14,20 @@ import com.romanticpipe.reviewcanvas.common.dto.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+	private final ObjectMapper objectMapper;
+
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 		AccessDeniedException accessDeniedException) throws IOException {
-		ObjectMapper objectMapper = new ObjectMapper();
-
 		PrintWriter writer = response.getWriter();
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		writer.write(objectMapper.writeValueAsString(ErrorResponse.of(SecurtyErrorCode.UNAUTHORIZED)));
+		writer.write(objectMapper.writeValueAsString(ErrorResponse.of(SecurityErrorCode.UNAUTHORIZED)));
 	}
 }

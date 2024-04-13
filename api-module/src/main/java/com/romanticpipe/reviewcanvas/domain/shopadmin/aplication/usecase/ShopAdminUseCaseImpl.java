@@ -14,8 +14,8 @@ import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
+import com.romanticpipe.reviewcanvas.exception.AdminErrorCode;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.AdminAuthRemover;
 import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
@@ -23,6 +23,9 @@ import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -41,18 +44,19 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public LoginResponse login(String email, String password, Role role) {
-		AdminInterface admin;
-		if (role.equals(Role.SUPER_ADMIN_ROLE)) {
-			admin = superAdminValidator.validByEmail(email);
-		} else {
-			admin = shopAdminValidator.validByEmail(email);
-		}
+		AdminInterface admin = role.equals(Role.SUPER_ADMIN_ROLE) ?
+			superAdminValidator.validByEmail(email) :
+			shopAdminValidator.validByEmail(email);
+
 		if (!passwordEncoder.matches(password, admin.getPassword())) {
-			throw new BusinessException(ShopAdminErrorCode.ADMIN_WRONG_PASSWARD);
+			throw new BusinessException(AdminErrorCode.ADMIN_WRONG_PASSWARD);
 		}
+
 		AdminAuth adminAuth = adminAuthValidator.findById(admin.getAdminAuthId());
 		String accessToken = tokenProvider.createToken(admin);
-		if (tokenProvider.isExpiredToken(adminAuth.getRefreshToken())) {
+		try {
+			tokenProvider.validateToken(adminAuth.getRefreshToken());
+		} catch (ExpiredJwtException | MalformedJwtException e) {
 			tokenProvider.createRefreshToken(adminAuth, admin.getId());
 		}
 		return LoginResponse.from(admin.getId(), accessToken);
@@ -103,11 +107,20 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public CheckLoginResponse checkLoginForAdmin(AdminInterface admin) {
-		if (admin.getRole().equals(Role.SUPER_ADMIN_ROLE)) {
-			admin = superAdminValidator.validById(admin.getId());
-		} else {
-			admin = shopAdminValidator.validById(admin.getId());
-		}
+		boolean isSuperAdmin = admin.getRole().equals(Role.SUPER_ADMIN_ROLE);
+
+		admin = isSuperAdmin ? superAdminValidator.validById(admin.getId()) :
+			shopAdminValidator.validById(admin.getId());
 		return CheckLoginResponse.from(admin.getId(), admin.getRole().toString());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public LoginResponse reissuedAccessToken(String accessToken) {
+		Claims claims = tokenProvider.getByClaimsExpiredToken(accessToken);
+		AdminInterface admin = tokenProvider.getAdminByClaims(claims);
+		tokenProvider.checkTokenExpired(admin.getAdminAuthId());
+		accessToken = tokenProvider.createToken(admin);
+		return LoginResponse.from(admin.getId(), accessToken);
 	}
 }
