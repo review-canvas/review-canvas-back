@@ -14,7 +14,6 @@ public class ShopAdminReader {
 	private final ReviewVisibilityRepository reviewVisibilityRepository;
 
 	public List<String> getReviewVisibilityTitle() {
-
-		return null;
+		return reviewVisibilityRepository.getReviewVisibilityTitles();
 	}
 }
