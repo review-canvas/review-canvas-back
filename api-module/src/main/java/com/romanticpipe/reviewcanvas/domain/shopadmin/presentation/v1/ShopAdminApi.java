@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetGeneralReviewThemeListResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,5 +56,5 @@ interface ShopAdminApi {
 			description = "성공적으로 기본 리뷰 테마 리스트 조회가 완료되었습니다.")
 	})
 	@GetMapping("/shopadmin/review-design/theme-list")
-	ResponseEntity<SuccessResponse<GetGeneralReviewThemeListResponse>> getGeneralReviewThemeList();
+	ResponseEntity<SuccessResponse<List<GetGeneralReviewThemeListResponse>>> getGeneralReviewThemeList();
 }

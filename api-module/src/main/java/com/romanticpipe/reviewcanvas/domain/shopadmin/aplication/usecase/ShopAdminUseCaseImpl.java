@@ -1,15 +1,20 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @RequiredArgsConstructor
@@ -44,7 +49,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.email(signUpRequest.email())
 			.password(signUpRequest.password())
 			.name(signUpRequest.name())
-//			.logoImageUrl(signUpRequest.logoImageUrl())
+			//			.logoImageUrl(signUpRequest.logoImageUrl())
 			.mallNumber(signUpRequest.mallNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
 			.approveStatus(false)
@@ -54,5 +59,12 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.build();
 
 		shopAdminCreator.signUp(shopAdmin);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<ReviewDesign> getGeneralReviewThemeList() {
+
+		return null;
 	}
 }

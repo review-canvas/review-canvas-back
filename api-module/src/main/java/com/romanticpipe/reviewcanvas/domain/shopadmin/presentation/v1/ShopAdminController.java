@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdminUseCase;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetGeneralReviewThemeListResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 
 import jakarta.validation.Valid;
@@ -49,7 +52,7 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	@GetMapping("/shopadmin/review-design/theme-list")
-	ResponseEntity<SuccessResponse<LoginResponse>> getGeneralReviewThemeList() {
-		return null;
+	ResponseEntity<SuccessResponse<List<GetGeneralReviewThemeListResponse>>> getGeneralReviewThemeList() {
+		return SuccessResponse.of().asHttp(HttpStatus.OK);
 	}
 }
