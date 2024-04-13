@@ -2,15 +2,16 @@ name: push image and deploy to aws
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop"]
 
 env:
   JDK_VERSION: 17
 
 jobs:
   deploy:
-    needs: build
+    environment: production
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,54 +24,28 @@ jobs:
           aws-region: 'ap-northeast-2'
 
       - name: Set up JDK ${{ env.JDK_VERSION }}
-        uses: actions/setup-java@v4
+        uses: review-canvas/gh-actions/common/jvm@main
         with:
-          distribution: 'temurin'
-          java-version: ${{ env.JDK_VERSION }}
-          cache: 'gradle'
+          version: ${{ env.JDK_VERSION }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
         shell: bash
 
       - name: Build with jib
-        run: |
-          export AWS_ACCOUNT_ID=${{ secrets.AWS_ACCOUNT_ID }}
-          ./gradlew :api-module:jib --info -x test
-
-      - name: Deploy EC2
-        uses: appleboy/ssh-action@master
+        uses: review-canvas/gh-actions/common/build/jib@main
+        id: build-image
+        env:
+          ECR_URI: ${{ secrets.AWS_ECR_URI }}
+          ECR_REPOSITORY: 'review-canvas-api'
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          port: 22
-          script: |
-            cd was
-            docker compose down
-            
-            cat > docker-compose.yml <<EOF
-            version: '3.8'
-            
-            services:
-              api:
-                container_name: review_canvas_prod_api
-                image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com/review-canvas-api:latest
-                ports:
-                  - "8080:8080"
-                environment:
-                  - RDS_URL=${{ secrets.RDS_URL }}
-                  - RDS_USERNAME=${{ secrets.RDS_USERNAME }}
-                  - RDS_PASSWORD=${{ secrets.RDS_PASSWORD }}
-                  - TZ=Asia/Seoul
-                healthcheck:
-                  test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/health"]
-                  interval: 10s
-                  timeout: 1s
-                  retries: 3
-                  start_period: 15s
-                restart: on-failure
-            EOF
-            
-            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-northeast-2.amazonaws.com
-            docker compose up -d
+          target_module: api-module
+          with_test: false
+          repository: ${{ env.ECR_REPOSITORY }}
+          tags: ${{ github.sha }}
+
+      - uses: review-canvas/gh-actions/deploy/ecs@main
+        with:
+          ecs_cluster: ${{ vars.ECS_CLUSTER }}
+          service: ${{ vars.ECS_SERVICE_API }}
+          image: ${{ steps.build-image.outputs.image }}

@@ -22,9 +22,10 @@ public class Review {
 	@Column(name = "review_id")
 	private Long id;
 
-	@Column(name = "product_id")
+	@Column(name = "product_id", columnDefinition = "binary(16)")
 	private String productId;
 
+	@Column(name = "user_id", columnDefinition = "binary(16)")
 	private String userId;
 	private String content;
 	private int score;

@@ -18,13 +18,16 @@ dependencies {
 apply plugin: 'com.google.cloud.tools.jib'
 
 jib {
+    def jibTag = System.getProperty("jib-tag")
+    def ecrUri = System.getenv("ECR_URI")
+
     from {
         image = "eclipse-temurin:17-jre"
     }
     to {
-        image = System.getenv("AWS_ACCOUNT_ID") + ".dkr.ecr.ap-northeast-2.amazonaws.com/review-canvas-api"
+        image = ecrUri
         credHelper = "ecr-login"
-        tags = ["${project.version.toString()}"]
+        tags = ["${project.version.toString()}", jibTag]
     }
     container {
         jvmFlags = ['-Dspring.profiles.active=prod', '-XX:+UseContainerSupport']
