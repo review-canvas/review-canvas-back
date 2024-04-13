@@ -9,8 +9,8 @@ import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
+import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
-import com.romanticpipe.reviewcanvas.service.ShopAdminReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
 	private final ShopAdminCreator shopAdminCreator;
-	private final ShopAdminReader shopAdminReader;
+	private final ReviewVisibilityReader reviewVisibilityReader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -64,6 +64,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public GetReviewVisibilityTitleResponse getReviewVisibilityTitle() {
-		return GetReviewVisibilityTitleResponse.from(shopAdminReader.getReviewVisibilityTitle());
+		return GetReviewVisibilityTitleResponse.from(reviewVisibilityReader.getReviewVisibilityTitle());
 	}
 }

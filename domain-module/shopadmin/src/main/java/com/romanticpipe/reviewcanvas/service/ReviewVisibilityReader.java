@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ShopAdminReader {
+public class ReviewVisibilityReader {
 	private final ReviewVisibilityRepository reviewVisibilityRepository;
 
 	public List<String> getReviewVisibilityTitle() {
