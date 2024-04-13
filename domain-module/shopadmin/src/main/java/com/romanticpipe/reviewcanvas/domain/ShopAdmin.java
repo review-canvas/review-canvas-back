@@ -18,6 +18,9 @@ public class ShopAdmin {
 	@Column(name = "shop_admin_id")
 	private Long id;
 
+	@Column(name = "selected_review_design_id")
+	private Long selectedReviewDesignId;
+
 	@Column(name = "approve_status", columnDefinition = "TINYINT(1)")
 	private boolean approveStatus;
 }

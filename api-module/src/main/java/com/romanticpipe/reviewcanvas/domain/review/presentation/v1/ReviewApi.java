@@ -4,6 +4,7 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetSelectedReviewDesignResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
 import io.swagger.v3.oas.annotations.Operation;
@@ -75,5 +76,15 @@ interface ReviewApi {
 		@Schema(description = "ASC, DESC 가능") Direction direction
 	);
 
+	@Operation(summary = "선택 중인 리뷰 디자인 조회 API", description = "특정 Shop admin이 선택 중인 리뷰 디자인을 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 선택 중인 리뷰 디자인 조회가 완료되었습니다.")
+	})
+	@GetMapping("/review_designs/{shop_admin_id}/selected_review_design")
+	ResponseEntity<SuccessResponse<GetSelectedReviewDesignResponse>> getSelectedReviewDesign(
+		@PathVariable("shop_admin_id") long shopAdminId
+	);
 
 }
