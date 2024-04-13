@@ -14,8 +14,8 @@ import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
+import com.romanticpipe.reviewcanvas.exception.AdminErrorCode;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.AdminAuthRemover;
 import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
@@ -49,7 +49,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			shopAdminValidator.validByEmail(email);
 
 		if (!passwordEncoder.matches(password, admin.getPassword())) {
-			throw new BusinessException(ShopAdminErrorCode.ADMIN_WRONG_PASSWARD);
+			throw new BusinessException(AdminErrorCode.ADMIN_WRONG_PASSWARD);
 		}
 
 		AdminAuth adminAuth = adminAuthValidator.findById(admin.getAdminAuthId());

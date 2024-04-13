@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.exception.AdminNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewDesignNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
-import com.romanticpipe.reviewcanvas.exception.ShopAdminNotFoundException;
 import com.romanticpipe.reviewcanvas.repository.ReviewDesignRepository;
 import com.romanticpipe.reviewcanvas.repository.ShopAdminRepository;
 
@@ -31,16 +31,16 @@ public class ShopAdminValidator {
 
 	public ShopAdmin validByEmail(String email) {
 		return shopAdminRepository.findByEmail(email)
-			.orElseThrow(() -> new ShopAdminNotFoundException());
+			.orElseThrow(() -> new AdminNotFoundException());
 	}
 
 	public ShopAdmin validById(long shopAdminId) {
 		return shopAdminRepository.findById(shopAdminId)
-			.orElseThrow(() -> new ShopAdminNotFoundException());
+			.orElseThrow(() -> new AdminNotFoundException());
 	}
 
 	public AdminInterface validByAuthId(long adminAuthId) {
 		return shopAdminRepository.findByAdminAuthId(adminAuthId)
-			.orElseThrow(() -> new ShopAdminNotFoundException());
+			.orElseThrow(() -> new AdminNotFoundException());
 	}
 }
