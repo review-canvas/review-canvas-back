@@ -2,6 +2,7 @@ bootJar.enabled = true
 jar.enabled = true
 
 dependencies {
+    implementation project(':domain-module')
     implementation project(':domain-module:review')
     implementation project(':domain-module:shopadmin')
     implementation project(':common-module')
