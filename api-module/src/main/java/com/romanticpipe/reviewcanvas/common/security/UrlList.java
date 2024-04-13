@@ -15,12 +15,10 @@ public class UrlList {
 		"/api/v1/shop-admin/login",
 		"/api/v1/shop-admin/sign-up",
 		"/api/v1/super-admin/login",
-		"api/v1/shop-admin/auth",
+		"api/v1/admin/auth",
 		"/swagger-ui/**",
 		"/v3/**"
 	);
 
-	private List<String> superUrls = Arrays.asList(
-		// "api/v1/shop-admin/auth"
-	);
+	private List<String> superUrls = Arrays.asList();
 }

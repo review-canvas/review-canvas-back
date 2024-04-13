@@ -73,4 +73,10 @@ class ShopAdminController implements ShopAdminApi {
 	public ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin(AdminInterface admin) {
 		return SuccessResponse.of(shopAdminUseCase.checkLoginForAdmin(admin)).asHttp(HttpStatus.OK);
 	}
+
+	@Override
+	@GetMapping("/admin/auth")
+	public ResponseEntity<SuccessResponse<LoginResponse>> reissuedAccessToken(String accessToken) {
+		return SuccessResponse.of(shopAdminUseCase.reissuedAccessToken(accessToken)).asHttp(HttpStatus.OK);
+	}
 }

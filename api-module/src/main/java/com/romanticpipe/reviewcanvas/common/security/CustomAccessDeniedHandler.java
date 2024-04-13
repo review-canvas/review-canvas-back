@@ -28,6 +28,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		writer.write(objectMapper.writeValueAsString(ErrorResponse.of(SecurtyErrorCode.UNAUTHORIZED)));
+		writer.write(objectMapper.writeValueAsString(ErrorResponse.of(SecurityErrorCode.UNAUTHORIZED)));
 	}
 }

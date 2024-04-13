@@ -25,7 +25,7 @@ public class AdminResolver implements HandlerMethodArgumentResolver {
 		NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || !authentication.isAuthenticated()) {
-			throw new BusinessException(SecurtyErrorCode.ILLEGAL_TOKEN);
+			throw new BusinessException(SecurityErrorCode.ILLEGAL_TOKEN);
 		}
 		return authentication.getPrincipal();
 	}

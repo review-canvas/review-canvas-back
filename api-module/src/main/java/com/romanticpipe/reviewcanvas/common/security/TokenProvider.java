@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -30,6 +31,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -42,7 +44,7 @@ public class TokenProvider implements InitializingBean {
 	private static final String AUTHORITIES_KEY = "auth";
 	private static final String AUTH_ID = "authId";
 	private static final String ADMIN_ID = "adminId";
-	private static final String DELETED_TOKEN = "deleted";
+	private static final String DELETED_TOKEN = "DELETED_TOKEN";
 
 	private final AdminAuthValidator adminAuthValidator;
 	private final ShopAdminValidator shopAdminValidator;
@@ -103,16 +105,21 @@ public class TokenProvider implements InitializingBean {
 		return new Date(now + duration.toMillis());
 	}
 
-	public AdminInterface getAdmin(Claims claims) {
-		Collection<? extends GrantedAuthority> authorities = getAuthorites(claims);
-		if (isSuperAdmin(authorities)) {
-			return this.superAdminValidator.validByAuthId(Long.parseLong(claims.get(AUTH_ID).toString()));
-		}
-
-		return this.shopAdminValidator.validByAuthId(Long.parseLong(claims.get(AUTH_ID).toString()));
+	public Authentication getAuthentication(Claims claims, String token) {
+		Collection<? extends GrantedAuthority> authorities = getAuthorities(claims);
+		AdminInterface admin = getAdminByClaims(claims);
+		return new UsernamePasswordAuthenticationToken(admin, token, authorities);
 	}
 
-	private List<SimpleGrantedAuthority> getAuthorites(Claims claims) {
+	public AdminInterface getAdminByClaims(Claims claims) {
+		Collection<? extends GrantedAuthority> authorities = getAuthorities(claims);
+		long authId = Long.parseLong(claims.get(AUTH_ID).toString());
+
+		return isSuperAdmin(authorities) ? this.superAdminValidator.validByAuthId(authId) :
+			this.shopAdminValidator.validByAuthId(authId);
+	}
+
+	private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
 		return Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
 			.map(SimpleGrantedAuthority::new)
 			.collect(Collectors.toList());
@@ -123,26 +130,15 @@ public class TokenProvider implements InitializingBean {
 			.anyMatch(authority -> authority.getAuthority().equals(Role.SUPER_ADMIN_ROLE.toString()));
 	}
 
-	public boolean isExpiredById(long authId) throws BusinessException {
-		String refreshToken = this.adminAuthValidator.findById(authId).getRefreshToken();
-		if (isExpiredToken(refreshToken, new Date())) {
-			return true;
+	public void checkTokenExpired(long authId) {
+		String refreshToken = Optional.ofNullable(this.adminAuthValidator.findById(authId))
+			.map(AdminAuth::getRefreshToken)
+			.orElseThrow(() -> new BusinessException(SecurityErrorCode.EXPIRED_TOKEN));
+		try {
+			validateToken(refreshToken);
+		} catch (ExpiredJwtException | MalformedJwtException e) {
+			throw new BusinessException(SecurityErrorCode.EXPIRED_TOKEN);
 		}
-		return false;
-	}
-
-	public Authentication getAuthentication(Claims claims, String token) {
-		Collection<? extends GrantedAuthority> authorities = getAuthorites(claims);
-
-		if (isSuperAdmin(authorities)) {
-			AdminInterface admin = this.superAdminValidator.validByAuthId(
-				Long.parseLong(claims.get(AUTH_ID).toString()));
-			return new UsernamePasswordAuthenticationToken(admin, token, authorities);
-		}
-
-		AdminInterface admin = this.shopAdminValidator.validByAuthId(
-			Long.parseLong(claims.get(AUTH_ID).toString()));
-		return new UsernamePasswordAuthenticationToken(admin, token, authorities);
 	}
 
 	public UsernamePasswordAuthenticationToken configureAuthentication(AdminInterface admin,
@@ -153,24 +149,15 @@ public class TokenProvider implements InitializingBean {
 		return auth;
 	}
 
-	public boolean isExpiredToken(String refreshToken, Date currentDate) {
-		if (refreshToken.isEmpty() || refreshToken.equals(DELETED_TOKEN)) {
-			return true;
-		}
-		Claims claims = parseClaims(refreshToken);
-
-		return claims.getExpiration().before(currentDate);
+	public Jws<Claims> validateToken(String token) throws BusinessException, MalformedJwtException {
+		return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 	}
 
-	private Claims parseClaims(String token) {
+	public Claims getByClaimsExpiredToken(String token) {
 		try {
 			return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
 		} catch (ExpiredJwtException e) {
 			return e.getClaims();
 		}
-	}
-
-	public Jws<Claims> validateToken(String token) throws BusinessException {
-		return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 	}
 }

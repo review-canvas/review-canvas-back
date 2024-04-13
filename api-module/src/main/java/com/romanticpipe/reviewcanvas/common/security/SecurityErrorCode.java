@@ -5,7 +5,7 @@ import com.romanticpipe.reviewcanvas.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum SecurtyErrorCode implements ErrorCode {
+public enum SecurityErrorCode implements ErrorCode {
 	UNAUTHORIZED(401, "S001", "Unauthorized Admin error."),
 	NON_BEARER(401, "S002", "Bearer format is required in the Authorization header."),
 	UNKNOWN_ERROR(403, "S003", "An unexpected error has occurred."),
