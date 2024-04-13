@@ -15,7 +15,7 @@ dependencies {
 apply plugin: 'com.google.cloud.tools.jib'
 
 jib {
-    def jibTag = System.getenv("jib-tag")
+    def jibTag = System.getProperty("jib-tag")
 
     from {
         image = "eclipse-temurin:17-jre"
