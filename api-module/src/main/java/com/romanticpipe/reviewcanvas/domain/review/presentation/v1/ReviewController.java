@@ -4,6 +4,7 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetMyReviewDesignResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -70,6 +71,20 @@ class ReviewController implements ReviewApi {
 															  UpdateReviewRequest updateReviewRequest) {
 		reviewUseCase.updateReview(reviewId, updateReviewRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/review_designs/{shop_admin_id}")
+	public ResponseEntity<SuccessResponse<PageResponse<GetMyReviewDesignResponse>>> getMyReviewDesigns(
+		@PathVariable("shop_admin_id") Long shopAdminId,
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
+		@Schema(description = "ASC, DESC 가능") Direction direction
+	){
+		return SuccessResponse.of(
+			reviewUseCase.getMyReviewDesigns(shopAdminId, PageableRequest.of(page, size, direction))
+		).asHttp(HttpStatus.OK);
 	}
 
 }

@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetMyReviewDesignResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
@@ -69,6 +70,21 @@ interface ReviewApi {
 	@GetMapping("/users/{userId}/reviews")
 	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsByUserId(
 		@PathVariable("userId") String userId,
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
+		@Schema(description = "ASC, DESC 가능") Direction direction
+	);
+
+	@Operation(summary = "개인 리뷰 디자인 조회 API", description = "특정 Shop admin이 생성한 리뷰 디자인 리스트를 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 개인 리뷰 디자인 조회가 완료되었습니다.")
+	})
+	@GetMapping("/review_designs/{shop_admin_id}")
+	ResponseEntity<SuccessResponse<PageResponse<GetMyReviewDesignResponse>>> getMyReviewDesigns(
+		@PathVariable("shop_admin_id") Long shopAdminId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC")

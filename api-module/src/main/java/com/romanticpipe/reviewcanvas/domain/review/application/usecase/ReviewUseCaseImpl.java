@@ -3,15 +3,18 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.romanticpipe.reviewcanvas.domain.MyReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetMyReviewDesignResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.service.MyReviewDesignReader;
 import com.romanticpipe.reviewcanvas.service.ProductValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewCreator;
 import com.romanticpipe.reviewcanvas.service.ReviewReader;
@@ -29,6 +32,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	private final ReviewReader reviewReader;
 	private final ReviewCreator reviewCreator;
 	private final ReviewValidator reviewValidator;
+	private final MyReviewDesignReader myReviewDesignReader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -66,6 +70,14 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 				? ReviewStatus.WAITING : ReviewStatus.APPROVED
 		);
 		reviewCreator.save(review);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PageResponse<GetMyReviewDesignResponse> getMyReviewDesigns(Long shopAdminId, PageableRequest pageableRequest) {
+		shopAdminValidator.validById(shopAdminId);
+		PageResponse<MyReviewDesign> myReviewDesignList = myReviewDesignReader.findByShopAdminId(shopAdminId, pageableRequest);
+		return myReviewDesignList.map(GetMyReviewDesignResponse::from);
 	}
 
 }
