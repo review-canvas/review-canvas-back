@@ -51,7 +51,6 @@ class ReviewUseCaseImplTest {
 			var productId = "product_no";
 			var pageableRequest = PageableRequest.of(0, 10, Direction.ASC);
 			var review = TestReviewFactory.createReview(1L, "1", "1", "content", 5);
-
 			var getReviewResponse = new PageResponse<>(0, 10, 0, List.of(review));
 			given(reviewReader.findByProductId(eq(productId), eq(pageableRequest)))
 				.willReturn(getReviewResponse);
