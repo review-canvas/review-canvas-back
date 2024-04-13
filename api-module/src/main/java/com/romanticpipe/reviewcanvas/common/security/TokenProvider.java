@@ -44,7 +44,6 @@ public class TokenProvider implements InitializingBean {
 	private static final String AUTHORITIES_KEY = "auth";
 	private static final String AUTH_ID = "authId";
 	private static final String ADMIN_ID = "adminId";
-	private static final String DELETED_TOKEN = "DELETED_TOKEN";
 
 	private final AdminAuthValidator adminAuthValidator;
 	private final ShopAdminValidator shopAdminValidator;
@@ -68,13 +67,11 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	public String createToken(AdminInterface admin) {
-		// 스프링 시큐리티 처리
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(String.valueOf(admin.getRole())));
-		// 사용자 인증 정보 생성
+		
 		UsernamePasswordAuthenticationToken auth = configureAuthentication(admin, authorities);
 
-		// JWT 토큰 생성
 		String auths = auth.getAuthorities().stream()
 			.map(GrantedAuthority::getAuthority)
 			.collect(Collectors.joining(","));

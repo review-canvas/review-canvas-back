@@ -16,7 +16,7 @@ public interface ShopAdminUseCase {
 
 	void logout(AdminInterface admin);
 
-	CheckLoginResponse checkLoginForAdmin(AdminInterface admin);
+	CheckLoginResponse checkLoginSession(AdminInterface admin);
 
 	LoginResponse reissuedAccessToken(String accessToken);
 }

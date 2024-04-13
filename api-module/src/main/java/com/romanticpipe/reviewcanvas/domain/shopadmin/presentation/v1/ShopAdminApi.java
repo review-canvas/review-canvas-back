@@ -77,8 +77,8 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 로그인 완료되었습니다.")
 	})
-	@GetMapping("/shop-admin/auth")
-	ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin(AdminInterface admin);
+	@GetMapping("/admin")
+	ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginSession(AdminInterface admin);
 
 	@Operation(summary = "AccessToken 재발급 API", description = "RefreshToken에 기반해 Access 토큰을 재발급한다.")
 	@ApiResponses(value = {

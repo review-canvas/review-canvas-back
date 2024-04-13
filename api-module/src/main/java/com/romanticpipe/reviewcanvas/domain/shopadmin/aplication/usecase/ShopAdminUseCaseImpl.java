@@ -80,6 +80,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.createdAt(signUpRequest.createdAt())
 			.updatedAt(signUpRequest.updatedAt())
 			.build();
+
 		ShopAdmin shopAdmin = ShopAdmin.builder()
 			.reviewVisibility(reviewVisibility)
 			.email(signUpRequest.email())
@@ -106,7 +107,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	@Override
 	@Transactional(readOnly = true)
-	public CheckLoginResponse checkLoginForAdmin(AdminInterface admin) {
+	public CheckLoginResponse checkLoginSession(AdminInterface admin) {
 		boolean isSuperAdmin = admin.getRole().equals(Role.SUPER_ADMIN_ROLE);
 
 		admin = isSuperAdmin ? superAdminValidator.validById(admin.getId()) :
