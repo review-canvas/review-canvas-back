@@ -35,6 +35,8 @@ jobs:
       - name: Build with jib
         uses: review-canvas/gh-actions/common/build/jib@main
         id: build-image
+        env:
+          ECR_URI: ${{ secrets.AWS_ECR_REPOSITORY }}
         with:
           target_module: api-module
           with_test: false
