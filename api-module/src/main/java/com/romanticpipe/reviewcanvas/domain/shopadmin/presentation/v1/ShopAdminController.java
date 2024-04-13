@@ -49,6 +49,7 @@ class ShopAdminController implements ShopAdminApi {
 	}
 
 	@Override
+	@GetMapping("/shopadmin/review-visibility/titles")
 	public ResponseEntity<SuccessResponse<GetReviewVisibilityTitleResponse>> getReviewVisibilityTitle() {
 		return SuccessResponse.of(
 			shopAdminUseCase.getReviewVisibilityTitle()
