@@ -37,7 +37,7 @@ jobs:
         id: build-image
         env:
           ECR_URI: ${{ secrets.AWS_ECR_URI }}
-          ECR_REPOSITORY: 'review_canvas_pai'
+          ECR_REPOSITORY: 'review_canvas_api'
         with:
           target_module: api-module
           with_test: false
