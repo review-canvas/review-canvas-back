@@ -2,11 +2,9 @@ package com.romanticpipe.reviewcanvas.common.security;
 
 import com.romanticpipe.reviewcanvas.exception.ErrorCode;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum SecurtyErrorCode implements ErrorCode {
 	UNAUTHORIZED(401, "S001", "Unauthorized Admin error."),
 	NON_BEARER(401, "S002", "Bearer format is required in the Authorization header."),
