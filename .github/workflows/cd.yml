@@ -36,6 +36,7 @@ jobs:
         uses: review-canvas/gh-actions/common/build/jib@main
         id: build-image
         env:
+          ECR_URI: ${{ secrets.AWS_ECR_URI }}
           ECR_REPOSITORY: 'review_canvas_pai'
         with:
           target_module: api-module
