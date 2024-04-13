@@ -64,7 +64,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public List<ReviewDesign> getGeneralReviewThemeList() {
-
+		shopAdminReader
 		return null;
 	}
 }
