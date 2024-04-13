@@ -39,6 +39,7 @@ jobs:
           target_module: api-module
           with_test: false
           repository: ${{ secrets.AWS_ECR_REPOSITORY }}
+          tags: ${{ github.sha }}
 
       - uses: review-canvas/gh-actions/deploy/ecs@main
         with:
