@@ -50,6 +50,8 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	public ResponseEntity<SuccessResponse<GetReviewVisibilityTitleResponse>> getReviewVisibilityTitle() {
-		return null;
+		return SuccessResponse.of(
+			shopAdminUseCase.getReviewVisibilityTitle()
+		).asHttp(HttpStatus.OK);
 	}
 }
