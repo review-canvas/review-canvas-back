@@ -53,6 +53,6 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 노출 항목 title 조회가 완료되었습니다.")
 	})
-	@GetMapping(value = "/shopadmin/reviewVisibility/title")
+	@GetMapping(value = "/shopadmin/review-visibility/titles")
 	ResponseEntity<SuccessResponse<GetReviewVisibilityTitleResponse>> getReviewVisibilityTitle();
 }
