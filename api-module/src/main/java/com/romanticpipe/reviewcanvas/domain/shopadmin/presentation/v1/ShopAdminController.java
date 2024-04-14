@@ -69,6 +69,13 @@ class ShopAdminController implements ShopAdminApi {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
+	@DeleteMapping("/shop-admin/logout")
+	@Override
+	public ResponseEntity<SuccessResponse<Void>> logout(AdminInterface admin) {
+		shopAdminUseCase.logout(admin);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
 	@Override
 	@GetMapping("/shop-admin/auth")
 	public ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginForAdmin(AdminInterface admin) {
