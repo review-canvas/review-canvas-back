@@ -13,7 +13,7 @@ public class ShopAdminRemover {
 	private final ShopAdminValidator shopAdminValidator;
 
 	public void quit(Long id) {
-		ShopAdmin shopAdmin = shopAdminValidator.isExistUserByID(id);
+		ShopAdmin shopAdmin = shopAdminValidator.validById(id);
 		shopAdmin.delete();
 	}
 }

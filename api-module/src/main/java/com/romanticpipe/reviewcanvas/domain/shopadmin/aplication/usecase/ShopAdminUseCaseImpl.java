@@ -105,7 +105,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void logout(AdminInterface admin) {
-		adminAuthRemover.logout(admin.getId());
+		adminAuthRemover.deleteRefreshToken(admin.getId());
 	}
 
 	@Override
@@ -123,5 +123,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public void quit(Long id) {
 		shopAdminRemover.quit(id);
+		adminAuthRemover.deleteRefreshToken(id);
 	}
 }
