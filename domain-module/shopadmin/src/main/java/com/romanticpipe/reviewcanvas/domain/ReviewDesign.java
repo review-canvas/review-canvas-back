@@ -22,6 +22,9 @@ public class ReviewDesign {
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR(10)")
 	private ReviewDesignType reviewDesignType;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR(32)")
+	private ReviewDesignPosition reviewDesignPosition;
 	private String themeName;
 	private String layoutType;
 	private String padding;
@@ -40,14 +43,13 @@ public class ReviewDesign {
 	private String reviewDesignUrl;
 
 	@Builder
-	public ReviewDesign(ReviewDesignType reviewDesignType, String themeName, String layoutType, String padding,
-		String gap,
-		String boxShadowColor,
-		int boxShadowWidth,
-		String borderColor, int borderTransparency, int borderWidth, String pagingType, int pagingNumber,
-		String textAlign, String pointColor,
-		String pointType, int lineEllipsis, String reviewDesignUrl) {
+	public ReviewDesign(ReviewDesignType reviewDesignType, ReviewDesignPosition reviewDesignPosition, String themeName,
+						String layoutType, String padding, String gap, String boxShadowColor, int boxShadowWidth,
+						String borderColor, int borderTransparency, int borderWidth, String pagingType,
+						int pagingNumber, String textAlign, String pointColor, String pointType, int lineEllipsis,
+						String reviewDesignUrl) {
 		this.reviewDesignType = reviewDesignType;
+		this.reviewDesignPosition = reviewDesignPosition;
 		this.themeName = themeName;
 		this.layoutType = layoutType;
 		this.padding = padding;

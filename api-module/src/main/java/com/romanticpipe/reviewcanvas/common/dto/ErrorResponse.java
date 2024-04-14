@@ -1,14 +1,16 @@
 package com.romanticpipe.reviewcanvas.common.dto;
 
+import java.util.List;
+
+import org.springframework.validation.FieldError;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.romanticpipe.reviewcanvas.exception.ErrorCode;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.FieldError;
-
-import java.util.List;
 
 @Getter
 @Schema(description = "성공 Response")
@@ -18,7 +20,6 @@ public class ErrorResponse {
 	@Schema(description = "성공 여부", defaultValue = "false")
 	private final boolean success = false;
 	private final ErrorInfo data;
-
 
 	public static ErrorResponse of(ErrorCode errorCode) {
 		return new ErrorResponse(new ErrorInfo(errorCode.getCode(), errorCode.getMessage(), null));
