@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.dto;
 
+import com.romanticpipe.reviewcanvas.enumeration.Direction;
+
 public record PageableRequest(int page, int size, Direction direction) {
 
 	public PageableRequest {
@@ -9,16 +11,8 @@ public record PageableRequest(int page, int size, Direction direction) {
 		}
 	}
 
-	public static PageableRequest of(int page, int size, String direction) {
-		return new PageableRequest(page, size, Direction.valueOf(direction));
-	}
-
-	public boolean isAscending() {
-		return direction == Direction.ASC;
-	}
-
-	private enum Direction {
-		ASC, DESC
+	public static PageableRequest of(int page, int size, Direction direction) {
+		return new PageableRequest(page, size, direction);
 	}
 
 }

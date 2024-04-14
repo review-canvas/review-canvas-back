@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 		description = "[Regacy] 리뷰캔버스 프로젝트의 API 문서입니다.",
 		version = "v1"),
 	servers = {
-		@Server(url = "https://review-canvas-dev.com", description = "테스트 서버"),
-		@Server(url = "https://review-canvas.com", description = "운영 서버")
+//		@Server(url = "https://review-canvas-dev.com", description = "테스트 서버"),
+		@Server(url = "https://api.review-canvas.com", description = "운영 서버")
 	}
 )
 @Configuration

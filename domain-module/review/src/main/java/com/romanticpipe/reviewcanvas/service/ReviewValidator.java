@@ -16,9 +16,6 @@ public class ReviewValidator {
 	private final ReviewRepository reviewRepository;
 
 	public Review validById(long reviewId) {
-		System.out.println("!!reviewId : " + reviewId);
-		System.out.println("!!reviewId : " + reviewRepository.findAll().size());
-
 		Optional<Review> reviewOptional = Optional.ofNullable(reviewRepository.findById(reviewId));
 		if (reviewOptional.isEmpty()) {
 			throw new BusinessException(ReviewErrorCode.REVIEW_NOT_FOUND);
