@@ -2,17 +2,18 @@ package com.romanticpipe.reviewcanvas.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Review {
 
@@ -21,15 +22,22 @@ public class Review {
 	@Column(name = "review_id")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "product_id", nullable = false)
-	private Product product;
+	@Column(name = "product_id", columnDefinition = "binary(16)")
+	private String productId;
 
+	@Column(name = "user_id", columnDefinition = "binary(16)")
+	private String userId;
 	private String content;
 	private int score;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR")
+	private ReviewStatus status;
 
-	private Review(String content, int score) {
+	public Review(String productId, String userId, String content, int score, ReviewStatus status) {
+		this.userId = userId;
+		this.productId = productId;
 		this.content = content;
 		this.score = score;
+		this.status = status;
 	}
 }
