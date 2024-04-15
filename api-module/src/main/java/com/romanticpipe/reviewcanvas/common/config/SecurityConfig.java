@@ -1,8 +1,6 @@
 package com.romanticpipe.reviewcanvas.common.config;
 
 import com.romanticpipe.reviewcanvas.common.security.AuthFilter;
-import com.romanticpipe.reviewcanvas.common.security.CustomAccessDeniedHandler;
-import com.romanticpipe.reviewcanvas.common.security.CustomEntryPoint;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.common.security.UrlList;
 import com.romanticpipe.reviewcanvas.domain.Role;
@@ -26,8 +24,6 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class SecurityConfig {
 	private final TokenProvider tokenProvider;
-	private final CustomEntryPoint entryPoint;
-	private final CustomAccessDeniedHandler accessDeniedHandler;
 	private final UrlList urlList;
 
 	@Bean
@@ -44,9 +40,7 @@ public class SecurityConfig {
 					.requestMatchers(urlList.getSuperUrls().toArray(new String[0])).hasAuthority(
 						String.valueOf(Role.SUPER_ADMIN_ROLE))
 					.anyRequest().authenticated();
-			}).exceptionHandling(c ->
-				c.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler)
-			).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			}).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(new AuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
