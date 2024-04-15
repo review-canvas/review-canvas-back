@@ -3,10 +3,6 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
 import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
@@ -22,7 +18,6 @@ import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
-
 import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

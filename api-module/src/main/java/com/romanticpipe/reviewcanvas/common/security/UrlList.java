@@ -1,11 +1,10 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
-import java.util.Arrays;
-import java.util.List;
-
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
-import lombok.Getter;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @Getter
