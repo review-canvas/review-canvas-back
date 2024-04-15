@@ -1,11 +1,10 @@
 package com.romanticpipe.reviewcanvas.repository;
 
-import java.util.Optional;
-
+import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.romanticpipe.reviewcanvas.domain.AdminAuth;
+import java.util.Optional;
 
 public interface AdminAuthRepository extends JpaRepository<AdminAuth, Long> {
-	Optional<AdminAuth> findById(Long Id);
+	Optional<AdminAuth> findById(Long id);
 }

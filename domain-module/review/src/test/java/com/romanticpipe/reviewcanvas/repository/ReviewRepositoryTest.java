@@ -19,11 +19,11 @@ class ReviewRepositoryTest extends RepositoryTestSetup {
 
 		@Nested
 		@DisplayName("productId에 해당하는 리뷰가 없을 경우")
-		class If_no_review_exists {
+		class IfNoReviewExists {
 
 			@Test
 			@DisplayName("빈 페이지를 반환한다.")
-			void return_empty_page() {
+			void returnEmptyPage() {
 				// given
 				String productId = "not_exist_product_id";
 
@@ -37,11 +37,11 @@ class ReviewRepositoryTest extends RepositoryTestSetup {
 
 		@Nested
 		@DisplayName("productId에 해당하는 리뷰가 여러개 있을 경우")
-		class If_reviews_exist {
+		class IfReviewsExist {
 
 			@Test
 			@DisplayName("리뷰 페이지를 반환한다.")
-			void return_review_page() {
+			void returnReviewPage() {
 				// given
 				String productId = "exist_product_id";
 				String userId = "user_id";
