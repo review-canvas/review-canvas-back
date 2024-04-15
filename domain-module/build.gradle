@@ -8,3 +8,9 @@ allprojects {
         testImplementation testFixtures(project(':domain-module'))
     }
 }
+
+subprojects {
+    dependencies {
+        implementation project(':domain-module')
+    }
+}

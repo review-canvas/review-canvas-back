@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,20 +16,21 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class Review {
+public class Review extends BaseEntityWithUpdate {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_id")
 	private Long id;
 
-	@Column(name = "product_id", columnDefinition = "binary(16)")
+	@Column(name = "product_id", columnDefinition = "BINARY(16)")
 	private String productId;
 
-	@Column(name = "user_id", columnDefinition = "binary(16)")
+	@Column(name = "user_id", columnDefinition = "BINARY(16)")
 	private String userId;
-	private String content;
 	private int score;
+	private String content;
+
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewStatus status;
