@@ -88,12 +88,6 @@ interface ReviewApi {
 		@Schema(description = "ASC, DESC 가능") Direction direction
 	);
 
-	@Operation(summary = "댓글 생성 API", description = "특정 리뷰의 댓글을 생성한다.")
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "성공적으로 댓글 생성이 완료되었습니다.")
-	})
 	@PostMapping("/reviews/{reviewId}/replies")
 	ResponseEntity<SuccessResponse<CreateReplyResponse>> createReply(
 		@PathVariable("reviewId") Long reviewId,

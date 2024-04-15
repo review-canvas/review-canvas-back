@@ -8,9 +8,6 @@ import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 
 public interface ReviewUseCase {
-	PageResponse<GetReviewResponse> getReviews(String productId, PageableRequest pageableRequest);
-
-	CreateReplyResponse createReply(Long reviewId, String userId, String content);
 	PageResponse<GetReviewResponse> getReviewsByProductId(String productId, PageableRequest pageableRequest);
 
 	PageResponse<GetReviewResponse> getReviewsByUserId(String userId, PageableRequest pageableRequest);
@@ -18,4 +15,7 @@ public interface ReviewUseCase {
 	void createReview(String productId, CreateReviewRequest createReviewRequest);
 
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);
+
+	CreateReplyResponse createReply(Long reviewId, String userId, String content);
+
 }

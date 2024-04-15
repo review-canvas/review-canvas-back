@@ -67,6 +67,22 @@ class ReviewController implements ReviewApi {
 	}
 
 	@Override
+	@PostMapping("/products/{productId}/reviews")
+	public ResponseEntity<SuccessResponse<Void>> createReview(
+		@PathVariable("productId") String productId, @RequestBody CreateReviewRequest createReviewRequest) {
+		reviewUseCase.createReview(productId, createReviewRequest);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@PatchMapping("/reviews/{reviewId}")
+	public ResponseEntity<SuccessResponse<Void>> updateReview(long reviewId,
+		UpdateReviewRequest updateReviewRequest) {
+		reviewUseCase.updateReview(reviewId, updateReviewRequest);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
 	@PostMapping("/reviews/{reviewId}/replies")
 	public ResponseEntity<SuccessResponse<CreateReplyResponse>> createReply(
 		@PathVariable("reviewId") Long reveiwId,
@@ -75,19 +91,5 @@ class ReviewController implements ReviewApi {
 			reveiwId, createReplyRequest.userId(), createReplyRequest.content()
 		);
 		return SuccessResponse.of(response).asHttp(HttpStatus.OK);
-	}
-	@PostMapping("/products/{productId}/reviews")
-	public ResponseEntity<SuccessResponse<Void>> createReview (
-		@PathVariable("productId") String productId, @RequestBody CreateReviewRequest createReviewRequest){
-		reviewUseCase.createReview(productId, createReviewRequest);
-		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
-	}
-
-	@Override
-	@PatchMapping("/reviews/{reviewId}")
-	public ResponseEntity<SuccessResponse<Void>> updateReview ( long reviewId,
-	UpdateReviewRequest updateReviewRequest){
-		reviewUseCase.updateReview(reviewId, updateReviewRequest);
-		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }

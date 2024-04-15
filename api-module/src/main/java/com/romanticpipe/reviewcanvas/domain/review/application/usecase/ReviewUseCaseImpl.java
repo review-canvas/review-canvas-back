@@ -37,9 +37,9 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	private final ShopAdminValidator shopAdminValidator;
 	private final ProductValidator productValidator;
 	private final ReviewReader reviewReader;
+	private final ReviewCreator reviewCreator;
 	private final ReviewValidator reviewValidator;
 	private final ReplyCreater replyCreater;
-	private final ReviewCreator reviewCreator;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -49,12 +49,6 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	}
 
 	@Override
-	@Transactional
-	public CreateReplyResponse createReply(Long reviewId, String userId, String content) {
-		reviewValidator.validById(reviewId);
-
-		return new CreateReplyResponse(replyCreater.createReply(reviewId, userId, content).getId());
-	}
 	@Transactional(readOnly = true)
 	public PageResponse<GetReviewResponse> getReviewsByUserId(String userId, PageableRequest pageableRequest) {
 		return reviewReader.findByUserId(userId, pageableRequest)
@@ -83,6 +77,14 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 				? ReviewStatus.WAITING : ReviewStatus.APPROVED
 		);
 		reviewCreator.save(review);
+	}
+
+	@Override
+	@Transactional
+	public CreateReplyResponse createReply(Long reviewId, String userId, String content) {
+		reviewValidator.validById(reviewId);
+
+		return new CreateReplyResponse(replyCreater.createReply(reviewId, userId, content).getId());
 	}
 
 }
