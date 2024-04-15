@@ -37,4 +37,5 @@ public class ShopAdminValidator {
 		return shopAdminRepository.findById(shopAdminId)
 			.orElseThrow(() -> new ShopAdminNotFoundException());
 	}
+
 }

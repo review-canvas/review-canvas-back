@@ -10,9 +10,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Review extends BaseEntityWithUpdate {
 
@@ -21,14 +23,13 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(name = "review_id")
 	private Long id;
 
-	@Column(name = "product_id", columnDefinition = "BINARY(16)")
+	@Column(name = "product_id", columnDefinition = "binary(16)")
 	private String productId;
 
-	@Column(name = "user_id", columnDefinition = "BINARY(16)")
+	@Column(name = "user_id", columnDefinition = "binary(16)")
 	private String userId;
-	private int score;
 	private String content;
-
+	private int score;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewStatus status;
