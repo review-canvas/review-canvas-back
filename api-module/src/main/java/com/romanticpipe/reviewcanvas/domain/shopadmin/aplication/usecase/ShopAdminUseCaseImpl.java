@@ -129,4 +129,10 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	public GetReviewVisibilityTitleResponse getReviewVisibilityTitle() {
 		return GetReviewVisibilityTitleResponse.from(reviewVisibilityReader.getReviewVisibilityTitle());
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public boolean emailCheck(String email) {
+		return shopAdminValidator.isExistEmail(email);
+	}
 }

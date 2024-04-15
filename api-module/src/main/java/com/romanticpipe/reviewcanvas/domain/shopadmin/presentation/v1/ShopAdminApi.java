@@ -8,6 +8,9 @@ import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.respons
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -99,4 +104,21 @@ interface ShopAdminApi {
 	})
 	@GetMapping(value = "/shop-admin/review-visibility/titles")
 	ResponseEntity<SuccessResponse<GetReviewVisibilityTitleResponse>> getReviewVisibilityTitle();
+
+	@Operation(summary = "이메일 중복 체크 API", description = "특정 이메일의 중복을 체크한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 이메일 중복 체크가 완료되었습니다.",
+			content = @Content(
+				schemaProperties = {
+					@SchemaProperty(name = "success", schema = @Schema(type = "boolean", description = "성공 여부")),
+					@SchemaProperty(name = "duplicate", schema = @Schema(type = "boolean", description = "중복 여부"))
+				}
+			))
+	})
+	@GetMapping("/shop-admin/email-check")
+	ResponseEntity<SuccessResponse<Map<String, Boolean>>> emailCheck(
+		@RequestParam(value = "email", required = true) String email
+	);
 }

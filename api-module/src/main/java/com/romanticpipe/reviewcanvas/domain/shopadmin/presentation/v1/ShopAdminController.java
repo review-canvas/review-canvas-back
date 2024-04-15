@@ -7,8 +7,8 @@ import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdminUseCase;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import jakarta.validation.Valid;
@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -98,6 +100,17 @@ class ShopAdminController implements ShopAdminApi {
 	public ResponseEntity<SuccessResponse<GetReviewVisibilityTitleResponse>> getReviewVisibilityTitle() {
 		return SuccessResponse.of(
 			shopAdminUseCase.getReviewVisibilityTitle()
+		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping(value = "/shop-admin/email-check")
+	public ResponseEntity<SuccessResponse<Map<String, Boolean>>> emailCheck(
+		@RequestParam(value = "email", required = true) String email
+	) {
+		boolean result = shopAdminUseCase.emailCheck(email);
+		return SuccessResponse.of(
+			Map.of("duplicate", result)
 		).asHttp(HttpStatus.OK);
 	}
 }

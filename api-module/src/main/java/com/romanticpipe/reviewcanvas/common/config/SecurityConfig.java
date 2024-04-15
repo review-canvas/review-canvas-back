@@ -1,7 +1,12 @@
 package com.romanticpipe.reviewcanvas.common.config;
 
-import java.util.Arrays;
-
+import com.romanticpipe.reviewcanvas.common.security.AuthFilter;
+import com.romanticpipe.reviewcanvas.common.security.CustomAccessDeniedHandler;
+import com.romanticpipe.reviewcanvas.common.security.CustomEntryPoint;
+import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
+import com.romanticpipe.reviewcanvas.common.security.UrlList;
+import com.romanticpipe.reviewcanvas.domain.Role;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,14 +19,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.romanticpipe.reviewcanvas.common.security.AuthFilter;
-import com.romanticpipe.reviewcanvas.common.security.CustomAccessDeniedHandler;
-import com.romanticpipe.reviewcanvas.common.security.CustomEntryPoint;
-import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
-import com.romanticpipe.reviewcanvas.common.security.UrlList;
-import com.romanticpipe.reviewcanvas.domain.Role;
-
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor

@@ -21,4 +21,6 @@ public interface ShopAdminUseCase {
 	LoginResponse reissuedAccessToken(String accessToken);
 
 	GetReviewVisibilityTitleResponse getReviewVisibilityTitle();
+
+	boolean emailCheck(String email);
 }
