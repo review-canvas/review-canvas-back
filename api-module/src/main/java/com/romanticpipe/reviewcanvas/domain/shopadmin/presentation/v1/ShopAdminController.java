@@ -7,6 +7,7 @@ import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdminUseCase;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
@@ -90,5 +91,13 @@ class ShopAdminController implements ShopAdminApi {
 			return bearerToken.substring("Bearer ".length());
 		}
 		throw new BusinessException(SecurityErrorCode.NON_BEARER);
+	}
+
+	@Override
+	@GetMapping("/shop-admin/review-visibility/titles")
+	public ResponseEntity<SuccessResponse<GetReviewVisibilityTitleResponse>> getReviewVisibilityTitle() {
+		return SuccessResponse.of(
+			shopAdminUseCase.getReviewVisibilityTitle()
+		).asHttp(HttpStatus.OK);
 	}
 }

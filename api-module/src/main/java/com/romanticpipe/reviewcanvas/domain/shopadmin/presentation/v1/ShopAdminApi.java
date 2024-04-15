@@ -5,6 +5,7 @@ import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -89,4 +90,13 @@ interface ShopAdminApi {
 	@GetMapping("/admin/auth")
 	ResponseEntity<SuccessResponse<LoginResponse>> reissuedAccessToken(
 		@RequestHeader(AUTHORIZATION) String accessToken);
+
+	@Operation(summary = "리뷰 노출 항목 title 조회 API", description = "리뷰 노출 항목 title을 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 노출 항목 title 조회가 완료되었습니다.")
+	})
+	@GetMapping(value = "/shop-admin/review-visibility/titles")
+	ResponseEntity<SuccessResponse<GetReviewVisibilityTitleResponse>> getReviewVisibilityTitle();
 }

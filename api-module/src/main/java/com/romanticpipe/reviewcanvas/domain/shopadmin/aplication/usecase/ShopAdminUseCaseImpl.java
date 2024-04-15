@@ -8,12 +8,14 @@ import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.exception.AdminErrorCode;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.AdminAuthRemover;
 import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
+import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
@@ -38,6 +40,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
 	private final SuperAdminValidator superAdminValidator;
+	private final ReviewVisibilityReader reviewVisibilityReader;
 
 	@Override
 	@Transactional
@@ -83,7 +86,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.email(signUpRequest.email())
 			.password(passwordEncoder.encode(signUpRequest.password()))
 			.name(signUpRequest.name())
-			//			.logoImageUrl(signUpRequest.logoImageUrl())
 			.mallNumber(signUpRequest.mallNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
 			.approveStatus(false)
@@ -120,5 +122,11 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		tokenProvider.checkTokenExpired(admin.getAdminAuthId());
 		accessToken = tokenProvider.createToken(admin);
 		return LoginResponse.from(admin.getId(), accessToken);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public GetReviewVisibilityTitleResponse getReviewVisibilityTitle() {
+		return GetReviewVisibilityTitleResponse.from(reviewVisibilityReader.getReviewVisibilityTitle());
 	}
 }
