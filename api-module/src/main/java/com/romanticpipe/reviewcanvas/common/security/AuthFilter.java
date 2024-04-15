@@ -21,8 +21,8 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequiredArgsConstructor
 public class AuthFilter extends OncePerRequestFilter {
-	private final String BEARER_PREFIX = "Bearer ";
-	private final String ATTRIBUTE_NAME = "exception";
+	private static final String BEARER_PREFIX = "Bearer ";
+	private static final String ATTRIBUTE_NAME = "exception";
 
 	private final TokenProvider tokenProvider;
 
