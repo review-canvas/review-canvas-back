@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ShopAdminErrorCode implements ErrorCode {
-	REVIEW_THEME_NOT_FOUND(400, "R001", "테마를 찾을 수 없습니다."),
-	NOT_GENERAL_REVIEW_THEME(400, "R002", "기본 테마가 아닙니다.");
+	SHOP_ADMIN_NOT_FOUND(400, "SH001", "Shop Admin을 찾을 수 없습니다.");
 
 	private final int status;
 	private final String code;

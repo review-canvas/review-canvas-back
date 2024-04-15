@@ -9,6 +9,10 @@ public class StringToDirectionConverter implements Converter<String, Direction> 
 
 	@Override
 	public Direction convert(String source) {
-		return Direction.of(source);
+		try {
+			return Direction.valueOf(source.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return Direction.NONE;
+		}
 	}
 }
