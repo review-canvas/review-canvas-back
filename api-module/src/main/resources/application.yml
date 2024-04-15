@@ -6,3 +6,13 @@ spring:
   config:
     import:
       - file:./domain-module/db.yml
+  jwt:
+    secret: ${JWT_SECRET}
+    access-token-validity: 1d
+    refresh-token-validity: 14d
+    access:
+      expiration: 100
+      header: Authorization
+    refresh:
+      expiration: 200
+      header: Authorization-refresh

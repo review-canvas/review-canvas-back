@@ -32,8 +32,8 @@ public interface ShopApi {
 		@Schema(name = "authorization code", description = "인증 코드") @RequestParam(required = true) String authCode
 	);
 
-	@Operation(summary = "cafe24 액세스 토큰 재발급", description = "refresh token으로 cafe24 access token을 재발급한다. " +
-		"[주의]: 해당 api를 호출하면 refresh token도 항상 재발급됩니다. "
+	@Operation(summary = "cafe24 액세스 토큰 재발급", description = "refresh token으로 cafe24 access token을 재발급한다. "
+		+ "[주의]: 해당 api를 호출하면 refresh token도 항상 재발급됩니다. "
 		+ "https://developers.cafe24.com/app/front/app/develop/oauth/retoken")
 	@ApiResponses(value = {
 		@ApiResponse(
