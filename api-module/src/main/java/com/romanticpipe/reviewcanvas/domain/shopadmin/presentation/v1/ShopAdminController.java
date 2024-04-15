@@ -118,7 +118,7 @@ class ShopAdminController implements ShopAdminApi {
 	}
 
 	@Override
-	@GetMapping("/shopadmin/review-design/theme-list")
+	@GetMapping("/shop-admin/review-design/theme-list")
 	public ResponseEntity<SuccessResponse<List<GetGeneralReviewThemeListResponse>>> getGeneralReviewThemeList() {
 		return SuccessResponse.of(
 			shopAdminUseCase.getGeneralReviewThemeList().stream().map(

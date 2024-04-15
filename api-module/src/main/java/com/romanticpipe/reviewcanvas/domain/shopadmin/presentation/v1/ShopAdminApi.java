@@ -130,6 +130,6 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 기본 리뷰 테마 리스트 조회가 완료되었습니다.")
 	})
-	@GetMapping("/shopadmin/review-design/theme-list")
+	@GetMapping("/shop-admin/review-design/theme-list")
 	ResponseEntity<SuccessResponse<List<GetGeneralReviewThemeListResponse>>> getGeneralReviewThemeList();
 }
