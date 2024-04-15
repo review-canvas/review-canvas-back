@@ -3,10 +3,6 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
 import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
@@ -26,7 +22,6 @@ import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -91,7 +86,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.email(signUpRequest.email())
 			.password(passwordEncoder.encode(signUpRequest.password()))
 			.name(signUpRequest.name())
-			//			.logoImageUrl(signUpRequest.logoImageUrl())
 			.mallNumber(signUpRequest.mallNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
 			.approveStatus(false)
