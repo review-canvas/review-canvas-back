@@ -104,7 +104,7 @@ class ShopAdminController implements ShopAdminApi {
 	}
 
 	@Override
-	@GetMapping(value = "/shopadmin/email-check")
+	@GetMapping(value = "/shop-admin/email-check")
 	public ResponseEntity<SuccessResponse<Map<String, Boolean>>> emailCheck(
 		@RequestParam(value = "email", required = true) String email
 	) {

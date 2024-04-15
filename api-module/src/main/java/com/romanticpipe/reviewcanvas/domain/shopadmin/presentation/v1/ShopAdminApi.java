@@ -117,7 +117,7 @@ interface ShopAdminApi {
 				}
 			))
 	})
-	@GetMapping("/shopadmin/email-check")
+	@GetMapping("/shop-admin/email-check")
 	ResponseEntity<SuccessResponse<Map<String, Boolean>>> emailCheck(
 		@RequestParam(value = "email", required = true) String email
 	);
