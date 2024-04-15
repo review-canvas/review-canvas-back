@@ -1,5 +1,16 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.AdminInterface;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,18 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.domain.AdminInterface;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Tag(name = "ShopAdmin", description = "샵 어드민 API")
 interface ShopAdminApi {
@@ -77,7 +77,7 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 로그인 완료되었습니다.")
 	})
-	@GetMapping("/admin")
+	@GetMapping("/shop-admin/auth")
 	ResponseEntity<SuccessResponse<CheckLoginResponse>> checkLoginSession(AdminInterface admin);
 
 	@Operation(summary = "AccessToken 재발급 API", description = "RefreshToken에 기반해 Access 토큰을 재발급한다.")
@@ -88,5 +88,5 @@ interface ShopAdminApi {
 	})
 	@GetMapping("/admin/auth")
 	ResponseEntity<SuccessResponse<LoginResponse>> reissuedAccessToken(
-		@RequestHeader String accessToken);
+		@RequestHeader(AUTHORIZATION) String accessToken);
 }

@@ -1,10 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
@@ -22,11 +17,14 @@ import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @RequiredArgsConstructor
@@ -44,8 +42,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public LoginResponse login(String email, String password, Role role) {
-		AdminInterface admin = role.equals(Role.SUPER_ADMIN_ROLE) ?
-			superAdminValidator.validByEmail(email) :
+		AdminInterface admin = role.equals(Role.SUPER_ADMIN_ROLE) ? superAdminValidator.validByEmail(email) :
 			shopAdminValidator.validByEmail(email);
 
 		if (!passwordEncoder.matches(password, admin.getPassword())) {
@@ -56,7 +53,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		String accessToken = tokenProvider.createToken(admin);
 		try {
 			tokenProvider.validateToken(adminAuth.getRefreshToken());
-		} catch (ExpiredJwtException | MalformedJwtException e) {
+		} catch (IllegalArgumentException | ExpiredJwtException | MalformedJwtException e) {
 			tokenProvider.createRefreshToken(adminAuth, admin.getId());
 		}
 		return LoginResponse.from(admin.getId(), accessToken);

@@ -1,24 +1,5 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
-import java.security.Key;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.Role;
@@ -26,7 +7,6 @@ import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -36,6 +16,23 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+
+import java.security.Key;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -69,7 +66,7 @@ public class TokenProvider implements InitializingBean {
 	public String createToken(AdminInterface admin) {
 		List<GrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(String.valueOf(admin.getRole())));
-		
+
 		UsernamePasswordAuthenticationToken auth = configureAuthentication(admin, authorities);
 
 		String auths = auth.getAuthorities().stream()
@@ -128,9 +125,7 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	public void checkTokenExpired(long authId) {
-		String refreshToken = Optional.ofNullable(this.adminAuthValidator.findById(authId))
-			.map(AdminAuth::getRefreshToken)
-			.orElseThrow(() -> new BusinessException(SecurityErrorCode.EXPIRED_TOKEN));
+		String refreshToken = this.adminAuthValidator.findById(authId).getRefreshToken();
 		try {
 			validateToken(refreshToken);
 		} catch (ExpiredJwtException | MalformedJwtException e) {
@@ -139,14 +134,14 @@ public class TokenProvider implements InitializingBean {
 	}
 
 	public UsernamePasswordAuthenticationToken configureAuthentication(AdminInterface admin,
-		List<GrantedAuthority> authorities) {
+																	   List<GrantedAuthority> authorities) {
 		UsernamePasswordAuthenticationToken auth =
 			new UsernamePasswordAuthenticationToken(admin, secretKey, authorities);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		return auth;
 	}
 
-	public Jws<Claims> validateToken(String token) throws BusinessException, MalformedJwtException {
+	public Jws<Claims> validateToken(String token) {
 		return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 	}
 
