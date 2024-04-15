@@ -1,6 +1,9 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import java.util.UUID;
+
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,12 +19,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class ShopAdmin extends BaseEntityWithUpdate {
+public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "shop_admin_id")
@@ -39,21 +41,27 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 	private String phoneNumber;
 	private Boolean approveStatus;
 	private UUID uuid;
+
+	private Long adminAuthId;
+
+	@Enumerated(EnumType.STRING)
+	private Role role = Role.SHOP_ADMIN_ROLE;
+
 	@Enumerated(EnumType.STRING)
 	@Column(name = "install_type", columnDefinition = "VARCHAR(32)")
 	private ShopInstallType shopInstallType;
 	private String installRequirement;
-	private String refreshToken;
 
 	private Long selectedReviewDesignId;
 
 	@Builder
 	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
-					 String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
-					 String installRequirement, Long selectedReviewDesignId) {
+		String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
+		String installRequirement, Long selectedReviewDesignId, Long adminAuthId) {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
+		this.role = Role.SHOP_ADMIN_ROLE;
 		this.name = name;
 		this.logoImageUrl = logoImageUrl;
 		this.mallNumber = mallNumber;
@@ -62,10 +70,7 @@ public class ShopAdmin extends BaseEntityWithUpdate {
 		this.shopInstallType = shopInstallType;
 		this.installRequirement = installRequirement;
 		this.selectedReviewDesignId = selectedReviewDesignId;
-		generateUuid();
-	}
-
-	public void generateUuid() { // UUID 관련 로직은 변경점이 많을 듯해 임시로 만듬.
+		this.adminAuthId = adminAuthId;
 		this.uuid = UUID.randomUUID();
 	}
 
