@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.config;
 import com.romanticpipe.reviewcanvas.TestReviewFactory;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.repository.ReviewRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public abstract class RepositoryTestSetup {
 
+	@Autowired
 	protected ReviewRepository reviewRepository;
 
 	protected Review createReviewEntity(String productId, String userId) {
