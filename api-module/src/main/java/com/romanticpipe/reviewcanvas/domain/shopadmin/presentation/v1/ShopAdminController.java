@@ -8,6 +8,7 @@ import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdm
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.LoginRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetGeneralReviewThemeListResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
@@ -28,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -111,6 +114,16 @@ class ShopAdminController implements ShopAdminApi {
 		boolean result = shopAdminUseCase.emailCheck(email);
 		return SuccessResponse.of(
 			Map.of("duplicate", result)
+		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/shop-admin/review-design/theme-list")
+	public ResponseEntity<SuccessResponse<List<GetGeneralReviewThemeListResponse>>> getGeneralReviewThemeList() {
+		return SuccessResponse.of(
+			shopAdminUseCase.getGeneralReviewThemeList().stream().map(
+				GetGeneralReviewThemeListResponse::from
+			).collect(Collectors.toList())
 		).asHttp(HttpStatus.OK);
 	}
 }
