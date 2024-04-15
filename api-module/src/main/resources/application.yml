@@ -7,7 +7,7 @@ spring:
     import:
       - db.yml
   jwt:
-    secret: ${JWT_SECRET}
+    secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tc3ByaW5nLWJvb3Qtc2VjdXJpdHktanByaW5nLWJvajdXJjdByaW5nLWJvb3Qtc2
     access-token-validity: 1d
     refresh-token-validity: 14d
     access:
