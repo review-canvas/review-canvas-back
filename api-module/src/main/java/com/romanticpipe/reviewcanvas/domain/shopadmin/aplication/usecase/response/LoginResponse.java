@@ -2,26 +2,20 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.respon
 
 import java.util.Objects;
 
-import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema(name = "LoginResponse", description = "Shop Admin 로그인 응답")
-public record LoginResponse(@Schema(description = "Shop Admin id", requiredMode = Schema.RequiredMode.REQUIRED)
-							Long shopAdminId,
+@Schema(name = "LoginResponse", description = "Admin 로그인 응답")
+public record LoginResponse(@Schema(description = "Admin id", requiredMode = Schema.RequiredMode.REQUIRED)
+							Long adminId,
 							@Schema(description = "Access Token", requiredMode = Schema.RequiredMode.REQUIRED)
-							String accessToken,
-							@Schema(description = "refresh Token", requiredMode = Schema.RequiredMode.REQUIRED)
-							String refreshToken) {
+							String accessToken) {
 
 	public LoginResponse {
-		Objects.requireNonNull(shopAdminId);
-		// Objects.requireNonNull(accessToken);
-		// Objects.requireNonNull(refreshToken);
+		Objects.requireNonNull(adminId);
+		Objects.requireNonNull(accessToken);
 	}
 
-	public static LoginResponse from(ShopAdmin shopAdmin) {
-		return new LoginResponse(shopAdmin.getId(), null, shopAdmin.getRefreshToken());
-		// return new LoginResponse(shopAdmin.getId(), shopAdmin.getAccessToken(), shopAdmin.getRefreshToken());
+	public static LoginResponse from(Long adminId, String accessToken) {
+		return new LoginResponse(adminId, accessToken);
 	}
 }
