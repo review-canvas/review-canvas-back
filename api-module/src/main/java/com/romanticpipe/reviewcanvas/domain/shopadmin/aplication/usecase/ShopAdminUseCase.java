@@ -1,12 +1,15 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 
 import com.romanticpipe.reviewcanvas.domain.AdminInterface;
+import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.Role;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface ShopAdminUseCase {
 
@@ -23,4 +26,6 @@ public interface ShopAdminUseCase {
 	GetReviewVisibilityTitleResponse getReviewVisibilityTitle();
 
 	boolean emailCheck(String email);
+
+	List<ReviewDesign> getGeneralReviewThemeList();
 }
