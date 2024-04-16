@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +59,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Transactional(readOnly = true)
 	public PageResponse<GetAwaitReviewResponse> getAwaitReviewsByShopAdmin(long shopAdminId,
 		PageableRequest pageableRequest) {
-		return null;
+		return reviewValidator.validAwaitReviewByShopAdminId(shopAdminId, pageableRequest)
+			.map(GetAwaitReviewResponse::from);
 	}
 
 	@Override

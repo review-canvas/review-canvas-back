@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.service;
 
+import java.util.List;
+
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ProductErrorCode;
