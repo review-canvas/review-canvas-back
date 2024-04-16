@@ -1,6 +1,6 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import com.romanticpipe.reviewcanvas.domain.AdminInterface;
+import com.romanticpipe.reviewcanvas.domain.Admin;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.exception.AdminNotFoundException;
@@ -37,7 +37,7 @@ public class ShopAdminValidator {
 			.orElseThrow(() -> new AdminNotFoundException());
 	}
 
-	public AdminInterface validByAuthId(long adminAuthId) {
+	public Admin validByAuthId(long adminAuthId) {
 		return shopAdminRepository.findByAdminAuthId(adminAuthId)
 			.orElseThrow(() -> new AdminNotFoundException());
 	}

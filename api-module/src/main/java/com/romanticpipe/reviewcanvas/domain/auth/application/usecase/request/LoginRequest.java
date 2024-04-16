@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request;
+package com.romanticpipe.reviewcanvas.domain.auth.application.usecase.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

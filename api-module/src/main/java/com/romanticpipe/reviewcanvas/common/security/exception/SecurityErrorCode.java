@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.common.security;
+package com.romanticpipe.reviewcanvas.common.security.exception;
 
 import com.romanticpipe.reviewcanvas.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ public enum SecurityErrorCode implements ErrorCode {
 	EXPIRED_TOKEN(403, "S005", "The token has expired."),
 	UNSUPPORTED_TOKEN(403, "S006", "The token is unsupported."),
 	ACCESS_DENIED(403, "S007", "Access is denied."),
-	ILLEGAL_TOKEN(403, "S008", "The JWT token is invalid.");
+	INVALID_TOKEN(403, "S008", "The JWT token is invalid.");
 
 	private final int status;
 	private final String code;

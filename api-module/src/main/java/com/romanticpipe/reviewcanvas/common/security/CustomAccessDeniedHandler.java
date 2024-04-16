@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanticpipe.reviewcanvas.common.dto.ErrorResponse;
+import com.romanticpipe.reviewcanvas.common.security.exception.SecurityErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

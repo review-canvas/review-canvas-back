@@ -1,12 +1,10 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import java.util.List;
-
+import com.romanticpipe.reviewcanvas.repository.ReviewVisibilityRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.romanticpipe.reviewcanvas.repository.ReviewVisibilityRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

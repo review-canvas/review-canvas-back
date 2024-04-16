@@ -1,7 +1,7 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
-import com.romanticpipe.reviewcanvas.domain.AdminInterface;
-import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.domain.AdminRole;
+import io.jsonwebtoken.Claims;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,16 +16,17 @@ public class AdminResolver implements HandlerMethodArgumentResolver {
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return AdminInterface.class.isAssignableFrom(parameter.getParameterType());
+		return parameter.getParameterType().equals(JwtInfo.class) && parameter.hasParameterAnnotation(AuthInfo.class);
 	}
 
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 								  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null || !authentication.isAuthenticated()) {
-			throw new BusinessException(SecurityErrorCode.ILLEGAL_TOKEN);
-		}
-		return authentication.getPrincipal();
+		Claims claims = (Claims) authentication.getPrincipal();
+		Long userId = Long.parseLong((String) claims.get(Claims.SUBJECT));
+		AdminRole adminRole = AdminRole.valueOf((String) claims.get(CustomClaims.ROLE));
+
+		return new JwtInfo(userId, adminRole);
 	}
 }

@@ -3,7 +3,7 @@ package com.romanticpipe.reviewcanvas.common.config;
 import com.romanticpipe.reviewcanvas.common.security.AuthFilter;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.common.security.UrlList;
-import com.romanticpipe.reviewcanvas.domain.Role;
+import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +38,7 @@ public class SecurityConfig {
 				auth
 					.requestMatchers(urlList.getPublicUrls().toArray(new String[0])).permitAll()
 					.requestMatchers(urlList.getSuperUrls().toArray(new String[0])).hasAuthority(
-						String.valueOf(Role.SUPER_ADMIN_ROLE))
+						String.valueOf(AdminRole.ROLE_SUPER_ADMIN))
 					.anyRequest().authenticated();
 			}).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(new AuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);

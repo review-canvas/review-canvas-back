@@ -28,8 +28,8 @@ public class ReviewVisibility {
 
 	@Builder
 	public ReviewVisibility(Boolean title, Boolean author, Boolean point, Boolean media, Boolean content,
-		Boolean createdAt,
-		Boolean updatedAt) {
+							Boolean createdAt,
+							Boolean updatedAt) {
 		this.title = title;
 		this.author = author;
 		this.point = point;
