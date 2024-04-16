@@ -1,11 +1,13 @@
 package com.romanticpipe.reviewcanvas.service;
 
+import org.springframework.stereotype.Service;
+
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.repository.ShopAdminRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
