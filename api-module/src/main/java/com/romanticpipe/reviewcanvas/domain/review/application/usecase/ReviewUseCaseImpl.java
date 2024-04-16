@@ -5,13 +5,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
-import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetSelectedReviewDesignResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.service.ProductValidator;
@@ -71,33 +69,5 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		);
 		reviewCreator.save(review);
 	}
-
-	@Override
-	@Transactional
-	public GetSelectedReviewDesignResponse getSelectedReviewDesign(long shopAdminId) {
-		ShopAdmin shopAdmin = shopAdminValidator.validById(shopAdminId);
-		ReviewDesign reviewDesign = reviewDesignValidator.validById(shopAdmin.getSelectedReviewDesignId());
-		return new GetSelectedReviewDesignResponse(
-			reviewDesign.getReviewDesignType(),
-			reviewDesign.getReviewDesignPosition(),
-			reviewDesign.getThemeName(),
-			reviewDesign.getLayoutType(),
-			reviewDesign.getPadding(),
-			reviewDesign.getGap(),
-			reviewDesign.getBoxShadowColor(),
-			reviewDesign.getBoxShadowWidth(),
-			reviewDesign.getBorderColor(),
-			reviewDesign.getBorderTransparency(),
-			reviewDesign.getBorderWidth(),
-			reviewDesign.getPagingType(),
-			reviewDesign.getPagingNumber(),
-			reviewDesign.getTextAlign(),
-			reviewDesign.getPointColor(),
-			reviewDesign.getPointType(),
-			reviewDesign.getLineEllipsis(),
-			reviewDesign.getReviewDesignUrl()
-		);
-	}
-
 
 }

@@ -5,7 +5,6 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUse
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetSelectedReviewDesignResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
@@ -71,13 +70,6 @@ class ReviewController implements ReviewApi {
 		UpdateReviewRequest updateReviewRequest) {
 		reviewUseCase.updateReview(reviewId, updateReviewRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
-	}
-
-	@GetMapping("/review_designs/{shop_admin_id}/selected_review_design")
-	public ResponseEntity<SuccessResponse<GetSelectedReviewDesignResponse>> getSelectedReviewDesign(
-		@PathVariable("shop_admin_id") long shopAdminId
-	) {
-		return SuccessResponse.of(reviewUseCase.getSelectedReviewDesign(shopAdminId)).asHttp(HttpStatus.OK);
 	}
 
 }
