@@ -9,6 +9,7 @@ import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetAwaitReviewResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -50,6 +51,13 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Review review = reviewValidator.validById(reviewId);
 		review.setScore(updateReviewRequest.score());
 		review.setContent(updateReviewRequest.content());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PageResponse<GetAwaitReviewResponse> getAwaitReviewsByShopAdmin(long shopAdminId,
+		PageableRequest pageableRequest) {
+		return null;
 	}
 
 	@Override
