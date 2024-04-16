@@ -4,6 +4,7 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetAwaitReviewResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -54,6 +55,13 @@ class ReviewController implements ReviewApi {
 		return SuccessResponse.of(
 			reviewUseCase.getReviewsByUserId(userId, PageableRequest.of(page, size, direction))
 		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/shop-admin/{shopAdminId}/await")
+	public ResponseEntity<SuccessResponse<PageResponse<GetAwaitReviewResponse>>> getAwaitReviewsByShopAdmin(
+		long shopAdminId, int size, int page, Direction direction) {
+		return null;
 	}
 
 	@Override

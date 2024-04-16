@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetAwaitReviewResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
@@ -75,5 +76,19 @@ interface ReviewApi {
 		@Schema(description = "ASC, DESC 가능") Direction direction
 	);
 
+	@Operation(summary = "대기 상태 리뷰 전체 조회 API", description = "shop에서 승인 대기 상태인 리뷰를 전체 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 사용자 리뷰 조회가 완료되었습니다.")
+	})
+	@GetMapping("/shop-admin/{shopAdminId}/await")
+	ResponseEntity<SuccessResponse<PageResponse<GetAwaitReviewResponse>>> getAwaitReviewsByShopAdmin(
+		@PathVariable("shopAdminId") long shopAdminId,
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
+		@Schema(description = "ASC, DESC 가능") Direction direction
+	);
 
 }
