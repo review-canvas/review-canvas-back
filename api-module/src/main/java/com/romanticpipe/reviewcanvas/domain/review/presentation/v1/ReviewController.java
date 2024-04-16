@@ -60,8 +60,15 @@ class ReviewController implements ReviewApi {
 	@Override
 	@GetMapping("/shop-admin/{shopAdminId}/await")
 	public ResponseEntity<SuccessResponse<PageResponse<GetAwaitReviewResponse>>> getAwaitReviewsByShopAdmin(
-		long shopAdminId, int size, int page, Direction direction) {
-		return null;
+		@PathVariable("shopAdminId") long shopAdminId,
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
+		@Schema(description = "ASC, DESC 가능") Direction direction) {
+
+		return SuccessResponse.of(
+			reviewUseCase.getAwaitReviewsByShopAdmin(shopAdminId, PageableRequest.of(page, size, direction))
+		).asHttp(HttpStatus.OK);
 	}
 
 	@Override
