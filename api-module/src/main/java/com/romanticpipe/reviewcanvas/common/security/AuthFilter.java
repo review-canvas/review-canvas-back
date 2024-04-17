@@ -37,8 +37,8 @@ public class AuthFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) {
-		return isPathIgnored(ignoredPathList.getAllIgnoredPath(), request) ||
-			isPathIgnored(ignoredPathList.getSuperAdminIgnoredPath(), request);
+		return isPathIgnored(ignoredPathList.getAllIgnoredPath(), request)
+			|| isPathIgnored(ignoredPathList.getSuperAdminIgnoredPath(), request);
 	}
 
 	private void authentication(HttpServletRequest request) {
