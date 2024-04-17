@@ -95,8 +95,8 @@ public class TokenProvider {
 		}
 	}
 
-	public Long getAdminIdFromRefreshToken(String refresToken) {
-		Claims claims = validateToken(JwtType.REFRESH, refresToken).getBody();
+	public Long getAdminIdFromRefreshToken(String refreshToken) {
+		Claims claims = validateToken(JwtType.REFRESH, refreshToken).getBody();
 		return Long.parseLong(claims.get(Claims.SUBJECT).toString());
 	}
 
