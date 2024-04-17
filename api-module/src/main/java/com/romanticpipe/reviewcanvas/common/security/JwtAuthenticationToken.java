@@ -15,11 +15,11 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
 	@Override
 	public Object getCredentials() {
-		return adminId;
+		return null;
 	}
 
 	@Override
 	public Object getPrincipal() {
-		return null;
+		return adminId;
 	}
 }

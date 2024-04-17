@@ -1,7 +1,6 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
 import com.romanticpipe.reviewcanvas.domain.AdminRole;
-import io.jsonwebtoken.Claims;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,10 +22,12 @@ public class AdminResolver implements HandlerMethodArgumentResolver {
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 								  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Claims claims = (Claims) authentication.getPrincipal();
-		Long userId = Long.parseLong((String) claims.get(Claims.SUBJECT));
-		AdminRole adminRole = AdminRole.valueOf((String) claims.get(CustomClaims.ROLE));
+		Long adminId = (Long) authentication.getPrincipal();
+		AdminRole adminRole = authentication.getAuthorities().stream()
+			.findFirst()
+			.map(authority -> AdminRole.valueOf(authority.getAuthority()))
+			.orElseThrow(() -> new IllegalStateException("권한이 없습니다."));
 
-		return new JwtInfo(userId, adminRole);
+		return new JwtInfo(adminId, adminRole);
 	}
 }
