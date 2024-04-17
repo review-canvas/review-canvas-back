@@ -10,19 +10,19 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public final class IgnoredPathList {
+public final class AccessPath {
 
 	@Getter
-	private final MultiValueMap<String, HttpMethod> allIgnoredPath;
+	private final MultiValueMap<String, HttpMethod> allAllowedPath;
 	@Getter
-	private final MultiValueMap<String, HttpMethod> superAdminIgnoredPath;
+	private final MultiValueMap<String, HttpMethod> shopAdminDeniedPath;
 
 	private final List<HttpMethod> allMethod =
 		Arrays.asList(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE);
 
-	private IgnoredPathList() {
-		allIgnoredPath = initAllIgnoredPath();
-		superAdminIgnoredPath = initSuperAdminIgnoredPath();
+	private AccessPath() {
+		allAllowedPath = initAllIgnoredPath();
+		shopAdminDeniedPath = initShopAdminDeniedPath();
 	}
 
 	private MultiValueMap<String, HttpMethod> initAllIgnoredPath() {
@@ -50,7 +50,8 @@ public final class IgnoredPathList {
 		return allIgnoredPath;
 	}
 
-	private MultiValueMap<String, HttpMethod> initSuperAdminIgnoredPath() {
-		return new LinkedMultiValueMap<>();
+	private MultiValueMap<String, HttpMethod> initShopAdminDeniedPath() {
+		LinkedMultiValueMap<String, HttpMethod> shopAdminDeniedPath = new LinkedMultiValueMap<>();
+		return shopAdminDeniedPath;
 	}
 }

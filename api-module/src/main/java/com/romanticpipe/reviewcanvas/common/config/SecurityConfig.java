@@ -1,9 +1,9 @@
 package com.romanticpipe.reviewcanvas.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.romanticpipe.reviewcanvas.common.security.AccessPath;
 import com.romanticpipe.reviewcanvas.common.security.AuthFilter;
 import com.romanticpipe.reviewcanvas.common.security.CustomExceptionHandlerFilter;
-import com.romanticpipe.reviewcanvas.common.security.IgnoredPathList;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ import java.util.Arrays;
 public class SecurityConfig {
 
 	private final TokenProvider tokenProvider;
-	private final IgnoredPathList ignoredPathList;
+	private final AccessPath accessPath;
 	private final ObjectMapper objectMapper;
 
 	@Bean
@@ -40,7 +40,7 @@ public class SecurityConfig {
 			.headers(c -> c.frameOptions(f -> f.disable()).disable())
 			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
 			.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(new AuthFilter(tokenProvider, ignoredPathList), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new AuthFilter(tokenProvider, accessPath), UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(new CustomExceptionHandlerFilter(objectMapper), AuthFilter.class);
 		return http.build();
 	}
