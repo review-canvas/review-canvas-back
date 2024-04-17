@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -48,7 +47,7 @@ interface AuthApi {
 			responseCode = "200",
 			description = "성공적으로 로그아웃 완료되었습니다.")
 	})
-	@DeleteMapping("/logout")
+	@PostMapping("/logout")
 	ResponseEntity<SuccessResponse<Void>> logout(@AuthInfo JwtInfo jwtInfo);
 
 	@Operation(summary = "AccessToken 재발급 API", description = "RefreshToken에 기반해 Access 토큰을 재발급한다.")

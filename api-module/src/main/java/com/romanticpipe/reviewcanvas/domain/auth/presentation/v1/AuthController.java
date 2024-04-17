@@ -13,7 +13,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +47,7 @@ class AuthController implements AuthApi {
 	}
 
 	@Override
-	@DeleteMapping("/logout")
+	@PostMapping("/logout")
 	public ResponseEntity<SuccessResponse<Void>> logout(@AuthInfo JwtInfo jwtInfo) {
 		authUseCase.logout(jwtInfo.adminId(), jwtInfo.adminRole());
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
