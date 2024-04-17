@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response;
+package com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -8,14 +8,13 @@ import java.util.Objects;
 public record LoginResponse(@Schema(description = "Admin id", requiredMode = Schema.RequiredMode.REQUIRED)
 							Long adminId,
 							@Schema(description = "Access Token", requiredMode = Schema.RequiredMode.REQUIRED)
-							String accessToken) {
+							String accessToken,
+							@Schema(description = "Refresh Token", requiredMode = Schema.RequiredMode.REQUIRED)
+							String refreshToken) {
 
 	public LoginResponse {
 		Objects.requireNonNull(adminId);
 		Objects.requireNonNull(accessToken);
-	}
-
-	public static LoginResponse from(Long adminId, String accessToken) {
-		return new LoginResponse(adminId, accessToken);
+		Objects.requireNonNull(refreshToken);
 	}
 }

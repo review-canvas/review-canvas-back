@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface AdminAuthRepository extends JpaRepository<AdminAuth, Long> {
 	Optional<AdminAuth> findById(Long id);
+
+	Optional<AdminAuth> findByRefreshToken(String refreshToken);
 }
