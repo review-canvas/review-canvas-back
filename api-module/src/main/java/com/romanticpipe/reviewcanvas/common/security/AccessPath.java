@@ -21,33 +21,33 @@ public final class AccessPath {
 		Arrays.asList(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE);
 
 	private AccessPath() {
-		allAllowedPath = initAllIgnoredPath();
+		allAllowedPath = initAllAllowedPath();
 		shopAdminDeniedPath = initShopAdminDeniedPath();
 	}
 
-	private MultiValueMap<String, HttpMethod> initAllIgnoredPath() {
-		MultiValueMap<String, HttpMethod> allIgnoredPath = new LinkedMultiValueMap<>();
+	private MultiValueMap<String, HttpMethod> initAllAllowedPath() {
+		MultiValueMap<String, HttpMethod> allAllowedPath = new LinkedMultiValueMap<>();
 		// swagger
-		allIgnoredPath.put("/swagger-ui/**", allMethod);
-		allIgnoredPath.put("/v3/api-docs/**", allMethod);
+		allAllowedPath.put("/swagger-ui/**", allMethod);
+		allAllowedPath.put("/v3/api-docs/**", allMethod);
 
 		// health check
-		allIgnoredPath.put("/api/v1/health", allMethod);
+		allAllowedPath.put("/api/v1/health", allMethod);
 
 		// auth
-		allIgnoredPath.put("/api/v1/shop-admin/login", List.of(HttpMethod.POST));
-		allIgnoredPath.put("/api/v1/super-admin/login", List.of(HttpMethod.POST));
-		allIgnoredPath.put("/api/v1/reissue-access-token", List.of(HttpMethod.POST));
+		allAllowedPath.put("/api/v1/shop-admin/login", List.of(HttpMethod.POST));
+		allAllowedPath.put("/api/v1/super-admin/login", List.of(HttpMethod.POST));
+		allAllowedPath.put("/api/v1/reissue-access-token", List.of(HttpMethod.POST));
 
 		// shop admin
-		allIgnoredPath.put("/api/v1/shop-admin/sign-up", List.of(HttpMethod.POST));
-		allIgnoredPath.put("/api/v1/shop-admin/email-check", List.of(HttpMethod.GET));
+		allAllowedPath.put("/api/v1/shop-admin/sign-up", List.of(HttpMethod.POST));
+		allAllowedPath.put("/api/v1/shop-admin/email-check", List.of(HttpMethod.GET));
 
 		// review
-		allIgnoredPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET, HttpMethod.POST));
-		allIgnoredPath.put("/api/v1/reviews/{reviewId}", List.of(HttpMethod.PATCH));
-		allIgnoredPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
-		return allIgnoredPath;
+		allAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET, HttpMethod.POST));
+		allAllowedPath.put("/api/v1/reviews/{reviewId}", List.of(HttpMethod.PATCH));
+		allAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
+		return allAllowedPath;
 	}
 
 	private MultiValueMap<String, HttpMethod> initShopAdminDeniedPath() {
