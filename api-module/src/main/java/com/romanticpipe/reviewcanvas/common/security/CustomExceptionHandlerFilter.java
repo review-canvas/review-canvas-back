@@ -14,6 +14,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @Slf4j
 @RequiredArgsConstructor
 public class CustomExceptionHandlerFilter extends OncePerRequestFilter {
@@ -26,14 +28,18 @@ public class CustomExceptionHandlerFilter extends OncePerRequestFilter {
 		try {
 			filterChain.doFilter(request, response);
 		} catch (TokenException e) {
-			ErrorCode errorCode = e.getErrorCode();
-			log.info("security exception = {} {}", errorCode, errorCode.getMessage());
-
-			ErrorResponse errorResponse = ErrorResponse.of(errorCode);
-			response.setStatus(errorCode.getStatus());
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+			handleException(response, e.getErrorCode());
 		}
+	}
+
+	private void handleException(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+		log.info("security exception = [{}] MESSAGE: {}", errorCode, errorCode.getMessage());
+
+		ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+		response.setStatus(errorCode.getStatus());
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType(APPLICATION_JSON_VALUE);
+		response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
 	}
 
 }
