@@ -45,4 +45,11 @@ public class ShopAdminValidator {
 	public boolean isExistEmail(String email) {
 		return shopAdminRepository.existsByEmail(email);
 	}
+
+	public void validApproveStatus(long shopAdminId) {
+		if(validById(shopAdminId).isApproveStatus()) {
+			throw new BusinessException(ShopAdminErrorCode.DENY_ACCESS_REVIEW_STATUS);
+		}
+
+	}
 }

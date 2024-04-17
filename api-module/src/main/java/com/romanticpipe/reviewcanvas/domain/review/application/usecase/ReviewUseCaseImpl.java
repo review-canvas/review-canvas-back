@@ -59,6 +59,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Transactional(readOnly = true)
 	public PageResponse<GetAwaitReviewResponse> getAwaitReviewsByShopAdmin(long shopAdminId,
 		PageableRequest pageableRequest) {
+		shopAdminValidator.validApproveStatus(shopAdminId);
 		return reviewValidator.validAwaitReviewByShopAdminId(shopAdminId, pageableRequest)
 			.map(GetAwaitReviewResponse::from);
 	}

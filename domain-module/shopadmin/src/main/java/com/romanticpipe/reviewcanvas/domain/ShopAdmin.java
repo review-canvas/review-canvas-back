@@ -32,7 +32,6 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "review_visibility_id")
 	private ReviewVisibility reviewVisibility;
-
 	private String email;
 	private String password;
 	private String name;
