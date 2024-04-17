@@ -7,9 +7,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,22 +45,22 @@ public class TokenProvider {
 	}
 
 	public String createAccessToken(Long adminId, AdminRole adminRole) {
-		return createToken(adminId, adminRole, accessTokenValidityTime);
+		return createToken(adminId, adminRole, "ACCESS", accessTokenValidityTime);
 	}
 
 	public String createRefreshToken(Long adminId, AdminRole adminRole) {
-		return createToken(adminId, adminRole, refreshTokenValidityTime);
+		return createToken(adminId, adminRole, "REFRESH", refreshTokenValidityTime);
 	}
 
 	public String createNewAccessTokenFromRefreshToken(String refreshToken) {
-		Claims claims = validateToken(refreshToken).getBody();
+		Claims claims = validateToken(JwtType.REFRESH, refreshToken).getBody();
 
 		Long adminId = Long.parseLong((String) claims.get(Claims.SUBJECT));
 		AdminRole adminRole = AdminRole.valueOf((String) claims.get(CustomClaims.ROLE));
 		return createAccessToken(adminId, adminRole);
 	}
 
-	private String createToken(Long adminId, AdminRole adminRole, Duration tokenValidityTime) {
+	private String createToken(Long adminId, AdminRole adminRole, String tokenType, Duration tokenValidityTime) {
 		Instant now = Instant.now();
 		Date currentDate = Date.from(now);
 		Date expiredDate = Date.from(now.plus(tokenValidityTime));
@@ -68,6 +71,7 @@ public class TokenProvider {
 			.setIssuedAt(currentDate)
 			.setExpiration(expiredDate)
 			.claim(CustomClaims.ROLE, adminRole)
+			.claim(CustomClaims.TOKEN_TYPE, tokenType)
 			.signWith(secretKey, SignatureAlgorithm.HS512)
 			.compact();
 	}
@@ -79,18 +83,20 @@ public class TokenProvider {
 		return new JwtAuthenticationToken(adminId, authorities);
 	}
 
-	public Jws<Claims> validateToken(String token) {
+	public Jws<Claims> validateToken(JwtType jwtType, String token) {
 		try {
-			return parseClaims(token);
+			Jws<Claims> claimsJws = parseClaims(token);
+			validateTokenType(claimsJws, jwtType);
+			return claimsJws;
 		} catch (ExpiredJwtException e) {
 			throw new TokenException(SecurityErrorCode.EXPIRED_TOKEN);
-		} catch (RuntimeException e) {
+		} catch (UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
 			throw new TokenException(SecurityErrorCode.INVALID_TOKEN);
 		}
 	}
 
-	public Long getAdminId(String token) {
-		Claims claims = validateToken(token).getBody();
+	public Long getAdminIdFromRefreshToken(String refresToken) {
+		Claims claims = validateToken(JwtType.REFRESH, refresToken).getBody();
 		return Long.parseLong(claims.get(Claims.SUBJECT).toString());
 	}
 
@@ -104,5 +110,12 @@ public class TokenProvider {
 	private Collection<? extends GrantedAuthority> getAuthorities(Claims claims) {
 		String adminRole = claims.get(CustomClaims.ROLE).toString();
 		return List.of(new SimpleGrantedAuthority(adminRole));
+	}
+
+	private void validateTokenType(Jws<Claims> claimsJws, JwtType jwtType) {
+		String tokenType = String.valueOf(claimsJws.getBody().get(CustomClaims.TOKEN_TYPE));
+		if (!jwtType.name().equals(tokenType)) {
+			throw new TokenException(SecurityErrorCode.DISALLOWED_TOKEN_TYPE);
+		}
 	}
 }

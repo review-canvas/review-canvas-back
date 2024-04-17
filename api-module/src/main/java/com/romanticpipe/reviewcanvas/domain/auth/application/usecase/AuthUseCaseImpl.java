@@ -57,7 +57,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public ReissueAccessTokenResponse reissuedAccessToken(String refreshToken) {
-		Long adminId = tokenProvider.getAdminId(refreshToken);
+		Long adminId = tokenProvider.getAdminIdFromRefreshToken(refreshToken);
 		AdminAuth adminAuth = adminAuthValidator.findById(adminId);
 		if (!Objects.equals(adminAuth.getRefreshToken(), refreshToken)) {
 			throw new BusinessException(SecurityErrorCode.INVALID_TOKEN);

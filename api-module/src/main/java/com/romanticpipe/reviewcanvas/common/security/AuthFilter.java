@@ -44,7 +44,7 @@ public class AuthFilter extends OncePerRequestFilter {
 	private void authentication(HttpServletRequest request) {
 		String accessToken = validateJwt(request);
 
-		tokenProvider.validateToken(accessToken);
+		tokenProvider.validateToken(JwtType.ACCESS, accessToken);
 
 		Authentication authentication = tokenProvider.getAuthentication(accessToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);

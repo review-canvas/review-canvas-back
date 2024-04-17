@@ -33,8 +33,6 @@ public class CustomExceptionHandlerFilter extends OncePerRequestFilter {
 	}
 
 	private void handleException(HttpServletResponse response, ErrorCode errorCode) throws IOException {
-		log.info("security exception = [{}] MESSAGE: {}", errorCode, errorCode.getMessage());
-
 		ErrorResponse errorResponse = ErrorResponse.of(errorCode);
 		response.setStatus(errorCode.getStatus());
 		response.setCharacterEncoding("UTF-8");
