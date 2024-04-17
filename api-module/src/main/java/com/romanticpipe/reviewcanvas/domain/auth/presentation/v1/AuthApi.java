@@ -10,6 +10,7 @@ import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.Re
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,8 @@ interface AuthApi {
 		@Valid @RequestBody LoginRequest loginRequest
 	);
 
-	@Operation(summary = "로그아웃 API", description = "refresh token을 삭제함으로 로그아웃한다.")
+	@Operation(summary = "로그아웃 API", description = "refresh token을 삭제함으로 로그아웃한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",

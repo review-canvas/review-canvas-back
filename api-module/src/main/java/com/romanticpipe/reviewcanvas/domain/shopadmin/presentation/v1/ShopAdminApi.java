@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -39,7 +40,8 @@ interface ShopAdminApi {
 		@RequestParam MultipartFile logoImage
 	);
 
-	@Operation(summary = "리뷰 노출 항목 title 조회 API", description = "리뷰 노출 항목 title을 조회한다.")
+	@Operation(summary = "리뷰 노출 항목 title 조회 API", description = "리뷰 노출 항목 title을 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
@@ -65,7 +67,8 @@ interface ShopAdminApi {
 		@RequestParam(value = "email", required = true) String email
 	);
 
-	@Operation(summary = "기본 리뷰 테마 리스트 조회 API", description = "기본 Review list/modal 테마 리스트를 조회한다.")
+	@Operation(summary = "기본 리뷰 테마 리스트 조회 API", description = "기본 Review list/modal 테마 리스트를 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
