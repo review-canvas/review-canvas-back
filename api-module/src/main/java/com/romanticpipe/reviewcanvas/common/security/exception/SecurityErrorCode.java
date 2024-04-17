@@ -5,14 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum SecurityErrorCode implements ErrorCode {
-	UNAUTHORIZED(401, "S001", "Unauthorized Admin error."),
-	NON_BEARER(401, "S002", "Bearer format is required in the Authorization header."),
-	UNKNOWN_ERROR(403, "S003", "An unexpected error has occurred."),
-	MAL_FORMED_TOKEN(403, "S004", "The JWT signature is incorrect."),
-	EXPIRED_TOKEN(403, "S005", "The token has expired."),
-	UNSUPPORTED_TOKEN(403, "S006", "The token is unsupported."),
-	ACCESS_DENIED(403, "S007", "Access is denied."),
-	INVALID_TOKEN(403, "S008", "The JWT token is invalid.");
+	NON_BEARER(401, "S001", "Authorization header에 Bearer 토큰이 없습니다."),
+	EXPIRED_TOKEN(403, "S002", "토큰이 만료됐습니다."),
+	INVALID_TOKEN(403, "S003", "토큰이 유효하지 않습니다.");
 
 	private final int status;
 	private final String code;
