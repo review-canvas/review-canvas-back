@@ -27,12 +27,26 @@ public final class IgnoredPathList {
 
 	private MultiValueMap<String, HttpMethod> initAllIgnoredPath() {
 		MultiValueMap<String, HttpMethod> allIgnoredPath = new LinkedMultiValueMap<>();
+		// swagger
 		allIgnoredPath.put("/swagger-ui/**", allMethod);
 		allIgnoredPath.put("/v3/api-docs/**", allMethod);
+
+		// health check
+		allIgnoredPath.put("/api/v1/health", allMethod);
+
+		// auth
 		allIgnoredPath.put("/api/v1/shop-admin/login", List.of(HttpMethod.POST));
 		allIgnoredPath.put("/api/v1/super-admin/login", List.of(HttpMethod.POST));
 		allIgnoredPath.put("/api/v1/reissue-access-token", List.of(HttpMethod.POST));
+
+		// shop admin
 		allIgnoredPath.put("/api/v1/shop-admin/sign-up", List.of(HttpMethod.POST));
+		allIgnoredPath.put("/api/v1/shop-admin/email-check", List.of(HttpMethod.GET));
+
+		// review
+		allIgnoredPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET, HttpMethod.POST));
+		allIgnoredPath.put("/api/v1/reviews/{reviewId}", List.of(HttpMethod.PATCH));
+		allIgnoredPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
 		return allIgnoredPath;
 	}
 
