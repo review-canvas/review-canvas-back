@@ -1,6 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,8 +19,6 @@ import jakarta.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -39,6 +41,7 @@ public class ShopAdmin extends BaseEntityWithUpdate implements Admin {
 	private String mallNumber;
 	private String phoneNumber;
 	private Boolean approveStatus;
+	private LocalDateTime deletedAt;
 	private UUID uuid;
 
 	private Long adminAuthId;
@@ -52,8 +55,8 @@ public class ShopAdmin extends BaseEntityWithUpdate implements Admin {
 
 	@Builder
 	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
-					 String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
-					 String installRequirement, Long selectedReviewDesignId, Long adminAuthId) {
+		String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
+		String installRequirement, Long selectedReviewDesignId, Long adminAuthId) {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
@@ -76,5 +79,13 @@ public class ShopAdmin extends BaseEntityWithUpdate implements Admin {
 	@Override
 	public AdminRole getRole() {
 		return AdminRole.ROLE_SHOP_ADMIN;
+	}
+
+	public void delete(LocalDateTime time) {
+		this.deletedAt = time;
+	}
+
+	public void recover() {
+		this.deletedAt = null;
 	}
 }

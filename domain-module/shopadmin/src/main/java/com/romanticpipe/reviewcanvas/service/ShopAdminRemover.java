@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
@@ -12,8 +14,8 @@ public class ShopAdminRemover {
 
 	private final ShopAdminValidator shopAdminValidator;
 
-	public void quit(Long id) {
+	public void quit(Long id, LocalDateTime time) {
 		ShopAdmin shopAdmin = shopAdminValidator.validById(id);
-		shopAdmin.delete();
+		shopAdmin.delete(time);
 	}
 }
