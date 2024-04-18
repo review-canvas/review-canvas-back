@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,27 +8,29 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class SuperAdmin implements Admin {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Reply extends BaseEntityWithUpdate {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "super_admin_id")
+	@Column(name = "reply_id")
 	private Long id;
-
-	@NotBlank
-	private String email;
-	@NotBlank
-	private String password;
 	@NotNull
-	private Long adminAuthId;
+	private Long reviewId;
+	@NotNull
+	private Long userId;
+	@NotBlank
+	private String content;
 
-	@Override
-	public AdminRole getRole() {
-		return AdminRole.ROLE_SUPER_ADMIN;
+	public Reply(Long reviewId, Long userId, String content) {
+		this.reviewId = reviewId;
+		this.userId = userId;
+		this.content = content;
 	}
 }
