@@ -20,6 +20,7 @@ import com.romanticpipe.reviewcanvas.TestReviewFactory;
 import com.romanticpipe.reviewcanvas.config.ControllerTestSetup;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -108,6 +109,30 @@ class ReviewControllerTest extends ControllerTestSetup {
 			// then
 			result.andExpect(status().isOk());
 		}
+	}
 
+	@Nested
+	@DisplayName("리뷰 수정 API는")
+	class UpdateReview {
+
+		@DisplayName("리뷰 아이디로 리뷰를 수정할 수 있다.")
+		@Test
+		void updateReview() throws Exception {
+			// given
+			String productId = "test_product_id";
+			CreateReviewRequest createReviewRequest = new CreateReviewRequest("test_user_id", 5, "test_content");
+			reviewUseCase.createReview(productId, createReviewRequest);
+			UpdateReviewRequest updateReviewRequest = new UpdateReviewRequest("test_content_updated", 1);
+
+			// when
+			ResultActions result = mockMvc.perform(
+				patch(BASE_URL + "/reviews/" + 1)
+					.content(new ObjectMapper().writeValueAsString(updateReviewRequest))
+					.contentType(MediaType.APPLICATION_JSON)
+			);
+
+			// then
+			result.andExpect(status().isOk());
+		}
 	}
 }
