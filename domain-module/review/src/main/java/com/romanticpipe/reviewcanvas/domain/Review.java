@@ -23,13 +23,14 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(name = "review_id")
 	private Long id;
 
-	@Column(name = "product_id", columnDefinition = "binary(16)")
+	@Column(name = "product_id", columnDefinition = "BINARY(16)")
 	private String productId;
 
-	@Column(name = "user_id", columnDefinition = "binary(16)")
+	@Column(name = "user_id", columnDefinition = "BINARY(16)")
 	private String userId;
-	private String content;
 	private int score;
+	private String content;
+
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewStatus status;

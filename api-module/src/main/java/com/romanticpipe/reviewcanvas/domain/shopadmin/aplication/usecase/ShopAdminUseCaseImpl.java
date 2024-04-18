@@ -1,80 +1,44 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.romanticpipe.reviewcanvas.domain.AdminAuth;
+import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
+import com.romanticpipe.reviewcanvas.domain.ReviewDesignType;
+import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
+import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
+import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
+import com.romanticpipe.reviewcanvas.service.ReviewDesignReader;
+import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
+import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
+import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
-import com.romanticpipe.reviewcanvas.domain.AdminAuth;
-import com.romanticpipe.reviewcanvas.domain.AdminInterface;
-import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
-import com.romanticpipe.reviewcanvas.domain.Role;
-import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.CheckLoginResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.LoginResponse;
-import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
-import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
-import com.romanticpipe.reviewcanvas.service.AdminAuthRemover;
-import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
-import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
-import com.romanticpipe.reviewcanvas.service.ShopAdminRemover;
-import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
-import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
-	private final TokenProvider tokenProvider;
+	private final PasswordEncoder passwordEncoder;
 	private final AdminAuthCreater adminAuthCreater;
-	private final AdminAuthRemover adminAuthRemover;
-	private final AdminAuthValidator adminAuthValidator;
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
-	private final SuperAdminValidator superAdminValidator;
-	private final BCryptPasswordEncoder passwordEncoder;
-	private final ShopAdminRemover shopAdminRemover;
+	private final ReviewVisibilityReader reviewVisibilityReader;
+	private final ReviewDesignReader reviewDesignReader;
 
-	@Override
-	@Transactional
-	public LoginResponse login(String email, String password, Role role) {
-		AdminInterface admin;
-		if (role.equals(Role.SUPER_ADMIN_ROLE)) {
-			admin = superAdminValidator.validByEmail(email);
-		} else {
-			admin = shopAdminValidator.validByEmail(email);
-		}
-
-		if (!passwordEncoder.matches(password, admin.getPassword())) {
-			throw new BusinessException(ShopAdminErrorCode.ADMIN_WRONG_PASSWARD);
-		}
-
-		AdminAuth adminAuth = adminAuthValidator.findAdminAuthById(admin.getId());
-
-		String accessToken = tokenProvider.createToken(admin);
-		String refreshToken = adminAuth.getRefreshToken();
-
-		if (tokenProvider.isExpiredToken(refreshToken)) {
-			tokenProvider.createRefreshToken(adminAuth);
-		}
-
-		if (adminAuth.getId() == null) {
-			adminAuthCreater.save(adminAuth);
-		}
-
-		return LoginResponse.from(admin.getId(), accessToken);
-
-	}
 
 	@Override
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest, MultipartFile logoImage) {
 		shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
+
+		AdminAuth adminAuth = AdminAuth.create();
+		adminAuthCreater.save(adminAuth);
 
 		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
 			.title(signUpRequest.title())
@@ -85,44 +49,39 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.createdAt(signUpRequest.createdAt())
 			.updatedAt(signUpRequest.updatedAt())
 			.build();
+
 		ShopAdmin shopAdmin = ShopAdmin.builder()
 			.reviewVisibility(reviewVisibility)
 			.email(signUpRequest.email())
 			.password(passwordEncoder.encode(signUpRequest.password()))
 			.name(signUpRequest.name())
-			//			.logoImageUrl(signUpRequest.logoImageUrl())
 			.mallNumber(signUpRequest.mallNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
 			.approveStatus(false)
 			.shopInstallType(signUpRequest.shopInstallType())
 			.installRequirement(signUpRequest.installRequirement())
 			.selectedReviewDesignId(signUpRequest.reviewDesignId())
+			.adminAuthId(adminAuth.getId())
 			.build();
 
 		shopAdminCreator.signUp(shopAdmin);
 	}
 
 	@Override
-	@Transactional
-	public void logout(AdminInterface admin) {
-		adminAuthRemover.deleteRefreshToken(admin.getId());
+	@Transactional(readOnly = true)
+	public GetReviewVisibilityTitleResponse getReviewVisibilityTitle() {
+		return GetReviewVisibilityTitleResponse.from(reviewVisibilityReader.getReviewVisibilityTitle());
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public CheckLoginResponse checkLoginForAdmin(AdminInterface admin) {
-		if (admin.getRole().equals(Role.SUPER_ADMIN_ROLE)) {
-			admin = superAdminValidator.validById(admin.getId());
-		} else {
-			admin = shopAdminValidator.validById(admin.getId());
-		}
-		return CheckLoginResponse.from(admin.getId(), admin.getRole().toString());
+	public boolean emailCheck(String email) {
+		return shopAdminValidator.isExistEmail(email);
 	}
 
 	@Override
-	@Transactional
-	public void quit(Long id) {
-		shopAdminRemover.quit(id);
-		adminAuthRemover.deleteRefreshToken(id);
+	@Transactional(readOnly = true)
+	public List<ReviewDesign> getGeneralReviewThemeList() {
+		return reviewDesignReader.getGeneralThemeList(ReviewDesignType.GENERAL);
 	}
 }

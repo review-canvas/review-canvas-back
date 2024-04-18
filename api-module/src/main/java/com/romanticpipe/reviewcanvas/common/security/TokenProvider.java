@@ -1,170 +1,121 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
-
-import com.romanticpipe.reviewcanvas.domain.AdminAuth;
-import com.romanticpipe.reviewcanvas.domain.AdminInterface;
-import com.romanticpipe.reviewcanvas.domain.Role;
-import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
-import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
-import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
-
+import com.romanticpipe.reviewcanvas.common.security.exception.SecurityErrorCode;
+import com.romanticpipe.reviewcanvas.common.security.exception.TokenException;
+import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
+import io.jsonwebtoken.security.SignatureException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
+
+import java.security.Key;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Component
-@RequiredArgsConstructor
-public class TokenProvider implements InitializingBean {
+public class TokenProvider {
 
-	private static final String AUTHORITIES_KEY = "auth";
-	private static final String ADMIN_ID = "id";
-	private static final String DELETED_TOKEN = "deleted";
+	private final Duration accessTokenValidityTime;
 
-	private final AdminAuthValidator adminAuthValidator;
-	private final ShopAdminValidator shopAdminValidator;
-	private final SuperAdminValidator superAdminValidator;
+	private final Duration refreshTokenValidityTime;
 
-	@Value("${spring.jwt.secret}")
-	private String secret;
+	private final Key secretKey;
 
-	@Value("${spring.jwt.access-token-validity-in-seconds}")
-	private long accessTokenValidityTime;
-
-	@Value("${spring.jwt.refresh-token-validity-in-seconds}")
-	private long refreshTokenValidityTime;
-
-	private Key secretKey;
-
-	@Override
-	public void afterPropertiesSet() {
-		byte[] keyBytes = Decoders.BASE64.decode(secret);
-		this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+	public TokenProvider(@Value("${spring.jwt.secret}") String secret,
+						 @Value("${spring.jwt.access-token-validity-time}") Duration accessTokenValidityTime,
+						 @Value("${spring.jwt.refresh-token-validity-time}") Duration refreshTokenValidityTime) {
+		this.accessTokenValidityTime = accessTokenValidityTime;
+		this.refreshTokenValidityTime = refreshTokenValidityTime;
+		this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
 	}
 
-	public String createToken(AdminInterface admin) {
-		// 스프링 시큐리티 처리
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(String.valueOf(admin.getRole())));
-		// 사용자 인증 정보 생성
-		UsernamePasswordAuthenticationToken auth = configureAuthentication(admin, authorities);
+	public String createAccessToken(Long adminId, AdminRole adminRole) {
+		return createToken(adminId, adminRole, "ACCESS", accessTokenValidityTime);
+	}
 
-		// JWT 토큰 생성
-		String auths = auth.getAuthorities().stream()
-			.map(GrantedAuthority::getAuthority)
-			.collect(Collectors.joining(","));
+	public String createRefreshToken(Long adminId, AdminRole adminRole) {
+		return createToken(adminId, adminRole, "REFRESH", refreshTokenValidityTime);
+	}
 
-		long now = (new Date()).getTime();
-		Date accessTokenValidity = new Date(now + 1000 * this.accessTokenValidityTime);
+	public String createNewAccessTokenFromRefreshToken(String refreshToken) {
+		Claims claims = validateToken(JwtType.REFRESH, refreshToken).getBody();
 
-		String accessToken = Jwts.builder()
-			.setExpiration(accessTokenValidity)
-			.setSubject(auth.getName())
-			.claim(AUTHORITIES_KEY, auths)
-			.claim(ADMIN_ID, admin.getId())
+		Long adminId = Long.parseLong((String) claims.get(Claims.SUBJECT));
+		AdminRole adminRole = AdminRole.valueOf((String) claims.get(CustomClaims.ROLE));
+		return createAccessToken(adminId, adminRole);
+	}
+
+	private String createToken(Long adminId, AdminRole adminRole, String tokenType, Duration tokenValidityTime) {
+		Instant now = Instant.now();
+		Date currentDate = Date.from(now);
+		Date expiredDate = Date.from(now.plus(tokenValidityTime));
+
+		return Jwts.builder()
+			.setHeader(Map.of("typ", "JWT"))
+			.setSubject(String.valueOf(adminId))
+			.setIssuedAt(currentDate)
+			.setExpiration(expiredDate)
+			.claim(CustomClaims.ROLE, adminRole)
+			.claim(CustomClaims.TOKEN_TYPE, tokenType)
 			.signWith(secretKey, SignatureAlgorithm.HS512)
 			.compact();
-
-		return accessToken;
 	}
 
-	public void createRefreshToken(AdminAuth adminAuth) {
-		long now = (new Date()).getTime();
-		Date refreshTokenValidity = new Date(now + 1000 * this.refreshTokenValidityTime);
-		adminAuth.setRefreshToken(Jwts.builder()
-			.setExpiration(refreshTokenValidity)
-			.claim(ADMIN_ID, adminAuth.getAdminId())
-			.signWith(secretKey, SignatureAlgorithm.HS256)
-			.compact());
+	public Authentication getAuthentication(String token) {
+		Claims claims = parseClaims(token).getBody();
+		Long adminId = Long.parseLong(claims.get(Claims.SUBJECT).toString());
+		Collection<? extends GrantedAuthority> authorities = getAuthorities(claims);
+		return new JwtAuthenticationToken(adminId, authorities);
 	}
 
-	public AdminInterface getAdmin(Claims claims) {
-		Collection<? extends GrantedAuthority> authorities =
-			Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-				.map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
-		AdminInterface admin;
-		if (authorities.stream()
-			.anyMatch(authority -> authority.getAuthority().equals(Role.SUPER_ADMIN_ROLE.toString()))) {
-			admin = this.superAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
-		} else {
-			admin = this.shopAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
-		}
-		return admin;
-	}
-
-	public boolean isExpiredById(long adminId) throws BusinessException {
-		String refreshToken = this.adminAuthValidator.findAdminAuthById(adminId).getRefreshToken();
-		if (isExpiredToken(refreshToken)) {
-			return true;
-		}
-		return false;
-	}
-
-	public Jws<Claims> validateToken(String token) throws BusinessException {
-		return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
-	}
-
-	public Authentication getAuthentication(Claims claims, String token) {
-		Collection<? extends GrantedAuthority> authorities =
-			Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-				.map(SimpleGrantedAuthority::new)
-				.collect(Collectors.toList());
-		AdminInterface admin;
-		if (authorities.stream()
-			.anyMatch(authority -> authority.getAuthority().equals(Role.SUPER_ADMIN_ROLE.toString()))) {
-			admin = this.superAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
-		} else {
-			admin = this.shopAdminValidator.validById(Long.parseLong(claims.get(ADMIN_ID).toString()));
-		}
-		return new UsernamePasswordAuthenticationToken(admin, token, authorities);
-	}
-
-	public UsernamePasswordAuthenticationToken configureAuthentication(AdminInterface admin,
-		List<GrantedAuthority> authorities) {
-		UsernamePasswordAuthenticationToken auth =
-			new UsernamePasswordAuthenticationToken(admin, secretKey, authorities);
-		SecurityContextHolder.getContext().setAuthentication(auth);
-		return auth;
-	}
-
-	public boolean isExpiredToken(String refreshToken) {
-		if (refreshToken.isEmpty() || refreshToken.equals(DELETED_TOKEN)) {
-			return true;
-		}
-		Claims claims = parseClaims(refreshToken);
-		if (claims.getExpiration().before(new Date())) {
-			return true;
-		}
-		return false;
-	}
-
-	private Claims parseClaims(String token) {
+	public Jws<Claims> validateToken(JwtType jwtType, String token) {
 		try {
-			return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+			Jws<Claims> claimsJws = parseClaims(token);
+			validateTokenType(claimsJws, jwtType);
+			return claimsJws;
 		} catch (ExpiredJwtException e) {
-			return e.getClaims();
+			throw new TokenException(SecurityErrorCode.EXPIRED_TOKEN);
+		} catch (UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
+			throw new TokenException(SecurityErrorCode.INVALID_TOKEN);
+		}
+	}
+
+	public Long getAdminIdFromRefreshToken(String refreshToken) {
+		Claims claims = validateToken(JwtType.REFRESH, refreshToken).getBody();
+		return Long.parseLong(claims.get(Claims.SUBJECT).toString());
+	}
+
+	private Jws<Claims> parseClaims(String token) {
+		return Jwts.parserBuilder()
+			.setSigningKey(secretKey)
+			.build()
+			.parseClaimsJws(token);
+	}
+
+	private Collection<? extends GrantedAuthority> getAuthorities(Claims claims) {
+		String adminRole = claims.get(CustomClaims.ROLE).toString();
+		return List.of(new SimpleGrantedAuthority(adminRole));
+	}
+
+	private void validateTokenType(Jws<Claims> claimsJws, JwtType jwtType) {
+		String tokenType = String.valueOf(claimsJws.getBody().get(CustomClaims.TOKEN_TYPE));
+		if (!jwtType.name().equals(tokenType)) {
+			throw new TokenException(SecurityErrorCode.DISALLOWED_TOKEN_TYPE);
 		}
 	}
 }

@@ -1,8 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,7 +21,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
+public class ShopAdmin extends BaseEntityWithUpdate implements Admin {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,13 +39,9 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 	private String mallNumber;
 	private String phoneNumber;
 	private Boolean approveStatus;
-	private LocalDateTime deletedAt;
 	private UUID uuid;
 
 	private Long adminAuthId;
-
-	@Enumerated(EnumType.STRING)
-	private Role role = Role.SHOP_ADMIN_ROLE;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "install_type", columnDefinition = "VARCHAR(32)")
@@ -56,16 +49,14 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 	private String installRequirement;
 
 	private Long selectedReviewDesignId;
-	private Long myReviewDesignId;
 
 	@Builder
 	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
-		String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
-		String installRequirement, Long selectedReviewDesignId) {
+					 String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
+					 String installRequirement, Long selectedReviewDesignId, Long adminAuthId) {
 		this.reviewVisibility = reviewVisibility;
 		this.email = email;
 		this.password = password;
-		this.role = Role.SHOP_ADMIN_ROLE;
 		this.name = name;
 		this.logoImageUrl = logoImageUrl;
 		this.mallNumber = mallNumber;
@@ -74,11 +65,7 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 		this.shopInstallType = shopInstallType;
 		this.installRequirement = installRequirement;
 		this.selectedReviewDesignId = selectedReviewDesignId;
-		this.myReviewDesignId = myReviewDesignId;
-		generateUuid();
-	}
-
-	public void generateUuid() {
+		this.adminAuthId = adminAuthId;
 		this.uuid = UUID.randomUUID();
 	}
 
@@ -86,11 +73,8 @@ public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
 		return approveStatus;
 	}
 
-	public void delete() {
-		this.deletedAt = LocalDateTime.now();
-	}
-
-	public void recover() {
-		this.deletedAt = null;
+	@Override
+	public AdminRole getRole() {
+		return AdminRole.ROLE_SHOP_ADMIN;
 	}
 }

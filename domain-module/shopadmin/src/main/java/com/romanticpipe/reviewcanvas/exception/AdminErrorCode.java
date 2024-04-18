@@ -3,9 +3,10 @@ package com.romanticpipe.reviewcanvas.exception;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum SuperAdminErrorCode implements ErrorCode {
+public enum AdminErrorCode implements ErrorCode {
 
-	SUPER_ADMIN_NOT_FOUND(400, "SP001", "아이디 혹은 비밀번호가 잘못 입력되었습니다.");
+	ADMIN_NOT_FOUND(400, "SA001", "등록되지 않은 아이디입니다."),
+	ADMIN_WRONG_PASSWARD(400, "SA002", "비밀번호가 잘못 입력되었습니다.");
 
 	private final int status;
 	private final String code;

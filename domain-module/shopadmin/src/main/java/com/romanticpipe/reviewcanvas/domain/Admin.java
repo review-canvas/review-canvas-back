@@ -1,11 +1,13 @@
 package com.romanticpipe.reviewcanvas.domain;
 
-public interface AdminInterface {
+public interface Admin {
 	Long getId();
 
 	String getEmail();
 
 	String getPassword();
 
-	Role getRole();
+	AdminRole getRole();
+
+	Long getAdminAuthId();
 }

@@ -12,5 +12,6 @@ allprojects {
 subprojects {
     dependencies {
         implementation project(':domain-module')
+        testFixturesImplementation project(':domain-module')
     }
 }
