@@ -12,11 +12,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanticpipe.reviewcanvas.TestReviewFactory;
 import com.romanticpipe.reviewcanvas.config.ControllerTestSetup;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -42,8 +45,8 @@ class ReviewControllerTest extends ControllerTestSetup {
 			var review = TestReviewFactory.createReview(1L, productId, "1", "content", 5);
 			var getReviewResponse = GetReviewResponse.from(review);
 			var getReviewPageResponse = new PageResponse<>(0, 10, 0, List.of(getReviewResponse));
-			given(reviewUseCase.getReviewsByProductId(eq(productId), any(PageableRequest.class)))
-				.willReturn(getReviewPageResponse);
+			given(reviewUseCase.getReviewsByProductId(eq(productId), any(PageableRequest.class))).willReturn(
+				getReviewPageResponse);
 
 			// when
 			ResultActions result = mockMvc.perform(get(BASE_URL + "/products/" + productId + "/reviews"));
@@ -66,16 +69,12 @@ class ReviewControllerTest extends ControllerTestSetup {
 			// given
 			String productId = "test_product_id";
 			String userId = "test_user_id";
-			var review = TestReviewFactory.createReview(1L,
-				productId,
-				userId,
-				"test_content",
-				5);
+			var review = TestReviewFactory.createReview(1L, productId, userId, "test_content", 5);
 
 			var getReviewResponse = GetReviewResponse.from(review);
 			var getReviewPageResponse = new PageResponse<>(0, 10, 0, List.of(getReviewResponse));
-			given(reviewUseCase.getReviewsByUserId(eq(userId), any(PageableRequest.class)))
-				.willReturn(getReviewPageResponse);
+			given(reviewUseCase.getReviewsByUserId(eq(userId), any(PageableRequest.class))).willReturn(
+				getReviewPageResponse);
 
 			// when
 			ResultActions result = mockMvc.perform(get(BASE_URL + "/users/" + userId + "/reviews"));
@@ -88,4 +87,27 @@ class ReviewControllerTest extends ControllerTestSetup {
 		}
 	}
 
+	@Nested
+	@DisplayName("리뷰 생성 API는")
+	class CreateReview {
+
+		@DisplayName("상품 아이디로 리뷰를 생성할 수 있다.")
+		@Test
+		void createReview() throws Exception {
+			// given
+			String productId = "test_product_id";
+			CreateReviewRequest createReviewRequest = new CreateReviewRequest("test_user_id", 5, "test_content");
+
+			// when
+			ResultActions result = mockMvc.perform(
+				post(BASE_URL + "/products/" + productId + "/reviews")
+					.content(new ObjectMapper().writeValueAsString(createReviewRequest))
+					.contentType(MediaType.APPLICATION_JSON)
+			);
+
+			// then
+			result.andExpect(status().isOk());
+		}
+
+	}
 }
