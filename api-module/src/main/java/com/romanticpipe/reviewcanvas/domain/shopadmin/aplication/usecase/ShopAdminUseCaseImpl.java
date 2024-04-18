@@ -51,16 +51,16 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.build();
 
 		ShopAdmin shopAdmin = ShopAdmin.builder()
-			.reviewVisibility(reviewVisibility)
+//			.reviewVisibility(reviewVisibility)
 			.email(signUpRequest.email())
 			.password(passwordEncoder.encode(signUpRequest.password()))
-			.name(signUpRequest.name())
+//			.name(signUpRequest.name())
 			.mallNumber(signUpRequest.mallNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
 			.approveStatus(false)
-			.shopInstallType(signUpRequest.shopInstallType())
-			.installRequirement(signUpRequest.installRequirement())
-			.selectedReviewDesignId(signUpRequest.reviewDesignId())
+//			.shopInstallType(signUpRequest.shopInstallType())
+//			.installRequirement(signUpRequest.installRequirement())
+//			.selectedReviewDesignId(signUpRequest.reviewDesignId())
 			.adminAuthId(adminAuth.getId())
 			.build();
 
