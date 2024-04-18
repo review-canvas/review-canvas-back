@@ -1,5 +1,19 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
+
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.romanticpipe.reviewcanvas.TestReviewFactory;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
@@ -10,19 +24,6 @@ import com.romanticpipe.reviewcanvas.service.ReviewCreator;
 import com.romanticpipe.reviewcanvas.service.ReviewReader;
 import com.romanticpipe.reviewcanvas.service.ReviewValidator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewUseCaseImplTest {
