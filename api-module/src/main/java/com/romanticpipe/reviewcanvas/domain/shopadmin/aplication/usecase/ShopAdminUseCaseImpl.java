@@ -16,6 +16,7 @@ import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
+import com.romanticpipe.reviewcanvas.service.AdminAuthRemover;
 import com.romanticpipe.reviewcanvas.service.ReviewDesignReader;
 import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
@@ -30,6 +31,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final PasswordEncoder passwordEncoder;
 	private final AdminAuthCreater adminAuthCreater;
+	private final AdminAuthRemover adminAuthRemover;
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
 	private final ShopAdminRemover shopAdminRemover;
@@ -93,6 +95,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public void quit(Long id, LocalDateTime time) {
 		shopAdminRemover.quit(id, time);
-		// adminAuthRemover.deleteRefreshToken(id);
+		adminAuthRemover.deleteRefreshToken(id);
 	}
 }
