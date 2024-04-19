@@ -50,6 +50,5 @@ public class ShopAdminValidator {
 		if(validById(shopAdminId).isApproveStatus()) {
 			throw new BusinessException(ShopAdminErrorCode.DENY_ACCESS_REVIEW_STATUS);
 		}
-
 	}
 }

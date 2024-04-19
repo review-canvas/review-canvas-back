@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,7 +77,8 @@ interface ReviewApi {
 		@Schema(description = "ASC, DESC 가능") Direction direction
 	);
 
-	@Operation(summary = "대기 상태 리뷰 전체 조회 API", description = "shop에서 승인 대기 상태인 리뷰를 전체 조회한다.")
+	@Operation(summary = "대기 상태 리뷰 전체 조회 API", description = "shop에서 승인 대기 상태인 리뷰를 전체 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
