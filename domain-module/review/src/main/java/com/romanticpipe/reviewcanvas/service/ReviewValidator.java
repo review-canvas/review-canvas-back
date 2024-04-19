@@ -32,6 +32,7 @@ public class ReviewValidator {
 
 	public PageResponse<Review> validAwaitReviewByShopAdminId(long shopAdminId, PageableRequest pageableRequest) {
 		Pageable pageable = PageableUtils.toPageable(pageableRequest);
-		return PageableUtils.toPageResponse(reviewRepository.findWaitingReviewsByShopAdminId(shopAdminId, pageable));
+		return PageableUtils.toPageResponse(reviewRepository.findAllByShopAdminId(shopAdminId, pageable));
 	}
+
 }

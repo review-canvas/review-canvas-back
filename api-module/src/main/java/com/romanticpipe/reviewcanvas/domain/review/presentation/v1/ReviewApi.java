@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
+import java.util.List;
+
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;

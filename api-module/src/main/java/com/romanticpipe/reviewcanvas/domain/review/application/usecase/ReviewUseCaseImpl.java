@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

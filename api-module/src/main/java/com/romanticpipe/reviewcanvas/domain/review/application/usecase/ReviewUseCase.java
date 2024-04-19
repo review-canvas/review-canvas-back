@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.List;
+
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetAwaitReviewResponse;
@@ -17,4 +19,5 @@ public interface ReviewUseCase {
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);
 
 	PageResponse<GetAwaitReviewResponse> getAwaitReviewsByShopAdmin(long shopAdminId, PageableRequest pageableRequest);
+	
 }
