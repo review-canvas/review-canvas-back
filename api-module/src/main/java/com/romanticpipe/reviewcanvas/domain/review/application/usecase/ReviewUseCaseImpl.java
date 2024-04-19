@@ -55,9 +55,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	public void createReview(String productId, CreateReviewRequest createReviewRequest) {
 		Product product = productValidator.validByProductId(productId);
 		ShopAdmin shopAdmin = shopAdminValidator.validById(product.getShopAdminId());
+		// TODO: 프론트로부터 mallId, productNo product를 조회하여 productId를 가져온다.
+		// TODO: 프론트로부터 memberId를 받아 user를 조회하여 userId를 가져온다.
 		Review review = new Review(
-			productId,
-			createReviewRequest.userId(),
+			null,
+			null,
 			createReviewRequest.content(),
 			createReviewRequest.score(),
 			shopAdmin.isApproveStatus()
