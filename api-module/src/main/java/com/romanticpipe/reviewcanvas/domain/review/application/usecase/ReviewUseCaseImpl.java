@@ -19,8 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Component
 @RequiredArgsConstructor
 class ReviewUseCaseImpl implements ReviewUseCase {
@@ -36,11 +34,9 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Transactional(readOnly = true)
 	public PageResponse<GetReviewResponse> getReviewsForUser(String mallId, Long productNo,
 															 PageableRequest pageableRequest) {
-		Optional<Product> product = productReader.findByMallIdAndProductNo(mallId, productNo);
-		if (product.isEmpty()) {
-			// TODO:
-		}
-		return reviewReader.findByProductId(product.get().getId(), pageableRequest)
+		Product product = productReader.findByMallIdAndProductNo(mallId, productNo)
+			.orElseGet(() -> createProduct(mallId, productNo));
+		return reviewReader.findByProductId(product.getId(), pageableRequest)
 			.map(GetReviewResponse::from);
 	}
 
@@ -77,4 +73,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		reviewCreator.save(review);
 	}
 
+	private Product createProduct(String mallId, Long productNo) {
+		// TODO: mallId, productNo로 product 정보를 가져와 저장하고, product 엔티티를 반환하는 로직을 작성한다.
+		return null;
+	}
 }

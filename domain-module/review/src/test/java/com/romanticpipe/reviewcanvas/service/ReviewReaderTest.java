@@ -39,9 +39,9 @@ class ReviewReaderTest {
 		@DisplayName("상품 아이디로 조회한 리뷰들을 PageResponse로 반환한다.")
 		void it_returns_reviews_by_product_id() {
 			// given
-			String productId = "product_no";
+			Long productId = 1L;
 			PageableRequest pageableRequest = PageableRequest.of(0, 10, Direction.ASC);
-			Review review = TestReviewFactory.createReview(1L, "1", "1", "content", 5);
+			Review review = TestReviewFactory.createReview(2L, productId, 3L, "content", 5);
 			PageImpl<Review> reviews = new PageImpl<>(List.of(review));
 			given(reviewRepository.findAllByProductId(eq(productId), any(Pageable.class)))
 				.willReturn(reviews);

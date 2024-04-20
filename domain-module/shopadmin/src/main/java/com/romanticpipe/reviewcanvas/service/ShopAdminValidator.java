@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ShopAdminValidator {
 	private final ShopAdminRepository shopAdminRepository;
-	private final ReviewDesignRepository designItemSuperRepository;
+	private final ReviewDesignRepository reviewDesignRepository;
 
 	public ReviewDesign isExistTheme(Integer reviewDesignId) {
-		ReviewDesign reviewDesign = designItemSuperRepository.findById(reviewDesignId)
+		ReviewDesign reviewDesign = reviewDesignRepository.findById(reviewDesignId)
 			.orElseThrow(ReviewDesignNotFoundException::new);
 		if (!reviewDesign.isGeneralType()) {
 			throw new BusinessException(ShopAdminErrorCode.NOT_GENERAL_REVIEW_THEME);
