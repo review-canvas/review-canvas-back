@@ -44,10 +44,10 @@ public class ReviewDesign {
 
 	@Builder
 	public ReviewDesign(ReviewDesignType reviewDesignType, ReviewDesignPosition reviewDesignPosition, String themeName,
-						String layoutType, String padding, String gap, String boxShadowColor, int boxShadowWidth,
-						String borderColor, int borderTransparency, int borderWidth, String pagingType,
-						int pagingNumber, String textAlign, String pointColor, String pointType, int lineEllipsis,
-						String reviewDesignUrl) {
+		String layoutType, String padding, String gap, String boxShadowColor, int boxShadowWidth,
+		String borderColor, int borderTransparency, int borderWidth, String pagingType,
+		int pagingNumber, String textAlign, String pointColor, String pointType, int lineEllipsis,
+		String reviewDesignUrl) {
 		this.reviewDesignType = reviewDesignType;
 		this.reviewDesignPosition = reviewDesignPosition;
 		this.themeName = themeName;
@@ -70,5 +70,29 @@ public class ReviewDesign {
 
 	public boolean isGeneralType() {
 		return reviewDesignType.equals(ReviewDesignType.GENERAL);
+	}
+
+	public void update(ReviewDesignPosition reviewDesignPosition, String themeName,
+		String layoutType, String padding, String gap, String boxShadowColor, int boxShadowWidth,
+		String borderColor, int borderTransparency, int borderWidth, String pagingType,
+		int pagingNumber, String textAlign, String pointColor, String pointType, int lineEllipsis,
+		String reviewDesignUrl) {
+		this.reviewDesignPosition = reviewDesignPosition;
+		this.themeName = themeName;
+		this.layoutType = layoutType;
+		this.padding = padding;
+		this.gap = gap;
+		this.boxShadowColor = boxShadowColor;
+		this.boxShadowWidth = boxShadowWidth;
+		this.borderColor = borderColor;
+		this.borderTransparency = borderTransparency;
+		this.borderWidth = borderWidth;
+		this.pagingType = pagingType;
+		this.pagingNumber = pagingNumber;
+		this.textAlign = textAlign;
+		this.pointColor = pointColor;
+		this.pointType = pointType;
+		this.lineEllipsis = lineEllipsis;
+		this.reviewDesignUrl = reviewDesignUrl;
 	}
 }
