@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase;
+package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignType;
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.UpdateReviewDesignRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.ReviewDesignReader;
 import com.romanticpipe.reviewcanvas.service.ReviewDesignValidator;

@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request;
+package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request;
 
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignPosition;
 

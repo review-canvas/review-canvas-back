@@ -1,10 +1,11 @@
-package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response;
+package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response;
+
+import java.util.Objects;
 
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignPosition;
-import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.Objects;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(name = "GetGeneralReviewThemeListResponse", description = "기본 리뷰 테마 리스트 조회 응답")
 public record GetGeneralReviewThemeListResponse(
