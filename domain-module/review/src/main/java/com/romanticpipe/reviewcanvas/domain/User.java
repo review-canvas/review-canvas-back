@@ -8,8 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,19 +26,13 @@ public class User {
 	@Column(name = "user_id")
 	private Long id;
 
-	@NotBlank
 	private String memberId;
-	@NotBlank
 	private String name;
-	@NotBlank
 	private String nickName;
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private Gender gender;
-	@NotBlank
 	private String nationality;
-	@NotNull
 	private LocalDate birth;
 
 	@Builder

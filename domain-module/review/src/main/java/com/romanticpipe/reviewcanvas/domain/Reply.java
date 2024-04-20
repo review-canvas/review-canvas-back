@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +19,8 @@ public class Reply extends BaseEntityWithUpdate {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "reply_id")
 	private Long id;
-	@NotNull
 	private Long reviewId;
-	@NotNull
 	private Long userId;
-	@NotBlank
 	private String content;
 
 	public Reply(Long reviewId, Long userId, String content) {

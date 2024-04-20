@@ -19,16 +19,16 @@ public class AdminAuth {
 
 	private String refreshToken;
 
-	private Integer shopAdminId;
-	private Integer superAdminId;
+	private Long shopAdminId;
+	private Long superAdminId;
 
-	public AdminAuth(String refreshToken, Integer shopAdminId, Integer superAdminId) {
+	public AdminAuth(String refreshToken, Long shopAdminId, Long superAdminId) {
 		this.refreshToken = refreshToken;
 		this.shopAdminId = shopAdminId;
 		this.superAdminId = superAdminId;
 	}
 
-	public static AdminAuth createShopAdminAuth(Integer shopAdminId) {
+	public static AdminAuth createShopAdminAuth(Long shopAdminId) {
 		return new AdminAuth(null, shopAdminId, null);
 	}
 

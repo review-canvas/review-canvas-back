@@ -7,8 +7,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,47 +19,38 @@ public class ReviewDesign {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_design_id")
 	private Long id;
-	@NotNull
+	private Long shopAdminId;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR(10)")
 	private ReviewDesignType reviewDesignType;
-	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR(32)")
 	private ReviewDesignPosition reviewDesignPosition;
-	@NotBlank
 	private String themeName;
-	@NotBlank
 	private String layoutType;
-	@NotBlank
 	private String padding;
-	@NotBlank
 	private String gap;
 	private String boxShadowColor;
 	private int boxShadowWidth;
-	@NotBlank
 	private String borderColor;
 	private int borderTransparency;
 	private int borderWidth;
-
-	@NotBlank
 	private String pagingType;
 	private int pagingNumber;
-	@NotBlank
 	private String textAlign;
-	@NotBlank
 	private String pointColor;
-	@NotBlank
 	private String pointType;
 	private int lineEllipsis;
 	private String reviewDesignUrl;
 
 	@Builder
-	public ReviewDesign(ReviewDesignType reviewDesignType, ReviewDesignPosition reviewDesignPosition, String themeName,
+	public ReviewDesign(Long shopAdminId, ReviewDesignType reviewDesignType,
+						ReviewDesignPosition reviewDesignPosition, String themeName,
 						String layoutType, String padding, String gap, String boxShadowColor, int boxShadowWidth,
 						String borderColor, int borderTransparency, int borderWidth, String pagingType,
 						int pagingNumber, String textAlign, String pointColor, String pointType, int lineEllipsis,
 						String reviewDesignUrl) {
+		this.shopAdminId = shopAdminId;
 		this.reviewDesignType = reviewDesignType;
 		this.reviewDesignPosition = reviewDesignPosition;
 		this.themeName = themeName;

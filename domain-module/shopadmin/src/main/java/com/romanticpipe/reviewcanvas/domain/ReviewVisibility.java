@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,26 +17,19 @@ public class ReviewVisibility {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_visibility_id")
 	private Long id;
-
-	@NotNull
+	private Long shopAdminId;
 	private Boolean title;
-	@NotNull
 	private Boolean author;
-	@NotNull
 	private Boolean point;
-	@NotNull
 	private Boolean media;
-	@NotNull
 	private Boolean content;
-	@NotNull
 	private Boolean createdAt;
-	@NotNull
 	private Boolean updatedAt;
 
 	@Builder
-	public ReviewVisibility(Boolean title, Boolean author, Boolean point, Boolean media, Boolean content,
-							Boolean createdAt,
-							Boolean updatedAt) {
+	public ReviewVisibility(Long shopAdminId, Boolean title, Boolean author, Boolean point, Boolean media,
+							Boolean content, Boolean createdAt, Boolean updatedAt) {
+		this.shopAdminId = shopAdminId;
 		this.title = title;
 		this.author = author;
 		this.point = point;

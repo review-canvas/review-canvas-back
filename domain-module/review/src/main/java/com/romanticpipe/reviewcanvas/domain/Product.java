@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,15 +18,9 @@ public class Product {
 	@Column(name = "product_id")
 	private Long id;
 
-	@NotNull
 	private Long productNo;
-
-	@NotBlank
 	@Column(name = "product_name")
 	private String name;
-
-	@NotNull
-	@Column(name = "shop_admin_id")
 	private Long shopAdminId;
 
 	public Product(Long productNo, String name, Long shopAdminId) {
