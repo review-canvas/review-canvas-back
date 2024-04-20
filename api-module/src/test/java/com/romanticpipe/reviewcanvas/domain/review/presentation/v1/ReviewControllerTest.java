@@ -61,17 +61,16 @@ class ReviewControllerTest extends ControllerTestSetup {
 	}
 
 	@Nested
-	@DisplayName("사용자 리뷰 조회 API는")
+	@DisplayName("사용자 리뷰 조회 API 테스트")
 	class GetReviewsByUserId {
 
-		@DisplayName("사용자 아이디로 리뷰를 조회할 수 있다.")
+		@DisplayName("사용자 아이디로 리뷰 조회 성공")
 		@Test
 		void getReviewsByUserId() throws Exception {
 			// given
 			String productId = "test_product_id";
 			String userId = "test_user_id";
 			var review = TestReviewFactory.createReview(1L, productId, userId, "test_content", 5);
-
 			var getReviewResponse = GetReviewResponse.from(review);
 			var getReviewPageResponse = new PageResponse<>(0, 10, 0, List.of(getReviewResponse));
 			given(reviewUseCase.getReviewsByUserId(eq(userId), any(PageableRequest.class))).willReturn(
@@ -86,13 +85,14 @@ class ReviewControllerTest extends ControllerTestSetup {
 				.andExpect(jsonPath("$.data.content[0].content").value(review.getContent()))
 				.andExpect(jsonPath("$.data.content[0].score").value(review.getScore()));
 		}
+
 	}
 
 	@Nested
-	@DisplayName("리뷰 생성 API는")
+	@DisplayName("리뷰 생성 API 테스트")
 	class CreateReview {
 
-		@DisplayName("상품 아이디로 리뷰를 생성할 수 있다.")
+		@DisplayName("상품 아이디로 리뷰 생성 성공")
 		@Test
 		void createReview() throws Exception {
 			// given
@@ -112,7 +112,7 @@ class ReviewControllerTest extends ControllerTestSetup {
 	}
 
 	@Nested
-	@DisplayName("리뷰 수정 API는")
+	@DisplayName("리뷰 수정 API 테스트")
 	class UpdateReview {
 
 		@DisplayName("리뷰 아이디로 리뷰를 수정할 수 있다.")

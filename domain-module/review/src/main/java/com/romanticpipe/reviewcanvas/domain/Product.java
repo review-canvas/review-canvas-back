@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class Product {
 
 	@Id
@@ -20,4 +20,10 @@ public class Product {
 
 	@Column(name = "shop_admin_id")
 	private long shopAdminId;
+
+	public Product(String productId, String name, long shopAdminId) {
+		this.id = productId;
+		this.name = name;
+		this.shopAdminId = shopAdminId;
+	}
 }
