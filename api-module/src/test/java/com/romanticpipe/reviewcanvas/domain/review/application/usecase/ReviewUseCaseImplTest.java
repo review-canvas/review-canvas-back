@@ -15,6 +15,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.romanticpipe.reviewcanvas.TestReviewFactory;
+import com.romanticpipe.reviewcanvas.domain.Product;
+import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
+import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.domain.ShopInstallType;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -62,6 +68,74 @@ class ReviewUseCaseImplTest {
 			// then
 			Assertions.assertThat(result).isEqualTo(getReviewResponse.map(GetReviewResponse::from));
 		}
+	}
+
+	@Nested
+	@DisplayName("getReviewsByUserId 메서드 테스트")
+	class GetReviewsByUserIdTest {
+
+		@Test
+		@DisplayName("성공 테스트")
+		void successTest() {
+			// given
+			var userId = "test_user_id";
+			var pageableRequest = PageableRequest.of(0, 10, Direction.ASC);
+			var review = TestReviewFactory.createReview(1L, "1", "1", "content", 5);
+			var getReviewResponse = new PageResponse<>(0, 10, 0, List.of(review));
+			given(reviewReader.findByUserId(eq(userId), eq(pageableRequest)))
+				.willReturn(getReviewResponse);
+
+			// when
+			var result = reviewUseCase.getReviewsByUserId(userId, pageableRequest);
+
+			// then
+			Assertions.assertThat(result).isEqualTo(getReviewResponse.map(GetReviewResponse::from));
+		}
+
+	}
+
+	@Nested
+	@DisplayName("updateReview 메서드 테스트")
+	class UpdateReviewTest {
+
+		@Test
+		@DisplayName("성공 테스트")
+		void successTest() {
+			// given
+			var reviewId = 1L;
+			UpdateReviewRequest updateReviewRequest = new UpdateReviewRequest("test_content_updated", 1);
+			var review = TestReviewFactory.createReview(1L, "1", "1", "content", 5);
+			given(reviewValidator.validById(eq(reviewId))).willReturn(review);
+
+			// when
+			reviewUseCase.updateReview(reviewId, updateReviewRequest);
+		}
+
+	}
+
+	@Nested
+	@DisplayName("createReview 메서드 테스트")
+	class CreateReviewTest {
+
+		@Test
+		@DisplayName("성공 테스트")
+		void successTest() {
+			// given
+			var productId = "test_product_id";
+			var shopAdminId = 1L;
+			var createReviewRequest = new CreateReviewRequest("test_user_id", 5, "test_content");
+			var product = new Product(productId, "test_name", shopAdminId);
+			var shopAdmin = new ShopAdmin(ReviewVisibility.builder().build(), "test_mail", "test_pw", "test_name",
+				"test_url", "test_num", "test_num", true, ShopInstallType.SELF_INSTALLATION, "test_req", 1L, 1L);
+
+			// when
+			given(productValidator.validByProductId(eq(productId))).willReturn(product);
+			given(shopAdminValidator.validById(eq(shopAdminId))).willReturn(shopAdmin);
+
+			// then
+			reviewUseCase.createReview(productId, createReviewRequest);
+		}
+
 	}
 
 }
