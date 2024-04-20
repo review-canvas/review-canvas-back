@@ -22,7 +22,7 @@ public class AdminResolver implements HandlerMethodArgumentResolver {
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 								  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Long adminId = (Long) authentication.getPrincipal();
+		Integer adminId = (Integer) authentication.getPrincipal();
 		AdminRole adminRole = authentication.getAuthorities().stream()
 			.findFirst()
 			.map(authority -> AdminRole.valueOf(authority.getAuthority()))

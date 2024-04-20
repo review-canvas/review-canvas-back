@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface SuperAdminRepository extends JpaRepository<SuperAdmin, Long> {
+public interface SuperAdminRepository extends JpaRepository<SuperAdmin, Integer> {
 	Optional<SuperAdmin> findByEmail(String email);
-
-	Optional<SuperAdmin> findByAdminAuthId(long adminAuthId);
 }

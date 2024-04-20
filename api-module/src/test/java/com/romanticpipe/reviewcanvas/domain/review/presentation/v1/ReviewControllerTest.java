@@ -39,15 +39,17 @@ class ReviewControllerTest extends ControllerTestSetup {
 		@Test
 		void getReviewsByProductId() throws Exception {
 			// given
-			String productId = "product_no";
-			var review = TestReviewFactory.createReview(1L, productId, "1", "content", 5);
+			String mallId = "mallId";
+			Long productNo = 1L;
+			var review = TestReviewFactory.createReview(1L, productNo, 1L, "content", 5);
 			var getReviewResponse = GetReviewResponse.from(review);
 			var getReviewPageResponse = new PageResponse<>(0, 10, 0, List.of(getReviewResponse));
-			given(reviewUseCase.getReviewsByProductId(eq(productId), any(PageableRequest.class)))
+			given(reviewUseCase.getReviewsForUser(eq(mallId), eq(productNo), any(PageableRequest.class)))
 				.willReturn(getReviewPageResponse);
 
 			// when
-			ResultActions result = mockMvc.perform(get(BASE_URL + "/products/" + productId + "/reviews"));
+			String url = BASE_URL + "/shop-admin/" + mallId + "/products/" + productNo + "/reviews";
+			ResultActions result = mockMvc.perform(get(url));
 
 			// then
 			result.andExpect(status().isOk())

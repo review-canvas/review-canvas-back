@@ -5,10 +5,7 @@ import com.romanticpipe.reviewcanvas.domain.ReviewDesignType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface ReviewDesignRepository extends JpaRepository<ReviewDesign, Long> {
-	Optional<ReviewDesign> findById(Long reviewDesignId);
-
+public interface ReviewDesignRepository extends JpaRepository<ReviewDesign, Integer> {
 	List<ReviewDesign> findAllByReviewDesignType(ReviewDesignType reviewDesignType);
 }

@@ -9,6 +9,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.U
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.service.ProductReader;
 import com.romanticpipe.reviewcanvas.service.ProductValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewCreator;
 import com.romanticpipe.reviewcanvas.service.ReviewReader;
@@ -24,14 +25,18 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
 	private final ProductValidator productValidator;
+	private final ProductReader productReader;
 	private final ReviewReader reviewReader;
 	private final ReviewCreator reviewCreator;
 	private final ReviewValidator reviewValidator;
 
 	@Override
 	@Transactional(readOnly = true)
-	public PageResponse<GetReviewResponse> getReviewsByProductId(String productId, PageableRequest pageableRequest) {
-		return reviewReader.findByProductId(productId, pageableRequest)
+	public PageResponse<GetReviewResponse> getReviewsForUser(String mallId, Long productNo,
+															 PageableRequest pageableRequest) {
+		Product product = productReader.findByMallIdAndProductNo(mallId, productNo)
+			.orElseGet(() -> createProduct(mallId, productNo));
+		return reviewReader.findByProductId(product.getId(), pageableRequest)
 			.map(GetReviewResponse::from);
 	}
 
@@ -55,9 +60,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	public void createReview(String productId, CreateReviewRequest createReviewRequest) {
 		Product product = productValidator.validByProductId(productId);
 		ShopAdmin shopAdmin = shopAdminValidator.validById(product.getShopAdminId());
+		// TODO: 프론트로부터 mallId, productNo product를 조회하여 productId를 가져온다.
+		// TODO: 프론트로부터 memberId를 받아 user를 조회하여 userId를 가져온다.
 		Review review = new Review(
-			productId,
-			createReviewRequest.userId(),
+			null,
+			null,
 			createReviewRequest.content(),
 			createReviewRequest.score(),
 			shopAdmin.isApproveStatus()
@@ -66,4 +73,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		reviewCreator.save(review);
 	}
 
+	private Product createProduct(String mallId, Long productNo) {
+		// TODO: mallId, productNo로 product 정보를 가져와 저장하고, product 엔티티를 반환하는 로직을 작성한다.
+		return null;
+	}
 }

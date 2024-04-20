@@ -2,10 +2,12 @@ package com.romanticpipe.reviewcanvas.common.security;
 
 import com.romanticpipe.reviewcanvas.common.security.exception.SecurityErrorCode;
 import com.romanticpipe.reviewcanvas.common.security.exception.TokenException;
+import com.romanticpipe.reviewcanvas.common.security.exception.TokenExpiredException;
 import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -33,7 +36,7 @@ public class AuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 									FilterChain filterChain) throws BusinessException, ServletException, IOException {
-		authentication(request);
+		authentication(request, response);
 		filterChain.doFilter(request, response);
 	}
 
@@ -42,10 +45,21 @@ public class AuthFilter extends OncePerRequestFilter {
 		return isRequestMatch(accessPath.getAllAllowedPath(), request);
 	}
 
-	private void authentication(HttpServletRequest request) {
-		String accessToken = validateJwt(request);
+	private void authentication(HttpServletRequest request, HttpServletResponse response) {
+		String accessToken = findAccessToken(request);
 
-		tokenProvider.validateToken(JwtType.ACCESS, accessToken);
+		try {
+			tokenProvider.validateToken(JwtType.ACCESS, accessToken);
+		} catch (TokenExpiredException e) {
+			String refreshToken = Arrays.stream(request.getCookies())
+				.filter(cookie -> CustomCookieName.REFRESH_TOKEN.equals(cookie.getName()))
+				.findAny()
+				.map(Cookie::getValue)
+				.orElseThrow(() -> e);
+
+			accessToken = tokenProvider.createNewAccessTokenFromRefreshToken(refreshToken);
+			response.setHeader("X-New-AccessToken", accessToken);
+		}
 
 		Authentication authentication = tokenProvider.getAuthentication(accessToken);
 		validateAdminHasAccessPermission(request, authentication);
@@ -53,7 +67,7 @@ public class AuthFilter extends OncePerRequestFilter {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
 
-	private String validateJwt(HttpServletRequest request) {
+	private String findAccessToken(HttpServletRequest request) {
 		String authorizationHeader = request.getHeader(AUTHORIZATION);
 		if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith(BEARER_PREFIX)) {
 			return authorizationHeader.substring(BEARER_PREFIX.length());
