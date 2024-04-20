@@ -37,9 +37,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	public void signUp(SignUpRequest signUpRequest, MultipartFile logoImage) {
 		shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
 
-		AdminAuth adminAuth = AdminAuth.create();
-		adminAuthCreater.save(adminAuth);
-
 		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
 			.title(signUpRequest.title())
 			.author(signUpRequest.author())
@@ -65,6 +62,9 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.build();
 
 		shopAdminCreator.signUp(shopAdmin);
+
+		AdminAuth adminAuth = AdminAuth.createShopAdminAuth(shopAdmin.getId());
+		adminAuthCreater.save(adminAuth);
 	}
 
 	@Override
