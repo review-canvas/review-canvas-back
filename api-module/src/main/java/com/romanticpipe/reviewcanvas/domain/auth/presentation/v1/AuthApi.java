@@ -49,14 +49,4 @@ interface AuthApi {
 	})
 	@PostMapping("/logout")
 	ResponseEntity<SuccessResponse<Void>> logout(@AuthInfo JwtInfo jwtInfo);
-
-//	@Operation(summary = "AccessToken 재발급 API", description = "RefreshToken에 기반해 Access 토큰을 재발급한다.")
-//	@ApiResponses(value = {
-//		@ApiResponse(
-//			responseCode = "200",
-//			description = "성공적으로 재발급 완료되었습니다.")
-//	})
-//	@PostMapping("/reissue-access-token")
-//	ResponseEntity<SuccessResponse<ReissueAccessTokenResponse>> reissueAccessToken(
-//		@Valid @RequestBody ReissueAccessTokenRequest request);
 }

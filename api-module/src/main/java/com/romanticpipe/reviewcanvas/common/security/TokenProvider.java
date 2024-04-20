@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.common.security;
 
 import com.romanticpipe.reviewcanvas.common.security.exception.SecurityErrorCode;
 import com.romanticpipe.reviewcanvas.common.security.exception.TokenException;
+import com.romanticpipe.reviewcanvas.common.security.exception.TokenExpiredException;
 import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -89,15 +90,10 @@ public class TokenProvider {
 			validateTokenType(claimsJws, jwtType);
 			return claimsJws;
 		} catch (ExpiredJwtException e) {
-			throw new TokenException(SecurityErrorCode.EXPIRED_TOKEN);
+			throw new TokenExpiredException();
 		} catch (UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
 			throw new TokenException(SecurityErrorCode.INVALID_TOKEN);
 		}
-	}
-
-	public Long getAdminIdFromRefreshToken(String refreshToken) {
-		Claims claims = validateToken(JwtType.REFRESH, refreshToken).getBody();
-		return Long.parseLong(claims.get(Claims.SUBJECT).toString());
 	}
 
 	private Jws<Claims> parseClaims(String token) {

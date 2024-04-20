@@ -52,19 +52,6 @@ public class AuthUseCaseImpl implements AuthUseCase {
 		adminAuth.logout();
 	}
 
-//	@Override
-//	@Transactional(readOnly = true)
-//	public ReissueAccessTokenResponse reissuedAccessToken(String refreshToken) {
-//		Long adminId = tokenProvider.getAdminIdFromRefreshToken(refreshToken);
-//		AdminAuth adminAuth = adminAuthValidator.findByAdminId(adminId);
-//		if (!Objects.equals(adminAuth.getRefreshToken(), refreshToken)) {
-//			throw new BusinessException(SecurityErrorCode.INVALID_TOKEN);
-//		}
-//
-//		String newAccessToken = tokenProvider.createNewAccessTokenFromRefreshToken(refreshToken);
-//		return new ReissueAccessTokenResponse(newAccessToken);
-//	}
-
 	private Admin validateAdminById(Integer adminId, AdminRole adminRole) {
 		if (Objects.equals(AdminRole.ROLE_SUPER_ADMIN, adminRole)) {
 			return superAdminValidator.validById(adminId);

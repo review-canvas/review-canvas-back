@@ -8,6 +8,4 @@ public interface AuthUseCase {
 	LoginResponse login(String email, String password, AdminRole adminRole);
 
 	void logout(Integer adminId, AdminRole adminRole);
-
-//	ReissueAccessTokenResponse reissuedAccessToken(String refreshToken);
 }
