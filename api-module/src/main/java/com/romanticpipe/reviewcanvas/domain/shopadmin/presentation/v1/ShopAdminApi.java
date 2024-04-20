@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.UpdateReviewDesignRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetGeneralReviewThemeListResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetGeneralReviewThemeListResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetReviewVisibilityTitleResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
