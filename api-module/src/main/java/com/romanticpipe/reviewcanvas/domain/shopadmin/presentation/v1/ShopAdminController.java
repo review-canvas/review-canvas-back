@@ -1,16 +1,14 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdminUseCase;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetGeneralReviewThemeListResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,9 +16,15 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.ShopAdminUseCase;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request.UpdateReviewDesignRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetGeneralReviewThemeListResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.response.GetReviewVisibilityTitleResponse;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -66,4 +70,13 @@ class ShopAdminController implements ShopAdminApi {
 			).collect(Collectors.toList())
 		).asHttp(HttpStatus.OK);
 	}
+
+	@Override
+	@PatchMapping("/shop-admin/review-design/{reviewDesignId}")
+	public ResponseEntity<SuccessResponse<Void>> updateReviewDesign(Long reviewDesignId,
+		UpdateReviewDesignRequest updateReviewDesignRequest) {
+		shopAdminUseCase.updateReviewDesign(reviewDesignId, updateReviewDesignRequest);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
 }
