@@ -39,11 +39,11 @@ class ReviewControllerTest extends ControllerTestSetup {
 		@Test
 		void getReviewsByProductId() throws Exception {
 			// given
-			String productId = "product_no";
-			var review = TestReviewFactory.createReview(1L, productId, "1", "content", 5);
+			Long productId = 1L;
+			var review = TestReviewFactory.createReview(1L, productId, 1, "content", 5);
 			var getReviewResponse = GetReviewResponse.from(review);
 			var getReviewPageResponse = new PageResponse<>(0, 10, 0, List.of(getReviewResponse));
-			given(reviewUseCase.getReviewsByProductId(eq(productId), any(PageableRequest.class)))
+			given(reviewUseCase.getReviewsForUser(eq(productId), any(PageableRequest.class)))
 				.willReturn(getReviewPageResponse);
 
 			// when

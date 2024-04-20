@@ -6,9 +6,7 @@ import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.AuthUseCase;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.request.LoginRequest;
-import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.request.ReissueAccessTokenRequest;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;
-import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.ReissueAccessTokenResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -53,12 +51,12 @@ class AuthController implements AuthApi {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
-	@Override
-	@PostMapping("/reissue-access-token")
-	public ResponseEntity<SuccessResponse<ReissueAccessTokenResponse>> reissueAccessToken(
-		@Valid @RequestBody ReissueAccessTokenRequest request) {
-		return SuccessResponse.of(
-			authUseCase.reissuedAccessToken(request.refreshToken())
-		).asHttp(HttpStatus.OK);
-	}
+//	@Override
+//	@PostMapping("/reissue-access-token")
+//	public ResponseEntity<SuccessResponse<ReissueAccessTokenResponse>> reissueAccessToken(
+//		@Valid @RequestBody ReissueAccessTokenRequest request) {
+//		return SuccessResponse.of(
+//			authUseCase.reissuedAccessToken(request.refreshToken())
+//		).asHttp(HttpStatus.OK);
+//	}
 }

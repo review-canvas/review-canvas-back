@@ -21,9 +21,9 @@ public class Product {
 	private Long productNo;
 	@Column(name = "product_name")
 	private String name;
-	private Long shopAdminId;
+	private Integer shopAdminId;
 
-	public Product(Long productNo, String name, Long shopAdminId) {
+	public Product(Long productNo, String name, Integer shopAdminId) {
 		this.productNo = productNo;
 		this.name = name;
 		this.shopAdminId = shopAdminId;

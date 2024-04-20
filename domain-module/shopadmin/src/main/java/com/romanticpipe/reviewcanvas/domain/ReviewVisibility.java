@@ -16,8 +16,8 @@ public class ReviewVisibility {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_visibility_id")
-	private Long id;
-	private Long shopAdminId;
+	private Integer id;
+	private Integer shopAdminId;
 	private Boolean title;
 	private Boolean author;
 	private Boolean point;
@@ -27,7 +27,7 @@ public class ReviewVisibility {
 	private Boolean updatedAt;
 
 	@Builder
-	public ReviewVisibility(Long shopAdminId, Boolean title, Boolean author, Boolean point, Boolean media,
+	public ReviewVisibility(Integer shopAdminId, Boolean title, Boolean author, Boolean point, Boolean media,
 							Boolean content, Boolean createdAt, Boolean updatedAt) {
 		this.shopAdminId = shopAdminId;
 		this.title = title;

@@ -9,6 +9,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.U
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.service.ProductReader;
 import com.romanticpipe.reviewcanvas.service.ProductValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewCreator;
 import com.romanticpipe.reviewcanvas.service.ReviewReader;
@@ -18,20 +19,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 class ReviewUseCaseImpl implements ReviewUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
 	private final ProductValidator productValidator;
+	private final ProductReader productReader;
 	private final ReviewReader reviewReader;
 	private final ReviewCreator reviewCreator;
 	private final ReviewValidator reviewValidator;
 
 	@Override
 	@Transactional(readOnly = true)
-	public PageResponse<GetReviewResponse> getReviewsByProductId(String productId, PageableRequest pageableRequest) {
-		return reviewReader.findByProductId(productId, pageableRequest)
+	public PageResponse<GetReviewResponse> getReviewsForUser(String mallId, Long productNo,
+															 PageableRequest pageableRequest) {
+		Optional<Product> product = productReader.findByMallIdAndProductNo(mallId, productNo);
+		if (product.isEmpty()) {
+			// TODO:
+		}
+		return reviewReader.findByProductId(product.get().getId(), pageableRequest)
 			.map(GetReviewResponse::from);
 	}
 

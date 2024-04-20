@@ -1,14 +1,12 @@
 package com.romanticpipe.reviewcanvas.domain.auth.application.usecase;
 
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
-import com.romanticpipe.reviewcanvas.common.security.exception.SecurityErrorCode;
 import com.romanticpipe.reviewcanvas.domain.Admin;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;
-import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.ReissueAccessTokenResponse;
-import com.romanticpipe.reviewcanvas.exception.AdminErrorCode;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.service.SuperAdminValidator;
@@ -34,13 +32,13 @@ public class AuthUseCaseImpl implements AuthUseCase {
 	public LoginResponse login(String email, String password, AdminRole adminRole) {
 		Admin admin = validateAdminByEmail(email, adminRole);
 		if (!passwordEncoder.matches(password, admin.getPassword())) {
-			throw new BusinessException(AdminErrorCode.ADMIN_WRONG_PASSWARD);
+			throw new BusinessException(ShopAdminErrorCode.ADMIN_WRONG_PASSWORD);
 		}
 
 		String accessToken = tokenProvider.createAccessToken(admin.getId(), admin.getRole());
 		String refreshToken = tokenProvider.createRefreshToken(admin.getId(), admin.getRole());
 
-		AdminAuth adminAuth = adminAuthValidator.findById(admin.getAdminAuthId());
+		AdminAuth adminAuth = adminAuthValidator.findByAdminId(admin.getId(), admin.getRole());
 		adminAuth.updateRefreshToken(refreshToken);
 
 		return new LoginResponse(admin.getId(), accessToken, refreshToken);
@@ -48,30 +46,30 @@ public class AuthUseCaseImpl implements AuthUseCase {
 
 	@Override
 	@Transactional
-	public void logout(Long adminId, AdminRole adminRole) {
+	public void logout(Integer adminId, AdminRole adminRole) {
 		Admin admin = validateAdminById(adminId, adminRole);
-		AdminAuth adminAuth = adminAuthValidator.findById(admin.getAdminAuthId());
+		AdminAuth adminAuth = adminAuthValidator.findByAdminId(admin.getId(), admin.getRole());
 		adminAuth.logout();
 	}
 
-	@Override
-	@Transactional(readOnly = true)
-	public ReissueAccessTokenResponse reissuedAccessToken(String refreshToken) {
-		Long adminId = tokenProvider.getAdminIdFromRefreshToken(refreshToken);
-		AdminAuth adminAuth = adminAuthValidator.findById(adminId);
-		if (!Objects.equals(adminAuth.getRefreshToken(), refreshToken)) {
-			throw new BusinessException(SecurityErrorCode.INVALID_TOKEN);
-		}
+//	@Override
+//	@Transactional(readOnly = true)
+//	public ReissueAccessTokenResponse reissuedAccessToken(String refreshToken) {
+//		Long adminId = tokenProvider.getAdminIdFromRefreshToken(refreshToken);
+//		AdminAuth adminAuth = adminAuthValidator.findByAdminId(adminId);
+//		if (!Objects.equals(adminAuth.getRefreshToken(), refreshToken)) {
+//			throw new BusinessException(SecurityErrorCode.INVALID_TOKEN);
+//		}
+//
+//		String newAccessToken = tokenProvider.createNewAccessTokenFromRefreshToken(refreshToken);
+//		return new ReissueAccessTokenResponse(newAccessToken);
+//	}
 
-		String newAccessToken = tokenProvider.createNewAccessTokenFromRefreshToken(refreshToken);
-		return new ReissueAccessTokenResponse(newAccessToken);
-	}
-
-	private Admin validateAdminById(Long adminId, AdminRole adminRole) {
+	private Admin validateAdminById(Integer adminId, AdminRole adminRole) {
 		if (Objects.equals(AdminRole.ROLE_SUPER_ADMIN, adminRole)) {
-			return superAdminValidator.validByAuthId(adminId);
+			return superAdminValidator.validById(adminId);
 		}
-		return shopAdminValidator.validByAuthId(adminId);
+		return shopAdminValidator.validById(adminId);
 	}
 
 	private Admin validateAdminByEmail(String email, AdminRole adminRole) {

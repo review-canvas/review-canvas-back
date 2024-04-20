@@ -4,9 +4,7 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.request.LoginRequest;
-import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.request.ReissueAccessTokenRequest;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;
-import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.ReissueAccessTokenResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -52,13 +50,13 @@ interface AuthApi {
 	@PostMapping("/logout")
 	ResponseEntity<SuccessResponse<Void>> logout(@AuthInfo JwtInfo jwtInfo);
 
-	@Operation(summary = "AccessToken 재발급 API", description = "RefreshToken에 기반해 Access 토큰을 재발급한다.")
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "성공적으로 재발급 완료되었습니다.")
-	})
-	@PostMapping("/reissue-access-token")
-	ResponseEntity<SuccessResponse<ReissueAccessTokenResponse>> reissueAccessToken(
-		@Valid @RequestBody ReissueAccessTokenRequest request);
+//	@Operation(summary = "AccessToken 재발급 API", description = "RefreshToken에 기반해 Access 토큰을 재발급한다.")
+//	@ApiResponses(value = {
+//		@ApiResponse(
+//			responseCode = "200",
+//			description = "성공적으로 재발급 완료되었습니다.")
+//	})
+//	@PostMapping("/reissue-access-token")
+//	ResponseEntity<SuccessResponse<ReissueAccessTokenResponse>> reissueAccessToken(
+//		@Valid @RequestBody ReissueAccessTokenRequest request);
 }

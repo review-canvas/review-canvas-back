@@ -44,23 +44,23 @@ public class TokenProvider {
 		this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
 	}
 
-	public String createAccessToken(Long adminId, AdminRole adminRole) {
+	public String createAccessToken(Integer adminId, AdminRole adminRole) {
 		return createToken(adminId, adminRole, "ACCESS", accessTokenValidityTime);
 	}
 
-	public String createRefreshToken(Long adminId, AdminRole adminRole) {
+	public String createRefreshToken(Integer adminId, AdminRole adminRole) {
 		return createToken(adminId, adminRole, "REFRESH", refreshTokenValidityTime);
 	}
 
 	public String createNewAccessTokenFromRefreshToken(String refreshToken) {
 		Claims claims = validateToken(JwtType.REFRESH, refreshToken).getBody();
 
-		Long adminId = Long.parseLong((String) claims.get(Claims.SUBJECT));
+		Integer adminId = Integer.parseInt((String) claims.get(Claims.SUBJECT));
 		AdminRole adminRole = AdminRole.valueOf((String) claims.get(CustomClaims.ROLE));
 		return createAccessToken(adminId, adminRole);
 	}
 
-	private String createToken(Long adminId, AdminRole adminRole, String tokenType, Duration tokenValidityTime) {
+	private String createToken(Integer adminId, AdminRole adminRole, String tokenType, Duration tokenValidityTime) {
 		Instant now = Instant.now();
 		Date currentDate = Date.from(now);
 		Date expiredDate = Date.from(now.plus(tokenValidityTime));

@@ -55,10 +55,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.mallNumber(signUpRequest.mallNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
 			.approveStatus(false)
-//			.shopInstallType(signUpRequest.shopInstallType())
-//			.installRequirement(signUpRequest.installRequirement())
-//			.selectedReviewDesignId(signUpRequest.reviewDesignId())
-			.adminAuthId(adminAuth.getId())
 			.build();
 
 		shopAdminCreator.signUp(shopAdmin);

@@ -1,6 +1,5 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import com.romanticpipe.reviewcanvas.domain.Admin;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.exception.AdminNotFoundException;
@@ -18,7 +17,7 @@ public class ShopAdminValidator {
 	private final ShopAdminRepository shopAdminRepository;
 	private final ReviewDesignRepository designItemSuperRepository;
 
-	public ReviewDesign isExistTheme(Long reviewDesignId) {
+	public ReviewDesign isExistTheme(Integer reviewDesignId) {
 		ReviewDesign reviewDesign = designItemSuperRepository.findById(reviewDesignId)
 			.orElseThrow(ReviewDesignNotFoundException::new);
 		if (!reviewDesign.isGeneralType()) {
@@ -32,14 +31,9 @@ public class ShopAdminValidator {
 			.orElseThrow(() -> new AdminNotFoundException());
 	}
 
-	public ShopAdmin validById(long shopAdminId) {
+	public ShopAdmin validById(Integer shopAdminId) {
 		return shopAdminRepository.findById(shopAdminId)
-			.orElseThrow(() -> new AdminNotFoundException());
-	}
-
-	public Admin validByAuthId(long adminAuthId) {
-		return shopAdminRepository.findByAdminAuthId(adminAuthId)
-			.orElseThrow(() -> new AdminNotFoundException());
+			.orElseThrow(AdminNotFoundException::new);
 	}
 
 	public boolean isExistEmail(String email) {

@@ -5,10 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ShopAdminRepository extends JpaRepository<ShopAdmin, Long> {
+public interface ShopAdminRepository extends JpaRepository<ShopAdmin, Integer> {
 	Optional<ShopAdmin> findByEmail(String email);
-
-	Optional<ShopAdmin> findByAdminAuthId(Long adminAuthId);
 
 	boolean existsByEmail(String email);
 }

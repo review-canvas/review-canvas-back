@@ -18,8 +18,8 @@ public class ReviewDesign {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_design_id")
-	private Long id;
-	private Long shopAdminId;
+	private Integer id;
+	private Integer shopAdminId;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR(10)")
 	private ReviewDesignType reviewDesignType;
@@ -44,7 +44,7 @@ public class ReviewDesign {
 	private String reviewDesignUrl;
 
 	@Builder
-	public ReviewDesign(Long shopAdminId, ReviewDesignType reviewDesignType,
+	public ReviewDesign(Integer shopAdminId, ReviewDesignType reviewDesignType,
 						ReviewDesignPosition reviewDesignPosition, String themeName,
 						String layoutType, String padding, String gap, String boxShadowColor, int boxShadowWidth,
 						String borderColor, int borderTransparency, int borderWidth, String pagingType,

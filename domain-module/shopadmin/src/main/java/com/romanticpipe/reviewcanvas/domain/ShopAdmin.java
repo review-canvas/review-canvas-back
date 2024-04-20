@@ -20,7 +20,7 @@ public class ShopAdmin extends BaseEntityWithUpdate implements Admin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "shop_admin_id")
-	private Long id;
+	private Integer id;
 
 	private String mallId;
 	private String email;
