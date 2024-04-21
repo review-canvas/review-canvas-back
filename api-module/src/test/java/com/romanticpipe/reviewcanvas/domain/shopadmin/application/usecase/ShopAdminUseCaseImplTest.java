@@ -49,12 +49,12 @@ class ShopAdminUseCaseImplTest {
 		@DisplayName("리뷰 디자인 아이디로 조회한 리뷰 디자인을 dto에 맞게 수정한다.")
 		void it_changes_review_design_by_review_design_id() {
 			//given
-			var reviewDesignId = 1L;
+			var reviewDesignId = 1;
 			var updateReviewDesignRequest = UpdateReviewDesignRequest.of(
 				ReviewDesignPosition.REVIEW_LIST, "test", "BOARD", "0px", "0px", "#000000", 0, "#ffffff", 0, 0,
 				"NUMBER", 0, "left", "#000000", "STAR", 1, "urlurl"
 			);
-			var reviewDesign = TestReviewDesignFactory.createReviewDesign(1L, "test", "BOARD", "0px", "0px", "#000000",
+			var reviewDesign = TestReviewDesignFactory.createReviewDesign(1, "test", "BOARD", "0px", "0px", "#000000",
 				0, "#ffffff", 0, 0,
 				"NUMBER", 0, "left", "#000000", "STAR", 1, "url"
 			);

@@ -92,7 +92,7 @@ interface ShopAdminApi {
 	})
 	@PatchMapping("/shop-admin/review-design/{reviewDesignId}")
 	ResponseEntity<SuccessResponse<Void>> updateReviewDesign(
-		@PathVariable("reviewDesignId") Long reviewDesignId,
+		@PathVariable("reviewDesignId") Integer reviewDesignId,
 		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest
 	);
 }

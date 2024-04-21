@@ -13,7 +13,7 @@ public final class TestReviewDesignFactory {
 		int boxShadowWidth, String borderColor, int borderTransparency, int borderWidth, String pagingType,
 		int pagingNumber, String textAlign, String pointColor, String pointType, int lineEllipsis,
 		String reviewDesignUrl) {
-		ReviewDesign reviewDesign = new ReviewDesign(ReviewDesignType.GENERAL, ReviewDesignPosition.REVIEW_LIST,
+		ReviewDesign reviewDesign = new ReviewDesign(1, ReviewDesignType.GENERAL, ReviewDesignPosition.REVIEW_LIST,
 			themeName, layoutType,
 			padding, gap, boxShadowColor, boxShadowWidth, borderColor, borderTransparency, borderWidth, pagingType,
 			pagingNumber, textAlign, pointColor, pointType, lineEllipsis, reviewDesignUrl);
@@ -21,12 +21,12 @@ public final class TestReviewDesignFactory {
 	}
 
 	public static ReviewDesign createReviewDesign(
-		Long reviewDesignId,
+		Integer reviewDesignId,
 		String themeName, String layoutType, String padding, String gap, String boxShadowColor,
 		int boxShadowWidth, String borderColor, int borderTransparency, int borderWidth, String pagingType,
 		int pagingNumber, String textAlign, String pointColor, String pointType, int lineEllipsis,
 		String reviewDesignUrl) {
-		ReviewDesign reviewDesign = new ReviewDesign(ReviewDesignType.GENERAL, ReviewDesignPosition.REVIEW_LIST,
+		ReviewDesign reviewDesign = new ReviewDesign(1, ReviewDesignType.GENERAL, ReviewDesignPosition.REVIEW_LIST,
 			themeName, layoutType,
 			padding, gap, boxShadowColor, boxShadowWidth, borderColor, borderTransparency, borderWidth, pagingType,
 			pagingNumber, textAlign, pointColor, pointType, lineEllipsis, reviewDesignUrl);

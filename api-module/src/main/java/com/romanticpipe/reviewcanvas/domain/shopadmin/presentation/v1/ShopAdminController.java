@@ -73,7 +73,7 @@ class ShopAdminController implements ShopAdminApi {
 
 	@Override
 	@PatchMapping("/shop-admin/review-design/{reviewDesignId}")
-	public ResponseEntity<SuccessResponse<Void>> updateReviewDesign(Long reviewDesignId,
+	public ResponseEntity<SuccessResponse<Void>> updateReviewDesign(Integer reviewDesignId,
 		UpdateReviewDesignRequest updateReviewDesignRequest) {
 		shopAdminUseCase.updateReviewDesign(reviewDesignId, updateReviewDesignRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);

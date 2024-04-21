@@ -14,7 +14,7 @@ public class ReviewDesignValidator {
 
 	private final ReviewDesignRepository reviewDesignRepository;
 
-	public ReviewDesign validById(Long id) {
+	public ReviewDesign validById(Integer id) {
 		return reviewDesignRepository.findById(id)
 			.orElseThrow(() -> new ReviewDesignNotFoundException());
 	}

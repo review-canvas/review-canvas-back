@@ -19,5 +19,5 @@ public interface ShopAdminUseCase {
 
 	List<ReviewDesign> getGeneralReviewThemeList();
 
-	void updateReviewDesign(Long reviewDesignId, UpdateReviewDesignRequest updateReviewDesignRequest);
+	void updateReviewDesign(Integer reviewDesignId, UpdateReviewDesignRequest updateReviewDesignRequest);
 }

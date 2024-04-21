@@ -30,7 +30,7 @@ class ShopAdminControllerTest extends ControllerTestSetup {
 		@Test
 		void updateReviewDesign() throws Exception {
 			//given
-			Long reviewDesignId = 1L;
+			var reviewDesignId = 1;
 			var updateReviewDesignRequest = "{\n"
 				+ "  \"reviewDesignPosition\": \"REVIEW_LIST\",\n"
 				+ "  \"themeName\": \"test\",\n"

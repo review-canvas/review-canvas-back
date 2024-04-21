@@ -31,8 +31,8 @@ class ReviewDesignValidatorTest {
 		@DisplayName("리뷰 디자인 아이디를 통해 ReviewDesign 엔티티를 반환한다.")
 		void it_returns_review_design_by_review_design_id() {
 			//given
-			Long reviewDesignId = 1L;
-			var reviewDesign = TestReviewDesignFactory.createReviewDesign(1L, "test", "BOARD", "0px", "0px", "#000000",
+			Integer reviewDesignId = 1;
+			var reviewDesign = TestReviewDesignFactory.createReviewDesign(1, "test", "BOARD", "0px", "0px", "#000000",
 				0, "#ffffff", 0, 0,
 				"NUMBER", 0, "left", "#000000", "STAR", 1, "url"
 			);

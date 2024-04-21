@@ -52,10 +52,10 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.build();
 
 		ShopAdmin shopAdmin = ShopAdmin.builder()
-//			.reviewVisibility(reviewVisibility)
+			//			.reviewVisibility(reviewVisibility)
 			.email(signUpRequest.email())
 			.password(passwordEncoder.encode(signUpRequest.password()))
-//			.name(signUpRequest.name())
+			//			.name(signUpRequest.name())
 			.mallNumber(signUpRequest.mallNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
 			.approveStatus(false)
@@ -87,7 +87,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	@Override
 	@Transactional
-	public void updateReviewDesign(Long reviewDesignId, UpdateReviewDesignRequest updateReviewDesignRequest) {
+	public void updateReviewDesign(Integer reviewDesignId, UpdateReviewDesignRequest updateReviewDesignRequest) {
 		ReviewDesign reviewDesign = reviewDesignValidator.validById(reviewDesignId);
 		reviewDesign.update(
 			updateReviewDesignRequest.reviewDesignPosition(),
