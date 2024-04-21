@@ -1,7 +1,7 @@
 package com.romanticpipe.reviewcanvas.service;
 
 import com.romanticpipe.reviewcanvas.domain.ShopAuthToken;
-import com.romanticpipe.reviewcanvas.repository.ShopAdminTokenRepository;
+import com.romanticpipe.reviewcanvas.repository.ShopAuthTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ShopAdminTokenCreator {
 
-	private final ShopAdminTokenRepository shopAdminTokenRepository;
+	private final ShopAuthTokenRepository shopAuthTokenRepository;
 
 	public ShopAuthToken save(ShopAuthToken shopAuthToken) {
-		return shopAdminTokenRepository.save(shopAuthToken);
+		return shopAuthTokenRepository.save(shopAuthToken);
 	}
 }
