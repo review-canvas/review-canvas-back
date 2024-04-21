@@ -16,8 +16,8 @@ public class MyReviewDesign {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "my_review_design_id")
-	private Long id;
+	private Integer id;
 
-	private Long shopAdminId;
-	private Long reviewDesignId;
+	private Integer reviewDesignId;
+	private Integer shopAdminId;
 }

@@ -15,12 +15,10 @@ public class SuperAdmin implements Admin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "super_admin_id")
-	private Long id;
+	private Integer id;
 
 	private String email;
 	private String password;
-
-	private Long adminAuthId;
 
 	@Override
 	public AdminRole getRole() {

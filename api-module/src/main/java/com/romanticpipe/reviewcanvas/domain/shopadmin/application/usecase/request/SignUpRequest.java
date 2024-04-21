@@ -1,6 +1,4 @@
-package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request;
-
-import com.romanticpipe.reviewcanvas.domain.ShopInstallType;
+package com.romanticpipe.reviewcanvas.domain.shopadmin.aplication.usecase.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -32,11 +30,11 @@ public record SignUpRequest(@Schema(description = "Email", requiredMode = Schema
 							@Schema(description = "Review UpdateAt Active", requiredMode = Schema.RequiredMode.REQUIRED)
 							@NotNull Boolean updatedAt,
 							@Schema(description = "Review Design Id", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotNull Long reviewDesignId,
-							@Schema(description = "설치 유형(직접 설치, 설치 의뢰)", requiredMode = Schema.RequiredMode.REQUIRED)
-							ShopInstallType shopInstallType,
-							@Schema(description = "설치 의뢰 시, 요청 사항", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-							String installRequirement
+							@NotNull Integer reviewDesignId
+//							@Schema(description = "설치 유형(직접 설치, 설치 의뢰)", requiredMode = Schema.RequiredMode.REQUIRED)
+//							ShopInstallType shopInstallType,
+//							@Schema(description = "설치 의뢰 시, 요청 사항", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+//							String installRequirement
 ) {
 
 }

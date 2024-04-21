@@ -14,13 +14,22 @@ import lombok.NoArgsConstructor;
 public class AdminAuth {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "admin_auth_id")
-	private Long id;
+	@Column(name = "admin_auth_id", columnDefinition = "INTEGER")
+	private Integer id;
 
 	private String refreshToken;
 
-	public static AdminAuth create() {
-		return new AdminAuth();
+	private Integer shopAdminId;
+	private Integer superAdminId;
+
+	public AdminAuth(String refreshToken, Integer shopAdminId, Integer superAdminId) {
+		this.refreshToken = refreshToken;
+		this.shopAdminId = shopAdminId;
+		this.superAdminId = superAdminId;
+	}
+
+	public static AdminAuth createShopAdminAuth(Integer shopAdminId) {
+		return new AdminAuth(null, shopAdminId, null);
 	}
 
 	public void updateRefreshToken(String newRefreshToken) {

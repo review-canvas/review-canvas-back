@@ -17,13 +17,8 @@ public class SuperAdminValidator {
 			.orElseThrow(() -> new AdminNotFoundException());
 	}
 
-	public Admin validByAuthId(long adminAuthId) {
-		return superAdminRepository.findByAdminAuthId(adminAuthId)
-			.orElseThrow(() -> new AdminNotFoundException());
-	}
-
-	public Admin validById(Long id) {
-		return superAdminRepository.findById(id)
-			.orElseThrow(() -> new AdminNotFoundException());
+	public Admin validById(Integer superAdminId) {
+		return superAdminRepository.findById(superAdminId)
+			.orElseThrow(AdminNotFoundException::new);
 	}
 }

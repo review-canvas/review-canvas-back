@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(name = "GetGeneralReviewThemeListResponse", description = "기본 리뷰 테마 리스트 조회 응답")
 public record GetGeneralReviewThemeListResponse(
 	@Schema(description = "Review Design id", requiredMode = Schema.RequiredMode.REQUIRED)
-	Long reviewDesignId,
+	Integer reviewDesignId,
 	@Schema(description = "Review Design Position", requiredMode = Schema.RequiredMode.REQUIRED)
 	ReviewDesignPosition reviewDesignPosition,
 	@Schema(description = "Review Design Url", requiredMode = Schema.RequiredMode.REQUIRED)

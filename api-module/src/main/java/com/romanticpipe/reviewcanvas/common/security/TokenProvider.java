@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.common.security;
 
 import com.romanticpipe.reviewcanvas.common.security.exception.SecurityErrorCode;
 import com.romanticpipe.reviewcanvas.common.security.exception.TokenException;
+import com.romanticpipe.reviewcanvas.common.security.exception.TokenExpiredException;
 import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -44,23 +45,23 @@ public class TokenProvider {
 		this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
 	}
 
-	public String createAccessToken(Long adminId, AdminRole adminRole) {
+	public String createAccessToken(Integer adminId, AdminRole adminRole) {
 		return createToken(adminId, adminRole, "ACCESS", accessTokenValidityTime);
 	}
 
-	public String createRefreshToken(Long adminId, AdminRole adminRole) {
+	public String createRefreshToken(Integer adminId, AdminRole adminRole) {
 		return createToken(adminId, adminRole, "REFRESH", refreshTokenValidityTime);
 	}
 
 	public String createNewAccessTokenFromRefreshToken(String refreshToken) {
 		Claims claims = validateToken(JwtType.REFRESH, refreshToken).getBody();
 
-		Long adminId = Long.parseLong((String) claims.get(Claims.SUBJECT));
+		Integer adminId = Integer.parseInt((String) claims.get(Claims.SUBJECT));
 		AdminRole adminRole = AdminRole.valueOf((String) claims.get(CustomClaims.ROLE));
 		return createAccessToken(adminId, adminRole);
 	}
 
-	private String createToken(Long adminId, AdminRole adminRole, String tokenType, Duration tokenValidityTime) {
+	private String createToken(Integer adminId, AdminRole adminRole, String tokenType, Duration tokenValidityTime) {
 		Instant now = Instant.now();
 		Date currentDate = Date.from(now);
 		Date expiredDate = Date.from(now.plus(tokenValidityTime));
@@ -89,15 +90,10 @@ public class TokenProvider {
 			validateTokenType(claimsJws, jwtType);
 			return claimsJws;
 		} catch (ExpiredJwtException e) {
-			throw new TokenException(SecurityErrorCode.EXPIRED_TOKEN);
+			throw new TokenExpiredException();
 		} catch (UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
 			throw new TokenException(SecurityErrorCode.INVALID_TOKEN);
 		}
-	}
-
-	public Long getAdminIdFromRefreshToken(String refreshToken) {
-		Claims claims = validateToken(JwtType.REFRESH, refreshToken).getBody();
-		return Long.parseLong(claims.get(Claims.SUBJECT).toString());
 	}
 
 	private Jws<Claims> parseClaims(String token) {

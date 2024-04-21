@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Schema(name = "LoginResponse", description = "Admin 로그인 응답")
 public record LoginResponse(@Schema(description = "Admin id", requiredMode = Schema.RequiredMode.REQUIRED)
-							Long adminId,
+							Integer adminId,
 							@Schema(description = "Access Token", requiredMode = Schema.RequiredMode.REQUIRED)
 							String accessToken,
 							@Schema(description = "Refresh Token", requiredMode = Schema.RequiredMode.REQUIRED)

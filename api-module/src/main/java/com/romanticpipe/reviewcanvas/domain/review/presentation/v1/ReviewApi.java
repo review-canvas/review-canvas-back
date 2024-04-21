@@ -29,9 +29,10 @@ interface ReviewApi {
 			responseCode = "200",
 			description = "성공적으로 상품 리뷰 조회가 완료되었습니다.")
 	})
-	@GetMapping("/products/{productId}/reviews")
-	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsByProductId(
-		@PathVariable("productId") String productId,
+	@GetMapping("/shop-admin/{mallId}/products/{productNo}/reviews")
+	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsForUser(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("productNo") Long productNo,
 		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC") Direction direction
