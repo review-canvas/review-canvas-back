@@ -1,7 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.shop.presentation.v1;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.domain.shop.application.usecase.ShopUseCase;
+import com.romanticpipe.reviewcanvas.domain.shop.application.usecase.Cafe24UseCase;
 import com.romanticpipe.reviewcanvas.domain.shop.application.usecase.response.GetCafe24AccessTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class ShopController implements ShopApi {
+public class Cafe24Controller implements Cafe24Api {
 
-	private final ShopUseCase shopUseCase;
+	private final Cafe24UseCase cafe24UseCase;
 
 	@Override
 	@GetMapping("/cafe24/access-token")
@@ -25,7 +25,7 @@ public class ShopController implements ShopApi {
 		@RequestParam(required = true) String mallId,
 		@RequestParam(required = true) String authCode
 	) {
-		GetCafe24AccessTokenResponse response = shopUseCase.getCafe24AccessToken(mallId, authCode);
+		GetCafe24AccessTokenResponse response = cafe24UseCase.getCafe24AccessToken(mallId, authCode);
 		return SuccessResponse.of(response).asHttp(HttpStatus.OK);
 	}
 
@@ -35,7 +35,7 @@ public class ShopController implements ShopApi {
 		@RequestParam(required = true) String mallId,
 		@RequestParam(required = true) String refreshToken
 	) {
-		GetCafe24AccessTokenResponse response = shopUseCase.reissueCafe24AccessToken(mallId, refreshToken);
+		GetCafe24AccessTokenResponse response = cafe24UseCase.reissueCafe24AccessToken(mallId, refreshToken);
 		return SuccessResponse.of(response).asHttp(HttpStatus.OK);
 	}
 }

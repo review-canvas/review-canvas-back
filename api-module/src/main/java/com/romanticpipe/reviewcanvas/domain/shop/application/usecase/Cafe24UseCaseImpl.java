@@ -13,7 +13,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 @Component
 @RequiredArgsConstructor
-public class ShopUseCaseImpl implements ShopUseCase {
+public class Cafe24UseCaseImpl implements Cafe24UseCase {
 
 	private final Cafe24AuthenticationClient cafe24AuthenticationClient;
 

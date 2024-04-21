@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "shop", description = "쇼핑몰 API")
 @SecurityRequirement(name = "Bearer Authentication")
-public interface ShopApi {
+public interface Cafe24Api {
 
 	@Operation(summary = "cafe24 액세스 토큰 발급", description = "auth code로 cafe24 액세스 토큰을 발급한다. "
 		+ "https://developers.cafe24.com/app/front/app/develop/oauth/token")
