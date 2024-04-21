@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
@@ -25,6 +26,10 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
+import com.romanticpipe.reviewcanvas.exception.AdminErrorCode;
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.exception.ProductErrorCode;
+import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.service.ProductValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewCreator;
 import com.romanticpipe.reviewcanvas.service.ReviewReader;
@@ -111,6 +116,22 @@ class ReviewUseCaseImplTest {
 			reviewUseCase.updateReview(reviewId, updateReviewRequest);
 		}
 
+		@Test
+		@DisplayName("실패 테스트 : 유효하지 않은 리뷰 아이디")
+		void failedByInvalidReviewId() {
+			// given
+			var reviewId = 1L;
+			UpdateReviewRequest updateReviewRequest = new UpdateReviewRequest("test_content_updated", 1);
+
+			// when
+			given(reviewValidator.validById(eq(reviewId))).willThrow(
+				new BusinessException(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+			// when
+			assertThrows(BusinessException.class,
+				() -> reviewUseCase.updateReview(reviewId, updateReviewRequest));
+		}
+
 	}
 
 	@Nested
@@ -134,6 +155,43 @@ class ReviewUseCaseImplTest {
 
 			// then
 			reviewUseCase.createReview(productId, createReviewRequest);
+		}
+
+		@Test
+		@DisplayName("실패 테스트 : 유효하지 않은 제품 아이디")
+		void failedByInvalidProductId() {
+			// given
+			var productId = "test_product_id";
+			var createReviewRequest = new CreateReviewRequest("test_user_id", 5, "test_content");
+
+			// when
+			given(productValidator.validByProductId(eq(productId))).willThrow(
+				new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
+
+			// then
+			assertThrows(BusinessException.class,
+				() -> reviewUseCase.createReview(productId, createReviewRequest));
+		}
+
+		@Test
+		@DisplayName("실패 테스트 : 유효하지 않은 Shop admin 아이디")
+		void failedByInvalidShopAdminId() {
+			// given
+			var productId = "test_product_id";
+			var shopAdminId = 1L;
+			var createReviewRequest = new CreateReviewRequest("test_user_id", 5, "test_content");
+			var product = new Product(productId, "test_name", shopAdminId);
+			var shopAdmin = new ShopAdmin(ReviewVisibility.builder().build(), "test_mail", "test_pw", "test_name",
+				"test_url", "test_num", "test_num", true, ShopInstallType.SELF_INSTALLATION, "test_req", 1L, 1L);
+
+			// when
+			given(productValidator.validByProductId(eq(productId))).willReturn(product);
+			given(shopAdminValidator.validById(eq(shopAdminId))).willThrow(
+				new BusinessException(AdminErrorCode.ADMIN_NOT_FOUND));
+
+			// then
+			assertThrows(BusinessException.class,
+				() -> reviewUseCase.createReview(productId, createReviewRequest));
 		}
 
 	}

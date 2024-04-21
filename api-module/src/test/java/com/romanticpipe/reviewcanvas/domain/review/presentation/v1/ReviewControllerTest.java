@@ -35,7 +35,7 @@ class ReviewControllerTest extends ControllerTestSetup {
 	ReviewUseCase reviewUseCase;
 
 	@Nested
-	@DisplayName("상품 리뷰 조회 API는")
+	@DisplayName("상품 리뷰 조회 API 테스트")
 	class GetReviewsByProductId {
 
 		@DisplayName("상품 아이디로 리뷰를 조회할 수 있다.")
