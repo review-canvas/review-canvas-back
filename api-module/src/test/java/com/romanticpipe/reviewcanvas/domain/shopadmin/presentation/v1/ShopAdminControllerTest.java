@@ -1,8 +1,8 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import com.romanticpipe.reviewcanvas.config.ControllerTestSetup;
+import com.romanticpipe.reviewcanvas.config.WithCustomAdmin;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.romanticpipe.reviewcanvas.config.ControllerTestSetup;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("ShopAdminController 테스트")
 @WebMvcTest(ShopAdminController.class)
@@ -25,6 +26,7 @@ class ShopAdminControllerTest extends ControllerTestSetup {
 
 	@Nested
 	@DisplayName("리뷰 디자인 수정 API는")
+	@WithCustomAdmin
 	class UpdateReviewDesignTest {
 		@DisplayName("리뷰 디자인 아이디로 리뷰 디자인을 수정할 수 있다.")
 		@Test
@@ -51,9 +53,9 @@ class ShopAdminControllerTest extends ControllerTestSetup {
 				+ "  \"reviewDesignUrl\": \"url\"\n"
 				+ "}";
 			//when
-			ResultActions result = mockMvc.perform(
+			ResultActions result = securityMockMvc.perform(
 				patch(BASE_URL + "/shop-admin/review-design/" + reviewDesignId).contentType(
-					MediaType.APPLICATION_JSON_VALUE).content(updateReviewDesignRequest));
+					MediaType.APPLICATION_JSON_VALUE).content(updateReviewDesignRequest).with(csrf()));
 			//then
 			result.andExpect(status().isOk());
 		}
