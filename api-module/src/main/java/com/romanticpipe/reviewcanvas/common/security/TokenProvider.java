@@ -79,7 +79,7 @@ public class TokenProvider {
 
 	public Authentication getAuthentication(String token) {
 		Claims claims = parseClaims(token).getBody();
-		Long adminId = Long.parseLong(claims.get(Claims.SUBJECT).toString());
+		Integer adminId = Integer.parseInt(claims.get(Claims.SUBJECT).toString());
 		Collection<? extends GrantedAuthority> authorities = getAuthorities(claims);
 		return new JwtAuthenticationToken(adminId, authorities);
 	}
