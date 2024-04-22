@@ -42,14 +42,5 @@ public record UpdateReviewDesignRequest(
 	@Schema(description = "리뷰 디자인 이미지 url", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	String reviewDesignUrl
 ) {
-	public static UpdateReviewDesignRequest of(ReviewDesignPosition reviewDesignPosition, String themeName,
-											   String layoutType, String padding, String gap, String boxShadowColor, int boxShadowWidth,
-											   String borderColor, int borderTransparency, int borderWidth, String pagingType,
-											   int pagingNumber, String textAlign, String pointColor, String pointType, int lineEllipsis,
-											   String reviewDesignUrl) {
 
-		return new UpdateReviewDesignRequest(reviewDesignPosition, themeName, layoutType, padding, gap,
-			boxShadowColor, boxShadowWidth, borderColor, borderTransparency, borderWidth, pagingType,
-			pagingNumber, textAlign, pointColor, pointType, lineEllipsis, reviewDesignUrl);
-	}
 }

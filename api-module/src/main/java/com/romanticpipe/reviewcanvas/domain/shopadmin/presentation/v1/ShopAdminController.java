@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +76,7 @@ class ShopAdminController implements ShopAdminApi {
 	@Override
 	@PatchMapping("/shop-admin/review-design/{reviewDesignId}")
 	public ResponseEntity<SuccessResponse<Void>> updateReviewDesign(
-		@AuthInfo JwtInfo jwtInfo, Integer reviewDesignId,
+		@AuthInfo JwtInfo jwtInfo, @PathVariable Integer reviewDesignId,
 		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest) {
 		shopAdminUseCase.updateReviewDesign(jwtInfo.adminId(), reviewDesignId, updateReviewDesignRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);

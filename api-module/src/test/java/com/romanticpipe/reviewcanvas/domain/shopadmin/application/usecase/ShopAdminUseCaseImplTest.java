@@ -54,7 +54,7 @@ class ShopAdminUseCaseImplTest {
 			//given
 			var shopAdminId = 2;
 			var reviewDesignId = 1;
-			var updateReviewDesignRequest = UpdateReviewDesignRequest.of(
+			var updateReviewDesignRequest = new UpdateReviewDesignRequest(
 				ReviewDesignPosition.REVIEW_LIST, "test", "BOARD", "0px", "0px", "#000000", 0, "#ffffff", 0, 0,
 				"NUMBER", 0, "left", "#000000", "STAR", 1, "urlurl"
 			);

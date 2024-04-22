@@ -31,10 +31,6 @@ public record SignUpRequest(@Schema(description = "Email", requiredMode = Schema
 							@NotNull Boolean updatedAt,
 							@Schema(description = "Review Design Id", requiredMode = Schema.RequiredMode.REQUIRED)
 							@NotNull Integer reviewDesignId
-	//							@Schema(description = "설치 유형(직접 설치, 설치 의뢰)", requiredMode = Schema.RequiredMode.REQUIRED)
-	//							ShopInstallType shopInstallType,
-	//							@Schema(description = "설치 의뢰 시, 요청 사항", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-	//							String installRequirement
 ) {
 
 }
