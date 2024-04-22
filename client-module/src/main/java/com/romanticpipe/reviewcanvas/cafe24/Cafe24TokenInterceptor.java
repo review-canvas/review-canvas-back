@@ -6,6 +6,7 @@ import com.romanticpipe.reviewcanvas.domain.ShopAuthToken;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.service.ShopAuthTokenService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class Cafe24TokenInterceptor implements ClientHttpRequestInterceptor {
@@ -45,11 +47,13 @@ public class Cafe24TokenInterceptor implements ClientHttpRequestInterceptor {
 	private void reissueAccessTokenIfNeeded(ShopAuthToken shopAuthToken, String mallId) {
 		LocalDateTime now = LocalDateTime.now();
 		if (now.isAfter(shopAuthToken.getRefreshTokenExpiresAt())) {
+			log.warn("Cafe24 refresh token이 만료되었습니다. [mallId: {}]", mallId);
 			throw new BusinessException(Cafe24ErrorCode.INVALID_OR_EXPIRED_REFRESH_TOKEN);
 		}
 		if (now.isAfter(shopAuthToken.getAccessTokenExpiresAt())) {
 			Cafe24AccessToken newToken = reissueAccessToken(shopAuthToken, mallId);
 			updateShopAuthToken(shopAuthToken, newToken);
+			log.info("Cafe24 access token을 재발급하여 db에 저장했습니다. [mallId: {}]", mallId);
 		}
 	}
 
