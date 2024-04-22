@@ -23,6 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -52,7 +53,8 @@ public class AuthFilter extends OncePerRequestFilter {
 		try {
 			tokenProvider.validateToken(JwtType.ACCESS, accessToken);
 		} catch (TokenExpiredException e) {
-			String refreshToken = Arrays.stream(request.getCookies())
+			Cookie[] cookies = Optional.ofNullable(request.getCookies()).orElseThrow(() -> e);
+			String refreshToken = Arrays.stream(cookies)
 				.filter(cookie -> CustomCookieName.REFRESH_TOKEN.equals(cookie.getName()))
 				.findAny()
 				.map(Cookie::getValue)
