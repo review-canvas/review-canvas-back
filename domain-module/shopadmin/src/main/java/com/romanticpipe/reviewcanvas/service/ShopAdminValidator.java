@@ -39,4 +39,9 @@ public class ShopAdminValidator {
 	public boolean isExistEmail(String email) {
 		return shopAdminRepository.existsByEmail(email);
 	}
+
+	public ShopAdmin validByMallId(String mallId) {
+		return shopAdminRepository.findByMallId(mallId)
+			.orElseThrow(AdminNotFoundException::new);
+	}
 }
