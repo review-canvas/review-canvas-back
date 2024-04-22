@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Tag(name = "shop", description = "쇼핑몰 API")
+@Tag(name = "cafe24", description = "Cafe24 쇼핑몰 API")
 @SecurityRequirement(name = "Bearer Authentication")
 public interface Cafe24Api {
 
@@ -22,7 +22,7 @@ public interface Cafe24Api {
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 액세스 토큰을 발급했습니다."),
+			description = "성공적으로 인증 프로세스를 수행했습니다."),
 		@ApiResponse(
 			responseCode = "400",
 			description = "C003: 외부 API 호출 중 오류가 발생했습니다.",
