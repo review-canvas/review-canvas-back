@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24Product;
+import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
@@ -9,6 +11,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.U
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.service.ProductCreator;
 import com.romanticpipe.reviewcanvas.service.ProductReader;
 import com.romanticpipe.reviewcanvas.service.ProductValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewCreator;
@@ -24,18 +27,18 @@ import org.springframework.transaction.annotation.Transactional;
 class ReviewUseCaseImpl implements ReviewUseCase {
 
 	private final ShopAdminValidator shopAdminValidator;
+	private final ProductCreator productCreator;
 	private final ProductValidator productValidator;
 	private final ProductReader productReader;
 	private final ReviewReader reviewReader;
 	private final ReviewCreator reviewCreator;
 	private final ReviewValidator reviewValidator;
+	private final Cafe24ProductClient cafe24ProductClient;
 
 	@Override
-	@Transactional(readOnly = true)
 	public PageResponse<GetReviewResponse> getReviewsForUser(String mallId, Long productNo,
 															 PageableRequest pageableRequest) {
-		Product product = productReader.findByMallIdAndProductNo(mallId, productNo)
-			.orElseGet(() -> createProduct(mallId, productNo));
+		Product product = productValidator.validateByMallIdAndProductNo(mallId, productNo);
 		return reviewReader.findByProductId(product.getId(), pageableRequest)
 			.map(GetReviewResponse::from);
 	}
@@ -59,8 +62,10 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Transactional
 	public void createReview(String productId, CreateReviewRequest createReviewRequest) {
 		Product product = productValidator.validByProductId(productId);
+		// TODO: product가  mallId와 productNo로 상품을 생성하는 로직을 추가하도록 변경해야 함.
+//		Product product = productReader.findByMallIdAndProductNo(mallId, productNo)
+//			.orElseGet(() -> createProduct(mallId, productNo));
 		ShopAdmin shopAdmin = shopAdminValidator.validById(product.getShopAdminId());
-		// TODO: 프론트로부터 mallId, productNo product를 조회하여 productId를 가져온다.
 		// TODO: 프론트로부터 memberId를 받아 user를 조회하여 userId를 가져온다.
 		Review review = new Review(
 			null,
@@ -74,7 +79,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	}
 
 	private Product createProduct(String mallId, Long productNo) {
-		// TODO: mallId, productNo로 product 정보를 가져와 저장하고, product 엔티티를 반환하는 로직을 작성한다.
-		return null;
+		Cafe24Product cafe24Product = cafe24ProductClient.getProduct(mallId, productNo);
+		cafe24Product.validateCafe24Product(mallId, productNo);
+		ShopAdmin shopAdmin = shopAdminValidator.validByMallId(mallId);
+
+		Product product = new Product(productNo, cafe24Product.getProductName(), shopAdmin.getId());
+		return productCreator.save(product);
 	}
 }

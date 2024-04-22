@@ -9,4 +9,6 @@ public interface ShopAdminRepository extends JpaRepository<ShopAdmin, Integer> {
 	Optional<ShopAdmin> findByEmail(String email);
 
 	boolean existsByEmail(String email);
+
+	Optional<ShopAdmin> findByMallId(String mallId);
 }
