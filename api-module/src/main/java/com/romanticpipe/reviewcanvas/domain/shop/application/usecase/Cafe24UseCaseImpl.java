@@ -25,8 +25,8 @@ public class Cafe24UseCaseImpl implements Cafe24UseCase {
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
 			try {
 				shopAuthTokenService.findByMallId(mallId)
-					.ifPresentOrElse(shopAuthToken -> updateShopAuthToken(cafe24AccessToken, shopAuthToken)
-						, () -> shopAuthTokenService.save(cafe24AccessToken.toShopAuthToken()));
+					.ifPresentOrElse(shopAuthToken -> updateShopAuthToken(cafe24AccessToken, shopAuthToken),
+						() -> shopAuthTokenService.save(cafe24AccessToken.toShopAuthToken()));
 			} catch (RuntimeException e) {
 				transactionStatus.setRollbackOnly();
 				throw e;

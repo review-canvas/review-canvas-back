@@ -24,7 +24,8 @@ public class Cafe24TokenInterceptor implements ClientHttpRequestInterceptor {
 	private final Cafe24AuthenticationClient cafe24AuthenticationClient;
 
 	@Override
-	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+	public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+		throws IOException {
 		String mallId = extractMallId(request);
 		ShopAuthToken shopAuthToken = shopAuthTokenService.validateByMallId(mallId);
 		reissueAccessTokenIfNeeded(shopAuthToken, mallId);

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, String> {
 
-	@Query("SELECT p FROM Product p JOIN ShopAdmin s ON p.shopAdminId = s.id " +
-		"WHERE s.mallId = :mallId AND p.productNo = :productNo")
+	@Query("SELECT p FROM Product p JOIN ShopAdmin s ON p.shopAdminId = s.id "
+		+ "WHERE s.mallId = :mallId AND p.productNo = :productNo")
 	Optional<Product> findByMallIdAndProductNo(String mallId, Long productNo);
 }
