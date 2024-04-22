@@ -39,4 +39,13 @@ public class ShopAuthToken extends BaseEntity {
 		this.refreshTokenExpiresAt = refreshTokenExpiresAt;
 		this.scope = scope;
 	}
+
+	public void update(String accessToken, LocalDateTime accessTokenExpiresAt, String refreshToken,
+					   LocalDateTime refreshTokenExpiresAt, String scope) {
+		this.accessToken = accessToken;
+		this.accessTokenExpiresAt = accessTokenExpiresAt;
+		this.refreshToken = refreshToken;
+		this.refreshTokenExpiresAt = refreshTokenExpiresAt;
+		this.scope = scope;
+	}
 }
