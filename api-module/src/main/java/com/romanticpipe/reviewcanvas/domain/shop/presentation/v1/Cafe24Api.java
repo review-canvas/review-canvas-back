@@ -9,7 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "shop", description = "쇼핑몰 API")
@@ -27,9 +28,9 @@ public interface Cafe24Api {
 			description = "C003: 외부 API 호출 중 오류가 발생했습니다.",
 			content = @Content(schema = @Schema(hidden = true))),
 	})
-	@GetMapping("/cafe24/authentication-process")
+	@PostMapping("/cafe24/{mallId}/authentication-process")
 	ResponseEntity<SuccessResponse<Void>> cafe24AuthenticationProcess(
-		@Schema(name = "mall id", description = "쇼핑몰의 아이디") @RequestParam(required = true) String mallId,
+		@Schema(name = "mall id", description = "쇼핑몰의 아이디") @PathVariable(required = true) String mallId,
 		@Schema(name = "authorization code", description = "인증 코드") @RequestParam(required = true) String authCode
 	);
 }
