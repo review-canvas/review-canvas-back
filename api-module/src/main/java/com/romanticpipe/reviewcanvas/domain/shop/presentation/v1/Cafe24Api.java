@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "cafe24", description = "Cafe24 쇼핑몰 API")
-@SecurityRequirement(name = "Bearer Authentication")
 public interface Cafe24Api {
 
 	@Operation(summary = "cafe24 인증 프로세스 api", description = "auth code로 cafe24 액세스 토큰을 발급받아 서버에 저장한다 "
