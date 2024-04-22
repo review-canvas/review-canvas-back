@@ -19,7 +19,7 @@ public record Cafe24AccessToken(String accessToken,
 								LocalDateTime issuedAt) {
 
 	public ShopAuthToken toShopAuthToken() {
-		String scope = scopes.stream().reduce((a, b) -> a + "," + b).orElse("");
+		String scope = String.join(",", scopes);
 		return ShopAuthToken.builder()
 			.mallId(mallId)
 			.accessToken(accessToken)
