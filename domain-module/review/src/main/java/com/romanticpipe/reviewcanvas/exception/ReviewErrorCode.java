@@ -4,7 +4,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ReviewErrorCode implements ErrorCode {
-	REVIEW_NOT_FOUND(400, "R001", "리뷰를 찾을 수 없습니다.");
+
+	// Review
+	REVIEW_NOT_FOUND(400, "R001", "리뷰를 찾을 수 없습니다."),
+
+	// Product
+	PRODUCT_NOT_FOUND(400, "R002", "상품을 찾을 수 없습니다.");
 
 	private final int status;
 	private final String code;

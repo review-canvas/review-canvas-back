@@ -34,6 +34,9 @@ public final class AccessPath {
 		// health check
 		allAllowedPath.put("/api/v1/health", allMethod);
 
+		// cafe24
+		allAllowedPath.put("/api/v1/cafe24/{mallId}/authentication-process", List.of(HttpMethod.POST));
+
 		// auth
 		allAllowedPath.put("/api/v1/shop-admin/login", List.of(HttpMethod.POST));
 		allAllowedPath.put("/api/v1/super-admin/login", List.of(HttpMethod.POST));

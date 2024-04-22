@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.cafe24;
 
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AuthenticationClient;
+import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.config.RestClientLoggingInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,5 +31,18 @@ class Cafe24HttpExchangeConfig {
 			.build();
 
 		return getHttpExchange(restClient, Cafe24AuthenticationClient.class);
+	}
+
+	@Bean
+	public Cafe24ProductClient cafe24ProductClient(
+		ClientHttpRequestFactory clientHttpRequestFactory, RestClientLoggingInterceptor restClientLoggingInterceptor,
+		Cafe24TokenInterceptor cafe24TokenInterceptor) {
+		RestClient restClient = RestClient.builder()
+			.requestFactory(clientHttpRequestFactory)
+			.requestInterceptor(restClientLoggingInterceptor)
+			.requestInterceptor(cafe24TokenInterceptor)
+			.build();
+
+		return getHttpExchange(restClient, Cafe24ProductClient.class);
 	}
 }

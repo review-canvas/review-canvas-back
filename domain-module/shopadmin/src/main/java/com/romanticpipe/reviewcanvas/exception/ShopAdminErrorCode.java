@@ -16,7 +16,10 @@ public enum ShopAdminErrorCode implements ErrorCode {
 	ADMIN_AUTH_NOT_FOUND(400, "A005", "refresh token을 찾을 수 없습니다."),
 
 	// MyReviewDesign
-	NOT_REVIEW_DESIGN_OWNER(400, "A006", "리뷰 디자인을 만든 주인이 아닙니다.");
+	NOT_REVIEW_DESIGN_OWNER(400, "A006", "리뷰 디자인을 만든 주인이 아닙니다."),
+
+	// ShopAuthToken
+	SHOP_AUTH_TOKEN_NOT_FOUND(400, "A007", "ShopAuthToken을 찾을 수 없습니다.");
 
 	private final int status;
 	private final String code;
