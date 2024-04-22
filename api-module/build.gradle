@@ -26,7 +26,7 @@ apply plugin: 'com.google.cloud.tools.jib'
 
 jib {
     def jibTag = System.getProperty("jib-tag")
-    def ecrUri = ''
+    def ecrUri = System.getenv("ECR_URI")
 
     from {
         image = "eclipse-temurin:17-jre"
