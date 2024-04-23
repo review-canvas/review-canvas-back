@@ -1,0 +1,11 @@
+dependencies {
+    implementation project(':domain-module')
+    implementation project(':domain-module:review')
+    implementation project(':domain-module:shopadmin')
+    implementation project(':common-module')
+    implementation project(':client-module')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework:spring-tx'
+}
