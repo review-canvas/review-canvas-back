@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 어떤 문제를 해결하려 하는지?: cafe24에서 제공하는 샵별 product 정보를 미리 가져와 db에 저장한다.
@@ -38,7 +39,7 @@ public class Cafe24ProductScheduler {
 
 	// TODO: 고려해야 할 사항
 	// 1. product 개수가 5000개가 넘어가면 한 products 조회 api로 전부 가져올 수 없기에 분할 작업이 필요(count product api로 확인 필요)
-	@Scheduled(cron = "0 0 3 * * *")
+	@Scheduled(cron = "${scheduler.update-product.cron}")
 	public void processUpdateProduct() {
 		log.info("product 정보 업데이트 scheduler 시작");
 		List<ShopAdmin> shopAdmins = shopAdminReader.findRegisteredShopAdmin();
@@ -55,8 +56,13 @@ public class Cafe24ProductScheduler {
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
 			try {
 				List<Product> existingProducts = productReader.findByShopAdminId(shopAdmin.getId());
-				cafe24Products.forEach(cafe24Product -> updateOrSaveProduct(cafe24Product, existingProducts, shopAdmin));
-				log.info("{} 쇼핑몰 상품 업데이트 성공", shopAdmin.getMallName());
+				AtomicInteger savedCount = new AtomicInteger(0);
+
+				cafe24Products.forEach(cafe24Product ->
+					updateOrSaveProduct(cafe24Product, existingProducts, shopAdmin, savedCount)
+				);
+
+				log.info("{} 쇼핑몰 상품 업데이트 성공 - 새롭게 추가된 상품 수: {}", shopAdmin.getMallName(), savedCount.get());
 			} catch (RuntimeException e) {
 				transactionStatus.setRollbackOnly();
 				log.warn("{} 쇼핑몰 상품 업데이트 실패", shopAdmin.getMallName());
@@ -65,14 +71,18 @@ public class Cafe24ProductScheduler {
 		});
 	}
 
-	private void updateOrSaveProduct(Cafe24Product cafe24Product, List<Product> existingProducts, ShopAdmin shopAdmin) {
+	private void updateOrSaveProduct(Cafe24Product cafe24Product, List<Product> existingProducts, ShopAdmin shopAdmin,
+									 AtomicInteger savedCount) {
 		existingProducts.stream()
 			.filter(product -> cafe24Product.productNo().equals(product.getProductNo()))
 			.findAny()
 			.ifPresentOrElse(
 				product -> product.update(cafe24Product.productName()),
-				() -> productCreator.save(new Product(cafe24Product.productNo(), cafe24Product.productName(),
-					shopAdmin.getId()))
+				() -> {
+					productCreator.save(new Product(cafe24Product.productNo(), cafe24Product.productName(),
+						shopAdmin.getId()));
+					savedCount.incrementAndGet();
+				}
 			);
 	}
 }

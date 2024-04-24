@@ -6,6 +6,7 @@ import com.romanticpipe.reviewcanvas.repository.ShopAuthTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,5 +26,9 @@ public class ShopAuthTokenService {
 
 	public Optional<ShopAuthToken> findByMallId(String mallId) {
 		return shopAuthTokenRepository.findByMallId(mallId);
+	}
+
+	public List<ShopAuthToken> findAll() {
+		return shopAuthTokenRepository.findAll();
 	}
 }
