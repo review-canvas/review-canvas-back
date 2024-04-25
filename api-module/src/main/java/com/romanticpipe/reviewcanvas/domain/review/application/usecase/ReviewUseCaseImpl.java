@@ -83,7 +83,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		cafe24ProductDto.validateCafe24Product(mallId, productNo);
 		ShopAdmin shopAdmin = shopAdminValidator.validByMallId(mallId);
 
-		Product product = new Product(productNo, cafe24ProductDto.getProductName(), shopAdmin.getId());
+		Product product = new Product(productNo, cafe24ProductDto.product().productName(), shopAdmin.getId());
 		return productCreator.save(product);
 	}
 }

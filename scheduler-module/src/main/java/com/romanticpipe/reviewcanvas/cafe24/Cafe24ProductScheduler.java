@@ -48,20 +48,22 @@ public class Cafe24ProductScheduler {
 	}
 
 	private void processEachShopAdmin(ShopAdmin shopAdmin) {
-		List<Cafe24Product> cafe24Products = productClient.getProducts(shopAdmin.getMallId()).getProducts();
+		List<Cafe24Product> cafe24Products = productClient.getProducts(shopAdmin.getMallId())
+			.products()
+			.stream()
+			.filter(Cafe24Product::isFullContent)
+			.toList();
 		updateProductsInTransaction(cafe24Products, shopAdmin);
 	}
 
 	private void updateProductsInTransaction(List<Cafe24Product> cafe24Products, ShopAdmin shopAdmin) {
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
 			try {
-				List<Product> existingProducts = productReader.findByShopAdminId(shopAdmin.getId());
+				List<Product> products = productReader.findByShopAdminId(shopAdmin.getId());
 				AtomicInteger savedCount = new AtomicInteger(0);
-
 				cafe24Products.forEach(cafe24Product ->
-					updateOrSaveProduct(cafe24Product, existingProducts, shopAdmin, savedCount)
+					updateOrSaveProduct(cafe24Product, products, shopAdmin, savedCount)
 				);
-
 				log.info("{} 쇼핑몰 상품 업데이트 성공 - 새롭게 추가된 상품 수: {}", shopAdmin.getMallName(), savedCount.get());
 			} catch (RuntimeException e) {
 				transactionStatus.setRollbackOnly();
