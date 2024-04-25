@@ -19,6 +19,6 @@ public interface ReviewUseCase {
 
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);
 
-	PageResponse<GetAwaitReviewResponse> getAwaitReviewsByShopAdmin(long shopAdminId, PageableRequest pageableRequest);
-	
+	PageResponse<GetAwaitReviewResponse> getAwaitReviewsByShopAdmin(Integer shopAdminId, PageableRequest pageableRequest);
+
 }

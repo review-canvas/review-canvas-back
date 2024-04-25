@@ -90,7 +90,7 @@ interface ReviewApi {
 	})
 	@GetMapping("/shop-admin/{shopAdminId}/await")
 	ResponseEntity<SuccessResponse<PageResponse<GetAwaitReviewResponse>>> getAwaitReviewsByShopAdmin(
-		@PathVariable("shopAdminId") long shopAdminId,
+		@PathVariable("shopAdminId") Integer shopAdminId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
