@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ReviewVisibilityRepository extends JpaRepository<ReviewVisibility, Long> {
+public interface ReviewVisibilityRepository extends JpaRepository<ReviewVisibility, Integer> {
 	@Query(
 		value = "SELECT COLUMN_NAME "
 			+ "FROM INFORMATION_SCHEMA.COLUMNS "

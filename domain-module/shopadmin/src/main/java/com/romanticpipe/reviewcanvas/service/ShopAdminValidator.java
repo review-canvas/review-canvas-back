@@ -1,6 +1,5 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import com.romanticpipe.reviewcanvas.domain.AdminInterface;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.exception.AdminNotFoundException;
@@ -16,10 +15,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ShopAdminValidator {
 	private final ShopAdminRepository shopAdminRepository;
-	private final ReviewDesignRepository designItemSuperRepository;
+	private final ReviewDesignRepository reviewDesignRepository;
 
-	public ReviewDesign isExistTheme(Long reviewDesignId) {
-		ReviewDesign reviewDesign = designItemSuperRepository.findById(reviewDesignId)
+	public ReviewDesign isExistTheme(Integer reviewDesignId) {
+		ReviewDesign reviewDesign = reviewDesignRepository.findById(reviewDesignId)
 			.orElseThrow(ReviewDesignNotFoundException::new);
 		if (!reviewDesign.isGeneralType()) {
 			throw new BusinessException(ShopAdminErrorCode.NOT_GENERAL_REVIEW_THEME);
@@ -32,21 +31,21 @@ public class ShopAdminValidator {
 			.orElseThrow(() -> new AdminNotFoundException());
 	}
 
-	public ShopAdmin validById(long shopAdminId) {
+	public ShopAdmin validById(Integer shopAdminId) {
 		return shopAdminRepository.findById(shopAdminId)
-			.orElseThrow(() -> new AdminNotFoundException());
-	}
-
-	public AdminInterface validByAuthId(long adminAuthId) {
-		return shopAdminRepository.findByAdminAuthId(adminAuthId)
-			.orElseThrow(() -> new AdminNotFoundException());
+			.orElseThrow(AdminNotFoundException::new);
 	}
 
 	public boolean isExistEmail(String email) {
 		return shopAdminRepository.existsByEmail(email);
 	}
 
-	public void validApproveStatus(long shopAdminId) {
+	public ShopAdmin validByMallId(String mallId) {
+		return shopAdminRepository.findByMallId(mallId)
+			.orElseThrow(AdminNotFoundException::new);
+	}
+
+	public void validApproveStatus(Integer shopAdminId) {
 		if(!validById(shopAdminId).isApproveStatus()) {
 			throw new BusinessException(ShopAdminErrorCode.DENY_ACCESS_REVIEW_STATUS);
 		}

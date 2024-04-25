@@ -5,10 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -16,14 +14,29 @@ import lombok.Setter;
 public class AdminAuth {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "admin_auth_id")
-	private Long id;
+	@Column(name = "admin_auth_id", columnDefinition = "INTEGER")
+	private Integer id;
 
-	@Setter
-	private String refreshToken = "";
+	private String refreshToken;
 
-	@Builder
-	public AdminAuth(String refreshToken) {
+	private Integer shopAdminId;
+	private Integer superAdminId;
+
+	public AdminAuth(String refreshToken, Integer shopAdminId, Integer superAdminId) {
 		this.refreshToken = refreshToken;
+		this.shopAdminId = shopAdminId;
+		this.superAdminId = superAdminId;
+	}
+
+	public static AdminAuth createShopAdminAuth(Integer shopAdminId) {
+		return new AdminAuth(null, shopAdminId, null);
+	}
+
+	public void updateRefreshToken(String newRefreshToken) {
+		this.refreshToken = newRefreshToken;
+	}
+
+	public void logout() {
+		this.refreshToken = null;
 	}
 }

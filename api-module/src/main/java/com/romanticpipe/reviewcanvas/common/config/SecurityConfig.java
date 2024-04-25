@@ -1,11 +1,10 @@
 package com.romanticpipe.reviewcanvas.common.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.romanticpipe.reviewcanvas.common.security.AccessPath;
 import com.romanticpipe.reviewcanvas.common.security.AuthFilter;
-import com.romanticpipe.reviewcanvas.common.security.CustomAccessDeniedHandler;
-import com.romanticpipe.reviewcanvas.common.security.CustomEntryPoint;
+import com.romanticpipe.reviewcanvas.common.security.CustomExceptionHandlerFilter;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
-import com.romanticpipe.reviewcanvas.common.security.UrlList;
-import com.romanticpipe.reviewcanvas.domain.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,10 +24,10 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
+
 	private final TokenProvider tokenProvider;
-	private final CustomEntryPoint entryPoint;
-	private final CustomAccessDeniedHandler accessDeniedHandler;
-	private final UrlList urlList;
+	private final AccessPath accessPath;
+	private final ObjectMapper objectMapper;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,17 +36,12 @@ public class SecurityConfig {
 			.csrf(c -> c.disable())
 			.formLogin(c -> c.disable())
 			.httpBasic(c -> c.disable())
+			.logout(c -> c.disable())
 			.headers(c -> c.frameOptions(f -> f.disable()).disable())
-			.authorizeHttpRequests(auth -> {
-				auth
-					.requestMatchers(urlList.getPublicUrls().toArray(new String[0])).permitAll()
-					.requestMatchers(urlList.getSuperUrls().toArray(new String[0])).hasAuthority(
-						String.valueOf(Role.SUPER_ADMIN_ROLE))
-					.anyRequest().authenticated();
-			}).exceptionHandling(c ->
-				c.authenticationEntryPoint(entryPoint).accessDeniedHandler(accessDeniedHandler)
-			).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.addFilterBefore(new AuthFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+			.sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.addFilterBefore(new AuthFilter(tokenProvider, accessPath), UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new CustomExceptionHandlerFilter(objectMapper), AuthFilter.class);
 		return http.build();
 	}
 

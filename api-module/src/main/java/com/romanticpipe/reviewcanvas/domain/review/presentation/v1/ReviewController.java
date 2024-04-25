@@ -11,10 +11,8 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,14 +32,15 @@ class ReviewController implements ReviewApi {
 	private final ReviewUseCase reviewUseCase;
 
 	@Override
-	@GetMapping("/products/{productId}/reviews")
-	public ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsByProductId(
-		@PathVariable("productId") String productId,
+	@GetMapping("/shop-admin/{mallId}/products/{productNo}/reviews")
+	public ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsForUser(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("productNo") Long productNo,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC") Direction direction) {
 		return SuccessResponse.of(
-			reviewUseCase.getReviewsByProductId(productId, PageableRequest.of(page, size, direction))
+			reviewUseCase.getReviewsForUser(mallId, productNo, PageableRequest.of(page, size, direction))
 		).asHttp(HttpStatus.OK);
 	}
 

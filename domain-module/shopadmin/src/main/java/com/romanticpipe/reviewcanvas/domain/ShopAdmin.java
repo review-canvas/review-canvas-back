@@ -19,61 +19,49 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class ShopAdmin extends BaseEntityWithUpdate implements AdminInterface {
+public class ShopAdmin extends BaseEntityWithUpdate implements Admin {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "shop_admin_id")
-	private Long id;
+	private Integer id;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "review_visibility_id")
-	private ReviewVisibility reviewVisibility;
+	private String mallId;
 	private String email;
 	private String password;
-	private String name;
+	private String mallName;
 	private String logoImageUrl;
 	private String mallNumber;
 	private String phoneNumber;
 	private Boolean approveStatus;
-	private UUID uuid;
-
-	private Long adminAuthId;
-
-	@Enumerated(EnumType.STRING)
-	private Role role = Role.SHOP_ADMIN_ROLE;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name = "install_type", columnDefinition = "VARCHAR(32)")
-	private ShopInstallType shopInstallType;
-	private String installRequirement;
-
-	private Long selectedReviewDesignId;
+	private String businessNumber;
+	private LocalDateTime deletedAt;
 
 	@Builder
-	public ShopAdmin(ReviewVisibility reviewVisibility, String email, String password, String name, String logoImageUrl,
-		String mallNumber, String phoneNumber, Boolean approveStatus, ShopInstallType shopInstallType,
-		String installRequirement, Long selectedReviewDesignId, Long adminAuthId) {
-		this.reviewVisibility = reviewVisibility;
+	public ShopAdmin(String mallId, String email, String password, String mallName, String logoImageUrl,
+					 String mallNumber, String phoneNumber, Boolean approveStatus, String businessNumber) {
+		this.mallId = mallId;
 		this.email = email;
 		this.password = password;
-		this.role = Role.SHOP_ADMIN_ROLE;
-		this.name = name;
+		this.mallName = mallName;
 		this.logoImageUrl = logoImageUrl;
 		this.mallNumber = mallNumber;
 		this.phoneNumber = phoneNumber;
 		this.approveStatus = approveStatus;
-		this.shopInstallType = shopInstallType;
-		this.installRequirement = installRequirement;
-		this.selectedReviewDesignId = selectedReviewDesignId;
-		this.adminAuthId = adminAuthId;
-		this.uuid = UUID.randomUUID();
+		this.businessNumber = businessNumber;
 	}
 
 	public boolean isApproveStatus() {
 		return approveStatus;
+	}
+
+	@Override
+	public AdminRole getRole() {
+		return AdminRole.ROLE_SHOP_ADMIN;
 	}
 }

@@ -1,13 +1,11 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import org.springframework.stereotype.Service;
-
-import com.romanticpipe.reviewcanvas.domain.AdminInterface;
+import com.romanticpipe.reviewcanvas.domain.Admin;
 import com.romanticpipe.reviewcanvas.domain.SuperAdmin;
 import com.romanticpipe.reviewcanvas.exception.AdminNotFoundException;
 import com.romanticpipe.reviewcanvas.repository.SuperAdminRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -19,13 +17,8 @@ public class SuperAdminValidator {
 			.orElseThrow(() -> new AdminNotFoundException());
 	}
 
-	public AdminInterface validByAuthId(long adminAuthId) {
-		return superAdminRepository.findByAdminAuthId(adminAuthId)
-			.orElseThrow(() -> new AdminNotFoundException());
-	}
-
-	public AdminInterface validById(Long id) {
-		return superAdminRepository.findById(id)
-			.orElseThrow(() -> new AdminNotFoundException());
+	public Admin validById(Integer superAdminId) {
+		return superAdminRepository.findById(superAdminId)
+			.orElseThrow(AdminNotFoundException::new);
 	}
 }

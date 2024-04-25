@@ -22,20 +22,16 @@ public class Review extends BaseEntityWithUpdate {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_id")
 	private Long id;
+	private Long productId;
+	private Long userId;
 
-	@Column(name = "product_id", columnDefinition = "BINARY(16)")
-	private String productId;
-
-	@Column(name = "user_id", columnDefinition = "BINARY(16)")
-	private String userId;
 	private int score;
 	private String content;
-
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewStatus status;
 
-	public Review(String productId, String userId, String content, int score, ReviewStatus status) {
+	public Review(Long productId, Long userId, String content, int score, ReviewStatus status) {
 		this.userId = userId;
 		this.productId = productId;
 		this.content = content;

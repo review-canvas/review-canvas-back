@@ -1,13 +1,10 @@
 package com.romanticpipe.reviewcanvas.repository;
 
-import java.util.Optional;
-
+import com.romanticpipe.reviewcanvas.domain.SuperAdmin;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.romanticpipe.reviewcanvas.domain.SuperAdmin;
+import java.util.Optional;
 
-public interface SuperAdminRepository extends JpaRepository<SuperAdmin, Long> {
+public interface SuperAdminRepository extends JpaRepository<SuperAdmin, Integer> {
 	Optional<SuperAdmin> findByEmail(String email);
-
-	Optional<SuperAdmin> findByAdminAuthId(long adminAuthId);
 }
