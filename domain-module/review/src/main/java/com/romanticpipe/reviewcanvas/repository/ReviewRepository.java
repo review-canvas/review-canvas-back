@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 	Page<Review> findAllByProductId(Long productId, Pageable pageable);
@@ -16,7 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	@Query("select r from Review r inner join Product p "
 		+ "on r.productId = p.id inner join ShopAdmin sa "
 		+ "on p.shopAdminId = sa.id "
-		+ "where sa.id = ?1 and r.status = 'WAITING'")
-	Page<Review> findAllByShopAdminId(long shopAdminId, Pageable pageable);
+		+ "where sa.id = :shopAdminId and r.status = 'WAITING'")
+	Page<Review> findAllByShopAdminId(@Param("shopAdminId") long shopAdminId, Pageable pageable);
 
 }
