@@ -28,7 +28,8 @@ public class Cafe24TokenInterceptor implements ClientHttpRequestInterceptor {
 	private final Cafe24AuthenticationClient cafe24AuthenticationClient;
 	private final ConcurrentMap<String, Cafe24Token> cafe24Tokens;
 
-	public Cafe24TokenInterceptor(ShopAuthTokenService shopAuthTokenService, Cafe24AuthenticationClient cafe24AuthenticationClient) {
+	public Cafe24TokenInterceptor(ShopAuthTokenService shopAuthTokenService,
+								  Cafe24AuthenticationClient cafe24AuthenticationClient) {
 		this.shopAuthTokenService = shopAuthTokenService;
 		this.cafe24AuthenticationClient = cafe24AuthenticationClient;
 		this.cafe24Tokens = this.shopAuthTokenService.findAll().stream()

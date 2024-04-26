@@ -24,7 +24,7 @@ public class Cafe24UseCaseImpl implements Cafe24UseCase {
 	public void cafe24AuthenticationProcess(String mallId, String authCode) {
 		MultiValueMap<String, String> requestParam = Cafe24FormUrlencodedFactory.getCafe24AccessToken(authCode);
 		Cafe24AccessToken cafe24AccessToken = cafe24AuthenticationClient.getAccessToken(mallId, requestParam);
-		if (!cafe24AccessToken.validateContent()) {
+		if (!cafe24AccessToken.isFullContent()) {
 			throw new BusinessException(Cafe24ErrorCode.INVALID_ACCESS_TOKEN);
 		}
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
