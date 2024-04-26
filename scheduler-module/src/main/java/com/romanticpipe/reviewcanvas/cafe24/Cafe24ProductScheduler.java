@@ -9,6 +9,7 @@ import com.romanticpipe.reviewcanvas.service.ProductReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -39,6 +40,7 @@ public class Cafe24ProductScheduler {
 
 	// TODO: 고려해야 할 사항
 	// 1. product 개수가 5000개가 넘어가면 한 products 조회 api로 전부 가져올 수 없기에 분할 작업이 필요(count product api로 확인 필요)
+	@SchedulerLock(name = "UpdateProduct")
 	@Scheduled(cron = "${scheduler.update-product.cron}")
 	public void processUpdateProduct() {
 		log.info("product 정보 업데이트 scheduler 시작");
