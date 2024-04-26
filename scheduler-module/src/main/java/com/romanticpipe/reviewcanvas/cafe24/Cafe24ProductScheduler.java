@@ -18,13 +18,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 어떤 문제를 해결하려 하는지?: cafe24에서 제공하는 샵별 product 정보를 미리 가져와 db에 저장한다.
- * 작업: 매일 새벽 3시에 cafe24에서 제공하는 product 정보를 조회하여 db에 저장하거나, 업데이트한다.
- * 시나리오(매일 새벽 3시가 되면)
- * 1. 회원가입이 완료된 shop의 shopAdminId, mallId를 가져온다.
- * 2. shopAdminId로 product id를 조회한다.
- * 3. mallId list로 product 정보를 조회한다.
- * 4. 만약 없는 product인 경우 product를 추가하고, 있는 product인 경우 업데이트한다.
+ * TASK: 매일 새벽 3시에 cafe24에서 제공하는 product 정보를 조회하여 db에 저장하거나, 업데이트한다.
+ *  TODO: product 개수가 5000개가 넘어가면 한 products 조회 api로 전부 가져올 수 없기에 분할 작업이 필요(count product api로 확인 필요)
  */
 
 @Slf4j
@@ -38,8 +33,6 @@ public class Cafe24ProductScheduler {
 	private final Cafe24ProductClient productClient;
 	private final TransactionTemplate writeTransactionTemplate;
 
-	// TODO: 고려해야 할 사항
-	// 1. product 개수가 5000개가 넘어가면 한 products 조회 api로 전부 가져올 수 없기에 분할 작업이 필요(count product api로 확인 필요)
 	@SchedulerLock(name = "UpdateProduct")
 	@Scheduled(cron = "${scheduler.update-product.cron}")
 	public void processUpdateProduct() {
