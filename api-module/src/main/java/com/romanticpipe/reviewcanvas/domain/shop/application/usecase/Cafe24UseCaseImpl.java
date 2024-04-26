@@ -1,9 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.shop.application.usecase;
 
+import com.romanticpipe.reviewcanvas.cafe24.Cafe24ErrorCode;
 import com.romanticpipe.reviewcanvas.cafe24.Cafe24FormUrlencodedFactory;
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AccessToken;
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AuthenticationClient;
 import com.romanticpipe.reviewcanvas.domain.ShopAuthToken;
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.service.ShopAuthTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,9 @@ public class Cafe24UseCaseImpl implements Cafe24UseCase {
 	public void cafe24AuthenticationProcess(String mallId, String authCode) {
 		MultiValueMap<String, String> requestParam = Cafe24FormUrlencodedFactory.getCafe24AccessToken(authCode);
 		Cafe24AccessToken cafe24AccessToken = cafe24AuthenticationClient.getAccessToken(mallId, requestParam);
+		if (!cafe24AccessToken.validateContent()) {
+			throw new BusinessException(Cafe24ErrorCode.INVALID_ACCESS_TOKEN);
+		}
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
 			try {
 				shopAuthTokenService.findByMallId(mallId)
