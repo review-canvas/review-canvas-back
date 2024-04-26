@@ -16,8 +16,8 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,13 +26,13 @@ public class Cafe24TokenInterceptor implements ClientHttpRequestInterceptor {
 
 	private final ShopAuthTokenService shopAuthTokenService;
 	private final Cafe24AuthenticationClient cafe24AuthenticationClient;
-	private final Map<String, Cafe24Token> cafe24Tokens;
+	private final ConcurrentMap<String, Cafe24Token> cafe24Tokens;
 
 	public Cafe24TokenInterceptor(ShopAuthTokenService shopAuthTokenService, Cafe24AuthenticationClient cafe24AuthenticationClient) {
 		this.shopAuthTokenService = shopAuthTokenService;
 		this.cafe24AuthenticationClient = cafe24AuthenticationClient;
 		this.cafe24Tokens = this.shopAuthTokenService.findAll().stream()
-			.collect(Collectors.toMap(ShopAuthToken::getMallId, Cafe24Token::from));
+			.collect(Collectors.toConcurrentMap(ShopAuthToken::getMallId, Cafe24Token::from));
 	}
 
 	@Override
