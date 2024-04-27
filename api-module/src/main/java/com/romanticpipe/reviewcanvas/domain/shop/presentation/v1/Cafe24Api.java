@@ -5,6 +5,7 @@ import com.romanticpipe.reviewcanvas.domain.shop.application.usecase.request.Caf
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @Tag(name = "cafe24", description = "Cafe24 쇼핑몰 API")
 public interface Cafe24Api {
@@ -40,14 +43,21 @@ public interface Cafe24Api {
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "cafe24 script tag 생성에 성공했습니다."),
+			description = "cafe24 script tag 생성에 성공했습니다.",
+			content = @Content(
+				schemaProperties = {
+					@SchemaProperty(name = "success", schema = @Schema(type = "boolean", description = "성공 여부")),
+					@SchemaProperty(name = "data", schema = @Schema(type = "object", contentSchema = Map.class,
+						defaultValue = "{\"scriptNo\": \"1527128695613925\"}"))
+				}
+			)),
 		@ApiResponse(
 			responseCode = "400",
 			description = "C003: 외부 API 호출 중 오류가 발생했습니다.",
 			content = @Content(schema = @Schema(hidden = true))),
 	})
 	@PostMapping("/cafe24/{mallId}/script-tag")
-	ResponseEntity<SuccessResponse<String>> cafe24CreateScriptTag(
+	ResponseEntity<SuccessResponse<Map<String, String>>> cafe24CreateScriptTag(
 		@Schema(name = "mall id", description = "쇼핑몰의 아이디") @PathVariable(required = true) String mallId,
 		@Valid @RequestBody Cafe24CreateScriptTagRequest request
 	);

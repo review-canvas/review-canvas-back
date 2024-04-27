@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/v1")
@@ -35,12 +37,13 @@ public class Cafe24Controller implements Cafe24Api {
 
 	@Override
 	@PostMapping("/cafe24/{mallId}/script-tag")
-	public ResponseEntity<SuccessResponse<String>> cafe24CreateScriptTag(
+	public ResponseEntity<SuccessResponse<Map<String, String>>> cafe24CreateScriptTag(
 		@PathVariable(required = true) String mallId,
 		@Valid @RequestBody Cafe24CreateScriptTagRequest request
 	) {
+		String scriptNo = cafe24UseCase.cafe24CreateScriptTag(mallId, request);
 		return SuccessResponse.of(
-			cafe24UseCase.cafe24CreateScriptTag(mallId, request)
+			Map.of("scriptNo", scriptNo)
 		).asHttp(HttpStatus.OK);
 	}
 }
