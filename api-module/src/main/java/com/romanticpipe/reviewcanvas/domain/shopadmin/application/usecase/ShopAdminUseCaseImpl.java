@@ -55,6 +55,8 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.approveStatus(false)
 			.build();
 
+		shopAdminCreator.signUp(shopAdmin);
+		System.out.println("test: " + shopAdmin.getId());
 		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
 			.shopAdminId(shopAdmin.getId())
 			.title(true)
@@ -72,7 +74,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.shopAdminId(shopAdmin.getId())
 			.build();
 
-		shopAdminCreator.signUp(shopAdmin);
 		reviewVisibillityCreater.save(reviewVisibility);
 		myReviewDesignCreater.save(myReviewDesign);
 		AdminAuth adminAuth = AdminAuth.createShopAdminAuth(shopAdmin.getId());
