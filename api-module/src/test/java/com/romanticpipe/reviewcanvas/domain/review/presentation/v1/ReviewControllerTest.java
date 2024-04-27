@@ -1,11 +1,12 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
-import com.romanticpipe.reviewcanvas.TestReviewFactory;
-import com.romanticpipe.reviewcanvas.config.ControllerTestSetup;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
-import com.romanticpipe.reviewcanvas.dto.PageResponse;
-import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,14 +14,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.romanticpipe.reviewcanvas.TestReviewFactory;
+import com.romanticpipe.reviewcanvas.config.ControllerTestSetup;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
+import com.romanticpipe.reviewcanvas.dto.PageResponse;
+import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 
 @DisplayName("ReviewController 테스트")
 @WebMvcTest(ReviewController.class)

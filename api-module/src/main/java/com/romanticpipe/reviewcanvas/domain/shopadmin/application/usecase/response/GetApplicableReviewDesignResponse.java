@@ -4,49 +4,52 @@ import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignPosition;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignType;
 
-public class GetApplicableReviewDesignResponse {
+public record GetApplicableReviewDesignResponse(
+	Integer id,
+	Integer shopAdminId,
+	ReviewDesignType reviewDesignType,
+	ReviewDesignPosition reviewDesignPosition,
+	String themeName,
+	String layoutType,
+	String padding,
+	String gap,
+	String boxShadowColor,
+	int boxShadowWidth,
+	String borderColor,
+	int borderTransparency,
+	int borderWidth,
+	String pagingType,
+	int pagingNumber,
+	String textAlign,
+	String pointColor,
+	String pointType,
+	int lineEllipsis,
+	String reviewDesignUrl
+) {
 
-	private Integer id;
-	private Integer shopAdminId;
-	private ReviewDesignType reviewDesignType;
-	private ReviewDesignPosition reviewDesignPosition;
-	private String themeName;
-	private String layoutType;
-	private String padding;
-	private String gap;
-	private String boxShadowColor;
-	private int boxShadowWidth;
-	private String borderColor;
-	private int borderTransparency;
-	private int borderWidth;
-	private String pagingType;
-	private int pagingNumber;
-	private String textAlign;
-	private String pointColor;
-	private String pointType;
-	private int lineEllipsis;
-	private String reviewDesignUrl;
-
-	public GetApplicableReviewDesignResponse(ReviewDesign reviewDesign) {
-		this.id = reviewDesign.getId();
-		this.shopAdminId = reviewDesign.getShopAdminId();
-		this.reviewDesignType = reviewDesign.getReviewDesignType();
-		this.reviewDesignPosition = reviewDesign.getReviewDesignPosition();
-		this.themeName = reviewDesign.getThemeName();
-		this.layoutType = reviewDesign.getLayoutType();
-		this.padding = reviewDesign.getPadding();
-		this.gap = reviewDesign.getGap();
-		this.boxShadowColor = reviewDesign.getBoxShadowColor();
-		this.boxShadowWidth = reviewDesign.getBoxShadowWidth();
-		this.borderColor = reviewDesign.getBorderColor();
-		this.borderTransparency = reviewDesign.getBorderTransparency();
-		this.borderWidth = reviewDesign.getBorderWidth();
-		this.pagingType = reviewDesign.getPagingType();
-		this.pagingNumber = reviewDesign.getPagingNumber();
-		this.textAlign = reviewDesign.getTextAlign();
-		this.pointColor = reviewDesign.getPointColor();
-		this.pointType = reviewDesign.getPointType();
-		this.lineEllipsis = reviewDesign.getLineEllipsis();
-		this.reviewDesignUrl = reviewDesign.getReviewDesignUrl();
+	public static GetApplicableReviewDesignResponse from(ReviewDesign reviewDesign) {
+		return new GetApplicableReviewDesignResponse(
+			reviewDesign.getId(),
+			reviewDesign.getShopAdminId(),
+			reviewDesign.getReviewDesignType(),
+			reviewDesign.getReviewDesignPosition(),
+			reviewDesign.getThemeName(),
+			reviewDesign.getLayoutType(),
+			reviewDesign.getPadding(),
+			reviewDesign.getGap(),
+			reviewDesign.getBoxShadowColor(),
+			reviewDesign.getBoxShadowWidth(),
+			reviewDesign.getBorderColor(),
+			reviewDesign.getBorderTransparency(),
+			reviewDesign.getBorderWidth(),
+			reviewDesign.getPagingType(),
+			reviewDesign.getPagingNumber(),
+			reviewDesign.getTextAlign(),
+			reviewDesign.getPointColor(),
+			reviewDesign.getPointType(),
+			reviewDesign.getLineEllipsis(),
+			reviewDesign.getReviewDesignUrl()
+		);
 	}
 }
+
