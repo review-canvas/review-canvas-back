@@ -9,17 +9,16 @@ import java.util.List;
 
 @Schema(description = "카페24 스크립트 태그 생성 API request")
 public record Cafe24CreateScriptTagRequest(
-	@Schema(name = "원본 script 경로", description = "설치할 스크립트의 원본 경로(절대 경로)",
+	@Schema(description = "설치할 스크립트의 원본 경로(절대 경로)",
 		requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotBlank String src,
-	@Schema(name = "화면 경로",
-		description = "스크립트를 표시할 화면 경로. 화면 경로는 화면의 페이지 경로가 아니라 쇼핑몰의 각 페이지에 부여된 특정한 역할을 의미함",
+	@Schema(description = "스크립트를 표시할 화면 경로. 화면 경로는 화면의 페이지 경로가 아니라 쇼핑몰의 각 페이지에 부여된 특정한 역할을 의미함",
 		requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotEmpty
 	List<String> displayLocation,
 	@Schema(description = "제외 경로", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	List<String> excludeLocation,
-	@Schema(name = "스킨 번호", description = "스크립트를 적용할 스킨 번호", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	@Schema(description = "스크립트를 적용할 스킨 번호", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	List<Integer> skinNo
 ) {
 	public Cafe24CreateScriptTagDto toCafe24CreateScriptTagDto() {
