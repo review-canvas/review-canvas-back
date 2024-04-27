@@ -3,9 +3,12 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
+import com.romanticpipe.reviewcanvas.domain.ReviewDesignPosition;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetApplicableReviewDesignResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetGeneralReviewThemeListResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetReviewVisibilityTitleResponse;
 import jakarta.validation.Valid;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -80,6 +84,22 @@ class ShopAdminController implements ShopAdminApi {
 		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest) {
 		shopAdminUseCase.updateReviewDesign(jwtInfo.adminId(), reviewDesignId, updateReviewDesignRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/shop-admin/review-design/{shopAdminId}/{reviewDesignPosition}")
+	public ResponseEntity<SuccessResponse<List<GetApplicableReviewDesignResponse>>> getApplicableReviewDesign(
+		@PathVariable("shopAdminId") Integer shopAdminId,
+		@PathVariable("reviewDesignPosition") ReviewDesignPosition reviewDesignPosition
+	) {
+		List<ReviewDesign> reviewDesigns = shopAdminUseCase.getCustomReviewThemeList(shopAdminId);
+		List<GetApplicableReviewDesignResponse> response = new ArrayList<>();
+		for (ReviewDesign reviewDesign : reviewDesigns) {
+			if (reviewDesign.getReviewDesignPosition() == reviewDesignPosition) {
+				response.add(new GetApplicableReviewDesignResponse(reviewDesign));
+			}
+		}
+		return SuccessResponse.of(response).asHttp(HttpStatus.OK);
 	}
 
 }

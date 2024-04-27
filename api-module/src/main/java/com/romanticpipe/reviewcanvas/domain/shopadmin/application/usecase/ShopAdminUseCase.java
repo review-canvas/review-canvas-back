@@ -18,6 +18,8 @@ public interface ShopAdminUseCase {
 
 	List<ReviewDesign> getGeneralReviewThemeList();
 
+	List<ReviewDesign> getCustomReviewThemeList(Integer shopAdminId);
+
 	void updateReviewDesign(Integer adminId, Integer reviewDesignId,
 							UpdateReviewDesignRequest updateReviewDesignRequest);
 }

@@ -12,7 +12,6 @@ public class MyReviewDesignValidator {
 
 	private final MyReviewDesignRepository myReviewDesignRepository;
 
-
 	public void validateIsMyDesign(Integer shopAdminId, Integer reviewDesignId) {
 		myReviewDesignRepository.findByShopAdminIdAndReviewDesignId(shopAdminId, reviewDesignId)
 			.orElseThrow(() -> new BusinessException(ShopAdminErrorCode.NOT_REVIEW_DESIGN_OWNER));

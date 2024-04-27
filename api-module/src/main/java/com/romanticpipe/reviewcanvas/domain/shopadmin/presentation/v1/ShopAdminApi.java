@@ -3,8 +3,10 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.ReviewDesignPosition;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetApplicableReviewDesignResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetGeneralReviewThemeListResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetReviewVisibilityTitleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -94,5 +96,18 @@ interface ShopAdminApi {
 	ResponseEntity<SuccessResponse<Void>> updateReviewDesign(
 		@AuthInfo JwtInfo jwtInfo, @PathVariable("reviewDesignId") Integer reviewDesignId,
 		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest
+	);
+
+	@Operation(summary = "적용 가능한 리뷰 디자인 조회 API", description = "적용 가능한 리뷰 디자인을 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 적용 가능한 리뷰 디자인 조회가 완료되었습니다.")
+	})
+	@GetMapping("/shop-admin/review-design/{shopAdminId}/{reviewDesignPosition}")
+	ResponseEntity<SuccessResponse<List<GetApplicableReviewDesignResponse>>> getApplicableReviewDesign(
+		@PathVariable("shopAdminId") Integer shopAdminId,
+		@PathVariable("reviewDesignPosition") ReviewDesignPosition reviewDesignPosition
 	);
 }
