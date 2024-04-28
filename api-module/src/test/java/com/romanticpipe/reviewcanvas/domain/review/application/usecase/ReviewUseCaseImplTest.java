@@ -73,4 +73,13 @@ class ReviewUseCaseImplTest {
 		}
 	}
 
+	@DisplayName("getAwaitReviewsByShopAdmin는")
+	class GetAwaitReviewsByShopAdminTest {
+		//given
+
+		// when
+
+		// then
+	}
+
 }

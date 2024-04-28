@@ -11,6 +11,7 @@ import com.romanticpipe.reviewcanvas.util.PageableUtils;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,8 @@ public class ReviewValidator {
 
 	public PageResponse<Review> validAwaitReviewByShopAdminId(long shopAdminId, PageableRequest pageableRequest) {
 		Pageable pageable = PageableUtils.toPageable(pageableRequest);
-		return PageableUtils.toPageResponse(reviewRepository.findAllByShopAdminId(shopAdminId, pageable));
+		Page<Review> allByShopAdminId = reviewRepository.findAllByShopAdminId(shopAdminId, pageable);
+		return PageableUtils.toPageResponse(allByShopAdminId);
 	}
 
 }
