@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import com.romanticpipe.reviewcanvas.TestProductFactory;
 import com.romanticpipe.reviewcanvas.TestReviewFactory;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetAwaitReviewResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -73,13 +74,35 @@ class ReviewUseCaseImplTest {
 		}
 	}
 
+	@Nested
 	@DisplayName("getAwaitReviewsByShopAdmin는")
 	class GetAwaitReviewsByShopAdminTest {
-		//given
 
-		// when
+		@Test
+		@DisplayName("댓글 승인 시스템을 활성화한 shop에서 대기중인 리뷰를 dto로 변환하여 반환한다.")
+		void it_returns_await_reviews_by_shopAdmin() {
+			//given
+			var shopAdminId = 1;
+			var mallId = "mallId";
+			var productNo = 1L;
+			var productId = 2L;
+			// var shopAdmin = TestShopAdminFactory.createShopAdmin();
+			var product = TestProductFactory.createProduct(productId, productNo, shopAdminId);
+			var pageableRequest = PageableRequest.of(0, 10, Direction.ASC);
+			var review = TestReviewFactory.createReview(1L, 1L, 1L, "content", 5);
+			var getReviewResponse = new PageResponse<>(0, 10, 0, List.of(review));
+			given(productReader.findByMallIdAndProductNo(eq(mallId), eq(productNo)))
+				.willReturn(Optional.of(product));
+			given(reviewReader.findByProductId(eq(productId), eq(pageableRequest)))
+				.willReturn(getReviewResponse);
 
-		// then
+			// when
+			var result = reviewUseCase.getAwaitReviewsByShopAdmin(shopAdminId, pageableRequest);
+
+			// then
+			Assertions.assertThat(result).isEqualTo(getReviewResponse.map(GetAwaitReviewResponse::from));
+		}
+
 	}
 
 }
