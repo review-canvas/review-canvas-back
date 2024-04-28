@@ -23,6 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -42,7 +43,8 @@ public class AuthFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) {
-		return isRequestMatch(accessPath.getAllAllowedPath(), request);
+		return !isRequestMatch(accessPath.getShopAdminAllowedPath(), request)
+			&& !isRequestMatch(accessPath.getSuperAdminAllowedPath(), request);
 	}
 
 	private void authentication(HttpServletRequest request, HttpServletResponse response) {
@@ -51,7 +53,8 @@ public class AuthFilter extends OncePerRequestFilter {
 		try {
 			tokenProvider.validateToken(JwtType.ACCESS, accessToken);
 		} catch (TokenExpiredException e) {
-			String refreshToken = Arrays.stream(request.getCookies())
+			Cookie[] cookies = Optional.ofNullable(request.getCookies()).orElseThrow(() -> e);
+			String refreshToken = Arrays.stream(cookies)
 				.filter(cookie -> CustomCookieName.REFRESH_TOKEN.equals(cookie.getName()))
 				.findAny()
 				.map(Cookie::getValue)
@@ -90,13 +93,21 @@ public class AuthFilter extends OncePerRequestFilter {
 	}
 
 	private void validateAdminHasAccessPermission(HttpServletRequest request, Authentication authentication) {
-		boolean hasAccessPermissionDenied = authentication.getAuthorities().stream()
+		boolean hasAccessPermissionAllowed = authentication.getAuthorities().stream()
 			.map(GrantedAuthority::getAuthority)
 			.map(AdminRole::valueOf)
-			.anyMatch(authority -> authority == AdminRole.ROLE_SHOP_ADMIN
-				&& isRequestMatch(accessPath.getShopAdminDeniedPath(), request));
+			.anyMatch(authority -> {
+				if (authority.equals(AdminRole.ROLE_SHOP_ADMIN)) {
+					return isRequestMatch(accessPath.getShopAdminAllowedPath(), request);
+				}
+				if (authority.equals(AdminRole.ROLE_SUPER_ADMIN)) {
+					return isRequestMatch(accessPath.getSuperAdminAllowedPath(), request);
+				}
+				return false;
+			});
 
-		if (hasAccessPermissionDenied) {
+
+		if (!hasAccessPermissionAllowed) {
 			throw new TokenException(SecurityErrorCode.AUTHORITY_NOT_FOUND);
 		}
 	}

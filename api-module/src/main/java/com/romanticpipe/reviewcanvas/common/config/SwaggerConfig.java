@@ -30,12 +30,23 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
 	@Bean
-	public GroupedOpenApi allOpenApi() {
-		String[] paths = {"/**"};
+	public GroupedOpenApi v1GroupedOpenApi() {
+		String[] paths = {"/api/v1/**"};
 
 		return GroupedOpenApi
 			.builder()
-			.group("모든 API")
+			.group("API v1")
+			.pathsToMatch(paths)
+			.build();
+	}
+
+	@Bean
+	public GroupedOpenApi v2GroupedOpenApi() {
+		String[] paths = {"/api/v2/**"};
+
+		return GroupedOpenApi
+			.builder()
+			.group("API v2")
 			.pathsToMatch(paths)
 			.build();
 	}

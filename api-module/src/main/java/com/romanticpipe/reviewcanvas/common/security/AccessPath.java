@@ -6,55 +6,37 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Component
 public final class AccessPath {
 
 	@Getter
-	private final MultiValueMap<String, HttpMethod> allAllowedPath;
+	private final MultiValueMap<String, HttpMethod> shopAdminAllowedPath;
 	@Getter
-	private final MultiValueMap<String, HttpMethod> shopAdminDeniedPath;
-
-	private final List<HttpMethod> allMethod =
-		Arrays.asList(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE);
+	private final MultiValueMap<String, HttpMethod> superAdminAllowedPath;
 
 	private AccessPath() {
-		allAllowedPath = initAllAllowedPath();
-		shopAdminDeniedPath = initShopAdminDeniedPath();
+		shopAdminAllowedPath = initShopAdminAllowedPath();
+		superAdminAllowedPath = initShopAdminDeniedPath();
 	}
 
-	private MultiValueMap<String, HttpMethod> initAllAllowedPath() {
-		MultiValueMap<String, HttpMethod> allAllowedPath = new LinkedMultiValueMap<>();
-		// swagger
-		allAllowedPath.put("/swagger-ui/**", allMethod);
-		allAllowedPath.put("/v3/api-docs/**", allMethod);
-
-		// health check
-		allAllowedPath.put("/api/v1/health", allMethod);
-
-		// cafe24
-		allAllowedPath.put("/api/v1/cafe24/{mallId}/authentication-process", List.of(HttpMethod.POST));
-
-		// auth
-		allAllowedPath.put("/api/v1/shop-admin/login", List.of(HttpMethod.POST));
-		allAllowedPath.put("/api/v1/super-admin/login", List.of(HttpMethod.POST));
-		allAllowedPath.put("/api/v1/reissue-access-token", List.of(HttpMethod.POST));
-
-		// shop admin
-		allAllowedPath.put("/api/v1/shop-admin/sign-up", List.of(HttpMethod.POST));
-		allAllowedPath.put("/api/v1/shop-admin/email-check", List.of(HttpMethod.GET));
-
-		// review
-		allAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET, HttpMethod.POST));
-		allAllowedPath.put("/api/v1/reviews/{reviewId}", List.of(HttpMethod.PATCH));
-		allAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
-		return allAllowedPath;
+	private MultiValueMap<String, HttpMethod> initShopAdminAllowedPath() {
+		MultiValueMap<String, HttpMethod> shopAdminAllowedPath = new LinkedMultiValueMap<>();
+		shopAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
+		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design/{reviewDesignId}", List.of(HttpMethod.PATCH));
+		shopAdminAllowedPath.put("/api/v1/shop-admin/review-visibility/title", List.of(HttpMethod.GET));
+		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design/theme-list", List.of(HttpMethod.GET));
+		shopAdminAllowedPath.put("/api/v1/logout", List.of(HttpMethod.POST));
+		return shopAdminAllowedPath;
 	}
 
 	private MultiValueMap<String, HttpMethod> initShopAdminDeniedPath() {
-		LinkedMultiValueMap<String, HttpMethod> shopAdminDeniedPath = new LinkedMultiValueMap<>();
-		return shopAdminDeniedPath;
+		LinkedMultiValueMap<String, HttpMethod> superAdminAllowedPath = new LinkedMultiValueMap<>();
+		superAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
+		superAdminAllowedPath.put("/api/v1/shop-admin/review-visibility/title", List.of(HttpMethod.GET));
+		superAdminAllowedPath.put("/api/v1/shop-admin/review-design/theme-list", List.of(HttpMethod.GET));
+		superAdminAllowedPath.put("/api/v1/logout", List.of(HttpMethod.POST));
+		return superAdminAllowedPath;
 	}
 }

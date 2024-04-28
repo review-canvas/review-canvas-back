@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.cafe24;
 
+import com.romanticpipe.reviewcanvas.cafe24.application.Cafe24ApplicationClient;
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AuthenticationClient;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.config.RestClientLoggingInterceptor;
@@ -37,12 +38,29 @@ class Cafe24HttpExchangeConfig {
 	public Cafe24ProductClient cafe24ProductClient(
 		ClientHttpRequestFactory clientHttpRequestFactory, RestClientLoggingInterceptor restClientLoggingInterceptor,
 		Cafe24TokenInterceptor cafe24TokenInterceptor) {
-		RestClient restClient = RestClient.builder()
+		RestClient restClient = createRestClient(clientHttpRequestFactory, restClientLoggingInterceptor,
+			cafe24TokenInterceptor);
+
+		return getHttpExchange(restClient, Cafe24ProductClient.class);
+	}
+
+	@Bean
+	public Cafe24ApplicationClient cafe24ApplicationClient(
+		ClientHttpRequestFactory clientHttpRequestFactory, RestClientLoggingInterceptor restClientLoggingInterceptor,
+		Cafe24TokenInterceptor cafe24TokenInterceptor) {
+		RestClient restClient = createRestClient(clientHttpRequestFactory, restClientLoggingInterceptor,
+			cafe24TokenInterceptor);
+
+		return getHttpExchange(restClient, Cafe24ApplicationClient.class);
+	}
+
+	private RestClient createRestClient(ClientHttpRequestFactory clientHttpRequestFactory,
+										RestClientLoggingInterceptor restClientLoggingInterceptor,
+										Cafe24TokenInterceptor cafe24TokenInterceptor) {
+		return RestClient.builder()
 			.requestFactory(clientHttpRequestFactory)
 			.requestInterceptor(restClientLoggingInterceptor)
 			.requestInterceptor(cafe24TokenInterceptor)
 			.build();
-
-		return getHttpExchange(restClient, Cafe24ProductClient.class);
 	}
 }
