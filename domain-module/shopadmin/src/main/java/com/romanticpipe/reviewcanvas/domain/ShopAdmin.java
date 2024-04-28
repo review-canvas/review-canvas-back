@@ -1,6 +1,9 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import java.time.LocalDateTime;
+
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,8 +12,6 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -35,7 +36,7 @@ public class ShopAdmin extends BaseEntityWithUpdate implements Admin {
 
 	@Builder
 	public ShopAdmin(String mallId, String email, String password, String mallName, String logoImageUrl,
-					 String mallNumber, String phoneNumber, Boolean approveStatus, String businessNumber) {
+		String mallNumber, String phoneNumber, Boolean approveStatus, String businessNumber) {
 		this.mallId = mallId;
 		this.email = email;
 		this.password = password;
@@ -49,6 +50,14 @@ public class ShopAdmin extends BaseEntityWithUpdate implements Admin {
 
 	public boolean isApproveStatus() {
 		return approveStatus;
+	}
+
+	public void delete(LocalDateTime localDateTime) {
+		this.deletedAt = localDateTime;
+	}
+
+	public void recover() {
+		this.deletedAt = null;
 	}
 
 	@Override

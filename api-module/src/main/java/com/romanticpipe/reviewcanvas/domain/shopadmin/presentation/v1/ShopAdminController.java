@@ -1,18 +1,14 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
-import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetGeneralReviewThemeListResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetReviewVisibilityTitleResponse;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +20,17 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetGeneralReviewThemeListResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetReviewVisibilityTitleResponse;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -79,6 +83,13 @@ class ShopAdminController implements ShopAdminApi {
 		@AuthInfo JwtInfo jwtInfo, @PathVariable Integer reviewDesignId,
 		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest) {
 		shopAdminUseCase.updateReviewDesign(jwtInfo.adminId(), reviewDesignId, updateReviewDesignRequest);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@DeleteMapping("/shop-admin/quit")
+	public ResponseEntity<SuccessResponse<Void>> quit(@AuthInfo JwtInfo jwtInfo) {
+		shopAdminUseCase.deleteShopAdmin(jwtInfo.adminId(), jwtInfo.adminRole(), LocalDateTime.now());
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 

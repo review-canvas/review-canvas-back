@@ -1,6 +1,15 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
+import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignType;
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
@@ -9,19 +18,15 @@ import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.reques
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
+import com.romanticpipe.reviewcanvas.service.AdminAuthValidator;
 import com.romanticpipe.reviewcanvas.service.MyReviewDesignValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewDesignReader;
 import com.romanticpipe.reviewcanvas.service.ReviewDesignValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -29,6 +34,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final PasswordEncoder passwordEncoder;
 	private final AdminAuthCreater adminAuthCreater;
+	private final AdminAuthValidator adminAuthValidator;
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
 	private final ReviewVisibilityReader reviewVisibilityReader;
@@ -88,7 +94,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void updateReviewDesign(Integer shopAdminId, Integer reviewDesignId,
-								   UpdateReviewDesignRequest updateReviewDesignRequest) {
+		UpdateReviewDesignRequest updateReviewDesignRequest) {
 		ReviewDesign reviewDesign = reviewDesignValidator.validById(reviewDesignId);
 		myReviewDesignValidator.validateIsMyDesign(shopAdminId, reviewDesignId);
 
@@ -110,5 +116,14 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			updateReviewDesignRequest.pointType(),
 			updateReviewDesignRequest.lineEllipsis(),
 			updateReviewDesignRequest.reviewDesignUrl());
+	}
+
+	@Override
+	@Transactional
+	public void deleteShopAdmin(Integer adminId, AdminRole adminRole, LocalDateTime localDateTime) {
+		ShopAdmin shopAdmin = shopAdminValidator.validById(adminId);
+		shopAdmin.delete(localDateTime);
+		AdminAuth adminAuth = adminAuthValidator.findByAdminId(adminId, adminRole);
+		adminAuth.logout();
 	}
 }
