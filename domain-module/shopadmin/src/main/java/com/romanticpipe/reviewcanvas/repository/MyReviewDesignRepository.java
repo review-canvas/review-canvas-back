@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface MyReviewDesignRepository extends JpaRepository<MyReviewDesign, Integer> {
 
-	Optional<MyReviewDesign> findByShopAdminIdAndReviewDesignId(Integer shopAdminId, Integer reviewDesignId);
+	// Optional<MyReviewDesign> findByShopAdminIdAndReviewDesignId(Integer shopAdminId, Integer reviewDesignId);
 }

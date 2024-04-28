@@ -18,6 +18,7 @@ public class MyReviewDesign {
 	@Column(name = "my_review_design_id")
 	private Integer id;
 
-	private Integer reviewDesignId;
+	private Integer reviewListDesignId;
+	private Integer reviewModalDesignId;
 	private Integer shopAdminId;
 }

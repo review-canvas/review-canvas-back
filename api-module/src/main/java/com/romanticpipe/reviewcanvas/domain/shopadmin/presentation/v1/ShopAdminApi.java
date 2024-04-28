@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetGeneralReviewThemeListResponse;
@@ -94,5 +95,16 @@ interface ShopAdminApi {
 	ResponseEntity<SuccessResponse<Void>> updateReviewDesign(
 		@AuthInfo JwtInfo jwtInfo, @PathVariable("reviewDesignId") Integer reviewDesignId,
 		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest
+	);
+
+	@Operation(summary = "Shop Admin 조회 API", description = "Shop Admin Id로 Shop Admin을 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 Shop Admin 조회가 완료되었습니다.")
+	})
+	@GetMapping(value = "/shop-admin/{shopAdminId}")
+	ResponseEntity<SuccessResponse<ShopAdmin>> getShopAdmin(
+		@PathVariable Integer shopAdminId
 	);
 }

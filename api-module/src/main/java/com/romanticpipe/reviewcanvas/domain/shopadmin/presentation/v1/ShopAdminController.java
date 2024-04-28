@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
@@ -80,6 +81,12 @@ class ShopAdminController implements ShopAdminApi {
 		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest) {
 		shopAdminUseCase.updateReviewDesign(jwtInfo.adminId(), reviewDesignId, updateReviewDesignRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping(value = "/shop-admin/{shopAdminId}")
+	public ResponseEntity<SuccessResponse<ShopAdmin>> getShopAdmin(@PathVariable Integer shopAdminId) {
+		return SuccessResponse.of(shopAdminUseCase.getShopAdmin(shopAdminId)).asHttp(HttpStatus.OK);
 	}
 
 }

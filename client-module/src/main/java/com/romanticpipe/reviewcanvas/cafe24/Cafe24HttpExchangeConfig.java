@@ -27,7 +27,7 @@ class Cafe24HttpExchangeConfig {
 		ClientHttpRequestFactory clientHttpRequestFactory, RestClientLoggingInterceptor restClientLoggingInterceptor) {
 		RestClient restClient = RestClient.builder()
 			.requestFactory(clientHttpRequestFactory)
-			.defaultHeader("Authorization", "Basic " + AUTHORIZATION_CODE)
+			.defaultHeader("Authorization", "Basic " + 'a')
 			.requestInterceptor(restClientLoggingInterceptor)
 			.build();
 

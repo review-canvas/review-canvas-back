@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignType;
@@ -14,11 +15,16 @@ import com.romanticpipe.reviewcanvas.service.ReviewDesignReader;
 import com.romanticpipe.reviewcanvas.service.ReviewDesignValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
+import com.romanticpipe.reviewcanvas.service.ShopAdminReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -31,6 +37,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	private final AdminAuthCreater adminAuthCreater;
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
+	private final ShopAdminReader shopAdminReader;
 	private final ReviewVisibilityReader reviewVisibilityReader;
 	private final ReviewDesignReader reviewDesignReader;
 	private final ReviewDesignValidator reviewDesignValidator;
@@ -110,5 +117,10 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			updateReviewDesignRequest.pointType(),
 			updateReviewDesignRequest.lineEllipsis(),
 			updateReviewDesignRequest.reviewDesignUrl());
+	}
+
+	public ShopAdmin getShopAdmin( Integer shopAdminId) {
+		shopAdminValidator.validById(shopAdminId);
+		return shopAdminReader.findById(shopAdminId).get();
 	}
 }
