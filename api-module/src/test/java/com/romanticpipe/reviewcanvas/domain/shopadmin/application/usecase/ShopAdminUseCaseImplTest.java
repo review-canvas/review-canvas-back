@@ -1,7 +1,9 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
 import com.romanticpipe.reviewcanvas.TestReviewDesignFactory;
+import com.romanticpipe.reviewcanvas.TestShopAdminFactory;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignPosition;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.service.MyReviewDesignValidator;
@@ -9,7 +11,10 @@ import com.romanticpipe.reviewcanvas.service.ReviewDesignReader;
 import com.romanticpipe.reviewcanvas.service.ReviewDesignValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
+import com.romanticpipe.reviewcanvas.service.ShopAdminReader;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,10 +23,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 class ShopAdminUseCaseImplTest {
@@ -34,6 +43,8 @@ class ShopAdminUseCaseImplTest {
 	ShopAdminCreator shopAdminCreator;
 	@Mock
 	ShopAdminValidator shopAdminValidator;
+	@Mock
+	ShopAdminReader shopAdminReader;
 	@Mock
 	ReviewVisibilityReader reviewVisibilityReader;
 	@Mock
@@ -69,6 +80,29 @@ class ShopAdminUseCaseImplTest {
 
 			//then
 			assertThat(reviewDesign.getReviewDesignUrl()).isEqualTo(updateReviewDesignRequest.reviewDesignUrl());
+		}
+
+	}
+
+
+	@Nested
+	@DisplayName("getShopAdmin 메소드는")
+	class GetShopAdminTest {
+		@Test
+		@DisplayName("Shop Admini Id로 Shop Admin을 조회한다.")
+		void get_shop_admin_by_shop_admin_id() {
+			//given
+			var shopAdminId = 1;
+			var shopAdmin = TestShopAdminFactory.createShopAdmin("test", "BOARD", "0px", "0px", "#000000",
+				"0", "#ffffff", false,  "url"
+			);
+			given(shopAdminReader.findById(eq(shopAdminId))).willReturn(Optional.of(shopAdmin));
+
+			//when
+			var result = shopAdminUseCase.getShopAdmin(shopAdminId);
+
+			//then
+			Assertions.assertThat(result).isEqualTo(shopAdmin);
 		}
 
 	}

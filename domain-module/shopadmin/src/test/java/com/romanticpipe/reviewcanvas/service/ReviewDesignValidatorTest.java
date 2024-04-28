@@ -21,6 +21,7 @@ class ReviewDesignValidatorTest {
 
 	@Mock
 	ReviewDesignRepository reviewDesignRepository;
+
 	@InjectMocks
 	ReviewDesignValidator reviewDesignValidator;
 

@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("ShopAdminController 테스트")
@@ -56,6 +56,27 @@ class ShopAdminControllerTest extends ControllerTestSetup {
 			ResultActions result = securityMockMvc.perform(
 				patch(BASE_URL + "/shop-admin/review-design/" + reviewDesignId).contentType(
 					MediaType.APPLICATION_JSON_VALUE).content(updateReviewDesignRequest).with(csrf()));
+			//then
+			result.andExpect(status().isOk());
+		}
+
+	}
+
+
+	@Nested
+	@DisplayName("Shop Admin 조회 API는")
+	@WithCustomAdmin
+	class GetShopAdminTest {
+		@DisplayName("Shop Admin 아이디로 Shop Admin을 조회할 수 있다.")
+		@Test
+		void getShopAdmin() throws Exception {
+			//given
+			var shopAdminId = 1;
+
+			//when
+			ResultActions result = securityMockMvc.perform(
+				get(BASE_URL + "/shop-admin/" + shopAdminId).with(csrf()));
+
 			//then
 			result.andExpect(status().isOk());
 		}
