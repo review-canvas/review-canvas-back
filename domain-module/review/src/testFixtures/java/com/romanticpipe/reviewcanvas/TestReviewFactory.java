@@ -15,4 +15,10 @@ public final class TestReviewFactory {
 		ReflectionTestUtils.setField(review, "id", reviewId);
 		return review;
 	}
+
+	public static Review createWaitingReview(Long reviewId, Long productId, Long userId, String content, int score) {
+		Review review = new Review(productId, userId, content, score, ReviewStatus.WAITING);
+		ReflectionTestUtils.setField(review, "id", reviewId);
+		return review;
+	}
 }

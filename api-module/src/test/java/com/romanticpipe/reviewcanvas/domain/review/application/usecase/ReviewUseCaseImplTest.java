@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import com.romanticpipe.reviewcanvas.TestProductFactory;
 import com.romanticpipe.reviewcanvas.TestReviewFactory;
+import com.romanticpipe.reviewcanvas.TestShopAdminFactory;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetAwaitReviewResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
@@ -86,10 +87,11 @@ class ReviewUseCaseImplTest {
 			var mallId = "mallId";
 			var productNo = 1L;
 			var productId = 2L;
-			// var shopAdmin = TestShopAdminFactory.createShopAdmin();
+			var shopAdmin = TestShopAdminFactory.createApproveShopAdmin(mallId, "test@naver.com", "test", "TEST_MALL",
+				"IMAGE_URL", "MALL_001", "000-0000-0000", "BUSINESS_NUM");
 			var product = TestProductFactory.createProduct(productId, productNo, shopAdminId);
 			var pageableRequest = PageableRequest.of(0, 10, Direction.ASC);
-			var review = TestReviewFactory.createReview(1L, 1L, 1L, "content", 5);
+			var review = TestReviewFactory.createWaitingReview(1L, 1L, 1L, "content", 5);
 			var getReviewResponse = new PageResponse<>(0, 10, 0, List.of(review));
 			given(productReader.findByMallIdAndProductNo(eq(mallId), eq(productNo)))
 				.willReturn(Optional.of(product));
