@@ -43,6 +43,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
+		shopAdminValidator.validateEmail(signUpRequest.email());
 
 		ShopAdmin shopAdmin = ShopAdmin.builder()
 			.email(signUpRequest.email())
