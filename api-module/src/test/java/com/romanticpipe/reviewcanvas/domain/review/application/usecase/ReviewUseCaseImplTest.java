@@ -22,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -60,8 +59,8 @@ class ReviewUseCaseImplTest {
 			var pageableRequest = PageableRequest.of(0, 10, Direction.ASC);
 			var review = TestReviewFactory.createReview(1L, 1L, 1L, "content", 5);
 			var getReviewResponse = new PageResponse<>(0, 10, 0, List.of(review));
-			given(productReader.findByMallIdAndProductNo(eq(mallId), eq(productNo)))
-				.willReturn(Optional.of(product));
+			given(productValidator.validateByMallIdAndProductNo(eq(mallId), eq(productNo)))
+				.willReturn(product);
 			given(reviewReader.findByProductId(eq(productId), eq(pageableRequest)))
 				.willReturn(getReviewResponse);
 

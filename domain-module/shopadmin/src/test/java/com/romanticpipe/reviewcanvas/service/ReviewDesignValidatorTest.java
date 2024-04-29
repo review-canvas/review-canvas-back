@@ -1,10 +1,7 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
-
-import java.util.Optional;
-
+import com.romanticpipe.reviewcanvas.TestReviewDesignFactory;
+import com.romanticpipe.reviewcanvas.repository.ReviewDesignRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,8 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.romanticpipe.reviewcanvas.TestReviewDesignFactory;
-import com.romanticpipe.reviewcanvas.repository.ReviewDesignRepository;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.eq;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewDesignValidatorTest {
