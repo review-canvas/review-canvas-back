@@ -45,7 +45,7 @@ public class ShopAdminValidator {
 			.orElseThrow(AdminNotFoundException::new);
 	}
 
-	public void validateEmail(String email) {
+	public void validateEmailDuplicated(String email) {
 		shopAdminRepository.findByEmail(email)
 			.ifPresent(admin -> {
 				throw new BusinessException(ShopAdminErrorCode.DUPLICATED_EMAIL);
