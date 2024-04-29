@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.common.healthcheck;
+package com.romanticpipe.reviewcanvas.domain.shopadmin.application.healthcheck;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

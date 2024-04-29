@@ -18,6 +18,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 		+ "on r.productId = p.id inner join ShopAdmin sa "
 		+ "on p.shopAdminId = sa.id "
 		+ "where sa.id = :shopAdminId and r.status = 'WAITING'")
-	Page<Review> findAllByShopAdminId(@Param("shopAdminId") long shopAdminId, Pageable pageable);
+	Page<Review> findAllByShopAdminId(@Param("shopAdminId") Integer shopAdminId, Pageable pageable);
 
 }

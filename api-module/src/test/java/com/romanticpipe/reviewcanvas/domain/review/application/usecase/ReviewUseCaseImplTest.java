@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 import com.romanticpipe.reviewcanvas.TestProductFactory;
 import com.romanticpipe.reviewcanvas.TestReviewFactory;
 import com.romanticpipe.reviewcanvas.TestShopAdminFactory;
+import com.romanticpipe.reviewcanvas.config.WithCustomAdmin;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetAwaitReviewResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
@@ -76,6 +77,7 @@ class ReviewUseCaseImplTest {
 	}
 
 	@Nested
+	@WithCustomAdmin
 	@DisplayName("getAwaitReviewsByShopAdmin는")
 	class GetAwaitReviewsByShopAdminTest {
 
@@ -91,8 +93,10 @@ class ReviewUseCaseImplTest {
 				"IMAGE_URL", "MALL_001", "000-0000-0000", "BUSINESS_NUM");
 			var product = TestProductFactory.createProduct(productId, productNo, shopAdminId);
 			var pageableRequest = PageableRequest.of(0, 10, Direction.ASC);
-			var review = TestReviewFactory.createWaitingReview(1L, 1L, 1L, "content", 5);
+			var review = TestReviewFactory.createWaitingReview(1L, productId, 1L, "content", 5);
 			var getReviewResponse = new PageResponse<>(0, 10, 0, List.of(review));
+			given(shopAdminValidator.validById(eq(shopAdminId)))
+				.willReturn(shopAdmin);
 			given(productReader.findByMallIdAndProductNo(eq(mallId), eq(productNo)))
 				.willReturn(Optional.of(product));
 			given(reviewReader.findByProductId(eq(productId), eq(pageableRequest)))
