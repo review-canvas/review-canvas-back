@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.review_property.domain;
+package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
