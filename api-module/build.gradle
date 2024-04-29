@@ -7,6 +7,7 @@ dependencies {
     implementation project(':domain-module:shopadmin')
     implementation project(':common-module')
     implementation project(':client-module')
+    runtimeOnly project(':scheduler-module')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -26,7 +27,7 @@ apply plugin: 'com.google.cloud.tools.jib'
 
 jib {
     def jibTag = System.getProperty("jib-tag")
-    def ecrUri = System.getenv("ECR_URI")
+    def ecrUri = System.getenv("ECR_URI") ?: "none"
 
     from {
         image = "eclipse-temurin:17-jre"

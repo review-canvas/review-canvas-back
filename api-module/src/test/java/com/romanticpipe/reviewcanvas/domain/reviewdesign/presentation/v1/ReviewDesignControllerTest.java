@@ -61,7 +61,7 @@ class ReviewDesignControllerTest extends ControllerTestSetup {
 				.build();
 			//when
 			ResultActions result = securityMockMvc.perform(
-				patch(BASE_URL + "/review-design/" + reviewDesignId).contentType(
+				patch(BASE_URL + "/shop-admin/review-design/" + reviewDesignId).contentType(
 						MediaType.APPLICATION_JSON_VALUE)
 					.content(objectMapper.writeValueAsString(reviewDesign))
 					.with(csrf()));

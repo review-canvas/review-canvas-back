@@ -1,7 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24Product;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
+import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductDto;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
@@ -79,11 +79,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	}
 
 	private Product createProduct(String mallId, Long productNo) {
-		Cafe24Product cafe24Product = cafe24ProductClient.getProduct(mallId, productNo);
-		cafe24Product.validateCafe24Product(mallId, productNo);
+		Cafe24ProductDto cafe24ProductDto = cafe24ProductClient.getProduct(mallId, productNo);
+		cafe24ProductDto.validateCafe24Product(mallId, productNo);
 		ShopAdmin shopAdmin = shopAdminValidator.validByMallId(mallId);
 
-		Product product = new Product(productNo, cafe24Product.getProductName(), shopAdmin.getId());
+		Product product = new Product(productNo, cafe24ProductDto.product().productName(), shopAdmin.getId());
 		return productCreator.save(product);
 	}
 }

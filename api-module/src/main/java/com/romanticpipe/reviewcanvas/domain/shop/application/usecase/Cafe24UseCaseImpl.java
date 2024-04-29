@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.shop.application.usecase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.romanticpipe.reviewcanvas.cafe24.Cafe24ErrorCode;
 import com.romanticpipe.reviewcanvas.cafe24.Cafe24FormUrlencodedFactory;
 import com.romanticpipe.reviewcanvas.cafe24.application.Cafe24ApplicationClient;
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AccessToken;
@@ -30,6 +31,9 @@ public class Cafe24UseCaseImpl implements Cafe24UseCase {
 	public void cafe24AuthenticationProcess(String mallId, String authCode) {
 		MultiValueMap<String, String> requestParam = Cafe24FormUrlencodedFactory.getCafe24AccessToken(authCode);
 		Cafe24AccessToken cafe24AccessToken = cafe24AuthenticationClient.getAccessToken(mallId, requestParam);
+		if (!cafe24AccessToken.isFullContent()) {
+			throw new BusinessException(Cafe24ErrorCode.INVALID_ACCESS_TOKEN);
+		}
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
 			try {
 				shopAuthTokenService.findByMallId(mallId)

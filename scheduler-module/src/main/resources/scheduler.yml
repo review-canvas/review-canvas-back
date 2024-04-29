@@ -1,0 +1,3 @@
+scheduler:
+  update-product:
+    cron: "00 00 03 * * *"
