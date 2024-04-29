@@ -28,4 +28,12 @@ public class MyReviewDesign {
 		this.reviewModalDesignId = reviewModalDesignId;
 		this.shopAdminId = shopAdminId;
 	}
+
+	public static MyReviewDesign create(int shopAdminId) {
+		return MyReviewDesign.builder()
+			.shopAdminId(shopAdminId)
+			.reviewListDesignId(1)
+			.reviewModalDesignId(2)
+			.build();
+	}
 }

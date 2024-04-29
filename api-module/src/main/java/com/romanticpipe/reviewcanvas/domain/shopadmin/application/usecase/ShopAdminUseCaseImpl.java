@@ -1,11 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
-import java.util.List;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.domain.MyReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
@@ -24,8 +18,12 @@ import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
 import com.romanticpipe.reviewcanvas.service.ReviewVisibillityCreater;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -52,31 +50,16 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.mallName(signUpRequest.mallName())
 			.mallNumber(signUpRequest.phoneNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
+			.mallId(signUpRequest.mallId())
 			.approveStatus(false)
 			.build();
+		shopAdminCreator.save(shopAdmin);
 
-		shopAdminCreator.signUp(shopAdmin);
-		System.out.println("test: " + shopAdmin.getId());
-		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
-			.shopAdminId(shopAdmin.getId())
-			.title(true)
-			.author(true)
-			.point(true)
-			.media(true)
-			.content(true)
-			.createdAt(true)
-			.updatedAt(true)
-			.build();
-
-		MyReviewDesign myReviewDesign = MyReviewDesign.builder()
-			.reviewListDesignId(1)
-			.reviewModalDesignId(2)
-			.shopAdminId(shopAdmin.getId())
-			.build();
-
+		ReviewVisibility reviewVisibility = ReviewVisibility.create(shopAdmin.getId());
+		MyReviewDesign myReviewDesign = MyReviewDesign.create(shopAdmin.getId());
+		AdminAuth adminAuth = AdminAuth.createShopAdminAuth(shopAdmin.getId());
 		reviewVisibillityCreater.save(reviewVisibility);
 		myReviewDesignCreater.save(myReviewDesign);
-		AdminAuth adminAuth = AdminAuth.createShopAdminAuth(shopAdmin.getId());
 		adminAuthCreater.save(adminAuth);
 	}
 
@@ -101,7 +84,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void updateReviewDesign(Integer shopAdminId, Integer reviewDesignId,
-		UpdateReviewDesignRequest updateReviewDesignRequest) {
+								   UpdateReviewDesignRequest updateReviewDesignRequest) {
 		ReviewDesign reviewDesign = reviewDesignValidator.validById(reviewDesignId);
 		myReviewDesignValidator.validateIsMyDesign(shopAdminId, reviewDesignId);
 

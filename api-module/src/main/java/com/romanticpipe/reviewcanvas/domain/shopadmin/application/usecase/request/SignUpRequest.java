@@ -11,7 +11,9 @@ public record SignUpRequest(@Schema(description = "Email", requiredMode = Schema
 							@Schema(description = "Phone Number", requiredMode = Schema.RequiredMode.REQUIRED)
 							@NotBlank String phoneNumber,
 							@Schema(description = "Mall Name", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotBlank String mallName
+							@NotBlank String mallName,
+							@Schema(description = "Mall ID", requiredMode = Schema.RequiredMode.REQUIRED)
+							@NotBlank String mallId
 ) {
 
 }
