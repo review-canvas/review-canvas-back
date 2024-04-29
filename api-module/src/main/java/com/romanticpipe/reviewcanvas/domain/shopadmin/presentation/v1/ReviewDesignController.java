@@ -25,7 +25,7 @@ public class ReviewDesignController implements ReviewDesignApi {
 	private final ReviewDesignUseCase reviewDesignUseCase;
 
 	@Override
-	@PatchMapping("/review-design/{reviewDesignId}")
+	@PatchMapping("/shop-admin/review-design/{reviewDesignId}")
 	public ResponseEntity<SuccessResponse<Void>> updateReviewDesign(
 		@AuthInfo JwtInfo jwtInfo, @PathVariable Integer reviewDesignId,
 		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest) {

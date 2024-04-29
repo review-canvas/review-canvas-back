@@ -27,7 +27,7 @@ public interface ReviewDesignApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 디자인 수정이 완료되었습니다.")
 	})
-	@PatchMapping("/review-design/{reviewDesignId}")
+	@PatchMapping("/shop-admin/review-design/{reviewDesignId}")
 	ResponseEntity<SuccessResponse<Void>> updateReviewDesign(
 		@AuthInfo JwtInfo jwtInfo, @PathVariable("reviewDesignId") Integer reviewDesignId,
 		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest
