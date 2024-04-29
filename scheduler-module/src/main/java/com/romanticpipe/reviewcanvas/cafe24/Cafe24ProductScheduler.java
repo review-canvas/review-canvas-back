@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * TASK: 매일 새벽 3시에 cafe24에서 제공하는 product 정보를 조회하여 db에 저장하거나, 업데이트한다.
@@ -33,7 +32,7 @@ public class Cafe24ProductScheduler {
 	private final Cafe24ProductClient productClient;
 	private final TransactionTemplate writeTransactionTemplate;
 
-	@SchedulerLock(name = "UpdateProduct")
+	@SchedulerLock(name = "UpdateProduct", lockAtLeastFor = "1m", lockAtMostFor = "1m")
 	@Scheduled(cron = "${scheduler.update-product.cron}")
 	public void processUpdateProduct() {
 		log.info("product 정보 업데이트 scheduler 시작");
@@ -55,11 +54,10 @@ public class Cafe24ProductScheduler {
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
 			try {
 				List<Product> products = productReader.findByShopAdminId(shopAdmin.getId());
-				AtomicInteger savedCount = new AtomicInteger(0);
-				cafe24Products.forEach(cafe24Product ->
-					updateOrSaveProduct(cafe24Product, products, shopAdmin, savedCount)
-				);
-				log.info("{} 쇼핑몰 상품 업데이트 성공 - 새롭게 추가된 상품 수: {}", shopAdmin.getMallName(), savedCount.get());
+				int savedCount = cafe24Products.stream()
+					.reduce(0, (count, cafe24Product) ->
+						count + updateOrSaveProduct(cafe24Product, products, shopAdmin), Integer::sum);
+				log.info("{} 쇼핑몰 상품 업데이트 성공 - 새롭게 추가된 상품 수: {}", shopAdmin.getMallName(), savedCount);
 			} catch (RuntimeException e) {
 				transactionStatus.setRollbackOnly();
 				log.warn("{} 쇼핑몰 상품 업데이트 실패", shopAdmin.getMallName());
@@ -68,18 +66,29 @@ public class Cafe24ProductScheduler {
 		});
 	}
 
-	private void updateOrSaveProduct(Cafe24Product cafe24Product, List<Product> existingProducts, ShopAdmin shopAdmin,
-									 AtomicInteger savedCount) {
-		existingProducts.stream()
-			.filter(product -> cafe24Product.productNo().equals(product.getProductNo()))
-			.findAny()
-			.ifPresentOrElse(
-				product -> product.update(cafe24Product.productName()),
-				() -> {
-					productCreator.save(new Product(cafe24Product.productNo(), cafe24Product.productName(),
-						shopAdmin.getId()));
-					savedCount.incrementAndGet();
-				}
-			);
+	private int updateOrSaveProduct(Cafe24Product cafe24Product, List<Product> existingProducts, ShopAdmin shopAdmin) {
+		return new UpdateSaveCafe24ProductTaskExecutor(productCreator)
+			.execute(cafe24Product, existingProducts, shopAdmin);
+	}
+
+	@RequiredArgsConstructor
+	static class UpdateSaveCafe24ProductTaskExecutor {
+		private final ProductCreator productCreator;
+		private int count = 0;
+
+		public int execute(Cafe24Product cafe24Product, List<Product> existingProducts, ShopAdmin shopAdmin) {
+			existingProducts.stream()
+				.filter(product -> cafe24Product.productNo().equals(product.getProductNo()))
+				.findAny()
+				.ifPresentOrElse(
+					product -> product.update(cafe24Product.productName()),
+					() -> {
+						productCreator.save(new Product(cafe24Product.productNo(), cafe24Product.productName(),
+							shopAdmin.getId()));
+						count++;
+					}
+				);
+			return count;
+		}
 	}
 }
