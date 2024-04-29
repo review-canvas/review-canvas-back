@@ -11,6 +11,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetGeneralReviewThemeListResponse;
@@ -35,11 +46,9 @@ interface ShopAdminApi {
 			responseCode = "200",
 			description = "성공적으로 회원가입이 완료되었습니다.")
 	})
-	@PostMapping(value = "/shop-admin/sign-up",
-		consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	@PostMapping(value = "/shop-admin/sign-up")
 	ResponseEntity<SuccessResponse<Void>> signUp(
-		@Valid @RequestPart SignUpRequest signUpRequest,
-		@RequestParam MultipartFile logoImage
+		@RequestBody SignUpRequest signUpRequest
 	);
 
 	@Operation(summary = "리뷰 노출 항목 title 조회 API", description = "리뷰 노출 항목 title을 조회한다.",

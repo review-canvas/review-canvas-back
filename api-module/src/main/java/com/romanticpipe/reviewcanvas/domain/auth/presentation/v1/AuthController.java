@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,12 @@ class AuthController implements AuthApi {
 	@PostMapping("/logout")
 	public ResponseEntity<SuccessResponse<Void>> logout(@AuthInfo JwtInfo jwtInfo) {
 		authUseCase.logout(jwtInfo.adminId(), jwtInfo.adminRole());
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/auth/check")
+	public ResponseEntity<SuccessResponse<Void>> authCheck() {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 

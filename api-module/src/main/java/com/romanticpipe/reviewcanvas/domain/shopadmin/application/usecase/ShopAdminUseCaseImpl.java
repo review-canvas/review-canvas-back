@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.domain.AdminAuth;
+import com.romanticpipe.reviewcanvas.domain.MyReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesign;
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignType;
 import com.romanticpipe.reviewcanvas.domain.ReviewVisibility;
@@ -15,12 +16,20 @@ import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetReviewVisibilityTitleResponse;
 import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
+import com.romanticpipe.reviewcanvas.service.MyReviewDesignCreater;
+import com.romanticpipe.reviewcanvas.service.MyReviewDesignValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewDesignReader;
 import com.romanticpipe.reviewcanvas.service.ReviewVisibilityReader;
+import com.romanticpipe.reviewcanvas.service.ReviewVisibillityCreater;
 import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -30,37 +39,31 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	private final AdminAuthCreater adminAuthCreater;
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
+	private final ReviewVisibillityCreater reviewVisibillityCreater;
 	private final ReviewVisibilityReader reviewVisibilityReader;
 	private final ReviewDesignReader reviewDesignReader;
 
 	@Override
 	@Transactional
-	public void signUp(SignUpRequest signUpRequest, MultipartFile logoImage) {
-		shopAdminValidator.isExistTheme(signUpRequest.reviewDesignId());
-
-		ReviewVisibility reviewVisibility = ReviewVisibility.builder()
-			.title(signUpRequest.title())
-			.author(signUpRequest.author())
-			.point(signUpRequest.point())
-			.media(signUpRequest.media())
-			.content(signUpRequest.content())
-			.createdAt(signUpRequest.createdAt())
-			.updatedAt(signUpRequest.updatedAt())
-			.build();
+	public void signUp(SignUpRequest signUpRequest) {
+		shopAdminValidator.validateEmailDuplicated(signUpRequest.email());
 
 		ShopAdmin shopAdmin = ShopAdmin.builder()
-			//			.reviewVisibility(reviewVisibility)
 			.email(signUpRequest.email())
 			.password(passwordEncoder.encode(signUpRequest.password()))
-			//			.name(signUpRequest.name())
-			.mallNumber(signUpRequest.mallNumber())
+			.mallName(signUpRequest.mallName())
+			.mallNumber(signUpRequest.phoneNumber())
 			.phoneNumber(signUpRequest.phoneNumber())
+			.mallId(signUpRequest.mallId())
 			.approveStatus(false)
 			.build();
+		shopAdminCreator.save(shopAdmin);
 
-		shopAdminCreator.signUp(shopAdmin);
-
+		ReviewVisibility reviewVisibility = ReviewVisibility.create(shopAdmin.getId());
+		MyReviewDesign myReviewDesign = MyReviewDesign.create(shopAdmin.getId());
 		AdminAuth adminAuth = AdminAuth.createShopAdminAuth(shopAdmin.getId());
+		reviewVisibillityCreater.save(reviewVisibility);
+		myReviewDesignCreater.save(myReviewDesign);
 		adminAuthCreater.save(adminAuth);
 	}
 
