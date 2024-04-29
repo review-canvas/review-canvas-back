@@ -1,11 +1,12 @@
 package com.romanticpipe.reviewcanvas.repository;
 
-import com.romanticpipe.reviewcanvas.domain.MyReviewDesign;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import com.romanticpipe.reviewcanvas.domain.MyReviewDesign;
 
 public interface MyReviewDesignRepository extends JpaRepository<MyReviewDesign, Integer> {
 
-	Optional<MyReviewDesign> findByShopAdminIdAndReviewDesignId(Integer shopAdminId, Integer reviewDesignId);
+	Optional<MyReviewDesign> findByShopAdminIdAndReviewListDesignId(Integer shopAdminId, Integer reviewDesignId);
 }
