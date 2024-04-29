@@ -44,4 +44,11 @@ public class ShopAdminValidator {
 		return shopAdminRepository.findByMallId(mallId)
 			.orElseThrow(AdminNotFoundException::new);
 	}
+
+	public void validateEmailDuplicated(String email) {
+		shopAdminRepository.findByEmail(email)
+			.ifPresent(admin -> {
+				throw new BusinessException(ShopAdminErrorCode.DUPLICATED_EMAIL);
+			});
+	}
 }

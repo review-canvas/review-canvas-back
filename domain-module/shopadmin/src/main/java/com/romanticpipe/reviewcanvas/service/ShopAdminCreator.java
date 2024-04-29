@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class ShopAdminCreator {
 	private final ShopAdminRepository shopAdminRepository;
 
-	public ShopAdmin signUp(ShopAdmin shopAdmin) {
+	public ShopAdmin save(ShopAdmin shopAdmin) {
 		return shopAdminRepository.save(shopAdmin);
 	}
 }
