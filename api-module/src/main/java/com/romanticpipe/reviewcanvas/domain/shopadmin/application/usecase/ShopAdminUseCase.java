@@ -15,6 +15,4 @@ public interface ShopAdminUseCase {
 	boolean emailCheck(String email);
 
 	List<ReviewDesign> getGeneralReviewThemeList();
-
-	List<ReviewDesign> getCustomReviewThemeList(Integer shopAdminId);
 }

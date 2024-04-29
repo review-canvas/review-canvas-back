@@ -16,4 +16,8 @@ public class ReviewDesignReader {
 	public List<ReviewDesign> getGeneralThemeList(ReviewDesignType reviewDesignType) {
 		return reviewDesignRepository.findAllByReviewDesignType(reviewDesignType);
 	}
+
+	public List<ReviewDesign> getApplicableReviewDesigns(int shopAdminId) {
+		return reviewDesignRepository.findALlApplicableReviewDesigns(shopAdminId);
+	}
 }
