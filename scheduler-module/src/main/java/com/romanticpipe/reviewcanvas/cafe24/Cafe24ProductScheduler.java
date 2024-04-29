@@ -42,12 +42,16 @@ public class Cafe24ProductScheduler {
 	}
 
 	private void processEachShopAdmin(ShopAdmin shopAdmin) {
-		List<Cafe24Product> cafe24Products = productClient.getProducts(shopAdmin.getMallId())
-			.products()
-			.stream()
-			.filter(Cafe24Product::isFullContent)
-			.toList();
-		updateProductsInTransaction(cafe24Products, shopAdmin);
+		try {
+			List<Cafe24Product> cafe24Products = productClient.getProducts(shopAdmin.getMallId())
+				.products()
+				.stream()
+				.filter(Cafe24Product::isFullContent)
+				.toList();
+			updateProductsInTransaction(cafe24Products, shopAdmin);
+		} catch (Exception e) {
+			log.warn("[{}] 쇼핑몰 상품 업데이트 실패. error message: {}", shopAdmin.getMallName(), e.getMessage());
+		}
 	}
 
 	private void updateProductsInTransaction(List<Cafe24Product> cafe24Products, ShopAdmin shopAdmin) {
@@ -57,10 +61,9 @@ public class Cafe24ProductScheduler {
 				int savedCount = cafe24Products.stream()
 					.reduce(0, (count, cafe24Product) ->
 						count + updateOrSaveProduct(cafe24Product, products, shopAdmin), Integer::sum);
-				log.info("{} 쇼핑몰 상품 업데이트 성공 - 새롭게 추가된 상품 수: {}", shopAdmin.getMallName(), savedCount);
+				log.info("[{}] 쇼핑몰 상품 업데이트 성공 - 새롭게 추가된 상품 수: {}", shopAdmin.getMallName(), savedCount);
 			} catch (RuntimeException e) {
 				transactionStatus.setRollbackOnly();
-				log.warn("{} 쇼핑몰 상품 업데이트 실패", shopAdmin.getMallName());
 				throw e;
 			}
 		});
