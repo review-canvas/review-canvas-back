@@ -1,0 +1,24 @@
+package com.romanticpipe.reviewcanvas.admin.service;
+
+import com.romanticpipe.reviewcanvas.admin.domain.Admin;
+import com.romanticpipe.reviewcanvas.admin.domain.SuperAdmin;
+import com.romanticpipe.reviewcanvas.admin.exception.AdminNotFoundException;
+import com.romanticpipe.reviewcanvas.admin.repository.SuperAdminRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class SuperAdminValidator {
+	private final SuperAdminRepository superAdminRepository;
+
+	public SuperAdmin validByEmail(String email) {
+		return this.superAdminRepository.findByEmail(email)
+			.orElseThrow(() -> new AdminNotFoundException());
+	}
+
+	public Admin validById(Integer superAdminId) {
+		return superAdminRepository.findById(superAdminId)
+			.orElseThrow(AdminNotFoundException::new);
+	}
+}

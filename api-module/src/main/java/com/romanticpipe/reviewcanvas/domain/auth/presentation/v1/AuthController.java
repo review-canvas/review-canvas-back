@@ -1,10 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain.auth.presentation.v1;
 
+import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.CustomCookieName;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
-import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.AuthUseCase;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.request.LoginRequest;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;

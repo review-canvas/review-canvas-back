@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import com.romanticpipe.reviewcanvas.TestProductFactory;
 import com.romanticpipe.reviewcanvas.TestReviewFactory;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -11,7 +12,6 @@ import com.romanticpipe.reviewcanvas.service.ProductValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewCreator;
 import com.romanticpipe.reviewcanvas.service.ReviewReader;
 import com.romanticpipe.reviewcanvas.service.ReviewValidator;
-import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

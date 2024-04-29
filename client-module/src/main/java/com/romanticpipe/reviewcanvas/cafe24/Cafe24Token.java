@@ -1,6 +1,6 @@
 package com.romanticpipe.reviewcanvas.cafe24;
 
-import com.romanticpipe.reviewcanvas.domain.ShopAuthToken;
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAuthToken;
 
 import java.time.LocalDateTime;
 

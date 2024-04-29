@@ -1,12 +1,12 @@
 package com.romanticpipe.reviewcanvas.cafe24;
 
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminReader;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24Product;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.domain.Product;
-import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.service.ProductCreator;
 import com.romanticpipe.reviewcanvas.service.ProductReader;
-import com.romanticpipe.reviewcanvas.service.ShopAdminReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;

@@ -2,7 +2,7 @@ package com.romanticpipe.reviewcanvas.cafe24.authentication;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.romanticpipe.reviewcanvas.domain.ShopAuthToken;
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAuthToken;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;

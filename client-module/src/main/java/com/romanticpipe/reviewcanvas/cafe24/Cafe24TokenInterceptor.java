@@ -1,11 +1,11 @@
 package com.romanticpipe.reviewcanvas.cafe24;
 
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAuthToken;
+import com.romanticpipe.reviewcanvas.admin.exception.ShopAuthTokenNotFoundException;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAuthTokenService;
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AccessToken;
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AuthenticationClient;
-import com.romanticpipe.reviewcanvas.domain.ShopAuthToken;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.ShopAuthTokenNotFoundException;
-import com.romanticpipe.reviewcanvas.service.ShopAuthTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;

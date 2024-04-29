@@ -1,11 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
-import com.romanticpipe.reviewcanvas.domain.AdminAuth;
-import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.admin.domain.AdminAuth;
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.admin.service.AdminAuthCreater;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminCreator;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.service.AdminAuthCreater;
-import com.romanticpipe.reviewcanvas.service.ShopAdminCreator;
-import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

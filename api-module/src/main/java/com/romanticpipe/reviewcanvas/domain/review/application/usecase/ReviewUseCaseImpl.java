@@ -1,11 +1,12 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductDto;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
-import com.romanticpipe.reviewcanvas.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
@@ -17,7 +18,6 @@ import com.romanticpipe.reviewcanvas.service.ProductValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewCreator;
 import com.romanticpipe.reviewcanvas.service.ReviewReader;
 import com.romanticpipe.reviewcanvas.service.ReviewValidator;
-import com.romanticpipe.reviewcanvas.service.ShopAdminValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
