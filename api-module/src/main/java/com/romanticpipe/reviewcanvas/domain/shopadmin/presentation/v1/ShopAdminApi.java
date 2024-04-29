@@ -3,6 +3,17 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -12,10 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
-import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateReviewDesignRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetGeneralReviewThemeListResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetReviewVisibilityTitleResponse;
 
@@ -79,17 +87,4 @@ interface ShopAdminApi {
 	})
 	@GetMapping("/shop-admin/review-design/theme-list")
 	ResponseEntity<SuccessResponse<List<GetGeneralReviewThemeListResponse>>> getGeneralReviewThemeList();
-
-	@Operation(summary = "리뷰 디자인 수정 API", description = "리뷰 디자인을 수정한다.",
-		security = @SecurityRequirement(name = "Bearer Authentication"))
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "성공적으로 리뷰 디자인 수정이 완료되었습니다.")
-	})
-	@PatchMapping("/shop-admin/review-design/{reviewDesignId}")
-	ResponseEntity<SuccessResponse<Void>> updateReviewDesign(
-		@AuthInfo JwtInfo jwtInfo, @PathVariable("reviewDesignId") Integer reviewDesignId,
-		@Valid @RequestBody UpdateReviewDesignRequest updateReviewDesignRequest
-	);
 }
