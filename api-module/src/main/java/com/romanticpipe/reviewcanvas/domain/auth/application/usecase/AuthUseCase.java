@@ -1,6 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.auth.application.usecase;
 
-import com.romanticpipe.reviewcanvas.domain.AdminRole;
+import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;
 
 public interface AuthUseCase {

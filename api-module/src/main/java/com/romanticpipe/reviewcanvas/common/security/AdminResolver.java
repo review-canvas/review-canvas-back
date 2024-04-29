@@ -1,6 +1,6 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
-import com.romanticpipe.reviewcanvas.domain.AdminRole;
+import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
