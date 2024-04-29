@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request;
 
 import com.romanticpipe.reviewcanvas.domain.ReviewDesignPosition;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

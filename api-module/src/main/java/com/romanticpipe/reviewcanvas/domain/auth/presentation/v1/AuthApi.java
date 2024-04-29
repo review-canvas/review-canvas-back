@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -49,4 +50,14 @@ interface AuthApi {
 	})
 	@PostMapping("/logout")
 	ResponseEntity<SuccessResponse<Void>> logout(@AuthInfo JwtInfo jwtInfo);
+
+	@Operation(summary = "로그인 여부 확인 API", description = "access token 및 refresh token으로 로그인 여부를 확인한다",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "로그인된 상태입니다.")
+	})
+	@GetMapping("/auth/check")
+	ResponseEntity<SuccessResponse<Void>> authCheck();
 }

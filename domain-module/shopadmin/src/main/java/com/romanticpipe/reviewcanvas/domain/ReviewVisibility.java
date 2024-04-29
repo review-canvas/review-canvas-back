@@ -39,4 +39,17 @@ public class ReviewVisibility {
 		this.updatedAt = updatedAt;
 	}
 
+	public static ReviewVisibility create(Integer shopAdminId) {
+		return ReviewVisibility.builder()
+			.shopAdminId(shopAdminId)
+			.title(true)
+			.author(true)
+			.point(true)
+			.media(true)
+			.content(true)
+			.createdAt(true)
+			.updatedAt(true)
+			.build();
+	}
+
 }
