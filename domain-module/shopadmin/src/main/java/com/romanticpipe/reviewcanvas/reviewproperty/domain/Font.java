@@ -15,20 +15,17 @@ public class Font {
 	private String size;
 	@Column(name = "font_bold")
 	private String bold;
-	@Column(name = "font_weight")
-	private String weight;
 	@Column(name = "font_color")
 	private String color;
 
-	public Font(String name, String size, String bold, String weight, String color) {
+	public Font(String name, String size, String bold, String color) {
 		this.name = name;
 		this.size = size;
 		this.bold = bold;
-		this.weight = weight;
 		this.color = color;
 	}
 
 	public static Font createDefaultReviewTitle() {
-		return new Font("Noto Sans KR", "12px", "normal", "normal", "#000000");
+		return new Font("Noto Sans KR", "12px", "normal", "#000000");
 	}
 }
