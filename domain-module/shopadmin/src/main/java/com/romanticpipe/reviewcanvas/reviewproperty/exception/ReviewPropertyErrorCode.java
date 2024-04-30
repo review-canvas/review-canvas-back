@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ReviewPropertyErrorCode implements ErrorCode {
 
-	REVIEW_TITLE_NOT_FOUND(400, "A009", "리뷰 제목을 찾을 수 없습니다.");
+	REVIEW_TITLE_NOT_FOUND(400, "A009", "리뷰 제목을 찾을 수 없습니다."),
+	REVIEW_DESCRIPTION_NOT_FOUND(400, "A010", "리뷰 설명글을 찾을 수 없습니다.");
 
 	private final int status;
 	private final String code;

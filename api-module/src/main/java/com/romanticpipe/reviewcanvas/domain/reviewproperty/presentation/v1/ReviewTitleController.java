@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.presentation.v1;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,8 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewTitleUseCase;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateReviewTitleAttributeRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateReviewTitleRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewTitleResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,17 +26,25 @@ public class ReviewTitleController implements ReviewTitleApi {
 
 	@Override
 	@PatchMapping("/shop-admin/review-title")
-	public ResponseEntity<SuccessResponse<Void>> updateReviewTitleAttribute(
-		@AuthInfo JwtInfo jwtInfo, @RequestBody UpdateReviewTitleAttributeRequest updateReviewTitleAttributeRequest) {
-		reviewTitleUseCase.updateReviewTitleAttribute(jwtInfo.adminId(),
-			updateReviewTitleAttributeRequest);
+	public ResponseEntity<SuccessResponse<Void>> updateReviewTitle(
+		@AuthInfo JwtInfo jwtInfo, @RequestBody UpdateReviewTitleRequest updateReviewTitleRequest) {
+		reviewTitleUseCase.updateReviewTitle(jwtInfo.adminId(),
+			updateReviewTitleRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
 	@Override
 	@PatchMapping("/shop-admin/review-title/reset")
-	public ResponseEntity<SuccessResponse<Void>> resetReviewTitleAttribute(@AuthInfo JwtInfo jwtInfo) {
-		reviewTitleUseCase.resetReviewTitleAttribute(jwtInfo.adminId());
+	public ResponseEntity<SuccessResponse<Void>> resetReviewTitle(@AuthInfo JwtInfo jwtInfo) {
+		reviewTitleUseCase.resetReviewTitle(jwtInfo.adminId());
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/shop-admin/review-title")
+	public ResponseEntity<SuccessResponse<GetReviewTitleResponse>> getReviewTitle(@AuthInfo JwtInfo jwtInfo) {
+		return SuccessResponse.of(
+			reviewTitleUseCase.getReviewTitle(jwtInfo.adminId())
+		).asHttp(HttpStatus.OK);
 	}
 }

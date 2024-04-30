@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewTitle;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewTitleType;
+import com.romanticpipe.reviewcanvas.reviewproperty.exception.ReviewDescriptionNotFoundException;
 import com.romanticpipe.reviewcanvas.reviewproperty.exception.ReviewTitleNotFoundException;
 import com.romanticpipe.reviewcanvas.reviewproperty.repository.ReviewTitleRepository;
 
@@ -22,6 +23,6 @@ public class ReviewTitleService {
 
 	public ReviewTitle validDescriptionByShopAdminId(Integer shopAdminId) {
 		return reviewTitleRepository.findByShopAdminIdAndReviewTitleType(shopAdminId, ReviewTitleType.DESCRIPTION)
-			.orElseThrow(ReviewTitleNotFoundException::new);
+			.orElseThrow(ReviewDescriptionNotFoundException::new);
 	}
 }

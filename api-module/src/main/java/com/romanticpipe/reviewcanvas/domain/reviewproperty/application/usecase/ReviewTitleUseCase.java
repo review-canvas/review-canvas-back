@@ -1,11 +1,14 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase;
 
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateReviewTitleAttributeRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateReviewTitleRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewTitleResponse;
 
 public interface ReviewTitleUseCase {
 
-	void updateReviewTitleAttribute(Integer shopAdminId,
-		UpdateReviewTitleAttributeRequest updateReviewTitleAttributeRequest);
+	void updateReviewTitle(Integer shopAdminId,
+		UpdateReviewTitleRequest updateReviewTitleRequest);
 
-	void resetReviewTitleAttribute(Integer shopAdminId);
+	void resetReviewTitle(Integer shopAdminId);
+
+	GetReviewTitleResponse getReviewTitle(Integer shopAdminId);
 }
