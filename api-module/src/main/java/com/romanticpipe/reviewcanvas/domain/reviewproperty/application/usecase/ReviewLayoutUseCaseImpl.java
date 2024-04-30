@@ -34,7 +34,9 @@ public class ReviewLayoutUseCaseImpl implements ReviewLayoutUseCase {
 	}
 
 	@Override
-	public void initializeReviewLayout(Integer adminId) {
-
+	@Transactional
+	public void initializeReviewLayout(Integer shopAdminId) {
+		ReviewLayout reviewLayout = reviewLayoutService.validateById(shopAdminId);
+		reviewLayout.initialize();
 	}
 }

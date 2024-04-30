@@ -72,4 +72,13 @@ public class ReviewLayout {
 		this.imageReviewAreaLayout = imageReviewAreaLayout;
 		this.reviewLayoutDesign = reviewLayoutDesign;
 	}
+
+	public void initialize() {
+		this.bestReviewAreaActivation = true;
+		this.reviewStatisticsAreaActivation = true;
+		this.imageReviewAreaActivation = true;
+		this.focusAreaLayout = FocusAreaLayout.BEST_REVIEW_TOP;
+		this.imageReviewAreaLayout = ImageReviewAreaLayout.REVIEW_TOP;
+		this.reviewLayoutDesign = ReviewLayoutDesign.BOARD;
+	}
 }
