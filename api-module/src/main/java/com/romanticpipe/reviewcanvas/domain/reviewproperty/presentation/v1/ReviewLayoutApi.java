@@ -38,5 +38,5 @@ public interface ReviewLayoutApi {
 			description = "성공적으로 Layout 디자인 속성 조회를 완료했습니다.")
 	})
 	@GetMapping("/shop-admin/review-layout")
-	ResponseEntity<SuccessResponse<ReviewLayoutResponse>> getReviewLayout();
+	ResponseEntity<SuccessResponse<ReviewLayoutResponse>> getReviewLayout(@AuthInfo JwtInfo jwtInfo);
 }

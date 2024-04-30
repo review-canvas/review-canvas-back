@@ -34,7 +34,7 @@ public class ReviewLayoutController implements ReviewLayoutApi {
 
 	@Override
 	@GetMapping("/shop-admin/review-layout")
-	public ResponseEntity<SuccessResponse<ReviewLayoutResponse>> getReviewLayout() {
-		return SuccessResponse.of(reviewLayoutUsecase.getReviewLayout()).asHttp(HttpStatus.OK);
+	public ResponseEntity<SuccessResponse<ReviewLayoutResponse>> getReviewLayout(@AuthInfo JwtInfo jwtInfo) {
+		return SuccessResponse.of(reviewLayoutUsecase.getReviewLayout(jwtInfo.adminId())).asHttp(HttpStatus.OK);
 	}
 }
