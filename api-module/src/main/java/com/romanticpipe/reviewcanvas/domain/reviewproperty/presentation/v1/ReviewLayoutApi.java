@@ -39,4 +39,14 @@ public interface ReviewLayoutApi {
 	})
 	@GetMapping("/shop-admin/review-layout")
 	ResponseEntity<SuccessResponse<ReviewLayoutResponse>> getReviewLayout(@AuthInfo JwtInfo jwtInfo);
+
+	@Operation(summary = "Layout 디자인 속성 초기화 API", description = "Layout 디자인 속성을 초기화한다.",
+	 security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 Layout 디자인 속성을 초기화했습니다.")
+	})
+	@PatchMapping("/shop-admin/review-layout/initialize")
+	ResponseEntity<SuccessResponse<Void>> initializeReviewLayout(@AuthInfo JwtInfo jwtInfo);
 }
