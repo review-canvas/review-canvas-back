@@ -2,7 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.presentation.v1;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
@@ -40,7 +40,7 @@ public interface ReviewContainerApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 Container 디자인 수정이 완료되었습니다.")
 	})
-	@PostMapping("/shop-admin/review-container")
+	@PatchMapping("/shop-admin/review-container/attributes")
 	ResponseEntity<SuccessResponse<Void>> updateReviewContainer(
 		@AuthInfo JwtInfo jwtInfo,
 		@Valid @RequestBody UpdateContainerRequest updateContainerRequest
