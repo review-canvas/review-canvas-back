@@ -1,13 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.LayoutRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateLayoutRequest;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewLayout;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewLayoutService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -17,14 +15,14 @@ public class ReviewLayoutUseCaseImpl implements ReviewLayoutUseCase {
 
 	@Override
 	@Transactional
-	public void updateLayout(Integer adminId, LayoutRequest layoutRequest) {
-		ReviewLayout reviewLayout = reviewLayoutService.validById(adminId);
+	public void updateLayout(Integer shopAdminId, UpdateLayoutRequest updateLayoutRequest) {
+		ReviewLayout reviewLayout = reviewLayoutService.validateById(shopAdminId);
 		reviewLayout.update(
-			layoutRequest.bestReviewAreaActivation(),
-			layoutRequest.reviewStaticsAreaActivation(),
-			layoutRequest.imageReviewAreaActivation(),
-			layoutRequest.focusAreaLayout(),
-			layoutRequest.imageReviewAreaLayout(),
-			layoutRequest.reviewLayoutDesign());
+			updateLayoutRequest.bestReviewAreaActivation(),
+			updateLayoutRequest.reviewStaticsAreaActivation(),
+			updateLayoutRequest.imageReviewAreaActivation(),
+			updateLayoutRequest.focusAreaLayout(),
+			updateLayoutRequest.imageReviewAreaLayout(),
+			updateLayoutRequest.reviewLayoutDesign());
 	}
 }
