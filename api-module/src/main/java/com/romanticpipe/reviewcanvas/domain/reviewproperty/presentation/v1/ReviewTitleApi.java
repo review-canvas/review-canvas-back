@@ -28,4 +28,16 @@ public interface ReviewTitleApi {
 	ResponseEntity<SuccessResponse<Void>> updateReviewTitleAttribute(
 		@AuthInfo JwtInfo jwtInfo, @RequestBody UpdateReviewTitleAttributeRequest updateReviewTitleAttributeRequest
 	);
+
+	@Operation(summary = "리뷰 제목 디자인 초기화 API", description = "리뷰 제목의 디자인 속성값을 초기화한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 제목 디자인 초기화가 완료되었습니다."
+		)
+	})
+	@PatchMapping("/shop-admin/review-title/reset")
+	ResponseEntity<SuccessResponse<Void>> resetReviewTitleAttribute(
+		@AuthInfo JwtInfo jwtInfo
+	);
 }

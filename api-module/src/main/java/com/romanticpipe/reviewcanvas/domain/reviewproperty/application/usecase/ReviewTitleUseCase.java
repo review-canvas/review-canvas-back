@@ -6,4 +6,6 @@ public interface ReviewTitleUseCase {
 
 	void updateReviewTitleAttribute(Integer shopAdminId,
 		UpdateReviewTitleAttributeRequest updateReviewTitleAttributeRequest);
+
+	void resetReviewTitleAttribute(Integer shopAdminId);
 }

@@ -86,4 +86,13 @@ public class ReviewTitle {
 		this.boarder = boarder;
 		this.background = backGround;
 	}
+
+	public void reset() {
+		this.titleName = null;
+		this.alignmentPosition = AlignmentPosition.LEFT;
+		this.padding = Padding.createDefaultReviewDescription();
+		this.font = Font.createDefaultReviewDescription();
+		this.boarder = Boarder.createDefaultReviewDescription();
+		this.background = "#ffffff";
+	}
 }

@@ -38,4 +38,13 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 			updateReviewTitleAttributeRequest.getDescriptionBackGround()
 		);
 	}
+
+	@Override
+	public void resetReviewTitleAttribute(Integer shopAdminId) {
+		ReviewTitle reviewTitle = reviewTitleService.validTitleByShopAdminId(shopAdminId);
+		reviewTitle.reset();
+
+		ReviewTitle reviewDescription = reviewTitleService.validDescriptionByShopAdminId(shopAdminId);
+		reviewDescription.reset();
+	}
 }
