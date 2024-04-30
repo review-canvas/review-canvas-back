@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.reviewproperty.service;
 
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
@@ -11,6 +12,7 @@ import com.romanticpipe.reviewcanvas.reviewproperty.repository.ReviewLayoutRepos
 
 import lombok.RequiredArgsConstructor;
 
+@Service
 @RequiredArgsConstructor
 public class ReviewLayoutService {
 

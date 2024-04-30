@@ -23,7 +23,7 @@ public class ReviewLayoutController implements ReviewLayoutApi {
 	private final ReviewLayoutUseCase reviewLayoutUsecase;
 
 	@Override
-	@PatchMapping("/shop-admin/review-design/layout")
+	@PatchMapping("/shop-admin/review-layout")
 	public ResponseEntity<SuccessResponse<Void>> updateLayout(@AuthInfo JwtInfo jwtInfo,
 		@RequestBody LayoutRequest layoutRequest) {
 
