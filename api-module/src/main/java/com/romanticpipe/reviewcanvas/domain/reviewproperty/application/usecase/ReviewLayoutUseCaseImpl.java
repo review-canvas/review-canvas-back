@@ -15,7 +15,7 @@ public class ReviewLayoutUseCaseImpl implements ReviewLayoutUseCase {
 	private final ReviewLayoutService reviewLayoutService;
 
 	@Override
-	public void saveLayout(Integer adminId, LayoutRequest layoutRequest) {
+	public void updateLayout(Integer adminId, LayoutRequest layoutRequest) {
 		ReviewLayout reviewLayout = reviewLayoutService.validById(adminId);
 		reviewLayout.update(
 			layoutRequest.bestReviewAreaActivation(),

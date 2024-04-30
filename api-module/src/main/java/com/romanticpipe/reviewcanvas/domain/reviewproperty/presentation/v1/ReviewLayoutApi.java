@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.presentation.v1;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -21,8 +22,8 @@ public interface ReviewLayoutApi {
 			responseCode = "200",
 			description = "성공적으로 Layout 디자인 저장이 완료되었습니다.")
 	})
-	@PostMapping(value = "/shop-admin/review-design/layout")
-	ResponseEntity<SuccessResponse<Void>> saveLayout(
+	@PatchMapping("/shop-admin/review-design/layout")
+	ResponseEntity<SuccessResponse<Void>> updateLayout(
 		@AuthInfo JwtInfo jwtInfo,
 		@RequestBody LayoutRequest layoutRequest
 	);

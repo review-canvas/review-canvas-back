@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.presentation.v1;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,10 +23,11 @@ public class ReviewLayoutController implements ReviewLayoutApi {
 	private final ReviewLayoutUseCase reviewLayoutUsecase;
 
 	@Override
-	public ResponseEntity<SuccessResponse<Void>> saveLayout(@AuthInfo JwtInfo jwtInfo,
+	@PatchMapping("/shop-admin/review-design/layout")
+	public ResponseEntity<SuccessResponse<Void>> updateLayout(@AuthInfo JwtInfo jwtInfo,
 		@RequestBody LayoutRequest layoutRequest) {
 
-		reviewLayoutUsecase.saveLayout(jwtInfo.adminId(), layoutRequest);
+		reviewLayoutUsecase.updateLayout(jwtInfo.adminId(), layoutRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }
