@@ -28,7 +28,7 @@ public class Boarder {
 	}
 
 	public static Boarder createDefaultReviewContainer() {
-		return new Boarder("1px", "1px", "1px", "1px");
+		return new Boarder("0px", "0px", "0px", "0px");
 	}
 
 	public static Boarder createDefaultReviewColumn() {

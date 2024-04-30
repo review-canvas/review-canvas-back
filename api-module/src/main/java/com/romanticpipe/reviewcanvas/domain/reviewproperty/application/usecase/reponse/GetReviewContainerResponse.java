@@ -3,7 +3,10 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewContainer;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
+import lombok.Builder;
 
+@Builder(access = AccessLevel.PRIVATE)
 @Schema(name = "GetReviewContainerResponse", description = "리뷰 Container 설정 값을 반환하는 Response")
 public record GetReviewContainerResponse(@Schema(description = "가로", requiredMode = Schema.RequiredMode.REQUIRED)
 										 String width,
@@ -33,19 +36,19 @@ public record GetReviewContainerResponse(@Schema(description = "가로", require
 ) {
 
 	public static GetReviewContainerResponse from(ReviewContainer reviewContainer) {
-		return new GetReviewContainerResponse(
-			reviewContainer.getWidth(),
-			reviewContainer.getPadding().getLeft(),
-			reviewContainer.getPadding().getRight(),
-			reviewContainer.getPadding().getTop(),
-			reviewContainer.getPadding().getBottom(),
-			reviewContainer.getBackground(),
-			reviewContainer.getBoarder().getLeft(),
-			reviewContainer.getBoarder().getRight(),
-			reviewContainer.getBoarder().getTop(),
-			reviewContainer.getBoarder().getBottom(),
-			reviewContainer.getBoarderColor(),
-			reviewContainer.getShadow().name()
-		);
+		return GetReviewContainerResponse.builder()
+			.width(reviewContainer.getWidth())
+			.paddingLeft(reviewContainer.getPadding().getLeft())
+			.paddingRight(reviewContainer.getPadding().getRight())
+			.paddingTop(reviewContainer.getPadding().getTop())
+			.paddingBottom(reviewContainer.getPadding().getBottom())
+			.background(reviewContainer.getBackground())
+			.boarderLeft(reviewContainer.getBoarder().getLeft())
+			.boarderRight(reviewContainer.getBoarder().getRight())
+			.boarderTop(reviewContainer.getBoarder().getTop())
+			.boarderBottom(reviewContainer.getBoarder().getBottom())
+			.boarderColor(reviewContainer.getBoarderColor())
+			.shadow(reviewContainer.getShadow().name())
+			.build();
 	}
 }
