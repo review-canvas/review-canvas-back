@@ -38,4 +38,11 @@ public class Padding {
 	public static Padding createDefaultReviewTitle() {
 		return new Padding("10px", "10px", "10px", "10px");
 	}
+
+	public void update(String left, String right, String top, String bottom) {
+		this.left = left;
+		this.right = right;
+		this.top = top;
+		this.bottom = bottom;
+	}
 }

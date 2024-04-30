@@ -38,4 +38,11 @@ public class Boarder {
 	public static Boarder createDefaultReviewTitle() {
 		return new Boarder("1px", "1px", "1px", "1px");
 	}
+
+	public void update(String left, String right, String top, String bottom) {
+		this.left = left;
+		this.right = right;
+		this.top = top;
+		this.bottom = bottom;
+	}
 }

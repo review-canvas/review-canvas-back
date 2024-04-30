@@ -59,4 +59,15 @@ public class ReviewContainer {
 			.shopAdminId(shopAdminId)
 			.build();
 	}
+
+	public void update(String width, String paddingLeft, String paddingRight, String paddingTop, String paddingBottom,
+		String background, String boarderLeft, String boarderRight, String boarderTop, String boarderBottom,
+		String boarderColor, String shadow) {
+		this.width = width;
+		this.padding.update(paddingLeft, paddingRight, paddingTop, paddingBottom);
+		this.background = background;
+		this.boarder.update(boarderLeft, boarderRight, boarderTop, boarderBottom);
+		this.boarderColor = boarderColor;
+		this.shadow = Shadow.valueOf(shadow);
+	}
 }
