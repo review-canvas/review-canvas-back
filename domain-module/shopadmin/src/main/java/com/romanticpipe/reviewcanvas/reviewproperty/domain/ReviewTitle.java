@@ -35,18 +35,20 @@ public class ReviewTitle {
 	private Font font;
 	@Embedded
 	private Boarder boarder;
+	private String boarderColor;
 	private String background;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewTitle(ReviewTitleType reviewTitleType, String titleName, AlignmentPosition alignmentPosition,
-						Padding padding, Font font, Boarder boarder, String background, Integer shopAdminId) {
+		Padding padding, Font font, Boarder boarder, String boarderColor, String background, Integer shopAdminId) {
 		this.reviewTitleType = reviewTitleType;
 		this.titleName = titleName;
 		this.alignmentPosition = alignmentPosition;
 		this.padding = padding;
 		this.font = font;
 		this.boarder = boarder;
+		this.boarderColor = boarderColor;
 		this.background = background;
 		this.shopAdminId = shopAdminId;
 	}
@@ -59,6 +61,7 @@ public class ReviewTitle {
 			.padding(Padding.createDefaultReviewTitle())
 			.font(Font.createDefaultReviewTitle())
 			.boarder(Boarder.createDefaultReviewTitle())
+			.boarderColor("#ffffff")
 			.background("blue")
 			.shopAdminId(shopAdminId)
 			.build();
