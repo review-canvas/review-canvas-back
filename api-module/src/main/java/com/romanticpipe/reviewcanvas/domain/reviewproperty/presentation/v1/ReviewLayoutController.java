@@ -40,6 +40,7 @@ public class ReviewLayoutController implements ReviewLayoutApi {
 
 	@Override
 	public ResponseEntity<SuccessResponse<Void>> initializeReviewLayout(JwtInfo jwtInfo) {
-		return null;
+		reviewLayoutUsecase.initializeReviewLayout(jwtInfo.adminId());
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }

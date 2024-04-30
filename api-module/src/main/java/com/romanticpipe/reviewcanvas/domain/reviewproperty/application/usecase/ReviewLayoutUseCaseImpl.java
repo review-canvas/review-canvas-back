@@ -32,4 +32,9 @@ public class ReviewLayoutUseCaseImpl implements ReviewLayoutUseCase {
 	public ReviewLayoutResponse getReviewLayout(Integer shopAdminId) {
 		return ReviewLayoutResponse.from(reviewLayoutService.validateById(shopAdminId));
 	}
+
+	@Override
+	public void initializeReviewLayout(Integer adminId) {
+
+	}
 }
