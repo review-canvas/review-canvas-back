@@ -20,15 +20,12 @@ public record ReviewLayoutResponse(@Schema(description = "베스트 리뷰 영�
 								   @Schema(description = "리뷰 레이아웃 디자인", requiredMode = Schema.RequiredMode.REQUIRED)
 								   ReviewLayoutDesign reviewLayoutDesign) {
 
-
-	public ReviewLayoutResponse {
-
-	}
-
 	public static ReviewLayoutResponse from(ReviewLayout reviewLayout) {
 		return new ReviewLayoutResponse(reviewLayout.getBestReviewAreaActivation(),
-			reviewLayout.getImageReviewAreaActivation(), reviewLayout.getReviewStatisticsAreaActivation(),
-			reviewLayout.getFocusAreaLayout(), reviewLayout.getImageReviewAreaLayout(),
+			reviewLayout.getImageReviewAreaActivation(),
+			reviewLayout.getReviewStatisticsAreaActivation(),
+			reviewLayout.getFocusAreaLayout(),
+			reviewLayout.getImageReviewAreaLayout(),
 			reviewLayout.getReviewLayoutDesign());
 	}
 }
