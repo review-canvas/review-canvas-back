@@ -15,4 +15,5 @@ public interface ReviewUseCase {
 	void createReview(String productId, CreateReviewRequest createReviewRequest);
 
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);
+
 }
