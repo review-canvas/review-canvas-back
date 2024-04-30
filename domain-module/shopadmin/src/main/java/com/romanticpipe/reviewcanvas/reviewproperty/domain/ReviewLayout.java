@@ -61,4 +61,15 @@ public class ReviewLayout {
 			.shopAdminId(shopAdminId)
 			.build();
 	}
+
+	public void update(boolean bestReviewAreaActivation, boolean reviewStaticsAreaActivation,
+		boolean imageReviewAreaActivation, FocusAreaLayout focusAreaLayout,
+		ImageReviewAreaLayout imageReviewAreaLayout, ReviewLayoutDesign reviewLayoutDesign) {
+		this.bestReviewAreaActivation = bestReviewAreaActivation;
+		this.reviewStatisticsAreaActivation = reviewStaticsAreaActivation;
+		this.imageReviewAreaActivation = imageReviewAreaActivation;
+		this.focusAreaLayout = focusAreaLayout;
+		this.imageReviewAreaLayout = imageReviewAreaLayout;
+		this.reviewLayoutDesign = reviewLayoutDesign;
+	}
 }
