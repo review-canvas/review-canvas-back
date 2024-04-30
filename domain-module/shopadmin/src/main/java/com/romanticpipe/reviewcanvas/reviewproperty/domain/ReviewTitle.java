@@ -40,7 +40,7 @@ public class ReviewTitle {
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewTitle(ReviewTitleType reviewTitleType, String titleName, AlignmentPosition alignmentPosition,
-						Padding padding, Font font, Boarder boarder, String background, Integer shopAdminId) {
+		Padding padding, Font font, Boarder boarder, String background, Integer shopAdminId) {
 		this.reviewTitleType = reviewTitleType;
 		this.titleName = titleName;
 		this.alignmentPosition = alignmentPosition;
@@ -51,16 +51,39 @@ public class ReviewTitle {
 		this.shopAdminId = shopAdminId;
 	}
 
-	public static ReviewTitle create(Integer shopAdminId) {
+	public static ReviewTitle createTitle(Integer shopAdminId) {
 		return ReviewTitle.builder()
 			.reviewTitleType(ReviewTitleType.TITLE)
-			.titleName("리뷰 타이틀")
-			.alignmentPosition(AlignmentPosition.CENTER)
+			.titleName("REVIEW")
+			.alignmentPosition(AlignmentPosition.LEFT)
 			.padding(Padding.createDefaultReviewTitle())
 			.font(Font.createDefaultReviewTitle())
 			.boarder(Boarder.createDefaultReviewTitle())
-			.background("blue")
+			.background("#ffffff")
 			.shopAdminId(shopAdminId)
 			.build();
+	}
+
+	public static ReviewTitle createDescription(Integer shopAdminId) {
+		return ReviewTitle.builder()
+			.reviewTitleType(ReviewTitleType.DESCRIPTION)
+			.titleName(null)
+			.alignmentPosition(AlignmentPosition.LEFT)
+			.padding(Padding.createDefaultReviewDescription())
+			.font(Font.createDefaultReviewDescription())
+			.boarder(Boarder.createDefaultReviewDescription())
+			.background("#ffffff")
+			.shopAdminId(shopAdminId)
+			.build();
+	}
+
+	public void update(String titleName, AlignmentPosition alignmentPosition, Padding padding, Font font,
+		Boarder boarder, String backGround) {
+		this.titleName = titleName;
+		this.alignmentPosition = alignmentPosition;
+		this.padding = padding;
+		this.font = font;
+		this.boarder = boarder;
+		this.background = backGround;
 	}
 }

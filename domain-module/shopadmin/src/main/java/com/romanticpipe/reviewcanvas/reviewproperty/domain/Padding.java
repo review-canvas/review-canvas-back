@@ -34,6 +34,10 @@ public class Padding {
 	}
 
 	public static Padding createDefaultReviewTitle() {
-		return new Padding("10px", "10px", "10px", "10px");
+		return new Padding("0px", "0px", "0px", "0px");
+	}
+
+	public static Padding createDefaultReviewDescription() {
+		return new Padding("0px", "0px", "0px", "0px");
 	}
 }
