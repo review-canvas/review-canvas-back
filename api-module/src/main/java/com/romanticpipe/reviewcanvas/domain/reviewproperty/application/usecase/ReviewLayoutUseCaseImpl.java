@@ -28,6 +28,7 @@ public class ReviewLayoutUseCaseImpl implements ReviewLayoutUseCase {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ReviewLayoutResponse getReviewLayout(Integer shopAdminId) {
 		return ReviewLayoutResponse.from(reviewLayoutService.validateById(shopAdminId));
 	}
