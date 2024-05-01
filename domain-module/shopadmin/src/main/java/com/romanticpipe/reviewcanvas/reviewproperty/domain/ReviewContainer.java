@@ -37,8 +37,8 @@ public class ReviewContainer {
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewContainer(String width, Padding padding, String background, Boarder boarder, String boarderColor,
-							Shadow shadow,
-							Integer shopAdminId) {
+		Shadow shadow,
+		Integer shopAdminId) {
 		this.width = width;
 		this.padding = padding;
 		this.background = background;
@@ -49,6 +49,10 @@ public class ReviewContainer {
 	}
 
 	public static ReviewContainer create(Integer shopAdminId) {
+		return init(shopAdminId);
+	}
+
+	private static ReviewContainer init(Integer shopAdminId) {
 		return ReviewContainer.builder()
 			.width("Full")
 			.padding(Padding.createDefaultReviewContainer())
