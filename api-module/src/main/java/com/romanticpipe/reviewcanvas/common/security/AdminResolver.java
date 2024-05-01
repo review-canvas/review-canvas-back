@@ -1,5 +1,9 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
+import static org.springframework.http.HttpHeaders.*;
+
+import java.util.Iterator;
+
 import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
@@ -22,6 +26,9 @@ public class AdminResolver implements HandlerMethodArgumentResolver {
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 								  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		System.out.println("cookie : " + webRequest.getHeader("cookie"));
+		System.out.println("authentication : " + webRequest.getHeader(AUTHORIZATION));
+
 		Integer adminId = (Integer) authentication.getPrincipal();
 		AdminRole adminRole = authentication.getAuthorities().stream()
 			.findFirst()

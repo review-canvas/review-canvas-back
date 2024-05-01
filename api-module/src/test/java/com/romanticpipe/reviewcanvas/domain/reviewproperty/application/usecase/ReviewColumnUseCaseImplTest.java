@@ -42,7 +42,7 @@ class ReviewColumnUseCaseImplTest {
 			// given
 			var shopAdminId = 1;
 			// var reviewColumn = TestReviewColumnFactory.createReviewColumn();
-			
+
 			// when
 			var result = reviewColumnUseCase.getColumnByShopAdminId(shopAdminId);
 

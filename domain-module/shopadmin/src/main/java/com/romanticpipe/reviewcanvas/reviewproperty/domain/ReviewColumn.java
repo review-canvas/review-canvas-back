@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -60,4 +61,22 @@ public class ReviewColumn {
 			.build();
 	}
 
+	public void reset() {
+		this.width = "사이트 Width";
+		this.padding = Padding.createDefaultReviewColumn();
+		this.margin = Margin.createDefaultReviewColumn();
+		this.background = "blue";
+		this.boarder = Boarder.createDefaultReviewColumn();
+		this.shadow = Shadow.NONE;
+	}
+
+	public void update(String width, Padding padding, Margin margin, String background, Boarder boarder,
+		Shadow shadow) {
+		this.width = width;
+		this.padding = padding;
+		this.margin = margin;
+		this.background = background;
+		this.boarder = boarder;
+		this.shadow = shadow;
+	}
 }

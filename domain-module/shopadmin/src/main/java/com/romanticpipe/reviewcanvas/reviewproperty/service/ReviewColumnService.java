@@ -19,12 +19,8 @@ public class ReviewColumnService {
 
 	private final ReviewColumnRepository reviewColumnRepository;
 
-	public void validateById(Integer shopAdminId) {
-		reviewColumnRepository.findByShopAdminId(shopAdminId)
+	public ReviewColumn validateById(Integer shopAdminId) {
+		return reviewColumnRepository.findByShopAdminId(shopAdminId)
 			.orElseThrow(() -> new BusinessException(ReviewPropertyErrorCode.REVIEW_COLUMN_NOT_FOUND));
-	}
-
-	public Optional<ReviewColumn> findById(Integer shopAdminId) {
-		return reviewColumnRepository.findById(shopAdminId);
 	}
 }

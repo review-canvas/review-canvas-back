@@ -4,11 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateColumnRequest;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateLayoutRequest;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewColumn;
 
@@ -28,5 +30,30 @@ public interface ReviewColumnApi {
 	@GetMapping("/shop-admin/review-column/{shopAdminId}")
 	ResponseEntity<SuccessResponse<ReviewColumn>> getColumn(
 		@PathVariable Integer shopAdminId
+	);
+
+	@Operation(summary = "Column 디자인 저장 API", description = "Column 디자인 속성을 저장한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 Column 디자인 조회를 완료했습니다.")
+	})
+	@PatchMapping("/shop-admin/review-column")
+	ResponseEntity<SuccessResponse<Void>> updateColumn(
+		@AuthInfo JwtInfo jwtInfo,
+		@RequestBody UpdateColumnRequest updateColumnRequest
+	);
+
+	@Operation(summary = "Column 디자인 초기화 API", description = "Column 디자인 속성을 초기화한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 Column 디자인 조회를 완료했습니다.")
+	})
+	@PatchMapping("/shop-admin/review-column/reset")
+	ResponseEntity<SuccessResponse<Void>> resetColumn(
+		@AuthInfo JwtInfo jwtInfo
 	);
 }

@@ -19,23 +19,26 @@ public class Boarder {
 	private String top;
 	@Column(name = "boarder_bottom")
 	private String bottom;
+	@Column(name = "boarder_color")
+	private String color;
 
-	public Boarder(String left, String right, String top, String bottom) {
+	public Boarder(String left, String right, String top, String bottom, String color) {
 		this.left = left;
 		this.right = right;
 		this.top = top;
 		this.bottom = bottom;
+		this.color = color;
 	}
 
 	public static Boarder createDefaultReviewContainer() {
-		return new Boarder("1px", "1px", "1px", "1px");
+		return new Boarder("1px", "1px", "1px", "1px", "#ffffff");
 	}
 
 	public static Boarder createDefaultReviewColumn() {
-		return new Boarder("1px", "1px", "1px", "1px");
+		return new Boarder("1px", "1px", "1px", "1px", "#ffffff");
 	}
 
 	public static Boarder createDefaultReviewTitle() {
-		return new Boarder("1px", "1px", "1px", "1px");
+		return new Boarder("1px", "1px", "1px", "1px", "#ffffff");
 	}
 }
