@@ -18,7 +18,7 @@ public class ReviewColumnUseCaseImpl implements ReviewColumnUseCase {
 	private final ReviewColumnService reviewColumnService;
 
 	@Override
-	public ReviewColumn getColumn(Integer shopAdminId) {
+	public ReviewColumn getColumnByShopAdminId(Integer shopAdminId) {
 		reviewColumnService.validateById(shopAdminId);
 		return reviewColumnService.findById(shopAdminId).get();
 	}

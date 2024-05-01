@@ -1,6 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import com.romanticpipe.reviewcanvas.TestProductFactory;
 import com.romanticpipe.reviewcanvas.TestReviewFactory;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
