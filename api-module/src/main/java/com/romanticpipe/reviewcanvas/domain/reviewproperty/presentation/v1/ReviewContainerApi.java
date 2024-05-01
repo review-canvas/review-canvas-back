@@ -45,4 +45,16 @@ public interface ReviewContainerApi {
 		@AuthInfo JwtInfo jwtInfo,
 		@Valid @RequestBody UpdateContainerRequest updateContainerRequest
 	);
+
+	@Operation(summary = "리뷰 Container 디자인 초기화 API", description = "저장되어 있는 리뷰 Container 디자인 설정 값을 초기화한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 Container 디자인 초기화가 완료되었습니다.")
+	})
+	@PatchMapping("/shop-admin/review-container/reset")
+	ResponseEntity<SuccessResponse<Void>> resetReviewContainer(
+		@AuthInfo JwtInfo jwtInfo
+	);
 }
