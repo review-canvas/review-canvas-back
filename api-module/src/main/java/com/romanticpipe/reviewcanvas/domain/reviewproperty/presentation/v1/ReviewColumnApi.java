@@ -1,0 +1,32 @@
+package com.romanticpipe.reviewcanvas.domain.reviewproperty.presentation.v1;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateLayoutRequest;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewColumn;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+public interface ReviewColumnApi {
+
+	@Operation(summary = "Column 디자인 조회 API", description = "Column 디자인 속성을 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 Column 디자인 조회를 완료했습니다.")
+	})
+	@GetMapping("/shop-admin/review-column/{shopAdminId}")
+	ResponseEntity<SuccessResponse<ReviewColumn>> getColumn(
+		@PathVariable Integer shopAdminId
+	);
+}
