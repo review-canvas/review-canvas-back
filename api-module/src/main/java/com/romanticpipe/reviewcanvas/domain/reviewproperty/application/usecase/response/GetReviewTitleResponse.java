@@ -20,6 +20,8 @@ public record GetReviewTitleResponse(
 	Font titleFont,
 	@Schema(description = "리뷰 제목 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
 	Boarder titleBoarder,
+	@Schema(description = "리뷰 제목 테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
+	String titleBoarderColor,
 	@Schema(description = "리뷰 제목 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	String titleBackGround,
 	@Schema(description = "리뷰 설명글", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -32,15 +34,19 @@ public record GetReviewTitleResponse(
 	Font descriptionFont,
 	@Schema(description = "리뷰 설명글 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
 	Boarder descriptionBoarder,
-	@Schema(description = "리뷰 설명글 배경 생상", requiredMode = Schema.RequiredMode.REQUIRED)
+	@Schema(description = "리뷰 설명글 테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
+	String descriptionBoarderColor,
+	@Schema(description = "리뷰 설명글 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	String descriptionBackGround
 ) {
 
 	public static GetReviewTitleResponse from(ReviewTitle reviewTitle, ReviewTitle reviewDescription) {
 		return new GetReviewTitleResponse(reviewTitle.getTitleName(), reviewTitle.getAlignmentPosition(),
-			reviewTitle.getPadding(), reviewTitle.getFont(), reviewTitle.getBoarder(), reviewTitle.getBackground(),
+			reviewTitle.getPadding(), reviewTitle.getFont(), reviewTitle.getBoarder(), reviewTitle.getBoarderColor(),
+			reviewTitle.getBackground(),
 			reviewDescription.getTitleName(), reviewDescription.getAlignmentPosition(), reviewDescription.getPadding(),
-			reviewDescription.getFont(), reviewDescription.getBoarder(), reviewDescription.getBackground());
+			reviewDescription.getFont(), reviewDescription.getBoarder(), reviewDescription.getBoarderColor(),
+			reviewDescription.getBackground());
 	}
 
 }

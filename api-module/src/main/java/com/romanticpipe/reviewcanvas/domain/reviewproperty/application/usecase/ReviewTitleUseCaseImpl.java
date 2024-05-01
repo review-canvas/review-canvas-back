@@ -28,6 +28,7 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 			updateReviewTitleRequest.titlePadding(),
 			updateReviewTitleRequest.titleFont(),
 			updateReviewTitleRequest.titleBoarder(),
+			updateReviewTitleRequest.titleBoarderColor(),
 			updateReviewTitleRequest.titleBackGround()
 		);
 
@@ -38,6 +39,7 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 			updateReviewTitleRequest.descriptionPadding(),
 			updateReviewTitleRequest.descriptionFont(),
 			updateReviewTitleRequest.descriptionBoarder(),
+			updateReviewTitleRequest.descriptionBoarderColor(),
 			updateReviewTitleRequest.descriptionBackGround()
 		);
 	}
@@ -46,14 +48,14 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 	@Transactional
 	public void resetReviewTitle(Integer shopAdminId) {
 		ReviewTitle reviewTitle = reviewTitleService.validTitleByShopAdminId(shopAdminId);
-		reviewTitle.reset();
+		reviewTitle.resetTitle();
 
 		ReviewTitle reviewDescription = reviewTitleService.validDescriptionByShopAdminId(shopAdminId);
-		reviewDescription.reset();
+		reviewDescription.resetDescription();
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public GetReviewTitleResponse getReviewTitle(Integer shopAdminId) {
 		ReviewTitle reviewTitle = reviewTitleService.validTitleByShopAdminId(shopAdminId);
 		ReviewTitle reviewDescription = reviewTitleService.validDescriptionByShopAdminId(shopAdminId);
