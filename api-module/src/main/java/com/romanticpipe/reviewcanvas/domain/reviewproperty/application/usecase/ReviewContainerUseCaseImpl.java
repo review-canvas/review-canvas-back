@@ -41,4 +41,11 @@ class ReviewContainerUseCaseImpl implements ReviewContainerUseCase {
 		);
 		reviewContainerService.save(reviewContainer);
 	}
+
+	@Override
+	public void resetReviewContainer(Integer shopAdminId) {
+		reviewContainerService.validateByShopAdminId(shopAdminId);
+		ReviewContainer reviewContainer = ReviewContainer.create(shopAdminId);
+		reviewContainerService.save(reviewContainer);
+	}
 }
