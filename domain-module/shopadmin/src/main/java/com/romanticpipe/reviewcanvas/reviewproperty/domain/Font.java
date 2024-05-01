@@ -15,8 +15,8 @@ public class Font {
 	private String size;
 	@Column(name = "font_bold")
 	private String bold;
-	@Column(name = "font_weight")
-	private String weight;
+	// @Column(name = "font_weight")
+	// private String weight;
 	@Column(name = "font_color")
 	private String color;
 
@@ -24,7 +24,7 @@ public class Font {
 		this.name = name;
 		this.size = size;
 		this.bold = bold;
-		this.weight = weight;
+		// this.weight = weight;
 		this.color = color;
 	}
 
