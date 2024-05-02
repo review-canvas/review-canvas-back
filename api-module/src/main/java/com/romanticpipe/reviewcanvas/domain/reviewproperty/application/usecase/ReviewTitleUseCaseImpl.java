@@ -61,5 +61,5 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 		ReviewTitle reviewDescription = reviewTitleService.validDescriptionByShopAdminId(shopAdminId);
 		return GetReviewTitleResponse.from(reviewTitle, reviewDescription);
 	}
-	
+
 }

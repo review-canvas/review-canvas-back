@@ -20,36 +20,36 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "ReviewTitle", description = "리뷰 제목 디자인 API")
 public interface ReviewTitleApi {
 
-	@Operation(summary = "리뷰 제목 디자인 수정 API", description = "리뷰 제목의 디자인 속성값을 수정한다.", security = @SecurityRequirement(name = "Bearer Authentication"))
+	@Operation(summary = "리뷰 제목 디자인 수정 API", description = "리뷰 제목의 디자인 속성값을 수정한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 리뷰 제목 디자인 수정이 완료되었습니다."
-		)
+			description = "성공적으로 리뷰 제목 디자인 수정이 완료되었습니다.")
 	})
 	@PatchMapping("/shop-admin/review-title")
 	ResponseEntity<SuccessResponse<Void>> updateReviewTitle(
 		@AuthInfo JwtInfo jwtInfo, @RequestBody UpdateReviewTitleRequest updateReviewTitleRequest
 	);
 
-	@Operation(summary = "리뷰 제목 디자인 초기화 API", description = "리뷰 제목의 디자인 속성값을 초기화한다.", security = @SecurityRequirement(name = "Bearer Authentication"))
+	@Operation(summary = "리뷰 제목 디자인 초기화 API", description = "리뷰 제목의 디자인 속성값을 초기화한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 리뷰 제목 디자인 초기화가 완료되었습니다."
-		)
+			description = "성공적으로 리뷰 제목 디자인 초기화가 완료되었습니다.")
 	})
 	@PatchMapping("/shop-admin/review-title/reset")
 	ResponseEntity<SuccessResponse<Void>> initializeReviewTitle(
 		@AuthInfo JwtInfo jwtInfo
 	);
 
-	@Operation(summary = "리뷰 제목 디자인 조회 API", description = "리뷰 제목의 디자인 속성값을 조회한다.", security = @SecurityRequirement(name = "Bearer Authentication"))
+	@Operation(summary = "리뷰 제목 디자인 조회 API", description = "리뷰 제목의 디자인 속성값을 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 리뷰 제목 디자인 조회가 완료되었습니다."
-		)
+			description = "성공적으로 리뷰 제목 디자인 조회가 완료되었습니다.")
 	})
 	@GetMapping("/shop-admin/review-title")
 	ResponseEntity<SuccessResponse<GetReviewTitleResponse>> getReviewTitle(
