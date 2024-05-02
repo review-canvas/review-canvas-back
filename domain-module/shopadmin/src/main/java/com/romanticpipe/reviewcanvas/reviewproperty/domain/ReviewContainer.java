@@ -49,10 +49,6 @@ public class ReviewContainer {
 	}
 
 	public static ReviewContainer create(Integer shopAdminId) {
-		return init(shopAdminId);
-	}
-
-	private static ReviewContainer init(Integer shopAdminId) {
 		return ReviewContainer.builder()
 			.width("Full")
 			.padding(Padding.createDefaultReviewContainer())
@@ -62,6 +58,15 @@ public class ReviewContainer {
 			.shadow(Shadow.NONE)
 			.shopAdminId(shopAdminId)
 			.build();
+	}
+
+	public void reset() {
+		this.width = "Full";
+		this.padding = Padding.createDefaultReviewContainer();
+		this.background = "#ffffff";
+		this.boarder = Boarder.createDefaultReviewContainer();
+		this.boarderColor = "#ffffff";
+		this.shadow = Shadow.NONE;
 	}
 
 	public void update(String width, String paddingLeft, String paddingRight, String paddingTop, String paddingBottom,
