@@ -9,7 +9,6 @@ import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.AdminAuthCreater;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -47,11 +46,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional(readOnly = true)
 	public boolean emailCheck(String email) {
 		return shopAdminValidator.isExistEmail(email);
-	}
-
-	@Override
-	public GetReviewPropertyResponse getAllReviewProperty(Integer adminId) {
-		return null;
 	}
 
 }

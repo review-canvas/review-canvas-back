@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
-import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +17,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "ShopAdmin", description = "샵 어드민 API")
@@ -54,15 +50,4 @@ interface ShopAdminApi {
 		@RequestParam(value = "email", required = true) String email
 	);
 
-	@Operation(summary = "리뷰 디자인 전체 조회 API", description = "ShopAdmin의 리뷰 디자인 속성 전체를 불러온다.",
-		security = @SecurityRequirement(name = "Bearer Authentication"))
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "성공적으로 리뷰 속성 조회가 완료되었습니다.")
-	})
-	@GetMapping("/reviews/review-properties")
-	ResponseEntity<SuccessResponse<GetReviewPropertyResponse>> getAllReviewProperty(
-		@AuthInfo JwtInfo jwtInfo
-	);
 }

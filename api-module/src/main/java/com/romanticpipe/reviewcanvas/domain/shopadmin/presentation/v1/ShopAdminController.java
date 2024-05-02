@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyResponse;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 
@@ -44,11 +42,4 @@ class ShopAdminController implements ShopAdminApi {
 		).asHttp(HttpStatus.OK);
 	}
 
-	@Override
-	@GetMapping("/shop-admin/review-properties")
-	public ResponseEntity<SuccessResponse<GetReviewPropertyResponse>> getAllReviewProperty(JwtInfo jwtInfo) {
-		return SuccessResponse.of(
-			shopAdminUseCase.getAllReviewProperty(jwtInfo.adminId())
-		).asHttp(HttpStatus.OK);
-	}
 }
