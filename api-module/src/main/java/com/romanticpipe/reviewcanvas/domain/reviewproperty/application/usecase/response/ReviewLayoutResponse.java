@@ -15,7 +15,8 @@ public record ReviewLayoutResponse(@Schema(description = "베스트 리뷰 영�
 								   Boolean imageReviewAreaActivation,
 								   @Schema(description = "포커스 영역 레이아웃", requiredMode = Schema.RequiredMode.REQUIRED)
 								   FocusAreaLayout focusAreaLayout,
-								   @Schema(description = "이미지/동영상, 리뷰 영역 레이아웃", requiredMode = Schema.RequiredMode.REQUIRED)
+								   @Schema(description = "이미지/동영상,리뷰 영역 레이아웃",
+									   requiredMode = Schema.RequiredMode.REQUIRED)
 								   ImageReviewAreaLayout imageReviewAreaLayout,
 								   @Schema(description = "리뷰 레이아웃 디자인", requiredMode = Schema.RequiredMode.REQUIRED)
 								   ReviewLayoutDesign reviewLayoutDesign) {

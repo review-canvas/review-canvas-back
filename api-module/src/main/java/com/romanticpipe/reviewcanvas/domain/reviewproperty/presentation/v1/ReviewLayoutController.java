@@ -37,4 +37,10 @@ public class ReviewLayoutController implements ReviewLayoutApi {
 	public ResponseEntity<SuccessResponse<ReviewLayoutResponse>> getReviewLayout(@AuthInfo JwtInfo jwtInfo) {
 		return SuccessResponse.of(reviewLayoutUsecase.getReviewLayout(jwtInfo.adminId())).asHttp(HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity<SuccessResponse<Void>> initializeReviewLayout(JwtInfo jwtInfo) {
+		reviewLayoutUsecase.initializeReviewLayout(jwtInfo.adminId());
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
 }

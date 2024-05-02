@@ -92,7 +92,7 @@ public class ReviewTitle {
 		this.background = backGround;
 	}
 
-	public void resetTitle() {
+	public void initializeTitle() {
 		this.titleName = "REVIEW";
 		this.alignmentPosition = AlignmentPosition.LEFT;
 		this.padding = Padding.createDefaultReviewTitle();
@@ -102,7 +102,7 @@ public class ReviewTitle {
 		this.background = "#ffffff";
 	}
 
-	public void resetDescription() {
+	public void initializeDescription() {
 		this.titleName = null;
 		this.alignmentPosition = AlignmentPosition.LEFT;
 		this.padding = Padding.createDefaultReviewDescription();

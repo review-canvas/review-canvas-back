@@ -35,8 +35,8 @@ public class ReviewTitleController implements ReviewTitleApi {
 
 	@Override
 	@PatchMapping("/shop-admin/review-title/reset")
-	public ResponseEntity<SuccessResponse<Void>> resetReviewTitle(@AuthInfo JwtInfo jwtInfo) {
-		reviewTitleUseCase.resetReviewTitle(jwtInfo.adminId());
+	public ResponseEntity<SuccessResponse<Void>> initializeReviewTitle(@AuthInfo JwtInfo jwtInfo) {
+		reviewTitleUseCase.initializeReviewTitle(jwtInfo.adminId());
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
