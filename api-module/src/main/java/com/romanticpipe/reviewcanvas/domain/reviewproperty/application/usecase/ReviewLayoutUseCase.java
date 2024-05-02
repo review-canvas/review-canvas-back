@@ -7,6 +7,6 @@ public interface ReviewLayoutUseCase {
 	void updateLayout(Integer shopAdminId, UpdateLayoutRequest updateLayoutRequest);
 
 	ReviewLayoutResponse getReviewLayout(Integer shopAdminId);
-  
+
 	void initializeReviewLayout(Integer shopAdminId);
 }
