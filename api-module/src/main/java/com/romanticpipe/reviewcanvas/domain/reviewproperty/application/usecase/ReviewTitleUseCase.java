@@ -8,7 +8,7 @@ public interface ReviewTitleUseCase {
 	void updateReviewTitle(Integer shopAdminId,
 		UpdateReviewTitleRequest updateReviewTitleRequest);
 
-	void resetReviewTitle(Integer shopAdminId);
+	void initializeReviewTitle(Integer shopAdminId);
 
 	GetReviewTitleResponse getReviewTitle(Integer shopAdminId);
 }

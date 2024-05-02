@@ -40,7 +40,7 @@ public interface ReviewTitleApi {
 		)
 	})
 	@PatchMapping("/shop-admin/review-title/reset")
-	ResponseEntity<SuccessResponse<Void>> resetReviewTitle(
+	ResponseEntity<SuccessResponse<Void>> initializeReviewTitle(
 		@AuthInfo JwtInfo jwtInfo
 	);
 

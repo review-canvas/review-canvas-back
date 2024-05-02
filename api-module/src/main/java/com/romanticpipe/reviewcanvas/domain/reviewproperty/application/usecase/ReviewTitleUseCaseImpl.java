@@ -46,12 +46,12 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 
 	@Override
 	@Transactional
-	public void resetReviewTitle(Integer shopAdminId) {
+	public void initializeReviewTitle(Integer shopAdminId) {
 		ReviewTitle reviewTitle = reviewTitleService.validTitleByShopAdminId(shopAdminId);
-		reviewTitle.resetTitle();
+		reviewTitle.initializeTitle();
 
 		ReviewTitle reviewDescription = reviewTitleService.validDescriptionByShopAdminId(shopAdminId);
-		reviewDescription.resetDescription();
+		reviewDescription.initializeDescription();
 	}
 
 	@Override
