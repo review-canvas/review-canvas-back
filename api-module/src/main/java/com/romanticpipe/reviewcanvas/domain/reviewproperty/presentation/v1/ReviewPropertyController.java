@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewPropertyUseCase;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyResponse;
@@ -22,7 +23,7 @@ public class ReviewPropertyController implements ReviewPropertyApi {
 
 	@Override
 	@GetMapping("/shop-admin/review-properties")
-	public ResponseEntity<SuccessResponse<GetReviewPropertyResponse>> getAllReviewProperty(JwtInfo jwtInfo) {
+	public ResponseEntity<SuccessResponse<GetReviewPropertyResponse>> getAllReviewProperty(@AuthInfo JwtInfo jwtInfo) {
 		return SuccessResponse.of(
 			reviewPropertyUsecase.getAllReviewProperty(jwtInfo.adminId())
 		).asHttp(HttpStatus.OK);

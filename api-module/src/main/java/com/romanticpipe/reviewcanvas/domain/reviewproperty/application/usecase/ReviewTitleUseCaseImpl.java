@@ -27,8 +27,8 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 			updateReviewTitleRequest.titleAlignmentPosition(),
 			updateReviewTitleRequest.titlePadding(),
 			updateReviewTitleRequest.titleFont(),
-			updateReviewTitleRequest.titleBoarder(),
-			updateReviewTitleRequest.titleBoarderColor(),
+			updateReviewTitleRequest.titleBorder(),
+			updateReviewTitleRequest.titleBorderColor(),
 			updateReviewTitleRequest.titleBackGround()
 		);
 
@@ -38,8 +38,8 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 			updateReviewTitleRequest.descriptionAlignmentPosition(),
 			updateReviewTitleRequest.descriptionPadding(),
 			updateReviewTitleRequest.descriptionFont(),
-			updateReviewTitleRequest.descriptionBoarder(),
-			updateReviewTitleRequest.descriptionBoarderColor(),
+			updateReviewTitleRequest.descriptionBorder(),
+			updateReviewTitleRequest.descriptionBorderColor(),
 			updateReviewTitleRequest.descriptionBackGround()
 		);
 	}

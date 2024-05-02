@@ -12,7 +12,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "ReviewProperty", description = "리뷰 속성 API")
 public interface ReviewPropertyApi {
 
 	@Operation(summary = "리뷰 디자인 전체 조회 API", description = "ShopAdmin의 리뷰 디자인 속성 전체를 불러온다.",
@@ -22,7 +24,7 @@ public interface ReviewPropertyApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 속성 조회가 완료되었습니다.")
 	})
-	@GetMapping("/reviews/review-properties")
+	@GetMapping("/shop-admin/review-properties")
 	ResponseEntity<SuccessResponse<GetReviewPropertyResponse>> getAllReviewProperty(
 		@AuthInfo JwtInfo jwtInfo
 	);
