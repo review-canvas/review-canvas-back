@@ -3,8 +3,10 @@ package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Font {
@@ -26,6 +28,10 @@ public class Font {
 	}
 
 	public static Font createDefaultReviewTitle() {
-		return new Font("Noto Sans KR", "12px", "normal", "#000000");
+		return new Font("noto-sans-kr", "16px", "400", "#000000");
+	}
+
+	public static Font createDefaultReviewDescription() {
+		return new Font("noto-sans-kr", "12px", "400", "#000000");
 	}
 }

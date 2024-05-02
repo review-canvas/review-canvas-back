@@ -6,8 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Embeddable
 @Getter
+@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Boarder {
 
@@ -36,7 +36,11 @@ public class Boarder {
 	}
 
 	public static Boarder createDefaultReviewTitle() {
-		return new Boarder("1px", "1px", "1px", "1px");
+		return new Boarder("0px", "0px", "0px", "0px");
+	}
+
+	public static Boarder createDefaultReviewDescription() {
+		return new Boarder("0px", "0px", "0px", "0px");
 	}
 
 	public void update(String left, String right, String top, String bottom) {
