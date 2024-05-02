@@ -29,28 +29,32 @@ public class ReviewContainer {
 	private String background;
 	@Embedded
 	private Boarder boarder;
+	private String boarderColor;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private Shadow shadow;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private ReviewContainer(String width, Padding padding, String background, Boarder boarder, Shadow shadow,
+	private ReviewContainer(String width, Padding padding, String background, Boarder boarder, String boarderColor,
+							Shadow shadow,
 							Integer shopAdminId) {
 		this.width = width;
 		this.padding = padding;
 		this.background = background;
 		this.boarder = boarder;
+		this.boarderColor = boarderColor;
 		this.shadow = shadow;
 		this.shopAdminId = shopAdminId;
 	}
 
 	public static ReviewContainer create(Integer shopAdminId) {
 		return ReviewContainer.builder()
-			.width("사이트 Width")
+			.width("Full")
 			.padding(Padding.createDefaultReviewContainer())
-			.background("blue")
+			.background("#ffffff")
 			.boarder(Boarder.createDefaultReviewContainer())
+			.boarderColor("#ffffff")
 			.shadow(Shadow.NONE)
 			.shopAdminId(shopAdminId)
 			.build();
