@@ -23,6 +23,8 @@ public record UpdateColumnRequest(
 	@NotNull String background,
 	@Schema(description = "Review Column Boarder", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull Boarder boarder,
+	@Schema(description = "Review Column Boarder Color", requiredMode = Schema.RequiredMode.REQUIRED)
+	@NotNull String boarderColor,
 	@Schema(description = "Review Column Shadow", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull Shadow shadow
 ) {

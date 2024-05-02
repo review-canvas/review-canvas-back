@@ -33,6 +33,7 @@ public class ReviewColumnUseCaseImpl implements ReviewColumnUseCase {
 			updateColumnRequest.margin(),
 			updateColumnRequest.background(),
 			updateColumnRequest.boarder(),
+			updateColumnRequest.boarderColor(),
 			updateColumnRequest.shadow());
 		// reviewColumnService.update(reviewColumn);
 	}
