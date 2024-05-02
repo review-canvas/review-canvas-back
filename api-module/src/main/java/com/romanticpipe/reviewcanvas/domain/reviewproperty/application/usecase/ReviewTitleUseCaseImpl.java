@@ -43,7 +43,7 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 			updateReviewTitleRequest.descriptionBackGround()
 		);
 	}
-	
+
 	@Override
 	@Transactional
 	public void initializeReviewTitle(Integer shopAdminId) {
@@ -61,4 +61,5 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 		ReviewTitle reviewDescription = reviewTitleService.validDescriptionByShopAdminId(shopAdminId);
 		return GetReviewTitleResponse.from(reviewTitle, reviewDescription);
 	}
+	
 }
