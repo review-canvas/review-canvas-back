@@ -23,6 +23,7 @@ class ReviewContainerUseCaseImpl implements ReviewContainerUseCase {
 	}
 
 	@Override
+	@Transactional
 	public void updateReviewContainer(Integer shopAdminId, UpdateContainerRequest updateContainerRequest) {
 		ReviewContainer reviewContainer = reviewContainerService.validateByShopAdminId(shopAdminId);
 		reviewContainer.update(
@@ -39,6 +40,5 @@ class ReviewContainerUseCaseImpl implements ReviewContainerUseCase {
 			updateContainerRequest.boarderColor(),
 			updateContainerRequest.shadow()
 		);
-		reviewContainerService.save(reviewContainer);
 	}
 }
