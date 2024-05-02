@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ReviewPropertyErrorCode implements ErrorCode {
 
-	REVIEW_LAYOUT_NOT_FOUND(400, "RP001", "해당 계정에 Layout이 존재하지 않습니다.");
+	REVIEW_LAYOUT_NOT_FOUND(400, "RP001", "해당 계정에 Layout이 존재하지 않습니다."),
+	REVIEW_TITLE_NOT_FOUND(400, "RP002", "리뷰 제목을 찾을 수 없습니다."),
+	REVIEW_DESCRIPTION_NOT_FOUND(400, "RP003", "리뷰 설명글을 찾을 수 없습니다.");
 
 	private final int status;
 	private final String code;

@@ -35,32 +35,80 @@ public class ReviewTitle {
 	private Font font;
 	@Embedded
 	private Boarder boarder;
+	private String boarderColor;
 	private String background;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewTitle(ReviewTitleType reviewTitleType, String titleName, AlignmentPosition alignmentPosition,
-						Padding padding, Font font, Boarder boarder, String background, Integer shopAdminId) {
+		Padding padding, Font font, Boarder boarder, String boarderColor, String background, Integer shopAdminId) {
 		this.reviewTitleType = reviewTitleType;
 		this.titleName = titleName;
 		this.alignmentPosition = alignmentPosition;
 		this.padding = padding;
 		this.font = font;
 		this.boarder = boarder;
+		this.boarderColor = boarderColor;
 		this.background = background;
 		this.shopAdminId = shopAdminId;
 	}
 
-	public static ReviewTitle create(Integer shopAdminId) {
+	public static ReviewTitle createTitle(Integer shopAdminId) {
 		return ReviewTitle.builder()
 			.reviewTitleType(ReviewTitleType.TITLE)
-			.titleName("리뷰 타이틀")
-			.alignmentPosition(AlignmentPosition.CENTER)
+			.titleName("REVIEW")
+			.alignmentPosition(AlignmentPosition.LEFT)
 			.padding(Padding.createDefaultReviewTitle())
 			.font(Font.createDefaultReviewTitle())
 			.boarder(Boarder.createDefaultReviewTitle())
-			.background("blue")
+			.boarderColor("#ffffff")
+			.background("#ffffff")
 			.shopAdminId(shopAdminId)
 			.build();
+	}
+
+	public static ReviewTitle createDescription(Integer shopAdminId) {
+		return ReviewTitle.builder()
+			.reviewTitleType(ReviewTitleType.DESCRIPTION)
+			.titleName(null)
+			.alignmentPosition(AlignmentPosition.LEFT)
+			.padding(Padding.createDefaultReviewDescription())
+			.font(Font.createDefaultReviewDescription())
+			.boarder(Boarder.createDefaultReviewDescription())
+			.boarderColor("#ffffff")
+			.background("#ffffff")
+			.shopAdminId(shopAdminId)
+			.build();
+	}
+
+	public void update(String titleName, AlignmentPosition alignmentPosition, Padding padding, Font font,
+		Boarder boarder, String boarderColor, String backGround) {
+		this.titleName = titleName;
+		this.alignmentPosition = alignmentPosition;
+		this.padding = padding;
+		this.font = font;
+		this.boarder = boarder;
+		this.boarderColor = boarderColor;
+		this.background = backGround;
+	}
+
+	public void resetTitle() {
+		this.titleName = "REVIEW";
+		this.alignmentPosition = AlignmentPosition.LEFT;
+		this.padding = Padding.createDefaultReviewTitle();
+		this.font = Font.createDefaultReviewTitle();
+		this.boarder = Boarder.createDefaultReviewTitle();
+		this.boarderColor = "#ffffff";
+		this.background = "#ffffff";
+	}
+
+	public void resetDescription() {
+		this.titleName = null;
+		this.alignmentPosition = AlignmentPosition.LEFT;
+		this.padding = Padding.createDefaultReviewDescription();
+		this.font = Font.createDefaultReviewDescription();
+		this.boarder = Boarder.createDefaultReviewDescription();
+		this.boarderColor = "#ffffff";
+		this.background = "#ffffff";
 	}
 }
