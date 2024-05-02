@@ -36,7 +36,7 @@ public final class AccessPath {
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-title", List.of(HttpMethod.GET, HttpMethod.PATCH));
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-title/reset", List.of(HttpMethod.PATCH));
 		// review-layout
-		shopAdminAllowedPath.put("/api/v1/shop-admin/review-layout", List.of(HttpMethod.PATCH));
+		shopAdminAllowedPath.put("/api/v1/shop-admin/review-layout", List.of(HttpMethod.PATCH, HttpMethod.GET));
 		return shopAdminAllowedPath;
 	}
 

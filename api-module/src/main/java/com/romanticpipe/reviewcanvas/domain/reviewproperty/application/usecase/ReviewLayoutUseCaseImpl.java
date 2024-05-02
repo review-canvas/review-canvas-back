@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase;
 
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateLayoutRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.ReviewLayoutResponse;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewLayout;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewLayoutService;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,11 @@ public class ReviewLayoutUseCaseImpl implements ReviewLayoutUseCase {
 			updateLayoutRequest.focusAreaLayout(),
 			updateLayoutRequest.imageReviewAreaLayout(),
 			updateLayoutRequest.reviewLayoutDesign());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public ReviewLayoutResponse getReviewLayout(Integer shopAdminId) {
+		return ReviewLayoutResponse.from(reviewLayoutService.validateById(shopAdminId));
 	}
 }
