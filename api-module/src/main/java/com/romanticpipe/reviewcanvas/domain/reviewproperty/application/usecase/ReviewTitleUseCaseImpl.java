@@ -21,7 +21,7 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 	public void updateReviewTitle(Integer shopAdminId,
 		UpdateReviewTitleRequest updateReviewTitleRequest) {
 
-		ReviewTitle reviewTitle = reviewTitleService.validTitleByShopAdminId(shopAdminId);
+		ReviewTitle reviewTitle = reviewTitleService.validateTitleByShopAdminId(shopAdminId);
 		reviewTitle.update(
 			updateReviewTitleRequest.title(),
 			updateReviewTitleRequest.titleAlignmentPosition(),
@@ -32,7 +32,7 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 			updateReviewTitleRequest.titleBackGround()
 		);
 
-		ReviewTitle reviewDescription = reviewTitleService.validDescriptionByShopAdminId(shopAdminId);
+		ReviewTitle reviewDescription = reviewTitleService.validateDescriptionByShopAdminId(shopAdminId);
 		reviewDescription.update(
 			updateReviewTitleRequest.description(),
 			updateReviewTitleRequest.descriptionAlignmentPosition(),
@@ -47,18 +47,18 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 	@Override
 	@Transactional
 	public void initializeReviewTitle(Integer shopAdminId) {
-		ReviewTitle reviewTitle = reviewTitleService.validTitleByShopAdminId(shopAdminId);
+		ReviewTitle reviewTitle = reviewTitleService.validateTitleByShopAdminId(shopAdminId);
 		reviewTitle.initializeTitle();
 
-		ReviewTitle reviewDescription = reviewTitleService.validDescriptionByShopAdminId(shopAdminId);
+		ReviewTitle reviewDescription = reviewTitleService.validateDescriptionByShopAdminId(shopAdminId);
 		reviewDescription.initializeDescription();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public GetReviewTitleResponse getReviewTitle(Integer shopAdminId) {
-		ReviewTitle reviewTitle = reviewTitleService.validTitleByShopAdminId(shopAdminId);
-		ReviewTitle reviewDescription = reviewTitleService.validDescriptionByShopAdminId(shopAdminId);
+		ReviewTitle reviewTitle = reviewTitleService.validateTitleByShopAdminId(shopAdminId);
+		ReviewTitle reviewDescription = reviewTitleService.validateDescriptionByShopAdminId(shopAdminId);
 		return GetReviewTitleResponse.from(reviewTitle, reviewDescription);
 	}
 

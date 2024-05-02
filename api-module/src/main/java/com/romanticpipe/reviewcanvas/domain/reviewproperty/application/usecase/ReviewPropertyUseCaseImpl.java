@@ -25,8 +25,8 @@ public class ReviewPropertyUseCaseImpl implements ReviewPropertyUseCase {
 	@Transactional(readOnly = true)
 	public GetReviewPropertyResponse getAllReviewProperty(Integer shopAdminId) {
 		ReviewContainer reviewContainer = reviewContainerService.validateByShopAdminId(shopAdminId);
-		ReviewLayout reviewLayout = reviewLayoutService.validateById(shopAdminId);
-		ReviewTitle reviewTitle = reviewTitleService.validTitleByShopAdminId(shopAdminId);
+		ReviewLayout reviewLayout = reviewLayoutService.validateByShopAdminId(shopAdminId);
+		ReviewTitle reviewTitle = reviewTitleService.validateTitleByShopAdminId(shopAdminId);
 		return GetReviewPropertyResponse.from(reviewLayout, reviewContainer, reviewTitle);
 	}
 }

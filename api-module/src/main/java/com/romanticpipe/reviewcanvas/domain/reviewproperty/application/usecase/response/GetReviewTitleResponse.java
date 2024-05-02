@@ -21,7 +21,7 @@ public record GetReviewTitleResponse(
 	@Schema(description = "리뷰 제목 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
 	Border titleBorder,
 	@Schema(description = "리뷰 제목 테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
-	String titleBoarderColor,
+	String titleBorderColor,
 	@Schema(description = "리뷰 제목 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	String titleBackGround,
 	@Schema(description = "리뷰 설명글", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
