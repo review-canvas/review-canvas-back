@@ -14,7 +14,7 @@ import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.AllReviewPropertyResponse;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
 
@@ -91,7 +91,7 @@ interface ReviewApi {
 			description = "성공적으로 사용자 리뷰 조회가 완료되었습니다.")
 	})
 	@GetMapping("/reviews/properties")
-	ResponseEntity<SuccessResponse<AllReviewPropertyResponse>> getAllReviewProperty(
+	ResponseEntity<SuccessResponse<GetReviewPropertyResponse>> getAllReviewProperty(
 		@AuthInfo JwtInfo jwtInfo
 	);
 
