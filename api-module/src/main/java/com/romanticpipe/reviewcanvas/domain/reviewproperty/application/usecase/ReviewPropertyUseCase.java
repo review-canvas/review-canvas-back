@@ -4,5 +4,5 @@ import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.r
 
 public interface ReviewPropertyUseCase {
 
-	GetReviewPropertyResponse getAllReviewProperty(Integer adminId);
+	GetReviewPropertyResponse getAllReviewProperty(Integer shopAdminId);
 }
