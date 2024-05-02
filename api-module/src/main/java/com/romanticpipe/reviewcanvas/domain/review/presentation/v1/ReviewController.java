@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.AllReviewPropertyResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
@@ -57,12 +55,6 @@ class ReviewController implements ReviewApi {
 		return SuccessResponse.of(
 			reviewUseCase.getReviewsByUserId(userId, PageableRequest.of(page, size, direction))
 		).asHttp(HttpStatus.OK);
-	}
-
-	@Override
-	public ResponseEntity<SuccessResponse<AllReviewPropertyResponse>> getAllReviewProperty(JwtInfo jwtInfo) {
-
-		return null;
 	}
 
 	@Override

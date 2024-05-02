@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
-import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.enumeration.Direction;
 
@@ -81,18 +78,6 @@ interface ReviewApi {
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
 		@Schema(description = "ASC, DESC 가능") Direction direction
-	);
-
-	@Operation(summary = "리뷰 디자인 전체 조회 API", description = "ShopAdmin의 리뷰 디자인 속성 전체를 불러온다.",
-		security = @SecurityRequirement(name = "Bearer Authentication"))
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "성공적으로 사용자 리뷰 조회가 완료되었습니다.")
-	})
-	@GetMapping("/reviews/properties")
-	ResponseEntity<SuccessResponse<GetReviewPropertyResponse>> getAllReviewProperty(
-		@AuthInfo JwtInfo jwtInfo
 	);
 
 }
