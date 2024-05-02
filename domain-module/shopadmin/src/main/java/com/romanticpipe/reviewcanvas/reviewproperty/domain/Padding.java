@@ -42,11 +42,4 @@ public class Padding {
 	public static Padding createDefaultReviewDescription() {
 		return new Padding("0px", "0px", "0px", "0px");
 	}
-
-	public void update(String left, String right, String top, String bottom) {
-		this.left = left;
-		this.right = right;
-		this.top = top;
-		this.bottom = bottom;
-	}
 }

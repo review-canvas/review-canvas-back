@@ -60,14 +60,14 @@ public class ReviewContainer {
 			.build();
 	}
 
-	public void update(String width, String paddingLeft, String paddingRight, String paddingTop, String paddingBottom,
-		String background, String boarderLeft, String boarderRight, String boarderTop, String boarderBottom,
-		String boarderColor, String shadow) {
+	public void update(String width, Padding padding,
+		String background, Border border,
+		String borderColor, String shadow) {
 		this.width = width;
-		this.padding.update(paddingLeft, paddingRight, paddingTop, paddingBottom);
+		this.padding = padding;
 		this.background = background;
-		this.boarder.update(boarderLeft, boarderRight, boarderTop, boarderBottom);
-		this.boarderColor = boarderColor;
+		this.border = border;
+		this.borderColor = borderColor;
 		this.shadow = Shadow.valueOf(shadow);
 	}
 }

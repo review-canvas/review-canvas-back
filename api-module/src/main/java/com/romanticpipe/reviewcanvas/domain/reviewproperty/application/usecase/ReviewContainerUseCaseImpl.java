@@ -3,14 +3,9 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.reponse.GetReviewContainerResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateContainerRequest;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewContainer;
-import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewContainerService;
-
-import lombok.RequiredArgsConstructor;
-
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewContainerResponse;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewContainer;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewContainerService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,16 +28,10 @@ class ReviewContainerUseCaseImpl implements ReviewContainerUseCase {
 		ReviewContainer reviewContainer = reviewContainerService.validateByShopAdminId(shopAdminId);
 		reviewContainer.update(
 			updateContainerRequest.width(),
-			updateContainerRequest.paddingLeft(),
-			updateContainerRequest.paddingRight(),
-			updateContainerRequest.paddingTop(),
-			updateContainerRequest.paddingBottom(),
+			updateContainerRequest.padding(),
 			updateContainerRequest.background(),
-			updateContainerRequest.boarderLeft(),
-			updateContainerRequest.boarderRight(),
-			updateContainerRequest.boarderTop(),
-			updateContainerRequest.boarderBottom(),
-			updateContainerRequest.boarderColor(),
+			updateContainerRequest.border(),
+			updateContainerRequest.borderColor(),
 			updateContainerRequest.shadow()
 		);
 	}
