@@ -16,12 +16,12 @@ public class ReviewTitleService {
 
 	private final ReviewTitleRepository reviewTitleRepository;
 
-	public ReviewTitle validTitleByShopAdminId(Integer shopAdminId) {
+	public ReviewTitle validateTitleByShopAdminId(Integer shopAdminId) {
 		return reviewTitleRepository.findByShopAdminIdAndReviewTitleType(shopAdminId, ReviewTitleType.TITLE)
 			.orElseThrow(ReviewTitleNotFoundException::new);
 	}
 
-	public ReviewTitle validDescriptionByShopAdminId(Integer shopAdminId) {
+	public ReviewTitle validateDescriptionByShopAdminId(Integer shopAdminId) {
 		return reviewTitleRepository.findByShopAdminIdAndReviewTitleType(shopAdminId, ReviewTitleType.DESCRIPTION)
 			.orElseThrow(ReviewDescriptionNotFoundException::new);
 	}

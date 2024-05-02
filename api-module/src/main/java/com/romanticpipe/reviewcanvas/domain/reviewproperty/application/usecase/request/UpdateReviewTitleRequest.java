@@ -1,7 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request;
 
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.AlignmentPosition;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Boarder;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Font;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 
@@ -17,9 +17,9 @@ public record UpdateReviewTitleRequest(
 	@Schema(description = "리뷰 제목 폰트", requiredMode = Schema.RequiredMode.REQUIRED)
 	Font titleFont,
 	@Schema(description = "리뷰 제목 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
-	Boarder titleBoarder,
+	Border titleBorder,
 	@Schema(description = "리뷰 제목 테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
-	String titleBoarderColor,
+	String titleBorderColor,
 	@Schema(description = "리뷰 제목 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	String titleBackGround,
 	@Schema(description = "리뷰 설명글", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -31,9 +31,9 @@ public record UpdateReviewTitleRequest(
 	@Schema(description = "리뷰 설명글 폰트", requiredMode = Schema.RequiredMode.REQUIRED)
 	Font descriptionFont,
 	@Schema(description = "리뷰 설명글 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
-	Boarder descriptionBoarder,
+	Border descriptionBorder,
 	@Schema(description = "리뷰 설명글 테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
-	String descriptionBoarderColor,
+	String descriptionBorderColor,
 	@Schema(description = "리뷰 설명글 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	String descriptionBackGround
 ) {

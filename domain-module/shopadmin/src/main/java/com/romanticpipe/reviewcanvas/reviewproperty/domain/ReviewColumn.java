@@ -30,20 +30,20 @@ public class ReviewColumn {
 	private Margin margin;
 	private String background;
 	@Embedded
-	private Boarder boarder;
+	private Border border;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private Shadow shadow;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private ReviewColumn(String width, Padding padding, Margin margin, String background, Boarder boarder,
-						 Shadow shadow, Integer shopAdminId) {
+	private ReviewColumn(String width, Padding padding, Margin margin, String background, Border border,
+		Shadow shadow, Integer shopAdminId) {
 		this.width = width;
 		this.padding = padding;
 		this.margin = margin;
 		this.background = background;
-		this.boarder = boarder;
+		this.border = border;
 		this.shadow = shadow;
 		this.shopAdminId = shopAdminId;
 	}
@@ -54,7 +54,7 @@ public class ReviewColumn {
 			.padding(Padding.createDefaultReviewColumn())
 			.margin(Margin.createDefaultReviewColumn())
 			.background("blue")
-			.boarder(Boarder.createDefaultReviewColumn())
+			.border(Border.createDefaultReviewColumn())
 			.shadow(Shadow.NONE)
 			.shopAdminId(shopAdminId)
 			.build();

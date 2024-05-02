@@ -19,7 +19,7 @@ public class ReviewLayoutUseCaseImpl implements ReviewLayoutUseCase {
 	@Override
 	@Transactional
 	public void updateLayout(Integer shopAdminId, UpdateLayoutRequest updateLayoutRequest) {
-		ReviewLayout reviewLayout = reviewLayoutService.validateById(shopAdminId);
+		ReviewLayout reviewLayout = reviewLayoutService.validateByShopAdminId(shopAdminId);
 		reviewLayout.update(
 			updateLayoutRequest.bestReviewAreaActivation(),
 			updateLayoutRequest.reviewStaticsAreaActivation(),
@@ -32,13 +32,13 @@ public class ReviewLayoutUseCaseImpl implements ReviewLayoutUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public ReviewLayoutResponse getReviewLayout(Integer shopAdminId) {
-		return ReviewLayoutResponse.from(reviewLayoutService.validateById(shopAdminId));
+		return ReviewLayoutResponse.from(reviewLayoutService.validateByShopAdminId(shopAdminId));
 	}
 
 	@Override
 	@Transactional
 	public void initializeReviewLayout(Integer shopAdminId) {
-		ReviewLayout reviewLayout = reviewLayoutService.validateById(shopAdminId);
+		ReviewLayout reviewLayout = reviewLayoutService.validateByShopAdminId(shopAdminId);
 		reviewLayout.initialize();
 	}
 }

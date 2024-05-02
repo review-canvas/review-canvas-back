@@ -1,6 +1,6 @@
-package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.reponse;
+package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response;
 
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Boarder;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewContainer;
 
@@ -17,9 +17,9 @@ public record GetReviewContainerResponse(@Schema(description = "가로", require
 										 @Schema(description = "배경", requiredMode = Schema.RequiredMode.REQUIRED)
 										 String background,
 										 @Schema(description = "테두리", requiredMode = Schema.RequiredMode.REQUIRED)
-										 Boarder boarder,
+										 Border border,
 										 @Schema(description = "테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
-										 String boarderColor,
+										 String borderColor,
 										 @Schema(description = "그림자", requiredMode = Schema.RequiredMode.REQUIRED)
 										 String shadow
 
@@ -30,8 +30,8 @@ public record GetReviewContainerResponse(@Schema(description = "가로", require
 			.width(reviewContainer.getWidth())
 			.padding(reviewContainer.getPadding())
 			.background(reviewContainer.getBackground())
-			.boarder(reviewContainer.getBoarder())
-			.boarderColor(reviewContainer.getBoarderColor())
+			.border(reviewContainer.getBorder())
+			.borderColor(reviewContainer.getBorderColor())
 			.shadow(reviewContainer.getShadow().name())
 			.build();
 	}
