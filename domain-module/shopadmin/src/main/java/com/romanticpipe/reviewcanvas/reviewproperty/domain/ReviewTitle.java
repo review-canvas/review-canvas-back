@@ -34,21 +34,21 @@ public class ReviewTitle {
 	@Embedded
 	private Font font;
 	@Embedded
-	private Boarder boarder;
-	private String boarderColor;
+	private Border border;
+	private String borderColor;
 	private String background;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewTitle(ReviewTitleType reviewTitleType, String titleName, AlignmentPosition alignmentPosition,
-		Padding padding, Font font, Boarder boarder, String boarderColor, String background, Integer shopAdminId) {
+		Padding padding, Font font, Border border, String borderColor, String background, Integer shopAdminId) {
 		this.reviewTitleType = reviewTitleType;
 		this.titleName = titleName;
 		this.alignmentPosition = alignmentPosition;
 		this.padding = padding;
 		this.font = font;
-		this.boarder = boarder;
-		this.boarderColor = boarderColor;
+		this.border = border;
+		this.borderColor = borderColor;
 		this.background = background;
 		this.shopAdminId = shopAdminId;
 	}
@@ -60,8 +60,8 @@ public class ReviewTitle {
 			.alignmentPosition(AlignmentPosition.LEFT)
 			.padding(Padding.createDefaultReviewTitle())
 			.font(Font.createDefaultReviewTitle())
-			.boarder(Boarder.createDefaultReviewTitle())
-			.boarderColor("#ffffff")
+			.border(Border.createDefaultReviewTitle())
+			.borderColor("#ffffff")
 			.background("#ffffff")
 			.shopAdminId(shopAdminId)
 			.build();
@@ -74,21 +74,21 @@ public class ReviewTitle {
 			.alignmentPosition(AlignmentPosition.LEFT)
 			.padding(Padding.createDefaultReviewDescription())
 			.font(Font.createDefaultReviewDescription())
-			.boarder(Boarder.createDefaultReviewDescription())
-			.boarderColor("#ffffff")
+			.border(Border.createDefaultReviewDescription())
+			.borderColor("#ffffff")
 			.background("#ffffff")
 			.shopAdminId(shopAdminId)
 			.build();
 	}
 
 	public void update(String titleName, AlignmentPosition alignmentPosition, Padding padding, Font font,
-		Boarder boarder, String boarderColor, String backGround) {
+		Border border, String borderColor, String backGround) {
 		this.titleName = titleName;
 		this.alignmentPosition = alignmentPosition;
 		this.padding = padding;
 		this.font = font;
-		this.boarder = boarder;
-		this.boarderColor = boarderColor;
+		this.border = border;
+		this.borderColor = borderColor;
 		this.background = backGround;
 	}
 
@@ -97,8 +97,8 @@ public class ReviewTitle {
 		this.alignmentPosition = AlignmentPosition.LEFT;
 		this.padding = Padding.createDefaultReviewTitle();
 		this.font = Font.createDefaultReviewTitle();
-		this.boarder = Boarder.createDefaultReviewTitle();
-		this.boarderColor = "#ffffff";
+		this.border = Border.createDefaultReviewTitle();
+		this.borderColor = "#ffffff";
 		this.background = "#ffffff";
 	}
 
@@ -107,8 +107,8 @@ public class ReviewTitle {
 		this.alignmentPosition = AlignmentPosition.LEFT;
 		this.padding = Padding.createDefaultReviewDescription();
 		this.font = Font.createDefaultReviewDescription();
-		this.boarder = Boarder.createDefaultReviewDescription();
-		this.boarderColor = "#ffffff";
+		this.border = Border.createDefaultReviewDescription();
+		this.borderColor = "#ffffff";
 		this.background = "#ffffff";
 	}
 }
