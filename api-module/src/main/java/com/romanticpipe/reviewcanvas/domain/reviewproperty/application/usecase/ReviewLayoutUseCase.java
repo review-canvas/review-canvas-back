@@ -8,5 +8,5 @@ public interface ReviewLayoutUseCase {
 
 	ReviewLayoutResponse getReviewLayout(Integer shopAdminId);
 
-	void initializeReviewLayout(Integer adminId);
+	void initializeReviewLayout(Integer shopAdminId);
 }
