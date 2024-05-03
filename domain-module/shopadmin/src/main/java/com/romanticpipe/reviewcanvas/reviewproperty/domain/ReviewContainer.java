@@ -74,8 +74,8 @@ public class ReviewContainer {
 		this.width = "Full";
 		this.padding = Padding.createDefaultReviewContainer();
 		this.background = "#ffffff";
-		this.boarder = Boarder.createDefaultReviewContainer();
-		this.boarderColor = "#ffffff";
+		this.border = Border.createDefaultReviewContainer();
+		this.borderColor = "#ffffff";
 		this.shadow = Shadow.NONE;
 	}
 }
