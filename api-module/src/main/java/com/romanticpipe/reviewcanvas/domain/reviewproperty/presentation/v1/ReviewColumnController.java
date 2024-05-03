@@ -4,8 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,15 +25,15 @@ public class ReviewColumnController implements ReviewColumnApi {
 	private final ReviewColumnUseCase reviewColumnUseCase;
 
 	@Override
-	@GetMapping("/shop-admin/review-column/shopadmin/{shopAdminId}")
-	public ResponseEntity<SuccessResponse<ReviewColumn>> getColumn(@PathVariable Integer shopAdminId) {
-		return SuccessResponse.of(reviewColumnUseCase.getColumnByShopAdminId(shopAdminId)).asHttp(HttpStatus.OK);
+	@GetMapping("/shop-admin/review-column")
+	public ResponseEntity<SuccessResponse<ReviewColumn>> getColumn(@AuthInfo JwtInfo jwtInfo) {
+		return SuccessResponse.of(reviewColumnUseCase.getColumnByShopAdminId(jwtInfo.adminId())).asHttp(HttpStatus.OK);
 	}
 
 	@Override
 	@PatchMapping("/shop-admin/review-column")
 	public ResponseEntity<SuccessResponse<Void>> updateColumn(@AuthInfo JwtInfo jwtInfo,
-															  @RequestBody UpdateColumnRequest updateColumnRequest) {
+		@RequestBody UpdateColumnRequest updateColumnRequest) {
 		reviewColumnUseCase.updateReviewColumn(jwtInfo.adminId(), updateColumnRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}

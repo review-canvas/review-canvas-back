@@ -1,11 +1,8 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request;
 
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Boarder;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.FocusAreaLayout;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ImageReviewAreaLayout;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Margin;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewLayoutDesign;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Shadow;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -21,10 +18,10 @@ public record UpdateColumnRequest(
 	@NotNull Margin margin,
 	@Schema(description = "Review Column Background", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull String background,
-	@Schema(description = "Review Column Boarder", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull Boarder boarder,
-	@Schema(description = "Review Column Boarder Color", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull String boarderColor,
+	@Schema(description = "Review Column Border", requiredMode = Schema.RequiredMode.REQUIRED)
+	@NotNull Border border,
+	@Schema(description = "Review Column Border Color", requiredMode = Schema.RequiredMode.REQUIRED)
+	@NotNull String borderColor,
 	@Schema(description = "Review Column Shadow", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull Shadow shadow
 ) {

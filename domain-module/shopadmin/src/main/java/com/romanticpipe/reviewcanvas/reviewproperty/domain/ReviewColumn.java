@@ -31,6 +31,7 @@ public class ReviewColumn {
 	private String background;
 	@Embedded
 	private Border border;
+	private String borderColor;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private Shadow shadow;
@@ -38,7 +39,7 @@ public class ReviewColumn {
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewColumn(String width, Padding padding, Margin margin, String background, Border border,
-		Shadow shadow, Integer shopAdminId) {
+		String borderColor, Shadow shadow, Integer shopAdminId) {
 		this.width = width;
 		this.padding = padding;
 		this.margin = margin;
@@ -51,10 +52,10 @@ public class ReviewColumn {
 
 	public static ReviewColumn create(Integer shopAdminId) {
 		return ReviewColumn.builder()
-			.width("사이트 Width")
+			.width("Full")
 			.padding(Padding.createDefaultReviewColumn())
 			.margin(Margin.createDefaultReviewColumn())
-			.background("blue")
+			.background("#ffffff")
 			.border(Border.createDefaultReviewColumn())
 			.borderColor("#ffffff")
 			.shadow(Shadow.NONE)
@@ -63,23 +64,24 @@ public class ReviewColumn {
 	}
 
 	public void reset() {
-		this.width = "사이트 Width";
+		this.width = "Full";
 		this.padding = Padding.createDefaultReviewColumn();
 		this.margin = Margin.createDefaultReviewColumn();
-		this.background = "blue";
-		this.boarder = Border.createDefaultReviewColumn();
+		this.background = "#ffffff";
+		this.border = Border.createDefaultReviewColumn();
 		this.borderColor = "#ffffff";
 		this.shadow = Shadow.NONE;
 	}
 
-	public void update(String width, Padding padding, Margin margin, String background, Boarder boarder, String boarderColor,
+	public void update(String width, Padding padding, Margin margin, String background, Border border,
+		String borderColor,
 		Shadow shadow) {
 		this.width = width;
 		this.padding = padding;
 		this.margin = margin;
 		this.background = background;
-		this.boarder = boarder;
-		this.borderColor = boarderColor;
+		this.border = border;
+		this.borderColor = borderColor;
 		this.shadow = shadow;
 	}
 }

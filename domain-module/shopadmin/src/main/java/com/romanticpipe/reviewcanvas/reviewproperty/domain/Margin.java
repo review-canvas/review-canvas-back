@@ -28,6 +28,6 @@ public class Margin {
 	}
 
 	public static Margin createDefaultReviewColumn() {
-		return new Margin("10px", "10px", "10px", "10px");
+		return new Margin("0px", "0px", "15px", "0px");
 	}
 }
