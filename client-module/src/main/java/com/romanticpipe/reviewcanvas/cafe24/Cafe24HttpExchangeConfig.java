@@ -1,9 +1,7 @@
 package com.romanticpipe.reviewcanvas.cafe24;
 
-import com.romanticpipe.reviewcanvas.cafe24.application.Cafe24ApplicationClient;
-import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AuthenticationClient;
-import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
-import com.romanticpipe.reviewcanvas.config.RestClientLoggingInterceptor;
+import static com.romanticpipe.reviewcanvas.cafe24.Cafe24Properties.*;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -11,7 +9,10 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
-import static com.romanticpipe.reviewcanvas.cafe24.Cafe24Properties.AUTHORIZATION_CODE;
+import com.romanticpipe.reviewcanvas.cafe24.application.Cafe24ApplicationClient;
+import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AuthenticationClient;
+import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
+import com.romanticpipe.reviewcanvas.config.RestClientLoggingInterceptor;
 
 @Configuration
 class Cafe24HttpExchangeConfig {
@@ -27,8 +28,7 @@ class Cafe24HttpExchangeConfig {
 		ClientHttpRequestFactory clientHttpRequestFactory, RestClientLoggingInterceptor restClientLoggingInterceptor) {
 		RestClient restClient = RestClient.builder()
 			.requestFactory(clientHttpRequestFactory)
-			// .defaultHeader("Authorization", "Basic " + AUTHORIZATION_CODE)
-			.defaultHeader("Authorization", "Basic " + 's')
+			.defaultHeader("Authorization", "Basic " + AUTHORIZATION_CODE)
 			.requestInterceptor(restClientLoggingInterceptor)
 			.build();
 
@@ -56,8 +56,8 @@ class Cafe24HttpExchangeConfig {
 	}
 
 	private RestClient createRestClient(ClientHttpRequestFactory clientHttpRequestFactory,
-										RestClientLoggingInterceptor restClientLoggingInterceptor,
-										Cafe24TokenInterceptor cafe24TokenInterceptor) {
+		RestClientLoggingInterceptor restClientLoggingInterceptor,
+		Cafe24TokenInterceptor cafe24TokenInterceptor) {
 		return RestClient.builder()
 			.requestFactory(clientHttpRequestFactory)
 			.requestInterceptor(restClientLoggingInterceptor)
