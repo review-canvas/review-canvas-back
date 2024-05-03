@@ -60,9 +60,8 @@ public class ReviewContainer {
 			.build();
 	}
 
-	public void update(String width, Padding padding,
-		String background, Border border,
-		String borderColor, String shadow) {
+	public void update(String width, Padding padding, String background, Border border, String borderColor,
+		String shadow) {
 		this.width = width;
 		this.padding = padding;
 		this.background = background;
