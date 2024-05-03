@@ -32,7 +32,7 @@ public class Border {
 	}
 
 	public static Border createDefaultReviewColumn() {
-		return new Border("1px", "1px", "1px", "1px");
+		return new Border("0px", "0px", "0px", "0px");
 	}
 
 	public static Border createDefaultReviewTitle() {

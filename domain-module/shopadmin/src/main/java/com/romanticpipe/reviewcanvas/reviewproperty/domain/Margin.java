@@ -3,9 +3,11 @@ package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Embeddable
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Margin {
 
@@ -26,6 +28,6 @@ public class Margin {
 	}
 
 	public static Margin createDefaultReviewColumn() {
-		return new Margin("10px", "10px", "10px", "10px");
+		return new Margin("0px", "0px", "15px", "0px");
 	}
 }
