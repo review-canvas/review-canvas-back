@@ -12,7 +12,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -31,22 +30,21 @@ public class ReviewColumn {
 	private Margin margin;
 	private String background;
 	@Embedded
-	private Boarder boarder;
-	private String boarderColor;
+	private Border border;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private Shadow shadow;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private ReviewColumn(String width, Padding padding, Margin margin, String background, Boarder boarder, String boarderColor,
-						 Shadow shadow, Integer shopAdminId) {
+	private ReviewColumn(String width, Padding padding, Margin margin, String background, Border border,
+		Shadow shadow, Integer shopAdminId) {
 		this.width = width;
 		this.padding = padding;
 		this.margin = margin;
 		this.background = background;
-		this.boarder = boarder;
-		this.boarderColor = boarderColor;
+		this.border = border;
+		this.borderColor = borderColor;
 		this.shadow = shadow;
 		this.shopAdminId = shopAdminId;
 	}
@@ -57,8 +55,8 @@ public class ReviewColumn {
 			.padding(Padding.createDefaultReviewColumn())
 			.margin(Margin.createDefaultReviewColumn())
 			.background("blue")
-			.boarder(Boarder.createDefaultReviewColumn())
-			.boarderColor("#ffffff")
+			.border(Border.createDefaultReviewColumn())
+			.borderColor("#ffffff")
 			.shadow(Shadow.NONE)
 			.shopAdminId(shopAdminId)
 			.build();
@@ -69,8 +67,8 @@ public class ReviewColumn {
 		this.padding = Padding.createDefaultReviewColumn();
 		this.margin = Margin.createDefaultReviewColumn();
 		this.background = "blue";
-		this.boarder = Boarder.createDefaultReviewColumn();
-		this.boarderColor = "#ffffff";
+		this.boarder = Border.createDefaultReviewColumn();
+		this.borderColor = "#ffffff";
 		this.shadow = Shadow.NONE;
 	}
 
@@ -81,7 +79,7 @@ public class ReviewColumn {
 		this.margin = margin;
 		this.background = background;
 		this.boarder = boarder;
-		this.boarderColor = boarderColor;
+		this.borderColor = boarderColor;
 		this.shadow = shadow;
 	}
 }

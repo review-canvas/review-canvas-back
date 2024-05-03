@@ -9,23 +9,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewContainerUseCase;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewContainerResponse;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewPropertyUseCase;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyResponse;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-public class ReviewContainerController implements ReviewContainerApi {
+public class ReviewPropertyController implements ReviewPropertyApi {
 
-	private final ReviewContainerUseCase reviewContainerUseCase;
+	private final ReviewPropertyUseCase reviewPropertyUsecase;
 
 	@Override
-	@GetMapping("/shop-admin/review-container")
-	public ResponseEntity<SuccessResponse<GetReviewContainerResponse>> getReviewContainer(@AuthInfo JwtInfo jwtInfo) {
+	@GetMapping("/shop-admin/review-properties")
+	public ResponseEntity<SuccessResponse<GetReviewPropertyResponse>> getAllReviewProperty(@AuthInfo JwtInfo jwtInfo) {
 		return SuccessResponse.of(
-			reviewContainerUseCase.getReviewContainer(jwtInfo.adminId())
+			reviewPropertyUsecase.getAllReviewProperty(jwtInfo.adminId())
 		).asHttp(HttpStatus.OK);
 	}
+
 }

@@ -1,9 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -39,4 +41,5 @@ class ShopAdminController implements ShopAdminApi {
 			Map.of("duplicate", result)
 		).asHttp(HttpStatus.OK);
 	}
+
 }

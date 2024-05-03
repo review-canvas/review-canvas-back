@@ -28,22 +28,22 @@ public class ReviewContainer {
 	private Padding padding;
 	private String background;
 	@Embedded
-	private Boarder boarder;
-	private String boarderColor;
+	private Border border;
+	private String borderColor;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private Shadow shadow;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private ReviewContainer(String width, Padding padding, String background, Boarder boarder, String boarderColor,
-							Shadow shadow,
-							Integer shopAdminId) {
+	private ReviewContainer(String width, Padding padding, String background, Border border, String borderColor,
+		Shadow shadow,
+		Integer shopAdminId) {
 		this.width = width;
 		this.padding = padding;
 		this.background = background;
-		this.boarder = boarder;
-		this.boarderColor = boarderColor;
+		this.border = border;
+		this.borderColor = borderColor;
 		this.shadow = shadow;
 		this.shopAdminId = shopAdminId;
 	}
@@ -53,8 +53,8 @@ public class ReviewContainer {
 			.width("Full")
 			.padding(Padding.createDefaultReviewContainer())
 			.background("#ffffff")
-			.boarder(Boarder.createDefaultReviewContainer())
-			.boarderColor("#ffffff")
+			.border(Border.createDefaultReviewContainer())
+			.borderColor("#ffffff")
 			.shadow(Shadow.NONE)
 			.shopAdminId(shopAdminId)
 			.build();

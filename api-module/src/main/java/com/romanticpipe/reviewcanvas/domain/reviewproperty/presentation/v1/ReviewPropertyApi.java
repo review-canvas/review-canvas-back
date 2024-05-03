@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewContainerResponse;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,18 +14,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "ReviewContainer", description = "리뷰 Container API")
-public interface ReviewContainerApi {
+@Tag(name = "ReviewProperty", description = "리뷰 속성 API")
+public interface ReviewPropertyApi {
 
-	@Operation(summary = "리뷰 Container 디자인 조회 API", description = "저장되어 있는 리뷰 Container 디자인 설정 값을 조회한다.",
+	@Operation(summary = "리뷰 디자인 전체 조회 API", description = "ShopAdmin의 리뷰 디자인 속성 전체를 불러온다.",
 		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 리뷰 Container 디자인 조회가 완료되었습니다.")
+			description = "성공적으로 리뷰 속성 조회가 완료되었습니다.")
 	})
-	@GetMapping("/shop-admin/review-container")
-	ResponseEntity<SuccessResponse<GetReviewContainerResponse>> getReviewContainer(
+	@GetMapping("/shop-admin/review-properties")
+	ResponseEntity<SuccessResponse<GetReviewPropertyResponse>> getAllReviewProperty(
 		@AuthInfo JwtInfo jwtInfo
 	);
 }
