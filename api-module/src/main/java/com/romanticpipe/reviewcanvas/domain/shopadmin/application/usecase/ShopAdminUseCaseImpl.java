@@ -56,6 +56,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			Terms terms = termsService.validateByTag(tag);
 			termsTags.put(terms.getId(), Boolean.FALSE);
 		}
+		termsService.validateMandatoryTerms(signUpRequest.consentedTermsTags());
 
 		ShopAdmin shopAdmin = ShopAdmin.builder()
 			.email(signUpRequest.email())
