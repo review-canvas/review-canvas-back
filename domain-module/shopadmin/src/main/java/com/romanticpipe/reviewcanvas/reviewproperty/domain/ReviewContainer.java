@@ -28,31 +28,54 @@ public class ReviewContainer {
 	private Padding padding;
 	private String background;
 	@Embedded
-	private Boarder boarder;
+	private Border border;
+	private String borderColor;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private Shadow shadow;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private ReviewContainer(String width, Padding padding, String background, Boarder boarder, Shadow shadow,
-							Integer shopAdminId) {
+	private ReviewContainer(String width, Padding padding, String background, Border border, String borderColor,
+		Shadow shadow,
+		Integer shopAdminId) {
 		this.width = width;
 		this.padding = padding;
 		this.background = background;
-		this.boarder = boarder;
+		this.border = border;
+		this.borderColor = borderColor;
 		this.shadow = shadow;
 		this.shopAdminId = shopAdminId;
 	}
 
 	public static ReviewContainer create(Integer shopAdminId) {
 		return ReviewContainer.builder()
-			.width("사이트 Width")
+			.width("Full")
 			.padding(Padding.createDefaultReviewContainer())
-			.background("blue")
-			.boarder(Boarder.createDefaultReviewContainer())
+			.background("#ffffff")
+			.border(Border.createDefaultReviewContainer())
+			.borderColor("#ffffff")
 			.shadow(Shadow.NONE)
 			.shopAdminId(shopAdminId)
 			.build();
+	}
+
+	public void update(String width, Padding padding, String background, Border border, String borderColor,
+		String shadow) {
+		this.width = width;
+		this.padding = padding;
+		this.background = background;
+		this.border = border;
+		this.borderColor = borderColor;
+		this.shadow = Shadow.valueOf(shadow);
+	}
+
+	public void reset() {
+		this.width = "Full";
+		this.padding = Padding.createDefaultReviewContainer();
+		this.background = "#ffffff";
+		this.border = Border.createDefaultReviewContainer();
+		this.borderColor = "#ffffff";
+		this.shadow = Shadow.NONE;
 	}
 }

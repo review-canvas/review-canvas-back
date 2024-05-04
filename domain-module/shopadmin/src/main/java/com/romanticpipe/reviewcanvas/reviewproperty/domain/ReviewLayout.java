@@ -61,4 +61,24 @@ public class ReviewLayout {
 			.shopAdminId(shopAdminId)
 			.build();
 	}
+
+	public void update(boolean bestReviewAreaActivation, boolean reviewStaticsAreaActivation,
+		boolean imageReviewAreaActivation, FocusAreaLayout focusAreaLayout,
+		ImageReviewAreaLayout imageReviewAreaLayout, ReviewLayoutDesign reviewLayoutDesign) {
+		this.bestReviewAreaActivation = bestReviewAreaActivation;
+		this.reviewStatisticsAreaActivation = reviewStaticsAreaActivation;
+		this.imageReviewAreaActivation = imageReviewAreaActivation;
+		this.focusAreaLayout = focusAreaLayout;
+		this.imageReviewAreaLayout = imageReviewAreaLayout;
+		this.reviewLayoutDesign = reviewLayoutDesign;
+	}
+
+	public void initialize() {
+		this.bestReviewAreaActivation = true;
+		this.reviewStatisticsAreaActivation = true;
+		this.imageReviewAreaActivation = true;
+		this.focusAreaLayout = FocusAreaLayout.BEST_REVIEW_TOP;
+		this.imageReviewAreaLayout = ImageReviewAreaLayout.REVIEW_TOP;
+		this.reviewLayoutDesign = ReviewLayoutDesign.BOARD;
+	}
 }

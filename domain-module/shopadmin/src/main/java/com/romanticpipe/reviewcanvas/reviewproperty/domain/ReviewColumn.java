@@ -30,34 +30,58 @@ public class ReviewColumn {
 	private Margin margin;
 	private String background;
 	@Embedded
-	private Boarder boarder;
+	private Border border;
+	private String borderColor;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
 	private Shadow shadow;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
-	private ReviewColumn(String width, Padding padding, Margin margin, String background, Boarder boarder,
-						 Shadow shadow, Integer shopAdminId) {
+	private ReviewColumn(String width, Padding padding, Margin margin, String background, Border border,
+		String borderColor, Shadow shadow, Integer shopAdminId) {
 		this.width = width;
 		this.padding = padding;
 		this.margin = margin;
 		this.background = background;
-		this.boarder = boarder;
+		this.border = border;
+		this.borderColor = borderColor;
 		this.shadow = shadow;
 		this.shopAdminId = shopAdminId;
 	}
 
 	public static ReviewColumn create(Integer shopAdminId) {
 		return ReviewColumn.builder()
-			.width("사이트 Width")
+			.width("Full")
 			.padding(Padding.createDefaultReviewColumn())
 			.margin(Margin.createDefaultReviewColumn())
-			.background("blue")
-			.boarder(Boarder.createDefaultReviewColumn())
+			.background("#ffffff")
+			.border(Border.createDefaultReviewColumn())
+			.borderColor("#ffffff")
 			.shadow(Shadow.NONE)
 			.shopAdminId(shopAdminId)
 			.build();
 	}
 
+	public void reset() {
+		this.width = "Full";
+		this.padding = Padding.createDefaultReviewColumn();
+		this.margin = Margin.createDefaultReviewColumn();
+		this.background = "#ffffff";
+		this.border = Border.createDefaultReviewColumn();
+		this.borderColor = "#ffffff";
+		this.shadow = Shadow.NONE;
+	}
+
+	public void update(String width, Padding padding, Margin margin, String background, Border border,
+		String borderColor,
+		Shadow shadow) {
+		this.width = width;
+		this.padding = padding;
+		this.margin = margin;
+		this.background = background;
+		this.border = border;
+		this.borderColor = borderColor;
+		this.shadow = shadow;
+	}
 }

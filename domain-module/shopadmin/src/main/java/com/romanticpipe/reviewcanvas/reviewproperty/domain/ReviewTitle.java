@@ -34,36 +34,81 @@ public class ReviewTitle {
 	@Embedded
 	private Font font;
 	@Embedded
-	private Boarder boarder;
-	private String boarderColor;
+	private Border border;
+	private String borderColor;
 	private String background;
 	private Integer shopAdminId;
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewTitle(ReviewTitleType reviewTitleType, String titleName, AlignmentPosition alignmentPosition,
-		Padding padding, Font font, Boarder boarder, String boarderColor, String background, Integer shopAdminId) {
+		Padding padding, Font font, Border border, String borderColor, String background, Integer shopAdminId) {
 		this.reviewTitleType = reviewTitleType;
 		this.titleName = titleName;
 		this.alignmentPosition = alignmentPosition;
 		this.padding = padding;
 		this.font = font;
-		this.boarder = boarder;
-		this.boarderColor = boarderColor;
+		this.border = border;
+		this.borderColor = borderColor;
 		this.background = background;
 		this.shopAdminId = shopAdminId;
 	}
 
-	public static ReviewTitle create(Integer shopAdminId) {
+	public static ReviewTitle createTitle(Integer shopAdminId) {
 		return ReviewTitle.builder()
 			.reviewTitleType(ReviewTitleType.TITLE)
-			.titleName("리뷰 타이틀")
-			.alignmentPosition(AlignmentPosition.CENTER)
+			.titleName("REVIEW")
+			.alignmentPosition(AlignmentPosition.LEFT)
 			.padding(Padding.createDefaultReviewTitle())
 			.font(Font.createDefaultReviewTitle())
-			.boarder(Boarder.createDefaultReviewTitle())
-			.boarderColor("#ffffff")
-			.background("blue")
+			.border(Border.createDefaultReviewTitle())
+			.borderColor("#ffffff")
+			.background("#ffffff")
 			.shopAdminId(shopAdminId)
 			.build();
+	}
+
+	public static ReviewTitle createDescription(Integer shopAdminId) {
+		return ReviewTitle.builder()
+			.reviewTitleType(ReviewTitleType.DESCRIPTION)
+			.titleName(null)
+			.alignmentPosition(AlignmentPosition.LEFT)
+			.padding(Padding.createDefaultReviewDescription())
+			.font(Font.createDefaultReviewDescription())
+			.border(Border.createDefaultReviewDescription())
+			.borderColor("#ffffff")
+			.background("#ffffff")
+			.shopAdminId(shopAdminId)
+			.build();
+	}
+
+	public void update(String titleName, AlignmentPosition alignmentPosition, Padding padding, Font font,
+		Border border, String borderColor, String backGround) {
+		this.titleName = titleName;
+		this.alignmentPosition = alignmentPosition;
+		this.padding = padding;
+		this.font = font;
+		this.border = border;
+		this.borderColor = borderColor;
+		this.background = backGround;
+	}
+
+	public void initializeTitle() {
+		this.titleName = "REVIEW";
+		this.alignmentPosition = AlignmentPosition.LEFT;
+		this.padding = Padding.createDefaultReviewTitle();
+		this.font = Font.createDefaultReviewTitle();
+		this.border = Border.createDefaultReviewTitle();
+		this.borderColor = "#ffffff";
+		this.background = "#ffffff";
+	}
+
+	public void initializeDescription() {
+		this.titleName = null;
+		this.alignmentPosition = AlignmentPosition.LEFT;
+		this.padding = Padding.createDefaultReviewDescription();
+		this.font = Font.createDefaultReviewDescription();
+		this.border = Border.createDefaultReviewDescription();
+		this.borderColor = "#ffffff";
+		this.background = "#ffffff";
 	}
 }

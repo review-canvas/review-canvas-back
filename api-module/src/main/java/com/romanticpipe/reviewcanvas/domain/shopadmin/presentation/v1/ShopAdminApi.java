@@ -50,4 +50,5 @@ interface ShopAdminApi {
 	ResponseEntity<SuccessResponse<Map<String, Boolean>>> emailCheck(
 		@RequestParam(value = "email", required = true) String email
 	);
+
 }
