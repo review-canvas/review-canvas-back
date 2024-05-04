@@ -34,7 +34,7 @@ public class ReviewContainerController implements ReviewContainerApi {
 	}
 
 	@Override
-	@PatchMapping("/shop-admin/review-container/attributes")
+	@PatchMapping("/shop-admin/review-container")
 	public ResponseEntity<SuccessResponse<Void>> updateReviewContainer(
 		@AuthInfo JwtInfo jwtInfo,
 		@Valid @RequestBody UpdateContainerRequest updateContainerRequest) {

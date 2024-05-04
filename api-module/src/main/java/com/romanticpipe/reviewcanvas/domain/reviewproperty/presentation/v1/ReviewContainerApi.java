@@ -40,7 +40,7 @@ public interface ReviewContainerApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 Container 디자인 수정이 완료되었습니다.")
 	})
-	@PatchMapping("/shop-admin/review-container/attributes")
+	@PatchMapping("/shop-admin/review-container")
 	ResponseEntity<SuccessResponse<Void>> updateReviewContainer(
 		@AuthInfo JwtInfo jwtInfo,
 		@Valid @RequestBody UpdateContainerRequest updateContainerRequest

@@ -30,9 +30,6 @@ public final class AccessPath {
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design/{reviewDesignId}", List.of(HttpMethod.PATCH));
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-visibility/title", List.of(HttpMethod.GET));
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design/theme-list", List.of(HttpMethod.GET));
-		shopAdminAllowedPath.put("/api/v1/shop-admin/review-container", List.of(HttpMethod.GET));
-		shopAdminAllowedPath.put("/api/v1/shop-admin/review-container/attributes", List.of(HttpMethod.PATCH));
-		shopAdminAllowedPath.put("/api/v1/shop-admin/review-container/reset", List.of(HttpMethod.PATCH));
 		// auth
 		shopAdminAllowedPath.put("/api/v1/logout", List.of(HttpMethod.POST));
 		shopAdminAllowedPath.put("/api/v1/auth/check", List.of(HttpMethod.GET));
@@ -48,7 +45,8 @@ public final class AccessPath {
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-layout", List.of(HttpMethod.PATCH, HttpMethod.GET));
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-layout/initialize", List.of(HttpMethod.PATCH));
 		// review-container
-		shopAdminAllowedPath.put("/api/v1/shop-admin/review-container", List.of(HttpMethod.GET));
+		shopAdminAllowedPath.put("/api/v1/shop-admin/review-container", List.of(HttpMethod.PATCH, HttpMethod.GET));
+		shopAdminAllowedPath.put("/api/v1/shop-admin/review-container/reset", List.of(HttpMethod.PATCH));
 		return shopAdminAllowedPath;
 	}
 
