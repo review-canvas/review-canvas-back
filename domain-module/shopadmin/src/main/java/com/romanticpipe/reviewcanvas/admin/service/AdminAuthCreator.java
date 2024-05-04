@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AdminAuthCreater {
+public class AdminAuthCreator {
 	private final AdminAuthRepository adminAuthRepository;
 
-	public void save(AdminAuth adminAuth) {
-		adminAuthRepository.save(adminAuth);
+	public void createShopAdminAuth(Integer shopAdminId) {
+		adminAuthRepository.save(AdminAuth.createShopAdminAuth(shopAdminId));
 	}
 
 }

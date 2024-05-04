@@ -1,19 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
-import com.romanticpipe.reviewcanvas.admin.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.admin.service.AdminAuthCreater;
+import com.romanticpipe.reviewcanvas.admin.service.AdminAuthCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewColumn;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewContainer;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewLayout;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewTitle;
-import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewColumnService;
-import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewContainerService;
-import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewLayoutService;
-import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewTitleService;
+import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewPropertyService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.TermsConsentService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.TermsService;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final PasswordEncoder passwordEncoder;
-	private final AdminAuthCreater adminAuthCreater;
+	private final AdminAuthCreator adminAuthCreator;
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
-	private final ReviewLayoutService reviewLayoutService;
-	private final ReviewContainerService reviewContainerService;
-	private final ReviewColumnService reviewColumnService;
-	private final ReviewTitleService reviewTitleService;
+	private final ReviewPropertyService reviewPropertyService;
 	private final TermsService termsService;
 	private final TermsConsentService termsConsentService;
 
@@ -53,21 +42,9 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.build();
 		shopAdminCreator.save(shopAdmin);
 
-		ReviewLayout reviewLayout = ReviewLayout.create(shopAdmin.getId());
-		ReviewContainer reviewContainer = ReviewContainer.create(shopAdmin.getId());
-		ReviewColumn reviewColumn = ReviewColumn.create(shopAdmin.getId());
-		ReviewTitle reviewTitle = ReviewTitle.createTitle(shopAdmin.getId());
-		ReviewTitle reviewTitleDescription = ReviewTitle.createDescription(shopAdmin.getId());
-		AdminAuth adminAuth = AdminAuth.createShopAdminAuth(shopAdmin.getId());
-
-		reviewLayoutService.save(reviewLayout);
-		reviewContainerService.save(reviewContainer);
-		reviewColumnService.save(reviewColumn);
-		reviewTitleService.save(reviewTitle);
-		reviewTitleService.save(reviewTitleDescription);
-		adminAuthCreater.save(adminAuth);
-
 		termsConsentService.createAll(signUpRequest.consentedTermsIds(), shopAdmin.getId());
+		reviewPropertyService.createDefaultReviewProperty(shopAdmin.getId());
+		adminAuthCreator.createShopAdminAuth(shopAdmin.getId());
 	}
 
 	@Override

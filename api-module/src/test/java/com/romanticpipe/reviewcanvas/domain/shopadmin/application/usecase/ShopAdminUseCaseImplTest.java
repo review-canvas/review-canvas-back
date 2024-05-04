@@ -1,6 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
-import com.romanticpipe.reviewcanvas.admin.service.AdminAuthCreater;
+import com.romanticpipe.reviewcanvas.admin.service.AdminAuthCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +15,7 @@ class ShopAdminUseCaseImplTest {
 	@Mock
 	PasswordEncoder passwordEncoder;
 	@Mock
-	AdminAuthCreater adminAuthCreater;
+	AdminAuthCreator adminAuthCreator;
 	@Mock
 	ShopAdminCreator shopAdminCreator;
 	@Mock
