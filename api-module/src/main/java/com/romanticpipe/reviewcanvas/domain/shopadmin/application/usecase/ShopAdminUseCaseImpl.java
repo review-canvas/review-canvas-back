@@ -29,6 +29,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
 		shopAdminValidator.validateEmailDuplicated(signUpRequest.email());
+		termsService.validateAllById(signUpRequest.consentedTermsIds());
 		termsService.validateMandatoryTerms(signUpRequest.consentedTermsIds());
 
 		ShopAdmin shopAdmin = ShopAdmin.builder()
