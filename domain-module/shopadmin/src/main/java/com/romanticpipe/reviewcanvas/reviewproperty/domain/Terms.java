@@ -18,15 +18,13 @@ public class Terms {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "terms_id")
 	private Integer id;
-	private String tag;
 	@Column(name = "terms_name")
 	private String name;
 	private String contents;
 	private Boolean mandatory;
 
 	@Builder
-	public Terms(String tag, String name, String contents, Boolean mandatory) {
-		this.tag = tag;
+	public Terms(String name, String contents, Boolean mandatory) {
 		this.name = name;
 		this.contents = contents;
 		this.mandatory = mandatory;
