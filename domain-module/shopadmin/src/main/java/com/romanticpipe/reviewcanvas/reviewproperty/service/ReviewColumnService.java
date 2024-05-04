@@ -14,6 +14,10 @@ public class ReviewColumnService {
 
 	private final ReviewColumnRepository reviewColumnRepository;
 
+	public ReviewColumn save(ReviewColumn reviewColumn) {
+		return reviewColumnRepository.save(reviewColumn);
+	}
+
 	public ReviewColumn validateByShopAdminId(Integer shopAdminId) {
 		return reviewColumnRepository.findByShopAdminId(shopAdminId)
 			.orElseThrow(() -> new ReviewColumnNotFoundException());

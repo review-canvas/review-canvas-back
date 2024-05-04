@@ -16,6 +16,10 @@ public class ReviewTitleService {
 
 	private final ReviewTitleRepository reviewTitleRepository;
 
+	public ReviewTitle save(ReviewTitle reviewTitle) {
+		return reviewTitleRepository.save(reviewTitle);
+	}
+
 	public ReviewTitle validateTitleByShopAdminId(Integer shopAdminId) {
 		return reviewTitleRepository.findByShopAdminIdAndReviewTitleType(shopAdminId, ReviewTitleType.TITLE)
 			.orElseThrow(ReviewTitleNotFoundException::new);
