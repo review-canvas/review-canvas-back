@@ -1,31 +1,24 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.service;
 
-import java.util.List;
-
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.reviewproperty.exception.TermsErrorCode;
+import com.romanticpipe.reviewcanvas.reviewproperty.repository.TermsRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Terms;
-import com.romanticpipe.reviewcanvas.reviewproperty.exception.TermsErrorCode;
-import com.romanticpipe.reviewcanvas.reviewproperty.exception.TermsNotFoundException;
-import com.romanticpipe.reviewcanvas.reviewproperty.repository.TermsRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TermsService {
 	private final TermsRepository termsRepository;
 
-	public Terms validateByTag(String tag) {
-		return termsRepository.findByTag(tag).orElseThrow(TermsNotFoundException::new);
-	}
+	public void validateMandatoryTerms(List<Integer> consentedTermsIds) {
+		boolean allMandatoryTermsSelected = termsRepository.findAllByMandatory(true).stream()
+			.allMatch(mandatoryTerms -> consentedTermsIds.contains(mandatoryTerms.getId()));
 
-	public void validateMandatoryTerms(List<String> termsTags) {
-		List<Terms> mandatoryTermsList = termsRepository.findAllByMandatory(true);
-		for (Terms terms : mandatoryTermsList) {
-			if (!termsTags.contains(terms.getTag()))
-				throw new BusinessException(TermsErrorCode.NOT_CONSENT_MANDATORY_TERMS);
+		if (!allMandatoryTermsSelected) {
+			throw new BusinessException(TermsErrorCode.NOT_CONSENT_MANDATORY_TERMS);
 		}
 	}
 }
