@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class TermsService {
 	private final TermsRepository termsRepository;
 
-	public Terms findByTag(String tag) {
+	public Terms validateByTag(String tag) {
 		return termsRepository.findByTag(tag).orElseThrow(TermsNotFoundException::new);
 	}
 }

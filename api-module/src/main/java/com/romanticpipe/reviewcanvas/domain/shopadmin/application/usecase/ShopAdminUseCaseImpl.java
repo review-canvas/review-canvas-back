@@ -1,5 +1,8 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +47,15 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
 		shopAdminValidator.validateEmailDuplicated(signUpRequest.email());
+		Map<Integer, Boolean> termsTags = new HashMap<>();
+		for (String tag : signUpRequest.consentedTermsTags()) {
+			Terms terms = termsService.validateByTag(tag);
+			termsTags.put(terms.getId(), Boolean.TRUE);
+		}
+		for (String tag : signUpRequest.refusedTermsTags()) {
+			Terms terms = termsService.validateByTag(tag);
+			termsTags.put(terms.getId(), Boolean.FALSE);
+		}
 
 		ShopAdmin shopAdmin = ShopAdmin.builder()
 			.email(signUpRequest.email())
@@ -70,24 +82,14 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		reviewTitleService.save(reviewTitleDescription);
 		adminAuthCreater.save(adminAuth);
 
-		for (String tag : signUpRequest.consentedTermsTags()) {
-			Terms terms = termsService.findByTag(tag);
+		termsTags.forEach((termsId, isConsent) -> {
 			TermsConsent termsConsent = TermsConsent.builder()
-				.termsId(terms.getId())
-				.consent(true)
+				.termsId(termsId)
+				.consent(isConsent)
 				.shopAdminId(shopAdmin.getId())
 				.build();
 			termsConsentService.save(termsConsent);
-		}
-		for (String tag : signUpRequest.refusedTermsTags()) {
-			Terms terms = termsService.findByTag(tag);
-			TermsConsent termsConsent = TermsConsent.builder()
-				.termsId(terms.getId())
-				.consent(false)
-				.shopAdminId(shopAdmin.getId())
-				.build();
-			termsConsentService.save(termsConsent);
-		}
+		});
 	}
 
 	@Override
