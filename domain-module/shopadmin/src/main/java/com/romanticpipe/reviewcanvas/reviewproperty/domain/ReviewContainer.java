@@ -69,4 +69,13 @@ public class ReviewContainer {
 		this.borderColor = borderColor;
 		this.shadow = Shadow.valueOf(shadow);
 	}
+
+	public void reset() {
+		this.width = "Full";
+		this.padding = Padding.createDefaultReviewContainer();
+		this.background = "#ffffff";
+		this.border = Border.createDefaultReviewContainer();
+		this.borderColor = "#ffffff";
+		this.shadow = Shadow.NONE;
+	}
 }

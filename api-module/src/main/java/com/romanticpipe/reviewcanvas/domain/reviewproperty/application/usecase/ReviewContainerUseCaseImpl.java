@@ -35,4 +35,11 @@ class ReviewContainerUseCaseImpl implements ReviewContainerUseCase {
 			updateContainerRequest.shadow()
 		);
 	}
+
+	@Override
+	@Transactional
+	public void resetReviewContainer(Integer shopAdminId) {
+		ReviewContainer reviewContainer = reviewContainerService.validateByShopAdminId(shopAdminId);
+		reviewContainer.reset();
+	}
 }

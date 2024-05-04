@@ -7,4 +7,6 @@ public interface ReviewContainerUseCase {
 	GetReviewContainerResponse getReviewContainer(Integer shopAdminId);
 
 	void updateReviewContainer(Integer shopAdminId, UpdateContainerRequest updateContainerRequest);
+
+	void resetReviewContainer(Integer shopAdminId);
 }

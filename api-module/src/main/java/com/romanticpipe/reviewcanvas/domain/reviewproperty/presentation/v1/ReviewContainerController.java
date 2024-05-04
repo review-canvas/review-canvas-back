@@ -41,4 +41,12 @@ public class ReviewContainerController implements ReviewContainerApi {
 		reviewContainerUseCase.updateReviewContainer(jwtInfo.adminId(), updateContainerRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
+
+	@PatchMapping("/shop-admin/review-container/reset")
+	public ResponseEntity<SuccessResponse<Void>> resetReviewContainer(
+		@AuthInfo JwtInfo jwtInfo
+	) {
+		reviewContainerUseCase.resetReviewContainer(jwtInfo.adminId());
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
 }
