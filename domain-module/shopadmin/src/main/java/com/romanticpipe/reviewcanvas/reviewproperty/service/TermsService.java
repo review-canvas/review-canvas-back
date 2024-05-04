@@ -16,7 +16,10 @@ public class TermsService {
 	private final TermsRepository termsRepository;
 
 	public void validateMandatoryTerms(List<Integer> consentedTermsIds) {
-		boolean allMandatoryTermsSelected = termsRepository.findAllByMandatory(true).stream()
+		List<Terms> allTerms = termsRepository.findAll();
+		validateIds(allTerms, consentedTermsIds);
+		boolean allMandatoryTermsSelected = allTerms.stream()
+			.filter(terms -> terms.getMandatory() == true)
 			.allMatch(mandatoryTerms -> consentedTermsIds.contains(mandatoryTerms.getId()));
 
 		if (!allMandatoryTermsSelected) {
@@ -24,9 +27,9 @@ public class TermsService {
 		}
 	}
 
-	public void validateAllById(List<Integer> termsIds) {
-		List<Integer> storedTermsIds = termsRepository.findAll().stream().map(Terms::getId).toList();
-		boolean allTermsIdMatched = new HashSet<>(storedTermsIds).containsAll(termsIds);
+	private void validateIds(List<Terms> allTerms, List<Integer> validatedTermsId) {
+		List<Integer> storedTermsIds = allTerms.stream().map(Terms::getId).toList();
+		boolean allTermsIdMatched = new HashSet<>(storedTermsIds).containsAll(validatedTermsId);
 
 		if (!allTermsIdMatched) {
 			throw new BusinessException(TermsErrorCode.TERMS_ERROR_CODE);
