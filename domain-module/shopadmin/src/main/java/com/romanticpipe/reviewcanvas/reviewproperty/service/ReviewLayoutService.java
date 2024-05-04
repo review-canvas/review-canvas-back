@@ -14,6 +14,10 @@ public class ReviewLayoutService {
 
 	private final ReviewLayoutRepository reviewLayoutRepository;
 
+	public ReviewLayout save(ReviewLayout reviewLayout) {
+		return reviewLayoutRepository.save(reviewLayout);
+	}
+
 	public ReviewLayout validateByShopAdminId(Integer shopAdminId) {
 		return reviewLayoutRepository.findByShopAdminId(shopAdminId)
 			.orElseThrow(ReviewLayoutNotFoundException::new);
