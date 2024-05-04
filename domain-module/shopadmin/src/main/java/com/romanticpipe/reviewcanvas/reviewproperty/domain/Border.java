@@ -42,4 +42,8 @@ public class Border {
 	public static Border createDefaultReviewDescription() {
 		return new Border("0px", "0px", "0px", "0px");
 	}
+
+	public static Border createDefaultReviewDesignView() {
+		return new Border("5px", "5px", "5px", "5px");
+	}
 }
