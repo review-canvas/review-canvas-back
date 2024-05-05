@@ -32,7 +32,7 @@ public record Cafe24AccessToken(String accessToken,
 	}
 
 	public boolean isFullContent() {
-		return !StringUtils.hasText(accessToken) || expiresAt == null || !StringUtils.hasText(refreshToken)
-			|| refreshTokenExpiresAt == null || !StringUtils.hasText(mallId);
+		return !StringUtils.hasText(accessToken) || expiresAt != null || !StringUtils.hasText(refreshToken)
+			|| refreshTokenExpiresAt != null || !StringUtils.hasText(mallId);
 	}
 }
