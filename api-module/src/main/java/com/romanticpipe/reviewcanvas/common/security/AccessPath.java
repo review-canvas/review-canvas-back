@@ -1,13 +1,12 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
-import java.util.List;
-
+import lombok.Getter;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import lombok.Getter;
+import java.util.List;
 
 @Component
 public final class AccessPath {
@@ -19,7 +18,7 @@ public final class AccessPath {
 
 	private AccessPath() {
 		shopAdminAllowedPath = initShopAdminAllowedPath();
-		superAdminAllowedPath = initShopAdminDeniedPath();
+		superAdminAllowedPath = initSuperAdminAllowedPath();
 	}
 
 	private MultiValueMap<String, HttpMethod> initShopAdminAllowedPath() {
@@ -27,9 +26,8 @@ public final class AccessPath {
 		// review
 		shopAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
 		// shop-admin
-		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design/{reviewDesignId}", List.of(HttpMethod.PATCH));
-		shopAdminAllowedPath.put("/api/v1/shop-admin/review-visibility/title", List.of(HttpMethod.GET));
-		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design/theme-list", List.of(HttpMethod.GET));
+		shopAdminAllowedPath.put("/api/v1/shop-admin", List.of(HttpMethod.GET));
+		shopAdminAllowedPath.put("/api/v1/shop-admin/email-check", List.of(HttpMethod.GET));
 		// auth
 		shopAdminAllowedPath.put("/api/v1/logout", List.of(HttpMethod.POST));
 		shopAdminAllowedPath.put("/api/v1/auth/check", List.of(HttpMethod.GET));
@@ -50,13 +48,12 @@ public final class AccessPath {
 		return shopAdminAllowedPath;
 	}
 
-	private MultiValueMap<String, HttpMethod> initShopAdminDeniedPath() {
+	private MultiValueMap<String, HttpMethod> initSuperAdminAllowedPath() {
 		LinkedMultiValueMap<String, HttpMethod> superAdminAllowedPath = new LinkedMultiValueMap<>();
 		// review
 		superAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
 		// shop-admin
-		superAdminAllowedPath.put("/api/v1/shop-admin/review-visibility/title", List.of(HttpMethod.GET));
-		superAdminAllowedPath.put("/api/v1/shop-admin/review-design/theme-list", List.of(HttpMethod.GET));
+		superAdminAllowedPath.put("/api/v1/shop-admin/email-check", List.of(HttpMethod.GET));
 		// auth
 		superAdminAllowedPath.put("/api/v1/logout", List.of(HttpMethod.POST));
 		superAdminAllowedPath.put("/api/v1/auth/check", List.of(HttpMethod.GET));

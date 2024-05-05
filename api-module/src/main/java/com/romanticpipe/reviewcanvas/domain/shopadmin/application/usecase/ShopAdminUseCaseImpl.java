@@ -5,6 +5,7 @@ import com.romanticpipe.reviewcanvas.admin.service.AdminAuthCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewPropertyService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.TermsConsentService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.TermsService;
@@ -51,6 +52,12 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional(readOnly = true)
 	public boolean emailCheck(String email) {
 		return shopAdminValidator.isExistEmail(email);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public GetShopAdminInfoResponse getShopAdminInfo(Integer shopAdminId) {
+		return GetShopAdminInfoResponse.from(shopAdminValidator.validById(shopAdminId));
 	}
 
 }
