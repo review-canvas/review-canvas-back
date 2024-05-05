@@ -33,8 +33,8 @@ public interface Cafe24Api {
 					@SchemaProperty(name = "data", schema = @Schema(type = "object", contentSchema = Map.class,
 						defaultValue = "{\"shopAdminStatus\": \"INSTALLED\"}", allowableValues =
 						{"INSTALLED", "PREVIOUS_INSTALLED", "REGISTERED"}, description = "INSTALLED: 설치 완료, "
-						+ "PREVIOUS_INSTALLED: 이전에 설치된 상태, REGISTERED: 회원가입 완료됨, 참고로 이전에 설치된 상태나 " +
-						"회원가입 완료된 상태일 경우에도 cafe24 액세스 토큰을 발급받아 서버에 저장합니다."))
+						+ "PREVIOUS_INSTALLED: 이전에 설치된 상태, REGISTERED: 회원가입 완료됨, 참고로 이전에 설치된 상태나 "
+						+ "회원가입 완료된 상태일 경우에도 cafe24 액세스 토큰을 발급받아 서버에 저장합니다."))
 				}
 			)),
 		@ApiResponse(
