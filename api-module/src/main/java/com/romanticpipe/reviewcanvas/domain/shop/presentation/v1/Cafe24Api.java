@@ -26,14 +26,24 @@ public interface Cafe24Api {
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 인증 프로세스를 수행했습니다."),
+			description = "성공적으로 인증 프로세스를 수행했습니다.",
+			content = @Content(
+				schemaProperties = {
+					@SchemaProperty(name = "success", schema = @Schema(type = "boolean", description = "성공 여부")),
+					@SchemaProperty(name = "data", schema = @Schema(type = "object", contentSchema = Map.class,
+						defaultValue = "{\"shopAdminStatus\": \"INSTALLED\"}", allowableValues =
+						{"INSTALLED", "PREVIOUS_INSTALLED", "REGISTERED"}, description = "INSTALLED: 설치 완료, "
+						+ "PREVIOUS_INSTALLED: 이전에 설치된 상태, REGISTERED: 회원가입 완료됨, 참고로 이전에 설치된 상태나 "
+						+ "회원가입 완료된 상태일 경우에도 cafe24 액세스 토큰을 발급받아 서버에 저장합니다."))
+				}
+			)),
 		@ApiResponse(
 			responseCode = "400",
 			description = "C003: 외부 API 호출 중 오류가 발생했습니다.",
 			content = @Content(schema = @Schema(hidden = true))),
 	})
 	@PostMapping("/cafe24/{mallId}/authentication-process")
-	ResponseEntity<SuccessResponse<Void>> cafe24AuthenticationProcess(
+	ResponseEntity<SuccessResponse<Map<String, String>>> cafe24AuthenticationProcess(
 		@Schema(name = "mall id", description = "쇼핑몰의 아이디") @PathVariable(required = true) String mallId,
 		@Schema(name = "authorization code", description = "인증 코드") @RequestParam(required = true) String authCode
 	);
