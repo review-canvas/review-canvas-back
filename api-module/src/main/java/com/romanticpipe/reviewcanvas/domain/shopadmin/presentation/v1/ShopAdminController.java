@@ -5,11 +5,13 @@ import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,5 +51,15 @@ class ShopAdminController implements ShopAdminApi {
 		return SuccessResponse.of(
 			shopAdminUseCase.getShopAdminInfo(jwtInfo.adminId())
 		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@PatchMapping("/shop-admin")
+	public ResponseEntity<SuccessResponse<Void>> updateShopAdminInfo(
+		@RequestBody UpdateShopAdminInfoRequest request,
+		@AuthInfo JwtInfo jwtInfo
+	) {
+		shopAdminUseCase.updateShopAdminInfo(request, jwtInfo.adminId());
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }

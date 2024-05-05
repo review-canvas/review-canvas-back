@@ -5,6 +5,7 @@ import com.romanticpipe.reviewcanvas.admin.service.AdminAuthCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewPropertyService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.TermsConsentService;
@@ -58,6 +59,14 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Transactional(readOnly = true)
 	public GetShopAdminInfoResponse getShopAdminInfo(Integer shopAdminId) {
 		return GetShopAdminInfoResponse.from(shopAdminValidator.validById(shopAdminId));
+	}
+
+	@Override
+	@Transactional
+	public void updateShopAdminInfo(UpdateShopAdminInfoRequest request, Integer shopAdminId) {
+		ShopAdmin shopAdmin = shopAdminValidator.validById(shopAdminId);
+		String password = passwordEncoder.encode(request.password());
+		shopAdmin.update(password, request.phoneNumber(), request.mallNumber(), request.email());
 	}
 
 }
