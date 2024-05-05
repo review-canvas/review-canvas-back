@@ -6,32 +6,28 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Embeddable
 @Getter
+@Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Margin {
+public class Round {
 
-	@Column(name = "margin_left")
+	@Column(name = "round_left")
 	private String left;
-	@Column(name = "margin_right")
+	@Column(name = "round_right")
 	private String right;
-	@Column(name = "margin_top")
+	@Column(name = "round_top")
 	private String top;
-	@Column(name = "margin_bottom")
+	@Column(name = "round_bottom")
 	private String bottom;
 
-	public Margin(String left, String right, String top, String bottom) {
+	public Round(String left, String right, String top, String bottom) {
 		this.left = left;
 		this.right = right;
 		this.top = top;
 		this.bottom = bottom;
 	}
 
-	public static Margin createDefaultReviewColumn() {
-		return new Margin("0px", "0px", "15px", "0px");
-	}
-
-	public static Margin createDefaultReviewDesignView() {
-		return new Margin("10px", "10px", "10px", "10px");
+	public static Round createDefaultReviewDesignView() {
+		return new Round("0", "0", "0", "0");
 	}
 }

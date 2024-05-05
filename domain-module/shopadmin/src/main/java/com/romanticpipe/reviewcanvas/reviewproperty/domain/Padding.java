@@ -42,4 +42,8 @@ public class Padding {
 	public static Padding createDefaultReviewDescription() {
 		return new Padding("0px", "0px", "0px", "0px");
 	}
+
+	public static Padding createDefaultReviewDesignView() {
+		return new Padding("10px", "10px", "10px", "10px");
+	}
 }

@@ -34,4 +34,8 @@ public class Font {
 	public static Font createDefaultReviewDescription() {
 		return new Font("noto-sans-kr", "12px", "400", "#000000");
 	}
+
+	public static Font createDefaultReviewDesignView() {
+		return new Font("NONE", "12px", "0", "#000000");
+	}
 }
