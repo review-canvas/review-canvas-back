@@ -36,7 +36,7 @@ public class Cafe24ProductScheduler {
 	@Scheduled(cron = "${scheduler.update-product.cron}")
 	public void processUpdateProduct() {
 		log.info("product 정보 업데이트 scheduler 시작");
-		List<ShopAdmin> shopAdmins = shopAdminReader.findRegisteredShopAdmin();
+		List<ShopAdmin> shopAdmins = shopAdminReader.findAll();
 		shopAdmins.forEach(this::processEachShopAdmin);
 		log.info("product 정보 업데이트 scheduler 종료");
 	}
