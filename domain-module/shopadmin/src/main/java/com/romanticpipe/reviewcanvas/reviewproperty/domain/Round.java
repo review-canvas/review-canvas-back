@@ -26,4 +26,8 @@ public class Round {
 		this.top = top;
 		this.bottom = bottom;
 	}
+
+	public static Round createDefaultReviewDesignView() {
+		return new Round("0", "0", "0", "0");
+	}
 }

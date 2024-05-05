@@ -5,8 +5,7 @@ import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewLayoutUseCase;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateLayoutRequest;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.ReviewLayoutResponse;
-
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewLayoutResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +33,7 @@ public class ReviewLayoutController implements ReviewLayoutApi {
 
 	@Override
 	@GetMapping("/shop-admin/review-layout")
-	public ResponseEntity<SuccessResponse<ReviewLayoutResponse>> getReviewLayout(@AuthInfo JwtInfo jwtInfo) {
+	public ResponseEntity<SuccessResponse<GetReviewLayoutResponse>> getReviewLayout(@AuthInfo JwtInfo jwtInfo) {
 		return SuccessResponse.of(reviewLayoutUsecase.getReviewLayout(jwtInfo.adminId())).asHttp(HttpStatus.OK);
 	}
 

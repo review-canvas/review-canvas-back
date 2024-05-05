@@ -37,6 +37,8 @@ public class ReviewDesignView {
 	private Font font;
 	@Embedded
 	private Border border;
+	@Embedded
+	private Round round;
 	private String borderColor;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR")
@@ -46,12 +48,14 @@ public class ReviewDesignView {
 	private String seeMoreButtonType;
 	@Embedded
 	private ReviewLike reviewLike;
+	private Integer shopAdminId;
 
 	@Builder
 	private ReviewDesignView(String detailViewType, String pagingType, String filterType, String filterActiveTextColor,
 							 String reviewBackgroundColor, Margin margin, Padding padding, String detailInfoTextColor,
-							 Font font, Border border, String borderColor, Shadow shadow, String replyBackgroundColor,
-							 Integer reviewPreviewTextMaxSize, String seeMoreButtonType, ReviewLike reviewLike) {
+							 Font font, Border border, Round round, String borderColor, Shadow shadow,
+							 String replyBackgroundColor, Integer reviewPreviewTextMaxSize, String seeMoreButtonType,
+							 ReviewLike reviewLike, Integer shopAdminId) {
 		this.detailViewType = detailViewType;
 		this.pagingType = pagingType;
 		this.filterType = filterType;
@@ -62,12 +66,14 @@ public class ReviewDesignView {
 		this.detailInfoTextColor = detailInfoTextColor;
 		this.font = font;
 		this.border = border;
+		this.round = round;
 		this.borderColor = borderColor;
 		this.shadow = shadow;
 		this.replyBackgroundColor = replyBackgroundColor;
 		this.reviewPreviewTextMaxSize = reviewPreviewTextMaxSize;
 		this.seeMoreButtonType = seeMoreButtonType;
 		this.reviewLike = reviewLike;
+		this.shopAdminId = shopAdminId;
 	}
 
 	public static ReviewDesignView create(Integer shopAdminId) {
@@ -82,12 +88,14 @@ public class ReviewDesignView {
 			.detailInfoTextColor("#8d8d8d")
 			.font(Font.createDefaultReviewDesignView())
 			.border(Border.createDefaultReviewDesignView())
+			.round(Round.createDefaultReviewDesignView())
 			.borderColor("#ffffff")
 			.shadow(Shadow.SMALL)
 			.seeMoreButtonType("FIRST")
 			.replyBackgroundColor("#ffffff")
 			.reviewPreviewTextMaxSize(150)
 			.reviewLike(ReviewLike.createDefaultReviewLike())
+			.shopAdminId(shopAdminId)
 			.build();
 	}
 }
