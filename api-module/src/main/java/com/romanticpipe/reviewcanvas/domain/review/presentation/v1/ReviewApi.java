@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewForUserResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
@@ -31,7 +32,7 @@ interface ReviewApi {
 			description = "성공적으로 상품 리뷰 조회가 완료되었습니다.")
 	})
 	@GetMapping("/shop/{mallId}/products/{productNo}/reviews")
-	ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsForUser(
+	ResponseEntity<SuccessResponse<PageResponse<GetReviewForUserResponse>>> getReviewsForUser(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productNo,
 		@RequestParam(value = "size", required = false, defaultValue = "20") int size,

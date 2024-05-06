@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.service;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.dto.ReviewInfo;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import com.romanticpipe.reviewcanvas.repository.ReviewRepository;
 import com.romanticpipe.reviewcanvas.util.PageableUtils;
@@ -18,17 +19,16 @@ public class ReviewReader {
 
 	private final ReviewRepository reviewRepository;
 
-	public PageResponse<Review> findByProductId(Long productId, PageableRequest pageableRequest, ReviewFilter filter) {
+	public PageResponse<ReviewInfo> findByProductId(Long productId, PageableRequest pageableRequest,
+													ReviewFilter filter) {
 		Sort sort = SortUtils.getSort(pageableRequest.sort());
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
 		if (filter == ReviewFilter.IMAGE_VIDEO) {
-			return PageableUtils.toPageResponse(
-				reviewRepository.findAllByProductIdAndImageVideoUrlsIsNotNull(productId, pageable));
+			return PageableUtils.toPageResponse(reviewRepository.findAllImageVideoReview(productId, pageable));
 		} else if (filter == ReviewFilter.GENERAL) {
-			return PageableUtils.toPageResponse(
-				reviewRepository.findAllByProductIdAndImageVideoUrlsIsNull(productId, pageable));
+			return PageableUtils.toPageResponse(reviewRepository.findAllGeneralReview(productId, pageable));
 		} else {
-			return PageableUtils.toPageResponse(reviewRepository.findAllByProductId(productId, pageable));
+			return PageableUtils.toPageResponse(reviewRepository.findAllReview(productId, pageable));
 		}
 	}
 

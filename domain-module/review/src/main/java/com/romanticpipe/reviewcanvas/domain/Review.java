@@ -42,5 +42,6 @@ public class Review extends BaseEntityWithUpdate {
 		this.content = content;
 		this.score = score;
 		this.status = status;
+		this.imageVideoUrls = imageVideoUrls;
 	}
 }
