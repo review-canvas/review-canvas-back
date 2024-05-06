@@ -1,16 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
-
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,6 +14,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @Tag(name = "ShopAdmin", description = "샵 어드민 API")
 interface ShopAdminApi {
@@ -51,4 +54,24 @@ interface ShopAdminApi {
 		@RequestParam(value = "email", required = true) String email
 	);
 
+	@Operation(summary = "내 정보 조회 API", description = "마이페이지에서 내 정보를 조회할 때 사용될 api")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 내 정보 조회를 완료했습니다.")
+	})
+	@GetMapping("/shop-admin")
+	ResponseEntity<SuccessResponse<GetShopAdminInfoResponse>> getShopAdminInfo(@AuthInfo JwtInfo jwtInfo);
+
+	@Operation(summary = "내 정보 수정 API", description = "마이페이지에서 내 정보를 수정할 때 사용될 api")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 내 정보 조회를 수정했습니다.")
+	})
+	@PatchMapping("/shop-admin")
+	ResponseEntity<SuccessResponse<Void>> updateShopAdminInfo(
+		@RequestBody UpdateShopAdminInfoRequest request,
+		@AuthInfo JwtInfo jwtInfo
+	);
 }

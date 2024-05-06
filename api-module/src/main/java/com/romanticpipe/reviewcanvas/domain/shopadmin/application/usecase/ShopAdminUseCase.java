@@ -1,6 +1,8 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
 
 public interface ShopAdminUseCase {
 
@@ -8,4 +10,7 @@ public interface ShopAdminUseCase {
 
 	boolean emailCheck(String email);
 
+	GetShopAdminInfoResponse getShopAdminInfo(Integer shopAdminId);
+
+	void updateShopAdminInfo(UpdateShopAdminInfoRequest request, Integer shopAdminId);
 }
