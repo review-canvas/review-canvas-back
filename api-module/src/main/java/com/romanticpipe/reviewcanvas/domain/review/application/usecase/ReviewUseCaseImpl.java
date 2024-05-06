@@ -8,6 +8,7 @@ import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewForUserResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
@@ -38,13 +39,13 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	private final TransactionTemplate writeTransactionTemplate;
 
 	@Override
-	public PageResponse<GetReviewResponse> getReviewsForUser(String mallId, Long productNo,
-															 PageableRequest pageableRequest, ReviewFilter filter) {
+	public PageResponse<GetReviewForUserResponse> getReviewsForUser(String mallId, Long productNo,
+																	PageableRequest pageableRequest, ReviewFilter filter) {
 		Product product = productReader.findProduct(mallId, productNo)
 			.orElseGet(() -> createProduct(mallId, productNo));
 
 		return reviewReader.findByProductId(product.getId(), pageableRequest, filter)
-			.map(GetReviewResponse::from);
+			.map(GetReviewForUserResponse::from);
 	}
 
 	@Override
