@@ -6,12 +6,12 @@ import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductDto;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
-import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import com.romanticpipe.reviewcanvas.service.ProductCreator;
 import com.romanticpipe.reviewcanvas.service.ProductReader;
 import com.romanticpipe.reviewcanvas.service.ProductValidator;
@@ -39,11 +39,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewResponse> getReviewsForUser(String mallId, Long productNo,
-															 PageableRequest pageableRequest) {
+															 PageableRequest pageableRequest, ReviewFilter filter) {
 		Product product = productReader.findProduct(mallId, productNo)
 			.orElseGet(() -> createProduct(mallId, productNo));
 
-		return reviewReader.findByProductId(product.getId(), pageableRequest)
+		return reviewReader.findByProductId(product.getId(), pageableRequest, filter)
 			.map(GetReviewResponse::from);
 	}
 
@@ -71,15 +71,15 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 //			.orElseGet(() -> createProduct(mallId, productNo));
 		ShopAdmin shopAdmin = shopAdminValidator.validById(product.getShopAdminId());
 		// TODO: 프론트로부터 memberId를 받아 user를 조회하여 userId를 가져온다.
-		Review review = new Review(
-			null,
-			null,
-			createReviewRequest.content(),
-			createReviewRequest.score(),
-			shopAdmin.isApproveStatus()
-				? ReviewStatus.WAITING : ReviewStatus.APPROVED
-		);
-		reviewCreator.save(review);
+//		Review review = new Review(
+//			null,
+//			null,
+//			createReviewRequest.content(),
+//			createReviewRequest.score(),
+//			shopAdmin.isApproveStatus()
+//				? ReviewStatus.WAITING : ReviewStatus.APPROVED
+//		);
+//		reviewCreator.save(review);
 	}
 
 	private Product createProduct(String mallId, Long productNo) {

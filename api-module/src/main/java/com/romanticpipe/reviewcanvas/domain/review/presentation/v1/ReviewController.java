@@ -7,7 +7,8 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.U
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
-import com.romanticpipe.reviewcanvas.enumeration.Direction;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,15 +30,16 @@ class ReviewController implements ReviewApi {
 	private final ReviewUseCase reviewUseCase;
 
 	@Override
-	@GetMapping("/shop-admin/{mallId}/products/{productNo}/reviews")
+	@GetMapping("/shop/{mallId}/products/{productNo}/reviews")
 	public ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsForUser(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productNo,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-		@RequestParam(name = "direction", required = false, defaultValue = "LATEST") Direction direction) {
+		@RequestParam(name = "sort", required = false, defaultValue = "LATEST") ReviewSort sort,
+		@RequestParam(name = "filter", required = false, defaultValue = "ALL") ReviewFilter filter) {
 		return SuccessResponse.of(
-			reviewUseCase.getReviewsForUser(mallId, productNo, PageableRequest.of(page, size, direction))
+			reviewUseCase.getReviewsForUser(mallId, productNo, PageableRequest.of(page, size, sort), filter)
 		).asHttp(HttpStatus.OK);
 	}
 
@@ -47,11 +49,11 @@ class ReviewController implements ReviewApi {
 		@PathVariable("userId") String userId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-		@RequestParam(name = "direction", required = false, defaultValue = "DESC")
-		@Schema(description = "ASC, DESC 가능") Direction direction
+		@RequestParam(name = "reviewSort", required = false, defaultValue = "DESC")
+		@Schema(description = "ASC, DESC 가능") ReviewSort reviewSort
 	) {
 		return SuccessResponse.of(
-			reviewUseCase.getReviewsByUserId(userId, PageableRequest.of(page, size, direction))
+			reviewUseCase.getReviewsByUserId(userId, PageableRequest.of(page, size, reviewSort))
 		).asHttp(HttpStatus.OK);
 	}
 
