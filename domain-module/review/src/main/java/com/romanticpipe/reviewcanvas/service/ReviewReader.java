@@ -21,16 +21,14 @@ public class ReviewReader {
 	public PageResponse<Review> findByProductId(Long productId, PageableRequest pageableRequest, ReviewFilter filter) {
 		Sort sort = SortUtils.getSort(pageableRequest.sort());
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
-		if (filter == ReviewFilter.ALL) {
-			return PageableUtils.toPageResponse(reviewRepository.findAllByProductId(productId, pageable));
-		} else if (filter == ReviewFilter.IMAGE_VIDEO) {
+		if (filter == ReviewFilter.IMAGE_VIDEO) {
 			return PageableUtils.toPageResponse(
 				reviewRepository.findAllByProductIdAndImageVideoUrlsIsNotNull(productId, pageable));
 		} else if (filter == ReviewFilter.GENERAL) {
 			return PageableUtils.toPageResponse(
 				reviewRepository.findAllByProductIdAndImageVideoUrlsIsNull(productId, pageable));
 		} else {
-			throw new IllegalArgumentException("지원하지 않는 review filter 입니다." + filter);
+			return PageableUtils.toPageResponse(reviewRepository.findAllByProductId(productId, pageable));
 		}
 	}
 
