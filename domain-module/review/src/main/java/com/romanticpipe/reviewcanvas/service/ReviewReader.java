@@ -18,20 +18,20 @@ public class ReviewReader {
 
 	private final ReviewRepository reviewRepository;
 
-	// TODO: 이미지가 추가되면 리뷰를 찾는 방법을 변경해야 합니다.
 	public PageResponse<Review> findByProductId(Long productId, PageableRequest pageableRequest, ReviewFilter filter) {
 		Sort sort = SortUtils.getSort(pageableRequest.sort());
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
-		if (filter == ReviewFilter.ALL)
+		if (filter == ReviewFilter.ALL) {
 			return PageableUtils.toPageResponse(reviewRepository.findAllByProductId(productId, pageable));
-		else if (filter == ReviewFilter.IMAGE_VIDEO)
+		} else if (filter == ReviewFilter.IMAGE_VIDEO) {
 			return PageableUtils.toPageResponse(
 				reviewRepository.findAllByProductIdAndImageVideoUrlsIsNotNull(productId, pageable));
-		else if (filter == ReviewFilter.GENERAL)
+		} else if (filter == ReviewFilter.GENERAL) {
 			return PageableUtils.toPageResponse(
 				reviewRepository.findAllByProductIdAndImageVideoUrlsIsNull(productId, pageable));
-		else
+		} else {
 			throw new IllegalArgumentException("지원하지 않는 review filter 입니다." + filter);
+		}
 	}
 
 	public PageResponse<Review> findByUserId(String userId, PageableRequest pageableRequest) {
