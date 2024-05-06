@@ -6,6 +6,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUse
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -41,14 +42,14 @@ class ReviewControllerTest extends ControllerTestSetup {
 			// given
 			String mallId = "mallId";
 			Long productNo = 1L;
-			var review = TestReviewFactory.createReview(1L, productNo, 1L, "content", 5);
+			var review = TestReviewFactory.createReview(1L, productNo, 1L, "content", 5, null);
 			var getReviewResponse = GetReviewResponse.from(review);
 			var getReviewPageResponse = new PageResponse<>(0, 10, 0, List.of(getReviewResponse));
-			given(reviewUseCase.getReviewsForUser(eq(mallId), eq(productNo), any(PageableRequest.class)))
-				.willReturn(getReviewPageResponse);
+			given(reviewUseCase.getReviewsForUser(eq(mallId), eq(productNo), any(PageableRequest.class),
+				any(ReviewFilter.class))).willReturn(getReviewPageResponse);
 
 			// when
-			String url = BASE_URL + "/shop-admin/" + mallId + "/products/" + productNo + "/reviews";
+			String url = BASE_URL + "/shop/" + mallId + "/products/" + productNo + "/reviews";
 			ResultActions result = mockMvc.perform(get(url));
 
 			// then
