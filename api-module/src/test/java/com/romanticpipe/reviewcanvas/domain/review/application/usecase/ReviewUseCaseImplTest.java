@@ -6,7 +6,8 @@ import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
-import com.romanticpipe.reviewcanvas.enumeration.Direction;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
 import com.romanticpipe.reviewcanvas.service.ProductReader;
 import com.romanticpipe.reviewcanvas.service.ProductValidator;
 import com.romanticpipe.reviewcanvas.service.ReviewCreator;
@@ -22,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -56,16 +58,17 @@ class ReviewUseCaseImplTest {
 			var productNo = 1L;
 			var productId = 2L;
 			var product = TestProductFactory.createProduct(productId, productNo, 3);
-			var pageableRequest = PageableRequest.of(0, 10, Direction.ASC);
-			var review = TestReviewFactory.createReview(1L, 1L, 1L, "content", 5);
+			var pageableRequest = PageableRequest.of(0, 10, ReviewSort.LATEST);
+			var filter = ReviewFilter.ALL;
+			var review = TestReviewFactory.createReview(1L, 1L, 1L, "content", 5, null);
 			var getReviewResponse = new PageResponse<>(0, 10, 0, List.of(review));
-			given(productValidator.validateByMallIdAndProductNo(eq(mallId), eq(productNo)))
-				.willReturn(product);
-			given(reviewReader.findByProductId(eq(productId), eq(pageableRequest)))
+			given(productReader.findProduct(eq(mallId), eq(productNo)))
+				.willReturn(Optional.of(product));
+			given(reviewReader.findByProductId(eq(productId), eq(pageableRequest), eq(filter)))
 				.willReturn(getReviewResponse);
 
 			// when
-			var result = reviewUseCase.getReviewsForUser(mallId, productNo, pageableRequest);
+			var result = reviewUseCase.getReviewsForUser(mallId, productNo, pageableRequest, filter);
 
 			// then
 			Assertions.assertThat(result).isEqualTo(getReviewResponse.map(GetReviewResponse::from));

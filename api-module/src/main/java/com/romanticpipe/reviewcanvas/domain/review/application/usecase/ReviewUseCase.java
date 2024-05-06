@@ -5,10 +5,11 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.U
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 
 public interface ReviewUseCase {
 	PageResponse<GetReviewResponse> getReviewsForUser(String mallId, Long productNo,
-													  PageableRequest pageableRequest);
+													  PageableRequest pageableRequest, ReviewFilter filter);
 
 	PageResponse<GetReviewResponse> getReviewsByUserId(String userId, PageableRequest pageableRequest);
 

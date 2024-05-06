@@ -6,12 +6,12 @@ import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductDto;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
-import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import com.romanticpipe.reviewcanvas.service.ProductCreator;
 import com.romanticpipe.reviewcanvas.service.ProductReader;
 import com.romanticpipe.reviewcanvas.service.ProductValidator;
@@ -21,6 +21,7 @@ import com.romanticpipe.reviewcanvas.service.ReviewValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Component
 @RequiredArgsConstructor
@@ -34,12 +35,15 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	private final ReviewCreator reviewCreator;
 	private final ReviewValidator reviewValidator;
 	private final Cafe24ProductClient cafe24ProductClient;
+	private final TransactionTemplate writeTransactionTemplate;
 
 	@Override
 	public PageResponse<GetReviewResponse> getReviewsForUser(String mallId, Long productNo,
-															 PageableRequest pageableRequest) {
-		Product product = productValidator.validateByMallIdAndProductNo(mallId, productNo);
-		return reviewReader.findByProductId(product.getId(), pageableRequest)
+															 PageableRequest pageableRequest, ReviewFilter filter) {
+		Product product = productReader.findProduct(mallId, productNo)
+			.orElseGet(() -> createProduct(mallId, productNo));
+
+		return reviewReader.findByProductId(product.getId(), pageableRequest, filter)
 			.map(GetReviewResponse::from);
 	}
 
@@ -67,23 +71,25 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 //			.orElseGet(() -> createProduct(mallId, productNo));
 		ShopAdmin shopAdmin = shopAdminValidator.validById(product.getShopAdminId());
 		// TODO: 프론트로부터 memberId를 받아 user를 조회하여 userId를 가져온다.
-		Review review = new Review(
-			null,
-			null,
-			createReviewRequest.content(),
-			createReviewRequest.score(),
-			shopAdmin.isApproveStatus()
-				? ReviewStatus.WAITING : ReviewStatus.APPROVED
-		);
-		reviewCreator.save(review);
+//		Review review = new Review(
+//			null,
+//			null,
+//			createReviewRequest.content(),
+//			createReviewRequest.score(),
+//			shopAdmin.isApproveStatus()
+//				? ReviewStatus.WAITING : ReviewStatus.APPROVED
+//		);
+//		reviewCreator.save(review);
 	}
 
 	private Product createProduct(String mallId, Long productNo) {
 		Cafe24ProductDto cafe24ProductDto = cafe24ProductClient.getProduct(mallId, productNo);
-		cafe24ProductDto.validateCafe24Product(mallId, productNo);
-		ShopAdmin shopAdmin = shopAdminValidator.validByMallId(mallId);
+		cafe24ProductDto.validateIsFullContent(mallId, productNo);
 
-		Product product = new Product(productNo, cafe24ProductDto.product().productName(), shopAdmin.getId());
-		return productCreator.save(product);
+		return writeTransactionTemplate.execute(status -> {
+			ShopAdmin shopAdmin = shopAdminValidator.validByMallId(mallId);
+			Product product = new Product(productNo, cafe24ProductDto.product().productName(), shopAdmin.getId());
+			return productCreator.save(product);
+		});
 	}
 }

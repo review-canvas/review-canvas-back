@@ -35,7 +35,7 @@ public interface ReviewPropertyApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 속성 조회가 완료되었습니다.")
 	})
-	@GetMapping("/shop-admin/{mallId}/review-property")
+	@GetMapping("/shop/{mallId}/review-property")
 	ResponseEntity<SuccessResponse<GetReviewPropertyForUserResponse>> getReviewPropertyForUser(
 		@PathVariable String mallId
 	);

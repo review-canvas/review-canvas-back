@@ -32,7 +32,7 @@ public class ReviewPropertyController implements ReviewPropertyApi {
 	}
 
 	@Override
-	@GetMapping("/shop-admin/{mallId}/review-property")
+	@GetMapping("/shop/{mallId}/review-property")
 	public ResponseEntity<SuccessResponse<GetReviewPropertyForUserResponse>> getReviewPropertyForUser(
 		@PathVariable String mallId
 	) {
