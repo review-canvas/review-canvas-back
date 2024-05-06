@@ -24,7 +24,7 @@ public class SortUtils {
 				appendSort.and(Sort.by(Sort.Order.asc(Review.Fields.score)));
 			}
 		} else {
-			throw new IllegalArgumentException("Invalid Direction: " + sort);
+			throw new IllegalArgumentException("지원하지 않는 정렬 방식입니다: " + sort);
 		}
 	}
 }
