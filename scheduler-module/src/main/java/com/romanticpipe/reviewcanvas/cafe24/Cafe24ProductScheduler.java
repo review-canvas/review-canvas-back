@@ -57,7 +57,7 @@ public class Cafe24ProductScheduler {
 	private void updateProductsInTransaction(List<Cafe24Product> cafe24Products, ShopAdmin shopAdmin) {
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
 			try {
-				List<Product> products = productReader.findByShopAdminId(shopAdmin.getId());
+				List<Product> products = productReader.findProducts(shopAdmin.getId());
 				int savedCount = cafe24Products.stream()
 					.reduce(0, (count, cafe24Product) ->
 						count + updateOrSaveProduct(cafe24Product, products, shopAdmin), Integer::sum);

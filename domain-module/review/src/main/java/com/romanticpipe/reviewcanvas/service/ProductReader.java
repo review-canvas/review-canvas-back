@@ -14,11 +14,11 @@ public class ProductReader {
 
 	private final ProductRepository productRepository;
 
-	public Optional<Product> findByMallIdAndProductNo(String mallId, Long productNo) {
+	public Optional<Product> findProduct(String mallId, Long productNo) {
 		return productRepository.findByMallIdAndProductNo(mallId, productNo);
 	}
 
-	public List<Product> findByShopAdminId(Integer shopAdminId) {
+	public List<Product> findProducts(Integer shopAdminId) {
 		return productRepository.findAllByShopAdminId(shopAdminId);
 	}
 }
