@@ -40,7 +40,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewForUserResponse> getReviewsForUser(String mallId, Long productNo,
-																	PageableRequest pageableRequest, ReviewFilter filter) {
+																	PageableRequest pageableRequest,
+																	ReviewFilter filter) {
 		Product product = productReader.findProduct(mallId, productNo)
 			.orElseGet(() -> createProduct(mallId, productNo));
 

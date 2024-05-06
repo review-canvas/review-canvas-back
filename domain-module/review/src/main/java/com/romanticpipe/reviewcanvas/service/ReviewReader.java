@@ -19,7 +19,8 @@ public class ReviewReader {
 
 	private final ReviewRepository reviewRepository;
 
-	public PageResponse<ReviewInfo> findByProductId(Long productId, PageableRequest pageableRequest, ReviewFilter filter) {
+	public PageResponse<ReviewInfo> findByProductId(Long productId, PageableRequest pageableRequest,
+													ReviewFilter filter) {
 		Sort sort = SortUtils.getSort(pageableRequest.sort());
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
 		if (filter == ReviewFilter.IMAGE_VIDEO) {
