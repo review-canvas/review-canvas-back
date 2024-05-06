@@ -20,27 +20,27 @@ public class ReviewLike {
 	private String textColor;
 	@Column(name = "review_like_button_border_color")
 	private String buttonBorderColor;
-	@Column(name = "review_like_button_round_left")
-	private String buttonRoundLeft;
-	@Column(name = "review_like_button_round_right")
-	private String buttonRoundRight;
-	@Column(name = "review_like_button_round_top")
-	private String buttonRoundTop;
-	@Column(name = "review_like_button_round_bottom")
-	private String buttonRoundBottom;
+	@Column(name = "review_like_button_round_top_left")
+	private String buttonRoundTopLeft;
+	@Column(name = "review_like_button_round_top_right")
+	private String buttonRoundTopRight;
+	@Column(name = "review_like_button_round_bottom_left")
+	private String buttonRoundBottomLeft;
+	@Column(name = "review_like_button_round_bottom_right")
+	private String buttonRoundBottomRight;
 
 	@Builder
-	private ReviewLike(String buttonType, String iconColor, String textColor, String buttonBorderColor,
-					   String buttonRoundLeft, String buttonRoundRight, String buttonRoundTop,
-					   String buttonRoundBottom) {
+	public ReviewLike(String buttonType, String iconColor, String textColor,
+					  String buttonBorderColor, String buttonRoundTopLeft, String buttonRoundTopRight,
+					  String buttonRoundBottomLeft, String buttonRoundBottomRight) {
 		this.buttonType = buttonType;
 		this.iconColor = iconColor;
 		this.textColor = textColor;
 		this.buttonBorderColor = buttonBorderColor;
-		this.buttonRoundLeft = buttonRoundLeft;
-		this.buttonRoundRight = buttonRoundRight;
-		this.buttonRoundTop = buttonRoundTop;
-		this.buttonRoundBottom = buttonRoundBottom;
+		this.buttonRoundTopLeft = buttonRoundTopLeft;
+		this.buttonRoundTopRight = buttonRoundTopRight;
+		this.buttonRoundBottomLeft = buttonRoundBottomLeft;
+		this.buttonRoundBottomRight = buttonRoundBottomRight;
 	}
 
 	public static ReviewLike createDefaultReviewLike() {
@@ -49,10 +49,10 @@ public class ReviewLike {
 			.iconColor("#ffffff")
 			.textColor("#3F21DB")
 			.buttonBorderColor("#3F21DB")
-			.buttonRoundLeft("5px")
-			.buttonRoundRight("5px")
-			.buttonRoundTop("5px")
-			.buttonRoundBottom("5px")
+			.buttonRoundTopLeft("5px")
+			.buttonRoundTopRight("5px")
+			.buttonRoundBottomLeft("5px")
+			.buttonRoundBottomRight("5px")
 			.build();
 	}
 }

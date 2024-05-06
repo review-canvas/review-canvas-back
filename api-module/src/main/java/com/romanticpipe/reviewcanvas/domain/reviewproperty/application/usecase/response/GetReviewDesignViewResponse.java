@@ -5,7 +5,6 @@ import com.romanticpipe.reviewcanvas.reviewproperty.domain.Font;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Margin;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewDesignView;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewLike;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Round;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Shadow;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -48,10 +47,11 @@ public record GetReviewDesignViewResponse(
 	String replyBackgroundColor,
 	@Schema(description = "리뷰 미리보기 최대 글자 수", requiredMode = Schema.RequiredMode.REQUIRED)
 	Integer reviewPreviewTextMaxSize,
-	@Schema(description = "더보기 버튼 스타일", requiredMode = Schema.RequiredMode.REQUIRED)
+	@Schema(description = "더보기 버튼 스타일", requiredMode = Schema.RequiredMode.REQUIRED,
+		allowableValues = {"SEE_MORE_TOGGLE", "SEE_MORE_UNDERLINE", "READ_MORE", "NO_BUTTON"})
 	String seeMoreButtonType,
 	@Schema(description = "리뷰 좋아요", requiredMode = Schema.RequiredMode.REQUIRED)
-	ReviewLike reviewLike
+	ReviewLikeResponse reviewLike
 ) {
 	public static GetReviewDesignViewResponse from(ReviewDesignView reviewDesignView) {
 		return GetReviewDesignViewResponse.builder()
@@ -71,7 +71,7 @@ public record GetReviewDesignViewResponse(
 			.replyBackgroundColor(reviewDesignView.getReplyBackgroundColor())
 			.reviewPreviewTextMaxSize(reviewDesignView.getReviewPreviewTextMaxSize())
 			.seeMoreButtonType(reviewDesignView.getSeeMoreButtonType())
-			.reviewLike(reviewDesignView.getReviewLike())
+			.reviewLike(ReviewLikeResponse.from(reviewDesignView.getReviewLike()))
 			.build();
 	}
 }

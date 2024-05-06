@@ -11,20 +11,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Round {
 
-	@Column(name = "round_left")
-	private String left;
-	@Column(name = "round_right")
-	private String right;
-	@Column(name = "round_top")
-	private String top;
-	@Column(name = "round_bottom")
-	private String bottom;
+	@Column(name = "round_top_left")
+	private String topLeft;
+	@Column(name = "round_top_right")
+	private String topRight;
+	@Column(name = "round_bottom_left")
+	private String bottomLeft;
+	@Column(name = "round_bottom_right")
+	private String bottomRight;
 
-	public Round(String left, String right, String top, String bottom) {
-		this.left = left;
-		this.right = right;
-		this.top = top;
-		this.bottom = bottom;
+	public Round(String topLeft, String topRight, String bottomLeft, String bottomRight) {
+		this.topLeft = topLeft;
+		this.topRight = topRight;
+		this.bottomLeft = bottomLeft;
+		this.bottomRight = bottomRight;
 	}
 
 	public static Round createDefaultReviewDesignView() {
