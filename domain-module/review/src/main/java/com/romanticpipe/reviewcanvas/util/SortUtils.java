@@ -8,23 +8,24 @@ import java.util.List;
 
 public class SortUtils {
 
-	public static Sort getSort(List<Enum<?>> sorts) {
-		Sort appendedSort = Sort.unsorted();
-		sorts.forEach(sort -> appendSort(appendedSort, sort));
-		return appendedSort;
+	public static Sort getSort(List<Enum<?>> sortValues) {
+		if (sortValues == null || sortValues.isEmpty()) {
+			return Sort.unsorted();
+		}
+		return sortValues.stream()
+			.map(sortValue -> {
+				if (sortValue instanceof ReviewSort) {
+					return switch ((ReviewSort) sortValue) {
+						case HIGH_SCORE -> Sort.by(Sort.Order.desc(Review.Fields.score));
+						case LOW_SCORE -> Sort.by(Sort.Order.asc(Review.Fields.score));
+						default -> Sort.by(Sort.Order.desc("createdAt"));
+					};
+				} else {
+					throw new IllegalArgumentException("지원하지 않는 정렬 방식입니다: " + sortValue);
+				}
+			})
+			.reduce(Sort::and)
+			.orElse(Sort.unsorted());
 	}
 
-	private static void appendSort(Sort appendSort, Enum<?> sort) {
-		if (sort instanceof ReviewSort) {
-			if (sort == ReviewSort.LATEST) {
-				appendSort.and(Sort.by(Sort.Order.desc("createdAt")));
-			} else if (sort == ReviewSort.HIGH_SCORE) {
-				appendSort.and(Sort.by(Sort.Order.desc(Review.Fields.score)));
-			} else if (sort == ReviewSort.LOW_SCORE) {
-				appendSort.and(Sort.by(Sort.Order.asc(Review.Fields.score)));
-			}
-		} else {
-			throw new IllegalArgumentException("지원하지 않는 정렬 방식입니다: " + sort);
-		}
-	}
 }
