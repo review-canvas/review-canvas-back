@@ -1,7 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.admin.service.AdminAuthCreator;
+import com.romanticpipe.reviewcanvas.admin.service.AdminAuthService;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminCreator;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
@@ -10,17 +14,15 @@ import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.respon
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewPropertyService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.TermsConsentService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.TermsService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
 class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final PasswordEncoder passwordEncoder;
-	private final AdminAuthCreator adminAuthCreator;
+	private final AdminAuthService adminAuthService;
 	private final ShopAdminCreator shopAdminCreator;
 	private final ShopAdminValidator shopAdminValidator;
 	private final ReviewPropertyService reviewPropertyService;
@@ -46,7 +48,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 		termsConsentService.createAll(signUpRequest.consentedTermsIds(), shopAdmin.getId());
 		reviewPropertyService.createDefaultReviewProperty(shopAdmin.getId());
-		adminAuthCreator.createShopAdminAuth(shopAdmin.getId());
+		adminAuthService.createShopAdminAuth(shopAdmin.getId());
 	}
 
 	@Override
