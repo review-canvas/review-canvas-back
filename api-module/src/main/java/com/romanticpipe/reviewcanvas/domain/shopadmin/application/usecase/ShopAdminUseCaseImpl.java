@@ -6,8 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.AdminAuthService;
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminCreator;
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
@@ -23,8 +22,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 
 	private final PasswordEncoder passwordEncoder;
 	private final AdminAuthService adminAuthService;
-	private final ShopAdminCreator shopAdminCreator;
-	private final ShopAdminValidator shopAdminValidator;
+	private final ShopAdminService shopAdminService;
 	private final ReviewPropertyService reviewPropertyService;
 	private final TermsService termsService;
 	private final TermsConsentService termsConsentService;
@@ -32,7 +30,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
-		shopAdminValidator.validateEmailDuplicated(signUpRequest.email());
+		shopAdminService.validateEmailDuplicated(signUpRequest.email());
 		termsService.validateMandatoryTerms(signUpRequest.consentedTermsIds());
 
 		ShopAdmin shopAdmin = ShopAdmin.builder()
@@ -44,7 +42,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.mallId(signUpRequest.mallId())
 			.approveStatus(false)
 			.build();
-		shopAdminCreator.save(shopAdmin);
+		shopAdminService.save(shopAdmin);
 
 		termsConsentService.createAll(signUpRequest.consentedTermsIds(), shopAdmin.getId());
 		reviewPropertyService.createDefaultReviewProperty(shopAdmin.getId());
@@ -54,19 +52,19 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public boolean emailCheck(String email) {
-		return shopAdminValidator.isExistEmail(email);
+		return shopAdminService.isExistEmail(email);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public GetShopAdminInfoResponse getShopAdminInfo(Integer shopAdminId) {
-		return GetShopAdminInfoResponse.from(shopAdminValidator.validById(shopAdminId));
+		return GetShopAdminInfoResponse.from(shopAdminService.validById(shopAdminId));
 	}
 
 	@Override
 	@Transactional
 	public void updateShopAdminInfo(UpdateShopAdminInfoRequest request, Integer shopAdminId) {
-		ShopAdmin shopAdmin = shopAdminValidator.validById(shopAdminId);
+		ShopAdmin shopAdmin = shopAdminService.validById(shopAdminId);
 		String password = passwordEncoder.encode(request.password());
 		shopAdmin.update(password, request.phoneNumber(), request.mallNumber(), request.email(), request.mallName());
 	}

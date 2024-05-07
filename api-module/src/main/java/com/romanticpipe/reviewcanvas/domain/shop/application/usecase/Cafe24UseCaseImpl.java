@@ -1,9 +1,15 @@
 package com.romanticpipe.reviewcanvas.domain.shop.application.usecase;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.MultiValueMap;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAuthToken;
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminReader;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAuthTokenService;
 import com.romanticpipe.reviewcanvas.cafe24.Cafe24ErrorCode;
 import com.romanticpipe.reviewcanvas.cafe24.Cafe24FormUrlencodedFactory;
@@ -13,12 +19,8 @@ import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AuthenticationC
 import com.romanticpipe.reviewcanvas.domain.shop.application.usecase.request.Cafe24CreateScriptTagRequest;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.util.MultiValueMap;
 
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class Cafe24UseCaseImpl implements Cafe24UseCase {
 	private final Cafe24AuthenticationClient cafe24AuthenticationClient;
 	private final Cafe24ApplicationClient cafe24ApplicationClient;
 	private final ShopAuthTokenService shopAuthTokenService;
-	private final ShopAdminReader shopAdminReader;
+	private final ShopAdminService shopAdminService;
 	private final ObjectMapper objectMapper;
 
 	@Override
@@ -43,7 +45,7 @@ public class Cafe24UseCaseImpl implements Cafe24UseCase {
 				Optional<ShopAuthToken> shopAuthToken = shopAuthTokenService.findByMallId(mallId);
 				if (shopAuthToken.isPresent()) {
 					updateShopAuthToken(cafe24AccessToken, shopAuthToken.get());
-					return shopAdminReader.findByMallId(mallId)
+					return shopAdminService.findByMallId(mallId)
 						.map(admin -> "REGISTERED")
 						.orElse("PREVIOUS_INSTALLED");
 				}

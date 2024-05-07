@@ -1,7 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase;
 
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyForShopAdminResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyForUserResponse;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewColumn;
@@ -14,15 +17,14 @@ import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewContainerServi
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewDesignViewService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewLayoutService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewTitleService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
 public class ReviewPropertyUseCaseImpl implements ReviewPropertyUseCase {
 
-	private final ShopAdminValidator shopAdminValidator;
+	private final ShopAdminService shopAdminService;
 	private final ReviewContainerService reviewContainerService;
 	private final ReviewLayoutService reviewLayoutService;
 	private final ReviewTitleService reviewTitleService;
@@ -42,7 +44,7 @@ public class ReviewPropertyUseCaseImpl implements ReviewPropertyUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public GetReviewPropertyForUserResponse getReviewPropertyForUser(String mallId) {
-		ShopAdmin shopAdmin = shopAdminValidator.validByMallId(mallId);
+		ShopAdmin shopAdmin = shopAdminService.validByMallId(mallId);
 		ReviewContainer reviewContainer = reviewContainerService.validateByShopAdminId(shopAdmin.getId());
 		ReviewLayout reviewLayout = reviewLayoutService.validateByShopAdminId(shopAdmin.getId());
 		ReviewTitle reviewTitle = reviewTitleService.validateTitleByShopAdminId(shopAdmin.getId());

@@ -6,9 +6,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminCreator;
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminValidator;
-
 @ExtendWith(MockitoExtension.class)
 class ShopAdminUseCaseImplTest {
 

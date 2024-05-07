@@ -1,20 +1,23 @@
 package com.romanticpipe.reviewcanvas.cafe24;
 
+import java.util.List;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminReader;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24Product;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.service.ProductCreator;
 import com.romanticpipe.reviewcanvas.service.ProductReader;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import java.util.List;
 
 /**
  * TASK: 매일 새벽 3시에 cafe24에서 제공하는 product 정보를 조회하여 db에 저장하거나, 업데이트한다.
@@ -26,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Cafe24ProductScheduler {
 
-	private final ShopAdminReader shopAdminReader;
+	private final ShopAdminService shopAdminService;
 	private final ProductReader productReader;
 	private final ProductCreator productCreator;
 	private final Cafe24ProductClient productClient;
@@ -36,7 +39,7 @@ public class Cafe24ProductScheduler {
 	@Scheduled(cron = "${scheduler.update-product.cron}")
 	public void processUpdateProduct() {
 		log.info("product 정보 업데이트 scheduler 시작");
-		List<ShopAdmin> shopAdmins = shopAdminReader.findAll();
+		List<ShopAdmin> shopAdmins = shopAdminService.findAll();
 		shopAdmins.forEach(this::processEachShopAdmin);
 		log.info("product 정보 업데이트 scheduler 종료");
 	}
