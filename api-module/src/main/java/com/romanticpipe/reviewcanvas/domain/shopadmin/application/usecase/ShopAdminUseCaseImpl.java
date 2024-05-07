@@ -66,7 +66,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	public void updateShopAdminInfo(UpdateShopAdminInfoRequest request, Integer shopAdminId) {
 		ShopAdmin shopAdmin = shopAdminValidator.validById(shopAdminId);
 		String password = passwordEncoder.encode(request.password());
-		shopAdmin.update(password, request.phoneNumber(), request.mallNumber(), request.email());
+		shopAdmin.update(password, request.phoneNumber(), request.mallNumber(), request.email(), request.mallName());
 	}
 
 }
