@@ -18,4 +18,5 @@ public interface ReviewUseCase {
 
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);
 
+	GetReviewForUserResponse getReviewForUser(Long reviewId);
 }

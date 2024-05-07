@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 	@Query("SELECT r.id as reviewId, r.content as content, r.score as score, u.id as userId, u.nickName as nickname "
@@ -25,5 +27,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 	Page<Review> findAllByUserId(String userId, Pageable pageable);
 
-	Review findById(long reviewId);
+	Optional<Review> findById(Long reviewId);
+
+	@Query("SELECT r.id as reviewId, r.content as content, r.score as score, u.id as userId, u.nickName as nickname "
+		+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.id = :reviewId")
+	Optional<ReviewInfo> findReviewInfoById(Long reviewId);
 }

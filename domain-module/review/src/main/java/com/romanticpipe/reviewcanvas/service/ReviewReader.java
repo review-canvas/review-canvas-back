@@ -19,8 +19,8 @@ public class ReviewReader {
 
 	private final ReviewRepository reviewRepository;
 
-	public PageResponse<ReviewInfo> findByProductId(Long productId, PageableRequest pageableRequest,
-													ReviewFilter filter) {
+	public PageResponse<ReviewInfo> findAllByProductId(Long productId, PageableRequest pageableRequest,
+													   ReviewFilter filter) {
 		Sort sort = SortUtils.getSort(pageableRequest.sort());
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
 		if (filter == ReviewFilter.IMAGE_VIDEO) {
@@ -35,9 +35,5 @@ public class ReviewReader {
 	public PageResponse<Review> findByUserId(String userId, PageableRequest pageableRequest) {
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, SortUtils.getSort(pageableRequest.sort()));
 		return PageableUtils.toPageResponse(reviewRepository.findAllByUserId(userId, pageable));
-	}
-
-	public Review findByReviewId(long reviewId) {
-		return reviewRepository.findById(reviewId);
 	}
 }
