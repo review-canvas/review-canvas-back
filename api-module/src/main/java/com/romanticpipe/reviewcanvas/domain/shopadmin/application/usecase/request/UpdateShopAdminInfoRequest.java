@@ -10,6 +10,8 @@ public record UpdateShopAdminInfoRequest(
 	@Schema(description = "관리자 전화번호")
 	String mallNumber,
 	@Schema(description = "이메일")
-	String email
+	String email,
+	@Schema(description = "쇼핑몰 상호")
+	String mallName
 ) {
 }

@@ -58,10 +58,11 @@ public class ShopAdmin extends BaseEntityWithUpdate implements Admin {
 		return AdminRole.ROLE_SHOP_ADMIN;
 	}
 
-	public void update(String password, String phoneNumber, String mallNumber, String email) {
+	public void update(String password, String phoneNumber, String mallNumber, String email, String mallName) {
 		this.password = password;
 		this.phoneNumber = phoneNumber;
 		this.mallNumber = mallNumber;
 		this.email = email;
+		this.mallName = mallName;
 	}
 }
