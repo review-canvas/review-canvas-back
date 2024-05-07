@@ -12,7 +12,7 @@ import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.admin.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.admin.service.AdminAuthService;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
-import com.romanticpipe.reviewcanvas.admin.service.SuperAdminValidator;
+import com.romanticpipe.reviewcanvas.admin.service.SuperAdminService;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
@@ -27,7 +27,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
 	private final PasswordEncoder passwordEncoder;
 	private final AdminAuthService adminAuthService;
 	private final ShopAdminService shopAdminService;
-	private final SuperAdminValidator superAdminValidator;
+	private final SuperAdminService superAdminService;
 
 	@Override
 	@Transactional
@@ -56,14 +56,14 @@ public class AuthUseCaseImpl implements AuthUseCase {
 
 	private Admin validateAdminById(Integer adminId, AdminRole adminRole) {
 		if (Objects.equals(AdminRole.ROLE_SUPER_ADMIN, adminRole)) {
-			return superAdminValidator.validById(adminId);
+			return superAdminService.validById(adminId);
 		}
 		return shopAdminService.validById(adminId);
 	}
 
 	private Admin validateAdminByEmail(String email, AdminRole adminRole) {
 		if (Objects.equals(AdminRole.ROLE_SUPER_ADMIN, adminRole)) {
-			return superAdminValidator.validByEmail(email);
+			return superAdminService.validByEmail(email);
 		}
 		return shopAdminService.validByEmail(email);
 	}
