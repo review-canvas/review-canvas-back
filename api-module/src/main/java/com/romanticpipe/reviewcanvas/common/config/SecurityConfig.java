@@ -51,7 +51,8 @@ public class SecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(
 			List.of("http://localhost:3000", "http://localhost:3001", "http://localhost:3002",
-				"https://shop-admin.review-canvas.com"));
+				"https://web.review-canvas.com", "https://shop-admin.review-canvas.com",
+				"https://super-admin.review-canvas.com"));
 		configuration.setAllowedMethods(List.of("*"));
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
 		configuration.setAllowCredentials(true);
