@@ -45,8 +45,14 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Product product = productReader.findProduct(mallId, productNo)
 			.orElseGet(() -> createProduct(mallId, productNo));
 
-		return reviewReader.findByProductId(product.getId(), pageableRequest, filter)
+		return reviewReader.findAllByProductId(product.getId(), pageableRequest, filter)
 			.map(GetReviewForUserResponse::from);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public GetReviewForUserResponse getReviewForUser(Long reviewId) {
+		return GetReviewForUserResponse.from(reviewValidator.validateUserInfoById(reviewId));
 	}
 
 	@Override

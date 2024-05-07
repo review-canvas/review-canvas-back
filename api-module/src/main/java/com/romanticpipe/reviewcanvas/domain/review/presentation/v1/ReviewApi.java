@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "Review", description = "리뷰 API")
 interface ReviewApi {
 
-	@Operation(summary = "상품 리뷰 조회 API", description = "특정 상품의 리뷰를 조회한다.")
+	@Operation(summary = "상품 리뷰 리스트 조회 API", description = "특정 상품의 리뷰 리스트를 조회한다.")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
@@ -44,6 +44,15 @@ interface ReviewApi {
 		@Schema(description = "리뷰 필터", defaultValue = "ALL",
 			allowableValues = {"ALL", "IMAGE_VIDEO", "GENERAL"}) ReviewFilter filter
 	);
+
+	@Operation(summary = "리뷰 조회 API", description = "단건 리뷰를 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 조회가 완료되었습니다.")
+	})
+	@GetMapping("/reviews/{reviewId}")
+	ResponseEntity<SuccessResponse<GetReviewForUserResponse>> getReviewsForUser(@PathVariable Long reviewId);
 
 	@Operation(summary = "상품 리뷰 생성 API", description = "특정 상품의 리뷰를 생성한다.")
 	@ApiResponses(value = {
