@@ -20,11 +20,7 @@ class ReviewUseCaseImplTest {
 	@Mock
 	ProductService productService;
 	@Mock
-	ReviewReader reviewReader;
-	@Mock
 	ReviewService reviewService;
-	@Mock
-	ReviewValidator reviewValidator;
 	@InjectMocks
 	ReviewUseCaseImpl reviewUseCase;
 

@@ -6,17 +6,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.romanticpipe.reviewcanvas.admin.service.AdminAuthService;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
+
 @ExtendWith(MockitoExtension.class)
 class ShopAdminUseCaseImplTest {
 
 	@Mock
 	PasswordEncoder passwordEncoder;
 	@Mock
-	AdminAuthCreator adminAuthCreator;
+	AdminAuthService adminAuthService;
 	@Mock
-	ShopAdminCreator shopAdminCreator;
-	@Mock
-	ShopAdminValidator shopAdminValidator;
+	ShopAdminService shopAdminService;
 	@InjectMocks
 	ShopAdminUseCaseImpl shopAdminUseCase;
 
