@@ -13,8 +13,7 @@ import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24Product;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.domain.Product;
-import com.romanticpipe.reviewcanvas.service.ProductCreator;
-import com.romanticpipe.reviewcanvas.service.ProductReader;
+import com.romanticpipe.reviewcanvas.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Cafe24ProductScheduler {
 
 	private final ShopAdminService shopAdminService;
-	private final ProductReader productReader;
-	private final ProductCreator productCreator;
+	private final ProductService productService;
 	private final Cafe24ProductClient productClient;
 	private final TransactionTemplate writeTransactionTemplate;
 
@@ -60,7 +58,7 @@ public class Cafe24ProductScheduler {
 	private void updateProductsInTransaction(List<Cafe24Product> cafe24Products, ShopAdmin shopAdmin) {
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
 			try {
-				List<Product> products = productReader.findProducts(shopAdmin.getId());
+				List<Product> products = productService.findProducts(shopAdmin.getId());
 				int savedCount = cafe24Products.stream()
 					.reduce(0, (count, cafe24Product) ->
 						count + updateOrSaveProduct(cafe24Product, products, shopAdmin), Integer::sum);
@@ -73,13 +71,13 @@ public class Cafe24ProductScheduler {
 	}
 
 	private int updateOrSaveProduct(Cafe24Product cafe24Product, List<Product> existingProducts, ShopAdmin shopAdmin) {
-		return new UpdateSaveCafe24ProductTaskExecutor(productCreator)
+		return new UpdateSaveCafe24ProductTaskExecutor(productService)
 			.execute(cafe24Product, existingProducts, shopAdmin);
 	}
 
 	@RequiredArgsConstructor
 	static class UpdateSaveCafe24ProductTaskExecutor {
-		private final ProductCreator productCreator;
+		private final ProductService productService;
 		private int count = 0;
 
 		public int execute(Cafe24Product cafe24Product, List<Product> existingProducts, ShopAdmin shopAdmin) {
@@ -89,7 +87,7 @@ public class Cafe24ProductScheduler {
 				.ifPresentOrElse(
 					product -> product.update(cafe24Product.productName()),
 					() -> {
-						productCreator.save(new Product(cafe24Product.productNo(), cafe24Product.productName(),
+						productService.save(new Product(cafe24Product.productNo(), cafe24Product.productName(),
 							shopAdmin.getId()));
 						count++;
 					}

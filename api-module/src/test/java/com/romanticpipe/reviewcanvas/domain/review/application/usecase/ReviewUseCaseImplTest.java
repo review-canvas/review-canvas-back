@@ -8,25 +8,21 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.romanticpipe.reviewcanvas.service.ProductReader;
-import com.romanticpipe.reviewcanvas.service.ProductValidator;
-import com.romanticpipe.reviewcanvas.service.ReviewCreator;
-import com.romanticpipe.reviewcanvas.service.ReviewReader;
-import com.romanticpipe.reviewcanvas.service.ReviewValidator;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
+import com.romanticpipe.reviewcanvas.service.ProductService;
+import com.romanticpipe.reviewcanvas.service.ReviewService;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewUseCaseImplTest {
 
 	@Mock
-	ShopAdminValidator shopAdminValidator;
+	ShopAdminService shopAdminService;
 	@Mock
-	ProductValidator productValidator;
-	@Mock
-	ProductReader productReader;
+	ProductService productService;
 	@Mock
 	ReviewReader reviewReader;
 	@Mock
-	ReviewCreator reviewCreator;
+	ReviewService reviewService;
 	@Mock
 	ReviewValidator reviewValidator;
 	@InjectMocks
