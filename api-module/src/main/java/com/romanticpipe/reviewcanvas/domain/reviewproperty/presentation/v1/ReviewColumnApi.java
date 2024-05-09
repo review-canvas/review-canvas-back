@@ -4,6 +4,7 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateColumnRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewColumnResponse;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewColumn;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,14 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Tag(name = "ReviewColumn", description = "리뷰 Column 디자인 API")
 public interface ReviewColumnApi {
 
-	@Operation(summary = "Column 디자인 조회 API", description = "Column 디자인 속성을 조회한다.")
+	@Operation(summary = "Column 디자인 조회 API", description = "Column 디자인 속성을 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
 			description = "성공적으로 Column 디자인 조회를 완료했습니다.")
 	})
 	@GetMapping("/shop-admin/review-column")
-	ResponseEntity<SuccessResponse<ReviewColumn>> getColumn(
+	ResponseEntity<SuccessResponse<GetReviewColumnResponse>> getColumn(
 		@AuthInfo JwtInfo jwtInfo
 	);
 
