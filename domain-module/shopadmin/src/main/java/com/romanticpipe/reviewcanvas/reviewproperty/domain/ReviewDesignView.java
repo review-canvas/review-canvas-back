@@ -1,5 +1,10 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.DetailViewType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FilterType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.PagingType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.SeeMoreButtonType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -60,11 +65,11 @@ public class ReviewDesignView {
 
 	@Builder
 	private ReviewDesignView(DetailViewType detailViewType, PagingType pagingType, FilterType filterType,
-		String filterActiveTextColor,
-		String reviewBackgroundColor, Margin margin, Padding padding, String detailInfoTextColor,
-		Font font, Border border, Round round, String borderColor, Shadow shadow,
-		String replyBackgroundColor, Integer reviewPreviewTextMaxSize, SeeMoreButtonType seeMoreButtonType,
-		ReviewLike reviewLike, Integer shopAdminId) {
+							 String filterActiveTextColor,
+							 String reviewBackgroundColor, Margin margin, Padding padding, String detailInfoTextColor,
+							 Font font, Border border, Round round, String borderColor, Shadow shadow,
+							 String replyBackgroundColor, Integer reviewPreviewTextMaxSize, SeeMoreButtonType seeMoreButtonType,
+							 ReviewLike reviewLike, Integer shopAdminId) {
 		this.detailViewType = detailViewType;
 		this.pagingType = pagingType;
 		this.filterType = filterType;

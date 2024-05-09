@@ -3,8 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewContainer;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Shadow;
-
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;

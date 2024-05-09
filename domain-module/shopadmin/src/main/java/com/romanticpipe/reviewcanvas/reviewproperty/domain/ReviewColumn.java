@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -39,7 +40,7 @@ public class ReviewColumn {
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewColumn(String width, Padding padding, Margin margin, String background, Border border,
-		String borderColor, Shadow shadow, Integer shopAdminId) {
+						 String borderColor, Shadow shadow, Integer shopAdminId) {
 		this.width = width;
 		this.padding = padding;
 		this.margin = margin;
@@ -74,8 +75,8 @@ public class ReviewColumn {
 	}
 
 	public void update(String width, Padding padding, Margin margin, String background, Border border,
-		String borderColor,
-		Shadow shadow) {
+					   String borderColor,
+					   Shadow shadow) {
 		this.width = width;
 		this.padding = padding;
 		this.margin = margin;

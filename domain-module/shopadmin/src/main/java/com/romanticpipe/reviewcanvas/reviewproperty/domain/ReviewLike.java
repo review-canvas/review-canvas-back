@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ButtonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -34,8 +35,8 @@ public class ReviewLike {
 
 	@Builder
 	public ReviewLike(ButtonType buttonType, String iconColor, String textColor,
-		String buttonBorderColor, String buttonRoundTopLeft, String buttonRoundTopRight,
-		String buttonRoundBottomLeft, String buttonRoundBottomRight) {
+					  String buttonBorderColor, String buttonRoundTopLeft, String buttonRoundTopRight,
+					  String buttonRoundBottomLeft, String buttonRoundBottomRight) {
 		this.buttonType = buttonType;
 		this.iconColor = iconColor;
 		this.textColor = textColor;

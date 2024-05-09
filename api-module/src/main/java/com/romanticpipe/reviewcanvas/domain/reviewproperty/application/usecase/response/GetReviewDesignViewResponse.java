@@ -1,17 +1,16 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response;
 
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.DetailViewType;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.FilterType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Font;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Margin;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.PagingType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewDesignView;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Round;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.SeeMoreButtonType;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Shadow;
-
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.DetailViewType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FilterType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.PagingType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.SeeMoreButtonType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

@@ -1,5 +1,8 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FocusAreaLayout;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ImageReviewAreaLayout;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewLayoutDesign;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -63,8 +66,8 @@ public class ReviewLayout {
 	}
 
 	public void update(boolean bestReviewAreaActivation, boolean reviewStaticsAreaActivation,
-		boolean imageReviewAreaActivation, FocusAreaLayout focusAreaLayout,
-		ImageReviewAreaLayout imageReviewAreaLayout, ReviewLayoutDesign reviewLayoutDesign) {
+					   boolean imageReviewAreaActivation, FocusAreaLayout focusAreaLayout,
+					   ImageReviewAreaLayout imageReviewAreaLayout, ReviewLayoutDesign reviewLayoutDesign) {
 		this.bestReviewAreaActivation = bestReviewAreaActivation;
 		this.reviewStatisticsAreaActivation = reviewStaticsAreaActivation;
 		this.imageReviewAreaActivation = imageReviewAreaActivation;

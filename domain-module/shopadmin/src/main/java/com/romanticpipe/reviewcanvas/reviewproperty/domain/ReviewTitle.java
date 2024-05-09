@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.AlignmentPosition;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewTitleType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -41,7 +43,7 @@ public class ReviewTitle {
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewTitle(ReviewTitleType reviewTitleType, String titleName, AlignmentPosition alignmentPosition,
-		Padding padding, Font font, Border border, String borderColor, String background, Integer shopAdminId) {
+						Padding padding, Font font, Border border, String borderColor, String background, Integer shopAdminId) {
 		this.reviewTitleType = reviewTitleType;
 		this.titleName = titleName;
 		this.alignmentPosition = alignmentPosition;
@@ -82,7 +84,7 @@ public class ReviewTitle {
 	}
 
 	public void update(String titleName, AlignmentPosition alignmentPosition, Padding padding, Font font,
-		Border border, String borderColor, String backGround) {
+					   Border border, String borderColor, String backGround) {
 		this.titleName = titleName;
 		this.alignmentPosition = alignmentPosition;
 		this.padding = padding;

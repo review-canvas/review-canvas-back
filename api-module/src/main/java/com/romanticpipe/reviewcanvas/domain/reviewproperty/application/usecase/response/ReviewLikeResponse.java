@@ -1,8 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response;
 
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ButtonType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewLike;
-
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ButtonType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

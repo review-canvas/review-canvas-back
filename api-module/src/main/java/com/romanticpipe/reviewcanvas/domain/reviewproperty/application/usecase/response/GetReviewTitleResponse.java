@@ -1,11 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response;
 
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.AlignmentPosition;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Font;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewTitle;
-
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.AlignmentPosition;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(name = "GetReviewTitleResponse", description = "리뷰 제목 조회 응답")
