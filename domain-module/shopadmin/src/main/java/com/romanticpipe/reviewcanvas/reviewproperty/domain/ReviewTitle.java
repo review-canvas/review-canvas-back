@@ -43,7 +43,8 @@ public class ReviewTitle {
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private ReviewTitle(ReviewTitleType reviewTitleType, String titleName, AlignmentPosition alignmentPosition,
-						Padding padding, Font font, Border border, String borderColor, String background, Integer shopAdminId) {
+						Padding padding, Font font, Border border, String borderColor, String background,
+						Integer shopAdminId) {
 		this.reviewTitleType = reviewTitleType;
 		this.titleName = titleName;
 		this.alignmentPosition = alignmentPosition;

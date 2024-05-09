@@ -68,8 +68,8 @@ public class ReviewDesignView {
 							 String filterActiveTextColor,
 							 String reviewBackgroundColor, Margin margin, Padding padding, String detailInfoTextColor,
 							 Font font, Border border, Round round, String borderColor, Shadow shadow,
-							 String replyBackgroundColor, Integer reviewPreviewTextMaxSize, SeeMoreButtonType seeMoreButtonType,
-							 ReviewLike reviewLike, Integer shopAdminId) {
+							 String replyBackgroundColor, Integer reviewPreviewTextMaxSize,
+							 SeeMoreButtonType seeMoreButtonType, ReviewLike reviewLike, Integer shopAdminId) {
 		this.detailViewType = detailViewType;
 		this.pagingType = pagingType;
 		this.filterType = filterType;
