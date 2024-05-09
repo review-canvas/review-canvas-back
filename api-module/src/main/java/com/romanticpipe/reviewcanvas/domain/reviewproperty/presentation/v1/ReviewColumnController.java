@@ -13,6 +13,7 @@ import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewColumnUseCase;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateColumnRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewColumnResponse;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewColumn;
 
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,11 @@ public class ReviewColumnController implements ReviewColumnApi {
 
 	@Override
 	@GetMapping("/shop-admin/review-column")
-	public ResponseEntity<SuccessResponse<ReviewColumn>> getColumn(@AuthInfo JwtInfo jwtInfo) {
-		return SuccessResponse.of(reviewColumnUseCase.getColumnByShopAdminId(jwtInfo.adminId())).asHttp(HttpStatus.OK);
+	public ResponseEntity<SuccessResponse<GetReviewColumnResponse>> getColumn(@AuthInfo JwtInfo jwtInfo) {
+		return SuccessResponse.of(
+			GetReviewColumnResponse.from(
+				reviewColumnUseCase.getColumnByShopAdminId(jwtInfo.adminId()))
+		).asHttp(HttpStatus.OK);
 	}
 
 	@Override
