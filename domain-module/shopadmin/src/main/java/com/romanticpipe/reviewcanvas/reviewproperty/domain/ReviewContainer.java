@@ -61,13 +61,13 @@ public class ReviewContainer {
 	}
 
 	public void update(String width, Padding padding, String background, Border border, String borderColor,
-		String shadow) {
+		Shadow shadow) {
 		this.width = width;
 		this.padding = padding;
 		this.background = background;
 		this.border = border;
 		this.borderColor = borderColor;
-		this.shadow = Shadow.valueOf(shadow);
+		this.shadow = shadow;
 	}
 
 	public void reset() {
