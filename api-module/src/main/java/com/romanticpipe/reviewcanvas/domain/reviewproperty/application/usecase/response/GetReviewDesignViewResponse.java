@@ -1,28 +1,32 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response;
 
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.DetailViewType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.FilterType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Font;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Margin;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.PagingType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewDesignView;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Round;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.SeeMoreButtonType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Shadow;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-
 
 @Builder
 @Schema(description = "리뷰 디자인-리뷰 보기")
 public record GetReviewDesignViewResponse(
 	@Schema(description = "리뷰 자세히 보기 방식", requiredMode = Schema.RequiredMode.REQUIRED,
 		allowableValues = {"SPREAD", "MODAL"})
-	String detailViewType,
+	DetailViewType detailViewType,
 	@Schema(description = "페이징 방식", requiredMode = Schema.RequiredMode.REQUIRED,
 		allowableValues = {"PAGE_NUMBER", "SEE_MORE_SCROLL"})
-	String pagingType,
+	PagingType pagingType,
 	@Schema(description = "리뷰 필터", requiredMode = Schema.RequiredMode.REQUIRED,
 		allowableValues = {"LIST", "DROPDOWN"})
-	String filterType,
+	FilterType filterType,
 	@Schema(description = "필터 활성화 텍스트 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#000000")
 	String filterActiveTextColor,
 	@Schema(description = "각 리뷰 영역 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#FFFFFF")
@@ -49,7 +53,7 @@ public record GetReviewDesignViewResponse(
 	Integer reviewPreviewTextMaxSize,
 	@Schema(description = "더보기 버튼 스타일", requiredMode = Schema.RequiredMode.REQUIRED,
 		allowableValues = {"SEE_MORE_TOGGLE", "SEE_MORE_UNDERLINE", "READ_MORE", "NO_BUTTON"})
-	String seeMoreButtonType,
+	SeeMoreButtonType seeMoreButtonType,
 	@Schema(description = "리뷰 좋아요", requiredMode = Schema.RequiredMode.REQUIRED)
 	ReviewLikeResponse reviewLike
 ) {

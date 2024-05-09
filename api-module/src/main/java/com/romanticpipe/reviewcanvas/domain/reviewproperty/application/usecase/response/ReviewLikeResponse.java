@@ -1,6 +1,8 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response;
 
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.ButtonType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewLike;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -8,7 +10,7 @@ import lombok.Builder;
 public record ReviewLikeResponse(
 	@Schema(description = "리뷰 좋아요 버튼 타입", requiredMode = Schema.RequiredMode.REQUIRED,
 		allowableValues = {"NONE", "THUMB_UP_WITH_TEXT", "THUMB_UP"})
-	String buttonType,
+	ButtonType buttonType,
 	@Schema(description = "아이콘 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#FFFFFF")
 	String iconColor,
 	@Schema(description = "텍스트 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#3F21DB")

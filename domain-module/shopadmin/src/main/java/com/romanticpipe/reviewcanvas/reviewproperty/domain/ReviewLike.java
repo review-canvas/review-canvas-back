@@ -2,6 +2,8 @@ package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,8 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewLike {
 
-	@Column(name = "review_like_button_type")
-	private String buttonType;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "review_like_button_type", columnDefinition = "VARCHAR")
+	private ButtonType buttonType;
 	@Column(name = "review_like_icon_color")
 	private String iconColor;
 	@Column(name = "review_like_text_color")
@@ -30,9 +33,9 @@ public class ReviewLike {
 	private String buttonRoundBottomRight;
 
 	@Builder
-	public ReviewLike(String buttonType, String iconColor, String textColor,
-					  String buttonBorderColor, String buttonRoundTopLeft, String buttonRoundTopRight,
-					  String buttonRoundBottomLeft, String buttonRoundBottomRight) {
+	public ReviewLike(ButtonType buttonType, String iconColor, String textColor,
+		String buttonBorderColor, String buttonRoundTopLeft, String buttonRoundTopRight,
+		String buttonRoundBottomLeft, String buttonRoundBottomRight) {
 		this.buttonType = buttonType;
 		this.iconColor = iconColor;
 		this.textColor = textColor;
@@ -45,7 +48,7 @@ public class ReviewLike {
 
 	public static ReviewLike createDefaultReviewLike() {
 		return ReviewLike.builder()
-			.buttonType("NONE")
+			.buttonType(ButtonType.NONE)
 			.iconColor("#ffffff")
 			.textColor("#3F21DB")
 			.buttonBorderColor("#3F21DB")
