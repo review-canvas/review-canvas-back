@@ -7,8 +7,7 @@ import lombok.Builder;
 
 @Builder
 public record ReviewLikeResponse(
-	@Schema(description = "리뷰 좋아요 버튼 타입", requiredMode = Schema.RequiredMode.REQUIRED,
-		allowableValues = {"NONE", "THUMB_UP_WITH_TEXT", "THUMB_UP"})
+	@Schema(description = "리뷰 좋아요 버튼 타입", requiredMode = Schema.RequiredMode.REQUIRED)
 	ButtonType buttonType,
 	@Schema(description = "아이콘 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#FFFFFF")
 	String iconColor,

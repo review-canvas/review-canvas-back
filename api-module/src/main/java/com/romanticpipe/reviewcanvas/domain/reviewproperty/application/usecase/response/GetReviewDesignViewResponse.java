@@ -17,14 +17,11 @@ import lombok.Builder;
 @Builder
 @Schema(description = "리뷰 디자인-리뷰 보기")
 public record GetReviewDesignViewResponse(
-	@Schema(description = "리뷰 자세히 보기 방식", requiredMode = Schema.RequiredMode.REQUIRED,
-		allowableValues = {"SPREAD", "MODAL"})
+	@Schema(description = "리뷰 자세히 보기 방식", requiredMode = Schema.RequiredMode.REQUIRED)
 	DetailViewType detailViewType,
-	@Schema(description = "페이징 방식", requiredMode = Schema.RequiredMode.REQUIRED,
-		allowableValues = {"PAGE_NUMBER", "SEE_MORE_SCROLL"})
+	@Schema(description = "페이징 방식", requiredMode = Schema.RequiredMode.REQUIRED)
 	PagingType pagingType,
-	@Schema(description = "리뷰 필터", requiredMode = Schema.RequiredMode.REQUIRED,
-		allowableValues = {"LIST", "DROPDOWN"})
+	@Schema(description = "리뷰 필터", requiredMode = Schema.RequiredMode.REQUIRED)
 	FilterType filterType,
 	@Schema(description = "필터 활성화 텍스트 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#000000")
 	String filterActiveTextColor,
@@ -50,8 +47,7 @@ public record GetReviewDesignViewResponse(
 	String replyBackgroundColor,
 	@Schema(description = "리뷰 미리보기 최대 글자 수", requiredMode = Schema.RequiredMode.REQUIRED)
 	Integer reviewPreviewTextMaxSize,
-	@Schema(description = "더보기 버튼 스타일", requiredMode = Schema.RequiredMode.REQUIRED,
-		allowableValues = {"SEE_MORE_TOGGLE", "SEE_MORE_UNDERLINE", "READ_MORE", "NO_BUTTON"})
+	@Schema(description = "더보기 버튼 스타일", requiredMode = Schema.RequiredMode.REQUIRED)
 	SeeMoreButtonType seeMoreButtonType,
 	@Schema(description = "리뷰 좋아요", requiredMode = Schema.RequiredMode.REQUIRED)
 	ReviewLikeResponse reviewLike
