@@ -1,5 +1,10 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.DetailViewType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FilterType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.PagingType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.SeeMoreButtonType;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -23,9 +28,15 @@ public class ReviewDesignView {
 	@Column(name = "review_design_view_id")
 	private Integer id;
 
-	private String detailViewType;
-	private String pagingType;
-	private String filterType;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR")
+	private DetailViewType detailViewType;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR")
+	private PagingType pagingType;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR")
+	private FilterType filterType;
 	private String filterActiveTextColor;
 	private String reviewBackgroundColor;
 	@Embedded
@@ -45,17 +56,20 @@ public class ReviewDesignView {
 	private Shadow shadow;
 	private String replyBackgroundColor;
 	private Integer reviewPreviewTextMaxSize;
-	private String seeMoreButtonType;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR")
+	private SeeMoreButtonType seeMoreButtonType;
 	@Embedded
 	private ReviewLike reviewLike;
 	private Integer shopAdminId;
 
 	@Builder
-	private ReviewDesignView(String detailViewType, String pagingType, String filterType, String filterActiveTextColor,
+	private ReviewDesignView(DetailViewType detailViewType, PagingType pagingType, FilterType filterType,
+							 String filterActiveTextColor,
 							 String reviewBackgroundColor, Margin margin, Padding padding, String detailInfoTextColor,
 							 Font font, Border border, Round round, String borderColor, Shadow shadow,
-							 String replyBackgroundColor, Integer reviewPreviewTextMaxSize, String seeMoreButtonType,
-							 ReviewLike reviewLike, Integer shopAdminId) {
+							 String replyBackgroundColor, Integer reviewPreviewTextMaxSize,
+							 SeeMoreButtonType seeMoreButtonType, ReviewLike reviewLike, Integer shopAdminId) {
 		this.detailViewType = detailViewType;
 		this.pagingType = pagingType;
 		this.filterType = filterType;
@@ -78,9 +92,9 @@ public class ReviewDesignView {
 
 	public static ReviewDesignView create(Integer shopAdminId) {
 		return ReviewDesignView.builder()
-			.detailViewType("MODAL")
-			.pagingType("PAGE_NUMBER")
-			.filterType("LIST")
+			.detailViewType(DetailViewType.MODAL)
+			.pagingType(PagingType.PAGE_NUMBER)
+			.filterType(FilterType.LIST)
 			.filterActiveTextColor("#3F21BD")
 			.reviewBackgroundColor("#ffffff")
 			.margin(Margin.createDefaultReviewDesignView())
@@ -91,7 +105,7 @@ public class ReviewDesignView {
 			.round(Round.createDefaultReviewDesignView())
 			.borderColor("#ffffff")
 			.shadow(Shadow.SMALL)
-			.seeMoreButtonType("FIRST")
+			.seeMoreButtonType(SeeMoreButtonType.SEE_MORE_TOGGLE)
 			.replyBackgroundColor("#ffffff")
 			.reviewPreviewTextMaxSize(150)
 			.reviewLike(ReviewLike.createDefaultReviewLike())

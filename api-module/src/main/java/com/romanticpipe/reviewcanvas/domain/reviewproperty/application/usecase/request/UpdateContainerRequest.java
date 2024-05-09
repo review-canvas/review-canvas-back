@@ -2,7 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.
 
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
-
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +19,7 @@ public record UpdateContainerRequest(@Schema(description = "가로", requiredMod
 									 @Schema(description = "테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 									 @NotBlank String borderColor,
 									 @Schema(description = "그림자", requiredMode = Schema.RequiredMode.REQUIRED)
-									 @NotBlank String shadow
+									 @NotNull Shadow shadow
 ) {
 
 }

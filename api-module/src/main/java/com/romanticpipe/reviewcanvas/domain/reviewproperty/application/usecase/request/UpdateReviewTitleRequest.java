@@ -1,10 +1,9 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request;
 
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.AlignmentPosition;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Font;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
-
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.AlignmentPosition;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record UpdateReviewTitleRequest(

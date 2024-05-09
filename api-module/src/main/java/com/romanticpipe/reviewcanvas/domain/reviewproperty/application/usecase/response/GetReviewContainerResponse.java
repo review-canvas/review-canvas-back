@@ -3,7 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewContainer;
-
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,7 +21,7 @@ public record GetReviewContainerResponse(@Schema(description = "가로", require
 										 @Schema(description = "테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 										 String borderColor,
 										 @Schema(description = "그림자", requiredMode = Schema.RequiredMode.REQUIRED)
-										 String shadow
+										 Shadow shadow
 
 ) {
 
@@ -32,7 +32,7 @@ public record GetReviewContainerResponse(@Schema(description = "가로", require
 			.background(reviewContainer.getBackground())
 			.border(reviewContainer.getBorder())
 			.borderColor(reviewContainer.getBorderColor())
-			.shadow(reviewContainer.getShadow().name())
+			.shadow(reviewContainer.getShadow())
 			.build();
 	}
 }

@@ -1,8 +1,8 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request;
 
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.FocusAreaLayout;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ImageReviewAreaLayout;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewLayoutDesign;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FocusAreaLayout;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ImageReviewAreaLayout;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewLayoutDesign;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
