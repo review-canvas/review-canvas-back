@@ -5,7 +5,6 @@ import com.romanticpipe.reviewcanvas.reviewproperty.domain.Font;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Margin;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewDesignView;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Round;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.DetailViewType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FilterType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.PagingType;
@@ -38,7 +37,7 @@ public record GetReviewDesignViewResponse(
 	@Schema(description = "리뷰 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
 	Border border,
 	@Schema(description = "라운드", requiredMode = Schema.RequiredMode.REQUIRED)
-	Round round,
+	RoundResponse round,
 	@Schema(description = "테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#000000")
 	String borderColor,
 	@Schema(description = "그림자", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -64,7 +63,7 @@ public record GetReviewDesignViewResponse(
 			.detailInfoTextColor(reviewDesignView.getDetailInfoTextColor())
 			.font(reviewDesignView.getFont())
 			.border(reviewDesignView.getBorder())
-			.round(reviewDesignView.getRound())
+			.round(RoundResponse.from(reviewDesignView.getRound()))
 			.borderColor(reviewDesignView.getBorderColor())
 			.shadow(reviewDesignView.getShadow())
 			.replyBackgroundColor(reviewDesignView.getReplyBackgroundColor())

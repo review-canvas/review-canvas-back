@@ -15,14 +15,8 @@ public record ReviewLikeResponse(
 	String textColor,
 	@Schema(description = "버튼 테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#3F21DB")
 	String buttonBorderColor,
-	@Schema(description = "리뷰 좋아요 버튼 라운드 상단 좌측", requiredMode = Schema.RequiredMode.REQUIRED)
-	String buttonRoundTopLeft,
-	@Schema(description = "리뷰 좋아요 버튼 라운드 상단 우측", requiredMode = Schema.RequiredMode.REQUIRED)
-	String buttonRoundTopRight,
-	@Schema(description = "리뷰 좋아요 버튼 라운드 하단 좌측", requiredMode = Schema.RequiredMode.REQUIRED)
-	String buttonRoundBottomLeft,
-	@Schema(description = "리뷰 좋아요 버튼 라운드 하단 우측", requiredMode = Schema.RequiredMode.REQUIRED)
-	String buttonRoundBottomRight
+	@Schema(description = "버튼 라운드", requiredMode = Schema.RequiredMode.REQUIRED)
+	RoundResponse buttonRound
 ) {
 	public static ReviewLikeResponse from(ReviewLike reviewLike) {
 		return ReviewLikeResponse.builder()
@@ -30,10 +24,7 @@ public record ReviewLikeResponse(
 			.iconColor(reviewLike.getIconColor())
 			.textColor(reviewLike.getTextColor())
 			.buttonBorderColor(reviewLike.getButtonBorderColor())
-			.buttonRoundTopLeft(reviewLike.getButtonRoundTopLeft())
-			.buttonRoundTopRight(reviewLike.getButtonRoundTopRight())
-			.buttonRoundBottomLeft(reviewLike.getButtonRoundBottomLeft())
-			.buttonRoundBottomRight(reviewLike.getButtonRoundBottomRight())
+			.buttonRound(RoundResponse.from(reviewLike))
 			.build();
 	}
 }
