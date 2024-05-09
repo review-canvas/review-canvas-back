@@ -1,20 +1,22 @@
 package com.romanticpipe.reviewcanvas.cafe24;
 
-import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminReader;
-import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24Product;
-import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
-import com.romanticpipe.reviewcanvas.domain.Product;
-import com.romanticpipe.reviewcanvas.service.ProductCreator;
-import com.romanticpipe.reviewcanvas.service.ProductReader;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import java.util.List;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.List;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
+import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24Product;
+import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
+import com.romanticpipe.reviewcanvas.domain.Product;
+import com.romanticpipe.reviewcanvas.service.ProductService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * TASK: 매일 새벽 3시에 cafe24에서 제공하는 product 정보를 조회하여 db에 저장하거나, 업데이트한다.
@@ -26,9 +28,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Cafe24ProductScheduler {
 
-	private final ShopAdminReader shopAdminReader;
-	private final ProductReader productReader;
-	private final ProductCreator productCreator;
+	private final ShopAdminService shopAdminService;
+	private final ProductService productService;
 	private final Cafe24ProductClient productClient;
 	private final TransactionTemplate writeTransactionTemplate;
 
@@ -36,7 +37,7 @@ public class Cafe24ProductScheduler {
 	@Scheduled(cron = "${scheduler.update-product.cron}")
 	public void processUpdateProduct() {
 		log.info("product 정보 업데이트 scheduler 시작");
-		List<ShopAdmin> shopAdmins = shopAdminReader.findAll();
+		List<ShopAdmin> shopAdmins = shopAdminService.findAll();
 		shopAdmins.forEach(this::processEachShopAdmin);
 		log.info("product 정보 업데이트 scheduler 종료");
 	}
@@ -57,7 +58,7 @@ public class Cafe24ProductScheduler {
 	private void updateProductsInTransaction(List<Cafe24Product> cafe24Products, ShopAdmin shopAdmin) {
 		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
 			try {
-				List<Product> products = productReader.findProducts(shopAdmin.getId());
+				List<Product> products = productService.findProducts(shopAdmin.getId());
 				int savedCount = cafe24Products.stream()
 					.reduce(0, (count, cafe24Product) ->
 						count + updateOrSaveProduct(cafe24Product, products, shopAdmin), Integer::sum);
@@ -70,13 +71,13 @@ public class Cafe24ProductScheduler {
 	}
 
 	private int updateOrSaveProduct(Cafe24Product cafe24Product, List<Product> existingProducts, ShopAdmin shopAdmin) {
-		return new UpdateSaveCafe24ProductTaskExecutor(productCreator)
+		return new UpdateSaveCafe24ProductTaskExecutor(productService)
 			.execute(cafe24Product, existingProducts, shopAdmin);
 	}
 
 	@RequiredArgsConstructor
 	static class UpdateSaveCafe24ProductTaskExecutor {
-		private final ProductCreator productCreator;
+		private final ProductService productService;
 		private int count = 0;
 
 		public int execute(Cafe24Product cafe24Product, List<Product> existingProducts, ShopAdmin shopAdmin) {
@@ -86,7 +87,7 @@ public class Cafe24ProductScheduler {
 				.ifPresentOrElse(
 					product -> product.update(cafe24Product.productName()),
 					() -> {
-						productCreator.save(new Product(cafe24Product.productNo(), cafe24Product.productName(),
+						productService.save(new Product(cafe24Product.productNo(), cafe24Product.productName(),
 							shopAdmin.getId()));
 						count++;
 					}
