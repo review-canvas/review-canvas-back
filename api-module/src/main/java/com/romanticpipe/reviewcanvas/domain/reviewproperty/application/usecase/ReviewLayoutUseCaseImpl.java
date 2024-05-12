@@ -20,7 +20,7 @@ public class ReviewLayoutUseCaseImpl implements ReviewLayoutUseCase {
 		ReviewLayout reviewLayout = reviewLayoutService.validateByShopAdminId(shopAdminId);
 		reviewLayout.update(
 			updateLayoutRequest.bestReviewAreaActivation(),
-			updateLayoutRequest.reviewStaticsAreaActivation(),
+			updateLayoutRequest.reviewStatisticsAreaActivation(),
 			updateLayoutRequest.imageReviewAreaActivation(),
 			updateLayoutRequest.focusAreaLayout(),
 			updateLayoutRequest.imageReviewAreaLayout(),

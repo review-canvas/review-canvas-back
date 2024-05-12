@@ -11,7 +11,7 @@ public record UpdateLayoutRequest(
 	@Schema(description = "Best Review Area Activation", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull Boolean bestReviewAreaActivation,
 	@Schema(description = "Review Statics Activation", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull Boolean reviewStaticsAreaActivation,
+	@NotNull Boolean reviewStatisticsAreaActivation,
 	@Schema(description = "Image Review Area Activation", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull Boolean imageReviewAreaActivation,
 	@Schema(description = "Focus Area Layout", requiredMode = Schema.RequiredMode.REQUIRED)
