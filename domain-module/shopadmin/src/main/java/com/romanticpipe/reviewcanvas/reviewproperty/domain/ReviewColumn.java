@@ -53,7 +53,7 @@ public class ReviewColumn {
 
 	public static ReviewColumn create(Integer shopAdminId) {
 		return ReviewColumn.builder()
-			.width("Full")
+			.width("100%")
 			.padding(Padding.createDefaultReviewColumn())
 			.margin(Margin.createDefaultReviewColumn())
 			.background("#ffffff")
@@ -65,7 +65,7 @@ public class ReviewColumn {
 	}
 
 	public void reset() {
-		this.width = "Full";
+		this.width = "100%";
 		this.padding = Padding.createDefaultReviewColumn();
 		this.margin = Margin.createDefaultReviewColumn();
 		this.background = "#ffffff";
