@@ -51,7 +51,7 @@ public class ReviewContainer {
 
 	public static ReviewContainer create(Integer shopAdminId) {
 		return ReviewContainer.builder()
-			.width("Full")
+			.width("100%")
 			.padding(Padding.createDefaultReviewContainer())
 			.background("#ffffff")
 			.border(Border.createDefaultReviewContainer())
@@ -72,7 +72,7 @@ public class ReviewContainer {
 	}
 
 	public void reset() {
-		this.width = "Full";
+		this.width = "100%";
 		this.padding = Padding.createDefaultReviewContainer();
 		this.background = "#ffffff";
 		this.border = Border.createDefaultReviewContainer();
