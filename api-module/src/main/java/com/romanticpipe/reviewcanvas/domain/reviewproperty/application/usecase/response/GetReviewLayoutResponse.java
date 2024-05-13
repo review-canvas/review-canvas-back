@@ -5,7 +5,9 @@ import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FocusAreaLayout
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ImageReviewAreaLayout;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewLayoutDesign;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
+@Builder
 public record GetReviewLayoutResponse(@Schema(description = "베스트 리뷰 영역", requiredMode = Schema.RequiredMode.REQUIRED)
 									  Boolean bestReviewAreaActivation,
 									  @Schema(description = "리뷰 통계 영역", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -21,11 +23,13 @@ public record GetReviewLayoutResponse(@Schema(description = "베스트 리뷰 �
 									  ReviewLayoutDesign reviewLayoutDesign) {
 
 	public static GetReviewLayoutResponse from(ReviewLayout reviewLayout) {
-		return new GetReviewLayoutResponse(reviewLayout.getBestReviewAreaActivation(),
-			reviewLayout.getImageReviewAreaActivation(),
-			reviewLayout.getReviewStatisticsAreaActivation(),
-			reviewLayout.getFocusAreaLayout(),
-			reviewLayout.getImageReviewAreaLayout(),
-			reviewLayout.getReviewLayoutDesign());
+		return GetReviewLayoutResponse.builder()
+			.bestReviewAreaActivation(reviewLayout.getBestReviewAreaActivation())
+			.reviewStatisticsAreaActivation(reviewLayout.getReviewStatisticsAreaActivation())
+			.imageReviewAreaActivation(reviewLayout.getImageReviewAreaActivation())
+			.focusAreaLayout(reviewLayout.getFocusAreaLayout())
+			.imageReviewAreaLayout(reviewLayout.getImageReviewAreaLayout())
+			.reviewLayoutDesign(reviewLayout.getReviewLayoutDesign())
+			.build();
 	}
 }
