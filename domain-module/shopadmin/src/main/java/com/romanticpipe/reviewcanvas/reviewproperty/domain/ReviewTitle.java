@@ -73,7 +73,7 @@ public class ReviewTitle {
 	public static ReviewTitle createDescription(Integer shopAdminId) {
 		return ReviewTitle.builder()
 			.reviewTitleType(ReviewTitleType.DESCRIPTION)
-			.titleName(null)
+			.titleName("")
 			.alignmentPosition(AlignmentPosition.LEFT)
 			.padding(Padding.createDefaultReviewDescription())
 			.font(Font.createDefaultReviewDescription())
@@ -106,7 +106,7 @@ public class ReviewTitle {
 	}
 
 	public void initializeDescription() {
-		this.titleName = null;
+		this.titleName = "";
 		this.alignmentPosition = AlignmentPosition.LEFT;
 		this.padding = Padding.createDefaultReviewDescription();
 		this.font = Font.createDefaultReviewDescription();

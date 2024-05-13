@@ -6,7 +6,9 @@ import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewTitle;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.AlignmentPosition;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
+@Builder
 @Schema(name = "GetReviewTitleResponse", description = "리뷰 제목 조회 응답")
 public record GetReviewTitleResponse(
 	@Schema(description = "리뷰 제목", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -40,12 +42,22 @@ public record GetReviewTitleResponse(
 ) {
 
 	public static GetReviewTitleResponse from(ReviewTitle reviewTitle, ReviewTitle reviewDescription) {
-		return new GetReviewTitleResponse(reviewTitle.getTitleName(), reviewTitle.getAlignmentPosition(),
-			reviewTitle.getPadding(), reviewTitle.getFont(), reviewTitle.getBorder(), reviewTitle.getBorderColor(),
-			reviewTitle.getBackground(),
-			reviewDescription.getTitleName(), reviewDescription.getAlignmentPosition(), reviewDescription.getPadding(),
-			reviewDescription.getFont(), reviewDescription.getBorder(), reviewDescription.getBorderColor(),
-			reviewDescription.getBackground());
+		return GetReviewTitleResponse.builder()
+			.title(reviewTitle.getTitleName())
+			.titleAlignmentPosition(reviewTitle.getAlignmentPosition())
+			.titlePadding(reviewTitle.getPadding())
+			.titleFont(reviewTitle.getFont())
+			.titleBorder(reviewTitle.getBorder())
+			.titleBorderColor(reviewTitle.getBorderColor())
+			.titleBackGround(reviewTitle.getBackground())
+			.description(reviewDescription.getTitleName())
+			.descriptionAlignmentPosition(reviewDescription.getAlignmentPosition())
+			.descriptionPadding(reviewDescription.getPadding())
+			.descriptionFont(reviewDescription.getFont())
+			.descriptionBorder(reviewDescription.getBorder())
+			.descriptionBorderColor(reviewDescription.getBorderColor())
+			.descriptionBackGround(reviewDescription.getBackground())
+			.build();
 	}
 
 }
