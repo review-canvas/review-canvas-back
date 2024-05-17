@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.romanticpipe.reviewcanvas.cafe24.users.Cafe24UserClient;
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
@@ -19,6 +20,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	private final UsersService usersService;
 	private final ReplyService replyService;
 	private final ReviewService reviewService;
+	private final Cafe24UserClient cafe24UserClient;
 
 	@Override
 	@Transactional
@@ -36,6 +38,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	}
 
 	private User createUser(String mallId, String memberId) {
+		//미구현
 		return null;
 	}
 }
