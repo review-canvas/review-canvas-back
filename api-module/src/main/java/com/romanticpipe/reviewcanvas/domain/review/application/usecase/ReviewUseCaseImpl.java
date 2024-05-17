@@ -75,6 +75,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Product product = productService.validByProductId(productId);
 		User user = userService.validByUserId(createReviewRequest.memberId());
 		shopAdminService.validById(product.getShopAdminId());
+		shopAdminService.validByMallId(user.getMallId());
+
 		// review 생성 후 저장
 		Review review = new Review(productId,
 			user.getId(),
