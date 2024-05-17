@@ -71,10 +71,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReview(Long productId, CreateReviewRequest createReviewRequest) {
+		// 파라미터 각 id값 validation
 		Product product = productService.validByProductId(productId);
 		User user = userService.validByUserId(createReviewRequest.memberId());
-		ShopAdmin shopAdmin = shopAdminService.validById(product.getShopAdminId());
-		// TODO: 프론트로부터 memberId를 받아 user를 조회하여 userId를 가져온다.
+		shopAdminService.validById(product.getShopAdminId());
+		// review 생성 후 저장
 		Review review = new Review(productId,
 			user.getId(),
 			createReviewRequest.content(),

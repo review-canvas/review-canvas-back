@@ -27,6 +27,7 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(name = "review_id")
 	private Long id;
 	private Long productId;
+	@Column(name = "users_id")
 	private Long userId;
 
 	private int score;
