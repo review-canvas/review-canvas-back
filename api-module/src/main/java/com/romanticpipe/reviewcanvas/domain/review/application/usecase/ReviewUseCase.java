@@ -10,11 +10,11 @@ import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 
 public interface ReviewUseCase {
 	PageResponse<GetReviewForUserResponse> getReviewsForUser(String mallId, Long productNo,
-															 PageableRequest pageableRequest, ReviewFilter filter);
+		PageableRequest pageableRequest, ReviewFilter filter);
 
 	PageResponse<GetReviewResponse> getReviewsByUserId(String userId, PageableRequest pageableRequest);
 
-	void createReview(String productId, CreateReviewRequest createReviewRequest);
+	void createReview(Long productId, CreateReviewRequest createReviewRequest);
 
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);
 

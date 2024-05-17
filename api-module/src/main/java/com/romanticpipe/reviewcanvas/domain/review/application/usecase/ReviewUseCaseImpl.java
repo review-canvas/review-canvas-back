@@ -1,7 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import java.awt.desktop.UserSessionEvent;
-
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -12,6 +10,7 @@ import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductDto;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
+import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
@@ -71,12 +70,18 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public void createReview(String productId, CreateReviewRequest createReviewRequest) {
+	public void createReview(Long productId, CreateReviewRequest createReviewRequest) {
 		Product product = productService.validByProductId(productId);
-		User user =
+		User user = userService.validByUserId(createReviewRequest.memberId());
 		ShopAdmin shopAdmin = shopAdminService.validById(product.getShopAdminId());
 		// TODO: 프론트로부터 memberId를 받아 user를 조회하여 userId를 가져온다.
-		Review review = new Review(productId, createReviewRequest.memberId(), );
+		Review review = new Review(productId,
+			user.getId(),
+			createReviewRequest.content(),
+			createReviewRequest.score(),
+			ReviewStatus.APPROVED,
+			""
+		);
 		reviewService.save(review);
 	}
 

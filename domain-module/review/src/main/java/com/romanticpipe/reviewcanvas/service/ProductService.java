@@ -30,7 +30,7 @@ public class ProductService {
 		return productRepository.findAllByShopAdminId(shopAdminId);
 	}
 
-	public Product validByProductId(String productId) {
+	public Product validByProductId(Long productId) {
 		return productRepository.findById(productId)
 			.orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
 	}

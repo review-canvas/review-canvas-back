@@ -27,7 +27,7 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(name = "review_id")
 	private Long id;
 	private Long productId;
-	private String memberId;
+	private Long userId;
 
 	private int score;
 	private String content;
@@ -37,9 +37,9 @@ public class Review extends BaseEntityWithUpdate {
 	private String imageVideoUrls;
 
 	@Builder
-	public Review(Long productId, String memberId, String content, int score, ReviewStatus status,
+	public Review(Long productId, Long userId, String content, int score, ReviewStatus status,
 		String imageVideoUrls) {
-		this.memberId = memberId;
+		this.userId = userId;
 		this.productId = productId;
 		this.content = content;
 		this.score = score;
