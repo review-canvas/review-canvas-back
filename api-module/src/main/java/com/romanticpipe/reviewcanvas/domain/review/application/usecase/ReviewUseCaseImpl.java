@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.awt.desktop.UserSessionEvent;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -10,6 +12,7 @@ import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductDto;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
+import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewForUserResponse;
@@ -19,6 +22,7 @@ import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
+import com.romanticpipe.reviewcanvas.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,6 +33,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	private final ShopAdminService shopAdminService;
 	private final ProductService productService;
 	private final ReviewService reviewService;
+	private final UserService userService;
 	private final Cafe24ProductClient cafe24ProductClient;
 	private final TransactionTemplate writeTransactionTemplate;
 
@@ -68,20 +73,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Transactional
 	public void createReview(String productId, CreateReviewRequest createReviewRequest) {
 		Product product = productService.validByProductId(productId);
-		// TODO: product가  mallId와 productNo로 상품을 생성하는 로직을 추가하도록 변경해야 함.
-		//		Product product = productReader.findByMallIdAndProductNo(mallId, productNo)
-		//			.orElseGet(() -> createProduct(mallId, productNo));
+		User user =
 		ShopAdmin shopAdmin = shopAdminService.validById(product.getShopAdminId());
 		// TODO: 프론트로부터 memberId를 받아 user를 조회하여 userId를 가져온다.
-		//		Review review = new Review(
-		//			null,
-		//			null,
-		//			createReviewRequest.content(),
-		//			createReviewRequest.score(),
-		//			shopAdmin.isApproveStatus()
-		//				? ReviewStatus.WAITING : ReviewStatus.APPROVED
-		//		);
-		//		reviewCreator.save(review);
+		Review review = new Review(productId, createReviewRequest.memberId(), );
+		reviewService.save(review);
 	}
 
 	private Product createProduct(String mallId, Long productNo) {

@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain;
 
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,7 +27,7 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(name = "review_id")
 	private Long id;
 	private Long productId;
-	private Long userId;
+	private String memberId;
 
 	private int score;
 	private String content;
@@ -36,8 +37,9 @@ public class Review extends BaseEntityWithUpdate {
 	private String imageVideoUrls;
 
 	@Builder
-	public Review(Long productId, Long userId, String content, int score, ReviewStatus status, String imageVideoUrls) {
-		this.userId = userId;
+	public Review(Long productId, String memberId, String content, int score, ReviewStatus status,
+		String imageVideoUrls) {
+		this.memberId = memberId;
 		this.productId = productId;
 		this.content = content;
 		this.score = score;
