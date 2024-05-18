@@ -78,4 +78,14 @@ public interface ReviewDesignApi {
 		@AuthInfo JwtInfo jwtInfo,
 		@Valid @RequestBody UpdateDesignWriteRequest updateDesignWriteRequest
 	);
+
+	@Operation(summary = "리뷰 디자인 쓰기 초기화 API", description = "저장되어 있는 리뷰 디자인 쓰기 설정 값을 초기화한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 디자인 쓰기 설정값을 초기화 했습니다.")
+	})
+	@PatchMapping("/shop-admin/review-design-write/reset")
+	ResponseEntity<SuccessResponse<Void>> resetReviewDesignWrite(@AuthInfo JwtInfo jwtInfo);
 }

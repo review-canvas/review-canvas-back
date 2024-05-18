@@ -71,6 +71,7 @@ public class ReviewDesignController implements ReviewDesignApi {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
+	@Override
 	@PatchMapping("/shop-admin/review-design-write/reset")
 	public ResponseEntity<SuccessResponse<Void>> resetReviewDesignWrite(@AuthInfo JwtInfo jwtInfo) {
 		reviewDesignUseCase.resetReviewDesignWrite(jwtInfo.adminId());
