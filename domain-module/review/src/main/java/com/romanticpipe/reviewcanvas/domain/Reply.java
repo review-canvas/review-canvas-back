@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain;
 
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ public class Reply extends BaseEntityWithUpdate {
 	@Column(name = "reply_id")
 	private Long id;
 	private Long reviewId;
+	@Column(name = "users_id")
 	private Long userId;
 	private String content;
 
