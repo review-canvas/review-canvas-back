@@ -27,4 +27,17 @@ public record ReviewLikeResponse(
 			.buttonRound(RoundResponse.from(reviewLike))
 			.build();
 	}
+
+	public ReviewLike toVO() {
+		return ReviewLike.builder()
+			.buttonType(buttonType)
+			.iconColor(iconColor)
+			.textColor(textColor)
+			.buttonBorderColor(buttonBorderColor)
+			.buttonRoundTopLeft(buttonRound.topLeft())
+			.buttonRoundTopRight(buttonRound.topRight())
+			.buttonRoundBottomLeft(buttonRound.bottomLeft())
+			.buttonRoundBottomRight(buttonRound.bottomRight())
+			.build();
+	}
 }
