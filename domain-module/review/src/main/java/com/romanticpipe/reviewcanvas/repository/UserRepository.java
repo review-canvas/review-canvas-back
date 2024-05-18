@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.romanticpipe.reviewcanvas.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-	Optional<User> findByMemberId(String memberId);
+	Optional<User> findByMemberIdAndMallId(String memberId, String mallId);
 }

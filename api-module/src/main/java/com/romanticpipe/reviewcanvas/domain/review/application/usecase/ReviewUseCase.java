@@ -14,7 +14,7 @@ public interface ReviewUseCase {
 
 	PageResponse<GetReviewResponse> getReviewsByUserId(String userId, PageableRequest pageableRequest);
 
-	void createReview(Long productId, CreateReviewRequest createReviewRequest);
+	void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest);
 
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);
 

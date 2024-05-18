@@ -62,9 +62,10 @@ interface ReviewApi {
 			responseCode = "200",
 			description = "성공적으로 상품의 리뷰 생성이 완료되었습니다.")
 	})
-	@PostMapping("/products/{productId}/reviews")
+	@PostMapping("/shop/{mallId}/products/{productNo}/review")
 	ResponseEntity<SuccessResponse<Void>> createReview(
-		@PathVariable("productId") Long productId,
+		@PathVariable("mallId") String mallId,
+		@PathVariable("productNo") Long productId,
 		@RequestBody CreateReviewRequest createReviewRequest
 	);
 

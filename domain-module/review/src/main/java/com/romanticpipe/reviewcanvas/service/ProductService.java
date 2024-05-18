@@ -6,8 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.romanticpipe.reviewcanvas.domain.Product;
-import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.ProductErrorCode;
 import com.romanticpipe.reviewcanvas.repository.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -30,8 +28,4 @@ public class ProductService {
 		return productRepository.findAllByShopAdminId(shopAdminId);
 	}
 
-	public Product validByProductId(Long productId) {
-		return productRepository.findById(productId)
-			.orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
-	}
 }

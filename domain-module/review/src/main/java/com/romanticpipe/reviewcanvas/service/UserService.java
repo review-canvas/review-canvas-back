@@ -15,8 +15,8 @@ public class UserService {
 
 	private final UserRepository userRepository;
 
-	public User validByUserId(String memberId) {
-		return userRepository.findByMemberId(memberId)
+	public User validByUserIdAndMallId(String memberId, String mallId) {
+		return userRepository.findByMemberIdAndMallId(memberId, mallId)
 			.orElseThrow(() -> new BusinessException(UserErrorCode.USER_NOT_FOUND));
 	}
 }

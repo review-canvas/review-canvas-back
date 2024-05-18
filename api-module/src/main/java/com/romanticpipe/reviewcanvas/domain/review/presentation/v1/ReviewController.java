@@ -70,10 +70,12 @@ class ReviewController implements ReviewApi {
 	}
 
 	@Override
-	@PostMapping("/products/{productId}/reviews")
+	@PostMapping("/shop/{mallId}/products/{productNo}/review")
 	public ResponseEntity<SuccessResponse<Void>> createReview(
-		@PathVariable("productId") Long productId, @RequestBody CreateReviewRequest createReviewRequest) {
-		reviewUseCase.createReview(productId, createReviewRequest);
+		@PathVariable("mallId") String mallId,
+		@PathVariable("productNo") Long productId,
+		@RequestBody CreateReviewRequest createReviewRequest) {
+		reviewUseCase.createReview(mallId, productId, createReviewRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 

@@ -19,6 +19,8 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.exception.ProductErrorCode;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
@@ -70,21 +72,21 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public void createReview(Long productId, CreateReviewRequest createReviewRequest) {
+	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest) {
 		// 파라미터 각 id값 validation
-		Product product = productService.validByProductId(productId);
-		User user = userService.validByUserId(createReviewRequest.memberId());
-		shopAdminService.validById(product.getShopAdminId());
-		shopAdminService.validByMallId(user.getMallId());
+		Product product = productService.findProduct(mallId, productNo)
+			.orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
+		User user = userService.validByUserIdAndMallId(createReviewRequest.memberId(), mallId);
 
 		// review 생성 후 저장
-		Review review = new Review(productId,
-			user.getId(),
-			createReviewRequest.content(),
-			createReviewRequest.score(),
-			ReviewStatus.APPROVED,
-			""
-		);
+		Review review = Review.builder()
+			.productId(product.getId())
+			.userId(user.getId())
+			.content(createReviewRequest.content())
+			.score(createReviewRequest.score())
+			.status(ReviewStatus.APPROVED)
+			.imageVideoUrls("")
+			.build();
 		reviewService.save(review);
 	}
 
