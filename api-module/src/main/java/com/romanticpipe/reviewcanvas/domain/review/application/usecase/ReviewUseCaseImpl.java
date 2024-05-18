@@ -76,12 +76,10 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
 		MultipartFile reviewImage) {
-		// 파라미터 각 id값 validation
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
 		User user = userService.validByUserIdAndMallId(createReviewRequest.memberId(), mallId);
 
-		// review 생성 후 저장
 		Review review = Review.builder()
 			.productId(product.getId())
 			.userId(user.getId())
