@@ -32,4 +32,8 @@ public class Reply extends BaseEntityWithUpdate {
 		this.userId = userId;
 		this.content = content;
 	}
+
+	public void update(String content) {
+		this.content = content;
+	}
 }
