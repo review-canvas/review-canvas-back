@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
@@ -25,13 +26,31 @@ public class S3Service {
 	@Value("${aws.s3.bucket}")
 	private String bucketName;
 
+	public Path createSafeTempFile(MultipartFile multipartFile) throws IOException {
+		String originalFileName = multipartFile.getOriginalFilename();
+
+		// Check if the file name is valid and sanitize it
+		if (originalFileName == null || originalFileName.contains("..")) {
+			throw new IOException("Invalid file name: " + originalFileName);
+		}
+
+		// Normalize the file name
+		String fileName = StringUtils.cleanPath(originalFileName);
+
+		// Create a temp file
+		Path tempFile = Files.createTempFile(fileName, null);
+
+		return tempFile;
+	}
+
 	public String uploadFile(MultipartFile multipartFile) {
 		List<String> fileNameList = new ArrayList<>();
 		// multipartFileList.forEach(file -> {
 		// TODO 파일의 이름을 난수화 하는 과정이 필요할지?
 		try {
 			String fileName = multipartFile.getOriginalFilename();
-			Path tempFile = Files.createTempFile(fileName, null);
+
+			Path tempFile = createSafeTempFile(multipartFile);
 			multipartFile.transferTo(tempFile);
 
 			s3Client.putObject(PutObjectRequest.builder()
