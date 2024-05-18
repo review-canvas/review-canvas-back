@@ -4,5 +4,5 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.C
 
 public interface ReplyUseCase {
 
-	void creteReplyForUser(String mallId, Long productNo, Long reviewId, CreateReplyRequest createReplyRequest);
+	void createReplyForUser(String mallId, Long productNo, Long reviewId, CreateReplyRequest createReplyRequest);
 }
