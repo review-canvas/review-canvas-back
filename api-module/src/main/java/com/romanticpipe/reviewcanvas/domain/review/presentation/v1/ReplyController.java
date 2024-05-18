@@ -1,8 +1,9 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,6 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReplyUseCase;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
-import com.romanticpipe.reviewcanvas.dto.PageResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,9 +34,11 @@ public class ReplyController implements ReplyApi {
 	}
 
 	@Override
-	@GetMapping("/reviews/{reviewId}/replies")
-	public ResponseEntity<SuccessResponse<PageResponse<GetReplyForUserResponse>>> getReplyForUser(
+	public ResponseEntity<SuccessResponse<List<GetReplyForUserResponse>>> getReplyForUser(
 		@PathVariable("reviewId") Long reviewId) {
-		return null;
+		return SuccessResponse.of(
+			replyUseCase.getReplyForUser(reviewId)
+		).asHttp(HttpStatus.OK);
 	}
+
 }
