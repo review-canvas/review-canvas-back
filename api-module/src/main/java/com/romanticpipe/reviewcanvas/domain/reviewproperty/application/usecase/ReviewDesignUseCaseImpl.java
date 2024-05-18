@@ -26,4 +26,11 @@ class ReviewDesignUseCaseImpl implements ReviewDesignUseCase {
 		ReviewDesignView reviewDesignView = reviewDesignViewService.validateByShopAdminId(shopAdminId);
 		reviewDesignView.update(updateDesignViewRequest.toDto());
 	}
+
+	@Override
+	@Transactional
+	public void resetReviewDesignView(Integer shopAdminId) {
+		ReviewDesignView reviewDesignView = reviewDesignViewService.validateByShopAdminId(shopAdminId);
+		reviewDesignView.reset();
+	}
 }

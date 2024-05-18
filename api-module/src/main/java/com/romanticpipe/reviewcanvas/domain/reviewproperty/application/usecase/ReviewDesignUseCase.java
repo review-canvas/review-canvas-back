@@ -7,4 +7,6 @@ public interface ReviewDesignUseCase {
 	GetReviewDesignViewResponse getReviewDesignView(Integer shopAdminId);
 
 	void updateReviewDesignView(Integer shopAdminId, UpdateDesignViewRequest updateDesignViewRequest);
+
+	void resetReviewDesignView(Integer shopAdminId);
 }

@@ -133,4 +133,24 @@ public class ReviewDesignView {
 		this.seeMoreButtonType = dto.seeMoreButtonType();
 		this.reviewLike = dto.reviewLike();
 	}
+
+	public void reset() {
+		this.detailViewType = DetailViewType.MODAL;
+		this.pagingType = PagingType.PAGE_NUMBER;
+		this.filterType = FilterType.LIST;
+		this.filterActiveTextColor = "#3F21BD";
+		this.reviewBackgroundColor = "#ffffff";
+		this.margin = Margin.createDefaultReviewDesignView();
+		this.padding = Padding.createDefaultReviewDesignView();
+		this.detailInfoTextColor = "#8d8d8d";
+		this.font = Font.createDefaultReviewDesignView();
+		this.border = Border.createDefaultReviewDesignView();
+		this.round = Round.createDefaultReviewDesignView();
+		this.borderColor = "#ffffff";
+		this.shadow = Shadow.SMALL;
+		this.replyBackgroundColor = "#ffffff";
+		this.reviewPreviewTextMaxSize = 150;
+		this.seeMoreButtonType = SeeMoreButtonType.SEE_MORE_TOGGLE;
+		this.reviewLike = ReviewLike.createDefaultReviewLike();
+	}
 }
