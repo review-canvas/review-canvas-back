@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,5 +27,17 @@ public interface ReplyApi {
 	ResponseEntity<SuccessResponse<Void>> createReplyForUser(
 		@PathVariable("reviewId") Long reviewId,
 		@RequestBody CreateReplyRequest createReplyRequest
+	);
+
+	@Operation(summary = "리뷰 댓글 수정 API", description = "리뷰의 자신의 댓글을 수정한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 댓글 수정이 완료되었습니다.")
+	})
+	@PostMapping("/replies/{replyId}")
+	ResponseEntity<SuccessResponse<Void>> updateReplyForUser(
+		@PathVariable("replyId") Long replyId,
+		@RequestBody UpdateReplyRequest updateReplyRequest
 	);
 }
