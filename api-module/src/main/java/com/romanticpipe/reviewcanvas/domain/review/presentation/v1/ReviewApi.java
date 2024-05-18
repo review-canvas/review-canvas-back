@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
@@ -66,7 +68,8 @@ interface ReviewApi {
 	ResponseEntity<SuccessResponse<Void>> createReview(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productId,
-		@RequestBody CreateReviewRequest createReviewRequest
+		@RequestPart CreateReviewRequest createReviewRequest,
+		@RequestPart MultipartFile reviewImage
 	);
 
 	@Operation(summary = "리뷰 수정 API", description = "특정 상품의 리뷰를 수정한다.")

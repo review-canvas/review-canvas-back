@@ -1,5 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewForUserResponse;
@@ -14,7 +16,8 @@ public interface ReviewUseCase {
 
 	PageResponse<GetReviewResponse> getReviewsByUserId(String userId, PageableRequest pageableRequest);
 
-	void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest);
+	void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
+		MultipartFile reviewImage);
 
 	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest);
 

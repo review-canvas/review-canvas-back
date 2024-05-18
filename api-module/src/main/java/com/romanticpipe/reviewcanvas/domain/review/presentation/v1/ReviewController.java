@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
@@ -74,8 +75,9 @@ class ReviewController implements ReviewApi {
 	public ResponseEntity<SuccessResponse<Void>> createReview(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productId,
-		@RequestBody CreateReviewRequest createReviewRequest) {
-		reviewUseCase.createReview(mallId, productId, createReviewRequest);
+		@RequestPart CreateReviewRequest createReviewRequest,
+		@RequestPart MultipartFile reviewImage) {
+		reviewUseCase.createReview(mallId, productId, createReviewRequest, reviewImage);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 

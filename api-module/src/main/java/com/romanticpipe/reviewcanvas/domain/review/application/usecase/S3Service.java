@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -24,24 +25,26 @@ public class S3Service {
 	@Value("${spring.cloud.aws.s3.bucket}")
 	private String bucketName;
 
-	public void uploadFile(List<MultipartFile> multipartFileList) {
+	public String uploadFile(MultipartFile multipartFile) {
+		List<String> fileNameList = new ArrayList<>();
+		// multipartFileList.forEach(file -> {
+		// TODO 파일의 이름을 난수화 하는 과정이 필요할지?
+		try {
+			String fileName = multipartFile.getOriginalFilename();
+			Path tempFile = Files.createTempFile(fileName, null);
+			multipartFile.transferTo(tempFile);
 
-		multipartFileList.forEach(file -> {
-			// TODO 파일의 이름을 난수화 하는 과정이 필요할지?
-			try {
-				String fileName = file.getOriginalFilename();
-				Path tempFile = Files.createTempFile(fileName, null);
-				file.transferTo(tempFile);
+			s3Client.putObject(PutObjectRequest.builder()
+				.bucket(bucketName)
+				.key(fileName)
+				.build(), tempFile);
 
-				s3Client.putObject(PutObjectRequest.builder()
-					.bucket(bucketName)
-					.key(fileName)
-					.build(), tempFile);
-
-				Files.delete(tempFile);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		});
+			// fileNameList.add(fileName);
+			Files.delete(tempFile);
+			return fileName;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		// });
 	}
 }

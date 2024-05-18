@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
@@ -37,6 +38,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	private final UserService userService;
 	private final Cafe24ProductClient cafe24ProductClient;
 	private final TransactionTemplate writeTransactionTemplate;
+	private final S3Service s3Service;
 
 	@Override
 	public PageResponse<GetReviewForUserResponse> getReviewsForUser(String mallId, Long productNo,
@@ -72,7 +74,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest) {
+	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
+		MultipartFile reviewImage) {
 		// 파라미터 각 id값 validation
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
@@ -85,7 +88,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.content(createReviewRequest.content())
 			.score(createReviewRequest.score())
 			.status(ReviewStatus.APPROVED)
-			.imageVideoUrls("")
+			.imageVideoUrls(s3Service.uploadFile(reviewImage))
 			.build();
 		reviewService.save(review);
 	}
