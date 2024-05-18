@@ -6,7 +6,9 @@ import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
+@Builder
 public record GetReplyForUserResponse(@Schema(description = "댓글 id", requiredMode = Schema.RequiredMode.REQUIRED)
 									  Long replyId,
 									  @Schema(description = "댓글 내용", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -21,8 +23,13 @@ public record GetReplyForUserResponse(@Schema(description = "댓글 id", require
 									  String nickName) {
 
 	public static GetReplyForUserResponse from(Reply reply, User user) {
-		return new GetReplyForUserResponse(reply.getId(), reply.getContent(), reply.getCreatedAt(),
-			reply.getUpdatedAt(),
-			user.getMemberId(), user.getNickName());
+		return GetReplyForUserResponse.builder()
+			.replyId(reply.getId())
+			.content(reply.getContent())
+			.createAt(reply.getCreatedAt())
+			.updatedAt(reply.getUpdatedAt())
+			.memberId(user.getMemberId())
+			.nickName(user.getNickName())
+			.build();
 	}
 }
