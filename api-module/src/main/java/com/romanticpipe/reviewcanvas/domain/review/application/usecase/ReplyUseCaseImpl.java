@@ -1,16 +1,20 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
+
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -46,5 +50,14 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 				throw e;
 			}
 		});
+	}
+
+	@Override
+	@Transactional
+	public void updateReplyForUser(Long replyId, UpdateReplyRequest updateReplyRequest) {
+		Reply reply = replyService.findById(replyId);
+		Optional<User> optionalUser = userService.findUser(updateReplyRequest.memberId(), updateReplyRequest.mallId());
+		replyService.validateUserIsWriter(reply, optionalUser);
+		reply.update(updateReplyRequest.content());
 	}
 }
