@@ -34,4 +34,8 @@ public record RoundResponse(
 			.bottomRight(reviewLike.getButtonRoundBottomRight())
 			.build();
 	}
+
+	public Round toVO() {
+		return new Round(topLeft, topRight, bottomLeft, bottomRight);
+	}
 }

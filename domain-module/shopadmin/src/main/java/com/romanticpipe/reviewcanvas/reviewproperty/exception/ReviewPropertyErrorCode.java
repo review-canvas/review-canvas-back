@@ -11,7 +11,8 @@ public enum ReviewPropertyErrorCode implements ErrorCode {
 	REVIEW_DESCRIPTION_NOT_FOUND(400, "RP003", "Description이 존재하지 않습니다."),
 	REVIEW_CONTAINER_NOT_FOUND(400, "RP004", "Container가 존재하지 않습니다."),
 	REVIEW_COLUMN_NOT_FOUND(400, "RP005", "Column이 존재하지 않습니다."),
-	REVIEW_DESIGN_VIEW_NOT_FOUND(400, "RP006", "DesignView가 존재하지 않습니다.");
+	REVIEW_DESIGN_VIEW_NOT_FOUND(400, "RP006", "DesignView가 존재하지 않습니다."),
+	REVIEW_DESIGN_WRITE_NOT_FOUND(400, "RP007", "리뷰 디자인 쓰기 설정값이 존재하지 않습니다.");
 
 	private final int status;
 	private final String code;
