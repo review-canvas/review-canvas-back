@@ -16,4 +16,8 @@ public class ReviewDesignWriteService {
 		return reviewDesignWriteResponse.findByShopAdminId(shopAdminId)
 			.orElseThrow(ReviewDesignWriteNotFoundException::new);
 	}
+
+	public ReviewDesignWrite save(ReviewDesignWrite reviewDesignWrite) {
+		return reviewDesignWriteResponse.save(reviewDesignWrite);
+	}
 }
