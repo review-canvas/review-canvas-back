@@ -6,6 +6,7 @@ import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewDesignUseCase;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateDesignViewRequest;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewDesignViewResponse;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewDesignWriteResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,5 +49,14 @@ public class ReviewDesignController implements ReviewDesignApi {
 	) {
 		reviewDesignUseCase.resetReviewDesignView(jwtInfo.adminId());
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/shop-admin/review-design-write")
+	public ResponseEntity<SuccessResponse<GetReviewDesignWriteResponse>> getReviewDesignWrite(@AuthInfo JwtInfo jwtInfo
+	) {
+		return SuccessResponse.of(
+			reviewDesignUseCase.getReviewDesignWrite(jwtInfo.adminId())
+		).asHttp(HttpStatus.OK);
 	}
 }

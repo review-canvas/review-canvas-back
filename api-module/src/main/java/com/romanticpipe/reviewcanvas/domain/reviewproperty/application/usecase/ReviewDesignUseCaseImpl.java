@@ -2,8 +2,10 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase;
 
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateDesignViewRequest;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewDesignViewResponse;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewDesignWriteResponse;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewDesignView;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewDesignViewService;
+import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewDesignWriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 class ReviewDesignUseCaseImpl implements ReviewDesignUseCase {
 
 	private final ReviewDesignViewService reviewDesignViewService;
+	private final ReviewDesignWriteService reviewDesignWriteService;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -32,5 +35,11 @@ class ReviewDesignUseCaseImpl implements ReviewDesignUseCase {
 	public void resetReviewDesignView(Integer shopAdminId) {
 		ReviewDesignView reviewDesignView = reviewDesignViewService.validateByShopAdminId(shopAdminId);
 		reviewDesignView.reset();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public GetReviewDesignWriteResponse getReviewDesignWrite(Integer shopAdminId) {
+		return GetReviewDesignWriteResponse.from(reviewDesignWriteService.validateByShopAdminId(shopAdminId));
 	}
 }
