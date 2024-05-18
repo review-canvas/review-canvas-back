@@ -26,12 +26,15 @@ public class Cafe24Controller implements Cafe24Api {
 
 	@Override
 	@PostMapping("/cafe24/{mallId}/authentication-process")
-	public ResponseEntity<SuccessResponse<Void>> cafe24AuthenticationProcess(
+	public ResponseEntity<SuccessResponse<Map<String, String>>> cafe24AuthenticationProcess(
 		@PathVariable(required = true) String mallId,
 		@RequestParam(required = true) String authCode
 	) {
-		cafe24UseCase.cafe24AuthenticationProcess(mallId, authCode);
-		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+		;
+		String shopAdminStatus = cafe24UseCase.cafe24AuthenticationProcess(mallId, authCode);
+		return SuccessResponse.of(
+			Map.of("shopAdminStatus", shopAdminStatus)
+		).asHttp(HttpStatus.OK);
 	}
 
 

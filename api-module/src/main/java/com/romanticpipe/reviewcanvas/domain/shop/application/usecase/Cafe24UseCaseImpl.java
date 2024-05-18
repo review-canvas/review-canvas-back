@@ -1,20 +1,26 @@
 package com.romanticpipe.reviewcanvas.domain.shop.application.usecase;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.MultiValueMap;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAuthToken;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAuthTokenService;
+import com.romanticpipe.reviewcanvas.cafe24.Cafe24ErrorCode;
 import com.romanticpipe.reviewcanvas.cafe24.Cafe24FormUrlencodedFactory;
 import com.romanticpipe.reviewcanvas.cafe24.application.Cafe24ApplicationClient;
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AccessToken;
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AuthenticationClient;
-import com.romanticpipe.reviewcanvas.domain.ShopAuthToken;
 import com.romanticpipe.reviewcanvas.domain.shop.application.usecase.request.Cafe24CreateScriptTagRequest;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
-import com.romanticpipe.reviewcanvas.service.ShopAuthTokenService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.util.MultiValueMap;
 
 @Component
 @RequiredArgsConstructor
@@ -24,17 +30,28 @@ public class Cafe24UseCaseImpl implements Cafe24UseCase {
 	private final Cafe24AuthenticationClient cafe24AuthenticationClient;
 	private final Cafe24ApplicationClient cafe24ApplicationClient;
 	private final ShopAuthTokenService shopAuthTokenService;
+	private final ShopAdminService shopAdminService;
 	private final ObjectMapper objectMapper;
 
 	@Override
-	public void cafe24AuthenticationProcess(String mallId, String authCode) {
+	public String cafe24AuthenticationProcess(String mallId, String authCode) {
 		MultiValueMap<String, String> requestParam = Cafe24FormUrlencodedFactory.getCafe24AccessToken(authCode);
 		Cafe24AccessToken cafe24AccessToken = cafe24AuthenticationClient.getAccessToken(mallId, requestParam);
-		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
+		if (!cafe24AccessToken.isFullContent()) {
+			throw new BusinessException(Cafe24ErrorCode.INVALID_ACCESS_TOKEN);
+		}
+		return writeTransactionTemplate.execute(transactionStatus -> {
 			try {
-				shopAuthTokenService.findByMallId(mallId)
-					.ifPresentOrElse(shopAuthToken -> updateShopAuthToken(cafe24AccessToken, shopAuthToken),
-						() -> shopAuthTokenService.save(cafe24AccessToken.toShopAuthToken()));
+				Optional<ShopAuthToken> shopAuthToken = shopAuthTokenService.findByMallId(mallId);
+				if (shopAuthToken.isPresent()) {
+					updateShopAuthToken(cafe24AccessToken, shopAuthToken.get());
+					return shopAdminService.findByMallId(mallId)
+						.map(admin -> "REGISTERED")
+						.orElse("PREVIOUS_INSTALLED");
+				}
+
+				shopAuthTokenService.save(cafe24AccessToken.toShopAuthToken());
+				return "INSTALLED";
 			} catch (RuntimeException e) {
 				transactionStatus.setRollbackOnly();
 				throw e;

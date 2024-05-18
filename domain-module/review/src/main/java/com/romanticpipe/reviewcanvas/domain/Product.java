@@ -28,4 +28,8 @@ public class Product {
 		this.name = name;
 		this.shopAdminId = shopAdminId;
 	}
+
+	public void update(String productName) {
+		this.name = productName;
+	}
 }

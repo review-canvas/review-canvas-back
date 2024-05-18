@@ -1,9 +1,9 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
+import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.common.security.exception.SecurityErrorCode;
 import com.romanticpipe.reviewcanvas.common.security.exception.TokenException;
 import com.romanticpipe.reviewcanvas.common.security.exception.TokenExpiredException;
-import com.romanticpipe.reviewcanvas.domain.AdminRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;

@@ -1,30 +1,15 @@
 package com.romanticpipe.reviewcanvas.cafe24.product;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.springframework.util.StringUtils;
 
-@Slf4j
-public class Cafe24Product {
-	private final Product product;
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+public record Cafe24Product(Long productNo, String productName) {
 
-	@JsonCreator
-	public Cafe24Product(Product product) {
-		this.product = product;
-	}
-
-	public Long getProductNo() {
-		return product.productNo();
-	}
-
-	public String getProductName() {
-		return product.productName();
-	}
-
-	public void validateCafe24Product(String mallId, Long productNo) {
-		if (!StringUtils.hasText(getProductName())) {
-			log.info("Cafe24로부터 [mallId: {}] [productNo: {}]에 해당하는 상품을 가져올 수 없습니다.", mallId, productNo);
-			throw new Cafe24ProductNotFoundException();
-		}
+	public boolean isFullContent() {
+		return productNo != null && StringUtils.hasText(productName);
 	}
 }

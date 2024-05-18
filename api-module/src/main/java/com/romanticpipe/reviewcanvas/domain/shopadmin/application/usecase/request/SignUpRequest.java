@@ -2,35 +2,23 @@ package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.reque
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+
+import java.util.List;
 
 @Schema(name = "SignUpRequest", description = "Shop Admin 회원가입 요청")
-public record SignUpRequest(@Schema(description = "Email", requiredMode = Schema.RequiredMode.REQUIRED)
+public record SignUpRequest(@Schema(description = "이메일", requiredMode = Schema.RequiredMode.REQUIRED)
 							@NotBlank String email,
-							@Schema(description = "Password", requiredMode = Schema.RequiredMode.REQUIRED)
+							@Schema(description = "비밀번호", requiredMode = Schema.RequiredMode.REQUIRED)
 							@NotBlank String password,
-							@Schema(description = "Name", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotBlank String name,
-							@Schema(description = "Mall Number", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotBlank String mallNumber,
-							@Schema(description = "Phone Number", requiredMode = Schema.RequiredMode.REQUIRED)
+							@Schema(description = "전화번호", requiredMode = Schema.RequiredMode.REQUIRED)
 							@NotBlank String phoneNumber,
-							@Schema(description = "Review Title Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotNull Boolean title,
-							@Schema(description = "Review Author Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotNull Boolean author,
-							@Schema(description = "Review Point Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotNull Boolean point,
-							@Schema(description = "Review Media Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotNull Boolean media,
-							@Schema(description = "Review Content Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotNull Boolean content,
-							@Schema(description = "Review CreateAt Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotNull Boolean createdAt,
-							@Schema(description = "Review UpdateAt Active", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotNull Boolean updatedAt,
-							@Schema(description = "Review Design Id", requiredMode = Schema.RequiredMode.REQUIRED)
-							@NotNull Integer reviewDesignId
+							@Schema(description = "상호명", requiredMode = Schema.RequiredMode.REQUIRED)
+							@NotBlank String mallName,
+							@Schema(description = "Mall ID", requiredMode = Schema.RequiredMode.REQUIRED)
+							@NotBlank String mallId,
+							@Schema(description = "동의한 약관 id list", requiredMode = Schema.RequiredMode.REQUIRED)
+							@NotEmpty List<Integer> consentedTermsIds
 ) {
 
 }
