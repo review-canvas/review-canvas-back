@@ -119,4 +119,24 @@ public class ReviewDesignWrite {
 		this.completedButtonBackgroundColor = dto.completedButtonBackgroundColor();
 		this.completedButtonTextColor = dto.completedButtonTextColor();
 	}
+
+	public void reset() {
+		this.pageType = ReviewDesignWritePageType.MODAL;
+		this.widthSizePc = "500px";
+		this.widthSizeMobile = "100%";
+		this.backgroundColor = "#ffffff";
+		this.margin = Margin.createDefaultReviewDesignWrite();
+		this.border = Border.createDefaultReviewDesignWrite();
+		this.borderColor = "#222222";
+		this.starRateBackgroundColor = "#ffffff";
+		this.starRateColor = "#000000";
+		this.detailEvaluationCheckBoxBackgroundColor = "#ffffff";
+		this.detailEvaluationCheckBoxColor = "#3F21BD";
+		this.detailEvaluationCategory = "";
+		this.cancelButtonBackgroundColor = "#222222";
+		this.cancelButtonBorderColor = "#ffffff";
+		this.cancelButtonTextColor = "#ffffff";
+		this.completedButtonBackgroundColor = "#3F21BD";
+		this.completedButtonTextColor = "#ffffff";
+	}
 }

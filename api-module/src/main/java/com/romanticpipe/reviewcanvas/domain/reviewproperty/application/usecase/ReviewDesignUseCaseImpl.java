@@ -51,4 +51,11 @@ class ReviewDesignUseCaseImpl implements ReviewDesignUseCase {
 		ReviewDesignWrite reviewDesignWrite = reviewDesignWriteService.validateByShopAdminId(shopAdminId);
 		reviewDesignWrite.update(updateDesignWriteRequest.toDto());
 	}
+
+	@Override
+	@Transactional
+	public void resetReviewDesignWrite(Integer shopAdminId) {
+		ReviewDesignWrite reviewDesignWrite = reviewDesignWriteService.validateByShopAdminId(shopAdminId);
+		reviewDesignWrite.reset();
+	}
 }

@@ -70,4 +70,10 @@ public class ReviewDesignController implements ReviewDesignApi {
 		reviewDesignUseCase.updateReviewDesignWrite(jwtInfo.adminId(), updateDesignWriteRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
+
+	@PatchMapping("/shop-admin/review-design-write/reset")
+	public ResponseEntity<SuccessResponse<Void>> resetReviewDesignWrite(@AuthInfo JwtInfo jwtInfo) {
+		reviewDesignUseCase.resetReviewDesignWrite(jwtInfo.adminId());
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
 }

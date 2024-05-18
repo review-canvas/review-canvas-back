@@ -15,4 +15,6 @@ public interface ReviewDesignUseCase {
 	GetReviewDesignWriteResponse getReviewDesignWrite(Integer shopAdminId);
 
 	void updateReviewDesignWrite(Integer shopAdminId, UpdateDesignWriteRequest updateDesignWriteRequest);
+
+	void resetReviewDesignWrite(Integer shopAdminId);
 }
