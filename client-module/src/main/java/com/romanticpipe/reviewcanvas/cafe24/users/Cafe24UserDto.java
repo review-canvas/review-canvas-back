@@ -41,7 +41,7 @@ public record Cafe24UserDto(
 			.mallId(mallId)
 			.name(name)
 			.nickName(nickName)
-			.gender(Gender.of(gender))
+			.gender(Gender.valueOf(gender))
 			.nationality(nationality)
 			.birth(birthday)
 			.build();
