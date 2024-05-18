@@ -3,13 +3,17 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateDesignViewRequest;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewDesignViewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public interface ReviewDesignApi {
 
@@ -22,4 +26,17 @@ public interface ReviewDesignApi {
 	})
 	@GetMapping("/shop-admin/review-design-view")
 	ResponseEntity<SuccessResponse<GetReviewDesignViewResponse>> getReviewDesignView(@AuthInfo JwtInfo jwtInfo);
+
+	@Operation(summary = "리뷰 디자인 보기 수정  API", description = "입력받은 값으로 리뷰 디자인 보기 설정값을 수정한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 디자인 보기 설정값을 수정했습니다.")
+	})
+	@PatchMapping("/shop-admin/review-design-view")
+	ResponseEntity<SuccessResponse<Void>> updateReviewDesignView(
+		@AuthInfo JwtInfo jwtInfo,
+		@Valid @RequestBody UpdateDesignViewRequest updateDesignViewRequest
+	);
 }

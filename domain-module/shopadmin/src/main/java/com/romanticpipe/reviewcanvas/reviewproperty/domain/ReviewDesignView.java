@@ -5,6 +5,7 @@ import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FilterType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.PagingType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.SeeMoreButtonType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
+import com.romanticpipe.reviewcanvas.reviewproperty.dto.ReviewDesignViewDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -111,5 +112,25 @@ public class ReviewDesignView {
 			.reviewLike(ReviewLike.createDefaultReviewLike())
 			.shopAdminId(shopAdminId)
 			.build();
+	}
+
+	public void update(ReviewDesignViewDto dto) {
+		this.detailViewType = dto.detailViewType();
+		this.pagingType = dto.pagingType();
+		this.filterType = dto.filterType();
+		this.filterActiveTextColor = dto.filterActiveTextColor();
+		this.reviewBackgroundColor = dto.reviewBackgroundColor();
+		this.margin = dto.margin();
+		this.padding = dto.padding();
+		this.detailInfoTextColor = dto.detailInfoTextColor();
+		this.font = dto.font();
+		this.border = dto.border();
+		this.round = dto.round();
+		this.borderColor = dto.borderColor();
+		this.shadow = dto.shadow();
+		this.replyBackgroundColor = dto.replyBackgroundColor();
+		this.reviewPreviewTextMaxSize = dto.reviewPreviewTextMaxSize();
+		this.seeMoreButtonType = dto.seeMoreButtonType();
+		this.reviewLike = dto.reviewLike();
 	}
 }
