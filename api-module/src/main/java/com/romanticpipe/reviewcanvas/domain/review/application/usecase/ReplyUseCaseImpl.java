@@ -24,13 +24,14 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	private final TransactionTemplate writeTransactionTemplate;
 
 	@Override
-	public void createReplyForUser(String mallId, Long productNo, Long reviewId,
-								   CreateReplyRequest createReplyRequest) {
+	public void createReplyForUser(Long reviewId, CreateReplyRequest createReplyRequest) {
 		Optional<User> optionalUser = readTransactionTemplate.execute(status -> {
 			reviewService.validById(reviewId);
-			return userService.findUser(createReplyRequest.memberId(), mallId);
+			return userService.findUser(createReplyRequest.memberId(), createReplyRequest.mallId());
 		});
-		User user = optionalUser.orElseGet(() -> userUseCase.createSaveUser(mallId, createReplyRequest.memberId()));
+		User user = optionalUser.orElseGet(
+			() -> userUseCase.createSaveUser(createReplyRequest.mallId(), createReplyRequest.memberId())
+		);
 
 		writeTransactionTemplate.executeWithoutResult(status -> {
 			try {

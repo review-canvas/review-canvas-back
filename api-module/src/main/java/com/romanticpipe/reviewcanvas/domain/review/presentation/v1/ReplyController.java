@@ -6,7 +6,9 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.C
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,10 +20,10 @@ public class ReplyController implements ReplyApi {
 	private final ReplyUseCase replyUseCase;
 
 	@Override
-	@PostMapping("/shop/{mallId}/products/{productNo}/reviews/{reviewId}/reply")
-	public ResponseEntity<SuccessResponse<Void>> createReplyForUser(String mallId, Long productNo, Long reviewId,
-																	CreateReplyRequest createReplyRequest) {
-		replyUseCase.createReplyForUser(mallId, productNo, reviewId, createReplyRequest);
+	@PostMapping("/reviews/{reviewId}/reply")
+	public ResponseEntity<SuccessResponse<Void>> createReplyForUser(@PathVariable Long reviewId,
+																	@RequestBody CreateReplyRequest createReplyRequest) {
+		replyUseCase.createReplyForUser(reviewId, createReplyRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }
