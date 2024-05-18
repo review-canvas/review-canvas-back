@@ -46,4 +46,8 @@ public class Border {
 	public static Border createDefaultReviewDesignView() {
 		return new Border("5px", "5px", "5px", "5px");
 	}
+
+	public static Border createDefaultReviewDesignWrite() {
+		return new Border("1px", "1px", "1px", "1px");
+	}
 }

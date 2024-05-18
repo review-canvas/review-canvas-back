@@ -34,4 +34,8 @@ public class Margin {
 	public static Margin createDefaultReviewDesignView() {
 		return new Margin("10px", "10px", "10px", "10px");
 	}
+
+	public static Margin createDefaultReviewDesignWrite() {
+		return new Margin("20px", "20px", "20px", "20px");
+	}
 }
