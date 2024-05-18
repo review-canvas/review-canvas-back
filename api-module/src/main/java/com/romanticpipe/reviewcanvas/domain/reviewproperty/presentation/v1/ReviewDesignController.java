@@ -5,6 +5,7 @@ import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewDesignUseCase;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateDesignViewRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateDesignWriteRequest;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewDesignViewResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewDesignWriteResponse;
 import jakarta.validation.Valid;
@@ -58,5 +59,15 @@ public class ReviewDesignController implements ReviewDesignApi {
 		return SuccessResponse.of(
 			reviewDesignUseCase.getReviewDesignWrite(jwtInfo.adminId())
 		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@PatchMapping("/shop-admin/review-design-write")
+	public ResponseEntity<SuccessResponse<Void>> updateReviewDesignView(
+		@AuthInfo JwtInfo jwtInfo,
+		@Valid @RequestBody UpdateDesignWriteRequest updateDesignWriteRequest
+	) {
+		reviewDesignUseCase.updateReviewDesignWrite(jwtInfo.adminId(), updateDesignWriteRequest);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }

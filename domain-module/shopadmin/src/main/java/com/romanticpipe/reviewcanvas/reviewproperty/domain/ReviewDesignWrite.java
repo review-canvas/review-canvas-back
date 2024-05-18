@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewDesignWritePageType;
+import com.romanticpipe.reviewcanvas.reviewproperty.dto.ReviewDesignWriteDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -97,5 +98,25 @@ public class ReviewDesignWrite {
 			.completedButtonTextColor("#ffffff")
 			.shopAdminId(shopAdminId)
 			.build();
+	}
+
+	public void update(ReviewDesignWriteDto dto) {
+		this.pageType = dto.pageType();
+		this.widthSizePc = dto.widthSizePc();
+		this.widthSizeMobile = dto.widthSizeMobile();
+		this.backgroundColor = dto.backgroundColor();
+		this.margin = dto.margin();
+		this.border = dto.border();
+		this.borderColor = dto.borderColor();
+		this.starRateBackgroundColor = dto.starRateBackgroundColor();
+		this.starRateColor = dto.starRateColor();
+		this.detailEvaluationCheckBoxBackgroundColor = dto.detailEvaluationCheckBoxBackgroundColor();
+		this.detailEvaluationCheckBoxColor = dto.detailEvaluationCheckBoxColor();
+		this.detailEvaluationCategory = dto.detailEvaluationCategory();
+		this.cancelButtonBackgroundColor = dto.cancelButtonBackgroundColor();
+		this.cancelButtonBorderColor = dto.cancelButtonBorderColor();
+		this.cancelButtonTextColor = dto.cancelButtonTextColor();
+		this.completedButtonBackgroundColor = dto.completedButtonBackgroundColor();
+		this.completedButtonTextColor = dto.completedButtonTextColor();
 	}
 }

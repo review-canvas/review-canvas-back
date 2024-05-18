@@ -4,6 +4,7 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateDesignViewRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateDesignWriteRequest;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewDesignViewResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewDesignWriteResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -64,4 +65,17 @@ public interface ReviewDesignApi {
 	})
 	@GetMapping("/shop-admin/review-design-write")
 	ResponseEntity<SuccessResponse<GetReviewDesignWriteResponse>> getReviewDesignWrite(@AuthInfo JwtInfo jwtInfo);
+
+	@Operation(summary = "리뷰 디자인 쓰기 수정  API", description = "입력받은 값으로 리뷰 디자인 쓰기 설정값을 수정한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 디자인 쓰기 설정값을 수정했습니다.")
+	})
+	@PatchMapping("/shop-admin/review-design-write")
+	ResponseEntity<SuccessResponse<Void>> updateReviewDesignView(
+		@AuthInfo JwtInfo jwtInfo,
+		@Valid @RequestBody UpdateDesignWriteRequest updateDesignWriteRequest
+	);
 }
