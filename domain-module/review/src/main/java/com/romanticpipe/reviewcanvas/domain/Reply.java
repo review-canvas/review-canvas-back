@@ -22,6 +22,7 @@ public class Reply extends BaseEntityWithUpdate {
 	@Column(name = "reply_id")
 	private Long id;
 	private Long reviewId;
+	@Column(name = "users_id")
 	private Long userId;
 	private String content;
 
