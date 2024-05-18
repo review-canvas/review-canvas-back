@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
+package com.romanticpipe.reviewcanvas.common.storage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,7 +22,7 @@ public class S3Service {
 
 	private final S3Client s3Client;
 
-	@Value("${spring.cloud.aws.s3.bucket}")
+	@Value("${aws.s3.bucket}")
 	private String bucketName;
 
 	public String uploadFile(MultipartFile multipartFile) {
