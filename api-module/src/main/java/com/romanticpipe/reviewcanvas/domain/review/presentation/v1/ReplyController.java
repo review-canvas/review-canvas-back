@@ -13,6 +13,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReplyUseC
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -35,7 +36,7 @@ public class ReplyController implements ReplyApi {
 	@PostMapping("/replies/{replyId}")
 	public ResponseEntity<SuccessResponse<Void>> updateReplyForUser(
 		@PathVariable("replyId") Long replyId,
-		@RequestBody UpdateReplyRequest updateReplyRequest) {
+		@Valid @RequestBody UpdateReplyRequest updateReplyRequest) {
 		replyUseCase.updateReplyForUser(replyId, updateReplyRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}

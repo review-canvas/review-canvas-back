@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @Tag(name = "Reply", description = "댓글 API")
 public interface ReplyApi {
@@ -38,6 +39,6 @@ public interface ReplyApi {
 	@PostMapping("/replies/{replyId}")
 	ResponseEntity<SuccessResponse<Void>> updateReplyForUser(
 		@PathVariable("replyId") Long replyId,
-		@RequestBody UpdateReplyRequest updateReplyRequest
+		@Valid @RequestBody UpdateReplyRequest updateReplyRequest
 	);
 }
