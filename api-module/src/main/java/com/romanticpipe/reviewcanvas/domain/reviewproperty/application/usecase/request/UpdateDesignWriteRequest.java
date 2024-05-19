@@ -17,9 +17,9 @@ public record UpdateDesignWriteRequest(
 	@Schema(description = "배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotBlank String backgroundColor,
 	@Schema(description = "항목 안쪽 여백", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid PaddingRequest padding,
+	@Valid @NotNull PaddingRequest padding,
 	@Schema(description = "항목 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid BorderRequest border,
+	@Valid @NotNull BorderRequest border,
 	@Schema(description = "항목 테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotBlank String borderColor,
 	@Schema(description = "별점 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)

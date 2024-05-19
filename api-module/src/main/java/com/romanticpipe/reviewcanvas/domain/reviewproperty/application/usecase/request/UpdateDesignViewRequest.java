@@ -25,17 +25,17 @@ public record UpdateDesignViewRequest(
 	@Schema(description = "각 리뷰 영역 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#FFFFFF")
 	@NotBlank String reviewBackgroundColor,
 	@Schema(description = "바깥쪽 여백", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid MarginRequest margin,
+	@Valid @NotNull MarginRequest margin,
 	@Schema(description = "안쪽 여백", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid PaddingRequest padding,
+	@Valid @NotNull PaddingRequest padding,
 	@Schema(description = "상세 정보 텍스트 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#000000")
 	@NotBlank String detailInfoTextColor,
 	@Schema(description = "리뷰 텍스트", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid FontRequest font,
+	@Valid @NotNull FontRequest font,
 	@Schema(description = "리뷰 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid BorderRequest border,
+	@Valid @NotNull BorderRequest border,
 	@Schema(description = "라운드", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid RoundRequest round,
+	@Valid @NotNull RoundRequest round,
 	@Schema(description = "테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#000000")
 	@NotBlank String borderColor,
 	@Schema(description = "그림자", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -47,7 +47,7 @@ public record UpdateDesignViewRequest(
 	@Schema(description = "더보기 버튼 스타일", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull SeeMoreButtonType seeMoreButtonType,
 	@Schema(description = "리뷰 좋아요", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid ReviewLikeRequest reviewLike
+	@Valid @NotNull ReviewLikeRequest reviewLike
 ) {
 
 	public ReviewDesignViewDto toDto() {
