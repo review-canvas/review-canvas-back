@@ -28,6 +28,6 @@ public class Round {
 	}
 
 	public static Round createDefaultReviewDesignView() {
-		return new Round("0", "0", "0", "0");
+		return new Round("0px", "0px", "0px", "0px");
 	}
 }

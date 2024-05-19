@@ -5,6 +5,7 @@ import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FilterType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.PagingType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.SeeMoreButtonType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
+import com.romanticpipe.reviewcanvas.reviewproperty.dto.ReviewDesignViewDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -111,5 +112,45 @@ public class ReviewDesignView {
 			.reviewLike(ReviewLike.createDefaultReviewLike())
 			.shopAdminId(shopAdminId)
 			.build();
+	}
+
+	public void update(ReviewDesignViewDto dto) {
+		this.detailViewType = dto.detailViewType();
+		this.pagingType = dto.pagingType();
+		this.filterType = dto.filterType();
+		this.filterActiveTextColor = dto.filterActiveTextColor();
+		this.reviewBackgroundColor = dto.reviewBackgroundColor();
+		this.margin = dto.margin();
+		this.padding = dto.padding();
+		this.detailInfoTextColor = dto.detailInfoTextColor();
+		this.font = dto.font();
+		this.border = dto.border();
+		this.round = dto.round();
+		this.borderColor = dto.borderColor();
+		this.shadow = dto.shadow();
+		this.replyBackgroundColor = dto.replyBackgroundColor();
+		this.reviewPreviewTextMaxSize = dto.reviewPreviewTextMaxSize();
+		this.seeMoreButtonType = dto.seeMoreButtonType();
+		this.reviewLike = dto.reviewLike();
+	}
+
+	public void reset() {
+		this.detailViewType = DetailViewType.MODAL;
+		this.pagingType = PagingType.PAGE_NUMBER;
+		this.filterType = FilterType.LIST;
+		this.filterActiveTextColor = "#3F21BD";
+		this.reviewBackgroundColor = "#ffffff";
+		this.margin = Margin.createDefaultReviewDesignView();
+		this.padding = Padding.createDefaultReviewDesignView();
+		this.detailInfoTextColor = "#8d8d8d";
+		this.font = Font.createDefaultReviewDesignView();
+		this.border = Border.createDefaultReviewDesignView();
+		this.round = Round.createDefaultReviewDesignView();
+		this.borderColor = "#ffffff";
+		this.shadow = Shadow.SMALL;
+		this.replyBackgroundColor = "#ffffff";
+		this.reviewPreviewTextMaxSize = 150;
+		this.seeMoreButtonType = SeeMoreButtonType.SEE_MORE_TOGGLE;
+		this.reviewLike = ReviewLike.createDefaultReviewLike();
 	}
 }

@@ -1,9 +1,13 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
+import java.time.LocalDateTime;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.romanticpipe.reviewcanvas.admin.domain.AdminAuth;
+import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.AdminAuthService;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
@@ -69,4 +73,12 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		shopAdmin.update(password, request.phoneNumber(), request.mallNumber(), request.email(), request.mallName());
 	}
 
+	@Override
+	@Transactional
+	public void deleteShopAdmin(Integer adminId, AdminRole adminRole, LocalDateTime localDateTime) {
+		ShopAdmin shopAdmin = shopAdminService.validById(adminId);
+		shopAdmin.delete(localDateTime);
+		AdminAuth adminAuth = adminAuthService.findByAdminId(adminId, adminRole);
+		adminAuth.logout();
+	}
 }
