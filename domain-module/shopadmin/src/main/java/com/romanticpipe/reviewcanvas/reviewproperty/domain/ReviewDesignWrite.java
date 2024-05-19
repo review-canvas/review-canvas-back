@@ -32,7 +32,7 @@ public class ReviewDesignWrite {
 	private String widthSizeMobile;
 	private String backgroundColor;
 	@Embedded
-	private Margin margin;
+	private Padding padding;
 	@Embedded
 	private Border border;
 	private String borderColor;
@@ -50,7 +50,7 @@ public class ReviewDesignWrite {
 
 	@Builder
 	public ReviewDesignWrite(ReviewDesignWritePageType pageType, String widthSizePc, String widthSizeMobile,
-							 String backgroundColor, Margin margin, Border border, String borderColor,
+							 String backgroundColor, Padding padding, Border border, String borderColor,
 							 String starRateBackgroundColor, String starRateColor,
 							 String detailEvaluationCheckBoxBackgroundColor, String detailEvaluationCheckBoxColor,
 							 String detailEvaluationCategory, String cancelButtonBackgroundColor,
@@ -61,7 +61,7 @@ public class ReviewDesignWrite {
 		this.widthSizePc = widthSizePc;
 		this.widthSizeMobile = widthSizeMobile;
 		this.backgroundColor = backgroundColor;
-		this.margin = margin;
+		this.padding = padding;
 		this.border = border;
 		this.borderColor = borderColor;
 		this.starRateBackgroundColor = starRateBackgroundColor;
@@ -83,7 +83,7 @@ public class ReviewDesignWrite {
 			.widthSizePc("500px")
 			.widthSizeMobile("100%")
 			.backgroundColor("#ffffff")
-			.margin(Margin.createDefaultReviewDesignWrite())
+			.padding(Padding.createDefaultReviewDesignWrite())
 			.border(Border.createDefaultReviewDesignWrite())
 			.borderColor("#222222")
 			.starRateBackgroundColor("#ffffff")
@@ -105,7 +105,7 @@ public class ReviewDesignWrite {
 		this.widthSizePc = dto.widthSizePc();
 		this.widthSizeMobile = dto.widthSizeMobile();
 		this.backgroundColor = dto.backgroundColor();
-		this.margin = dto.margin();
+		this.padding = dto.padding();
 		this.border = dto.border();
 		this.borderColor = dto.borderColor();
 		this.starRateBackgroundColor = dto.starRateBackgroundColor();
@@ -125,7 +125,7 @@ public class ReviewDesignWrite {
 		this.widthSizePc = "500px";
 		this.widthSizeMobile = "100%";
 		this.backgroundColor = "#ffffff";
-		this.margin = Margin.createDefaultReviewDesignWrite();
+		this.padding = Padding.createDefaultReviewDesignWrite();
 		this.border = Border.createDefaultReviewDesignWrite();
 		this.borderColor = "#222222";
 		this.starRateBackgroundColor = "#ffffff";
