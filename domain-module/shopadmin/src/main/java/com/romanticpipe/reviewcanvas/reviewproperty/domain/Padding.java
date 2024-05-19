@@ -46,4 +46,8 @@ public class Padding {
 	public static Padding createDefaultReviewDesignView() {
 		return new Padding("10px", "10px", "10px", "10px");
 	}
+
+	public static Padding createDefaultReviewDesignWrite() {
+		return new Padding("20px", "20px", "20px", "20px");
+	}
 }

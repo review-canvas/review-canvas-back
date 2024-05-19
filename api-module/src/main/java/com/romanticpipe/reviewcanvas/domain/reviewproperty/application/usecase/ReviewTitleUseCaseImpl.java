@@ -25,9 +25,9 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 		reviewTitle.update(
 			updateReviewTitleRequest.title(),
 			updateReviewTitleRequest.titleAlignmentPosition(),
-			updateReviewTitleRequest.titlePadding(),
-			updateReviewTitleRequest.titleFont(),
-			updateReviewTitleRequest.titleBorder(),
+			updateReviewTitleRequest.titlePadding().toVO(),
+			updateReviewTitleRequest.titleFont().toVO(),
+			updateReviewTitleRequest.titleBorder().toVO(),
 			updateReviewTitleRequest.titleBorderColor(),
 			updateReviewTitleRequest.titleBackGround()
 		);
@@ -36,9 +36,9 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 		reviewDescription.update(
 			updateReviewTitleRequest.description(),
 			updateReviewTitleRequest.descriptionAlignmentPosition(),
-			updateReviewTitleRequest.descriptionPadding(),
-			updateReviewTitleRequest.descriptionFont(),
-			updateReviewTitleRequest.descriptionBorder(),
+			updateReviewTitleRequest.descriptionPadding().toVO(),
+			updateReviewTitleRequest.descriptionFont().toVO(),
+			updateReviewTitleRequest.descriptionBorder().toVO(),
 			updateReviewTitleRequest.descriptionBorderColor(),
 			updateReviewTitleRequest.descriptionBackGround()
 		);

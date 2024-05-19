@@ -1,11 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request;
 
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.ReviewLikeResponse;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.RoundResponse;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Font;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Margin;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.DetailViewType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FilterType;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.PagingType;
@@ -13,6 +7,7 @@ import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.SeeMoreButtonTy
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
 import com.romanticpipe.reviewcanvas.reviewproperty.dto.ReviewDesignViewDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -30,17 +25,17 @@ public record UpdateDesignViewRequest(
 	@Schema(description = "각 리뷰 영역 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#FFFFFF")
 	@NotBlank String reviewBackgroundColor,
 	@Schema(description = "바깥쪽 여백", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull Margin margin,
+	@Valid @NotNull MarginRequest margin,
 	@Schema(description = "안쪽 여백", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull Padding padding,
+	@Valid @NotNull PaddingRequest padding,
 	@Schema(description = "상세 정보 텍스트 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#000000")
 	@NotBlank String detailInfoTextColor,
 	@Schema(description = "리뷰 텍스트", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull Font font,
+	@Valid @NotNull FontRequest font,
 	@Schema(description = "리뷰 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull Border border,
+	@Valid @NotNull BorderRequest border,
 	@Schema(description = "라운드", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull RoundResponse round,
+	@Valid @NotNull RoundRequest round,
 	@Schema(description = "테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED, example = "#000000")
 	@NotBlank String borderColor,
 	@Schema(description = "그림자", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -52,7 +47,7 @@ public record UpdateDesignViewRequest(
 	@Schema(description = "더보기 버튼 스타일", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull SeeMoreButtonType seeMoreButtonType,
 	@Schema(description = "리뷰 좋아요", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull ReviewLikeResponse reviewLike
+	@Valid @NotNull ReviewLikeRequest reviewLike
 ) {
 
 	public ReviewDesignViewDto toDto() {
@@ -62,11 +57,11 @@ public record UpdateDesignViewRequest(
 			.filterType(filterType)
 			.filterActiveTextColor(filterActiveTextColor)
 			.reviewBackgroundColor(reviewBackgroundColor)
-			.margin(margin)
-			.padding(padding)
+			.margin(margin.toVO())
+			.padding(padding.toVO())
 			.detailInfoTextColor(detailInfoTextColor)
-			.font(font)
-			.border(border)
+			.font(font.toVO())
+			.border(border.toVO())
 			.round(round.toVO())
 			.borderColor(borderColor)
 			.shadow(shadow)

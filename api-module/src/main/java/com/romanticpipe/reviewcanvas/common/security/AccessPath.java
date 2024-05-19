@@ -44,11 +44,14 @@ public final class AccessPath {
 		// review-container
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-container", List.of(HttpMethod.PATCH, HttpMethod.GET));
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-container/reset", List.of(HttpMethod.PATCH));
+		//quit
+		shopAdminAllowedPath.put("/api/v1/shop-admin/quit", List.of(HttpMethod.DELETE));
 		// review-design
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design-view", List.of(HttpMethod.PATCH, HttpMethod.GET));
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design-view/reset", List.of(HttpMethod.PATCH));
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design-write", List.of(HttpMethod.PATCH, HttpMethod.GET));
 		shopAdminAllowedPath.put("/api/v1/shop-admin/review-design-write/reset", List.of(HttpMethod.PATCH));
+
 		return shopAdminAllowedPath;
 	}
 
