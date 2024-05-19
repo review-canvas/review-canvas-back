@@ -37,5 +37,4 @@ public record UpdateReviewTitleRequest(
 	@Schema(description = "리뷰 설명글 배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotBlank String descriptionBackGround
 ) {
-
 }
