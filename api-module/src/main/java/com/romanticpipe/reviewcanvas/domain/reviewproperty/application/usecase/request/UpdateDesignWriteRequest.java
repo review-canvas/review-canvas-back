@@ -1,7 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request;
 
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Margin;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewDesignWritePageType;
 import com.romanticpipe.reviewcanvas.reviewproperty.dto.ReviewDesignWriteDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,7 +18,7 @@ public record UpdateDesignWriteRequest(
 	@Schema(description = "배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotBlank String backgroundColor,
 	@Schema(description = "항목 안쪽 여백", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull Margin margin,
+	@NotNull Padding padding,
 	@Schema(description = "항목 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull Border border,
 	@Schema(description = "항목 테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -52,7 +52,7 @@ public record UpdateDesignWriteRequest(
 			.widthSizePc(widthSizePc)
 			.widthSizeMobile(widthSizeMobile)
 			.backgroundColor(backgroundColor)
-			.margin(margin)
+			.padding(padding)
 			.border(border)
 			.borderColor(borderColor)
 			.starRateBackgroundColor(starRateBackgroundColor)

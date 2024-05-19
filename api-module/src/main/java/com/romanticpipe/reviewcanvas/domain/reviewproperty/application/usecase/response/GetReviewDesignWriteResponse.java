@@ -1,7 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response;
 
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Margin;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewDesignWrite;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewDesignWritePageType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +19,7 @@ public record GetReviewDesignWriteResponse(
 	@Schema(description = "배경 색상", requiredMode = Schema.RequiredMode.REQUIRED)
 	String backgroundColor,
 	@Schema(description = "항목 안쪽 여백", requiredMode = Schema.RequiredMode.REQUIRED)
-	Margin margin,
+	Padding padding,
 	@Schema(description = "항목 테두리", requiredMode = Schema.RequiredMode.REQUIRED)
 	Border border,
 	@Schema(description = "항목 테두리 색상", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -51,7 +51,7 @@ public record GetReviewDesignWriteResponse(
 			.widthSizePc(reviewDesignWrite.getWidthSizePc())
 			.widthSizeMobile(reviewDesignWrite.getWidthSizeMobile())
 			.backgroundColor(reviewDesignWrite.getBackgroundColor())
-			.margin(reviewDesignWrite.getMargin())
+			.padding(reviewDesignWrite.getPadding())
 			.border(reviewDesignWrite.getBorder())
 			.borderColor(reviewDesignWrite.getBorderColor())
 			.starRateBackgroundColor(reviewDesignWrite.getStarRateBackgroundColor())
