@@ -11,9 +11,8 @@ spring:
     secret: c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LWp1bm8tc3ByaW5nLWJvb3Qtc2VjdXJpdHktanByaW5nLWJvajdXJjdByaW5nLWJvb3Qtc2
     access-token-validity-time: 1h
     refresh-token-validity-time: 14d
-
-autoconfigure:
-  exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
 
 aws:
   credentials:
@@ -23,5 +22,3 @@ aws:
     bucket: romantic-pipe-review-bucket
   region:
     static: ap-northeast-2
-  stack:
-    auto: false

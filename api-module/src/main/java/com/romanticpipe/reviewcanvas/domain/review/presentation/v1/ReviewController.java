@@ -1,5 +1,17 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewForUserResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
+import com.romanticpipe.reviewcanvas.dto.PageResponse;
+import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,20 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewForUserResponse;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
-import com.romanticpipe.reviewcanvas.dto.PageResponse;
-import com.romanticpipe.reviewcanvas.dto.PageableRequest;
-import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
-import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -71,7 +69,7 @@ class ReviewController implements ReviewApi {
 	}
 
 	@Override
-	@PostMapping("/shop/{mallId}/products/{productNo}/review")
+	@PostMapping(value = "/shop/{mallId}/products/{productNo}/review", consumes = "multipart/form-data")
 	public ResponseEntity<SuccessResponse<Void>> createReview(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productId,
@@ -84,7 +82,7 @@ class ReviewController implements ReviewApi {
 	@Override
 	@PatchMapping("/reviews/{reviewId}")
 	public ResponseEntity<SuccessResponse<Void>> updateReview(long reviewId,
-		UpdateReviewRequest updateReviewRequest) {
+															  UpdateReviewRequest updateReviewRequest) {
 		reviewUseCase.updateReview(reviewId, updateReviewRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}

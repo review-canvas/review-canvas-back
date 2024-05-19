@@ -1,10 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
@@ -26,8 +21,13 @@ import com.romanticpipe.reviewcanvas.exception.ProductErrorCode;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -43,8 +43,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewForUserResponse> getReviewsForUser(String mallId, Long productNo,
-		PageableRequest pageableRequest,
-		ReviewFilter filter) {
+																	PageableRequest pageableRequest,
+																	ReviewFilter filter) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseGet(() -> createProduct(mallId, productNo));
 
@@ -76,10 +76,13 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-		MultipartFile reviewImage) {
+							 MultipartFile reviewImage) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
 		User user = userService.validByUserIdAndMallId(createReviewRequest.memberId(), mallId);
+
+		String saveImagePath = "public-view/" + product.getShopAdminId() + "/" + product.getId();
+		s3Service.uploadFiles(List.of(reviewImage), saveImagePath);
 
 		Review review = Review.builder()
 			.productId(product.getId())
@@ -87,7 +90,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.content(createReviewRequest.content())
 			.score(createReviewRequest.score())
 			.status(ReviewStatus.APPROVED)
-			.imageVideoUrls(s3Service.uploadFile(reviewImage))
+			.imageVideoUrls(null)
 			.build();
 		reviewService.save(review);
 	}
