@@ -27,18 +27,9 @@ public class S3Service {
 
 	@Value("${aws.s3.bucket}")
 	private String bucketName;
-
-	/**
-	 * public-view
-	 * - 각 shop의 identifier
-	 * - product의 identifier
-	 * - reviewImage
-	 * shop-admin
-	 *  TODO
-	 *  - 확장자 호환 체크
-	 */
-	public void uploadFiles(List<MultipartFile> multipartFiles, String dirPath) {
-		multipartFiles.forEach(multipartFile -> {
+	
+	public List<String> uploadFiles(List<MultipartFile> multipartFiles, String dirPath) {
+		return multipartFiles.stream().map(multipartFile -> {
 			try {
 				String fileName = multipartFile.getOriginalFilename();
 				String saveFileName = createRandomFileName(fileName);
@@ -51,10 +42,11 @@ public class S3Service {
 					.build();
 				s3Client.putObject(putObjectRequest,
 					RequestBody.fromInputStream(multipartFile.getInputStream(), multipartFile.getSize()));
+				return saveFileName;
 			} catch (IOException | S3Exception e) {
 				throw new BusinessException(CommonErrorCode.FILE_UPLOAD_FAILED, e);
 			}
-		});
+		}).toList();
 	}
 
 	private String createRandomFileName(String fileName) {

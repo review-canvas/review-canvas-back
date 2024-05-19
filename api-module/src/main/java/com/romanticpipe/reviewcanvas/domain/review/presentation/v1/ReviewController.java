@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
@@ -74,8 +76,11 @@ class ReviewController implements ReviewApi {
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productId,
 		@RequestPart CreateReviewRequest createReviewRequest,
-		@RequestPart MultipartFile reviewImage) {
-		reviewUseCase.createReview(mallId, productId, createReviewRequest, reviewImage);
+		@RequestPart(required = false) List<MultipartFile> reviewImages) {
+		if (reviewImages == null) {
+			reviewImages = List.of();
+		}
+		reviewUseCase.createReview(mallId, productId, createReviewRequest, reviewImages);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 

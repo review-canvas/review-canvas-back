@@ -1,13 +1,11 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import org.springframework.stereotype.Service;
-
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.UserErrorCode;
+import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +15,6 @@ public class UserService {
 
 	public User validByUserIdAndMallId(String memberId, String mallId) {
 		return userRepository.findByMemberIdAndMallId(memberId, mallId)
-			.orElseThrow(() -> new BusinessException(UserErrorCode.USER_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(ReviewErrorCode.USER_NOT_FOUND));
 	}
 }

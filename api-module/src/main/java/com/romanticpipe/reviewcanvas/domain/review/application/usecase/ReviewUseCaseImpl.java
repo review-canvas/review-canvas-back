@@ -17,7 +17,7 @@ import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.ProductErrorCode;
+import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
@@ -76,13 +76,14 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-							 MultipartFile reviewImage) {
+							 List<MultipartFile> reviewImages) {
 		Product product = productService.findProduct(mallId, productNo)
-			.orElseThrow(() -> new BusinessException(ProductErrorCode.PRODUCT_NOT_FOUND));
+			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
 		User user = userService.validByUserIdAndMallId(createReviewRequest.memberId(), mallId);
 
-		String saveImagePath = "public-view/" + product.getShopAdminId() + "/" + product.getId();
-		s3Service.uploadFiles(List.of(reviewImage), saveImagePath);
+		String saveImagePath = "public-view/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
+		String savedFileNames = s3Service.uploadFiles(reviewImages, saveImagePath).stream()
+			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
 
 		Review review = Review.builder()
 			.productId(product.getId())
@@ -90,7 +91,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.content(createReviewRequest.content())
 			.score(createReviewRequest.score())
 			.status(ReviewStatus.APPROVED)
-			.imageVideoUrls(null)
+			.imageVideoUrls(savedFileNames)
 			.build();
 		reviewService.save(review);
 	}
