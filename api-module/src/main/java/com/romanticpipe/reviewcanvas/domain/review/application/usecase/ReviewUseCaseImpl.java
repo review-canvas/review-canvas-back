@@ -1,5 +1,12 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
@@ -21,13 +28,8 @@ import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -43,8 +45,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewForUserResponse> getReviewsForUser(String mallId, Long productNo,
-																	PageableRequest pageableRequest,
-																	ReviewFilter filter) {
+		PageableRequest pageableRequest,
+		ReviewFilter filter) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseGet(() -> createProduct(mallId, productNo));
 
@@ -67,7 +69,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest) {
+	public void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		Review review = reviewService.validById(reviewId);
 		review.setScore(updateReviewRequest.score());
 		review.setContent(updateReviewRequest.content());
@@ -76,7 +78,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-							 List<MultipartFile> reviewImages) {
+		List<MultipartFile> reviewImages) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
 		User user = userService.validByUserIdAndMallId(createReviewRequest.memberId(), mallId);
