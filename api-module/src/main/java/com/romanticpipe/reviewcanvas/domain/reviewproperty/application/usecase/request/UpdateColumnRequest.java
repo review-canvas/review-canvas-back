@@ -17,11 +17,13 @@ public record UpdateColumnRequest(
 	@Valid PaddingRequest padding,
 	@Schema(description = "Review Column Margin", requiredMode = Schema.RequiredMode.REQUIRED)
 	@Valid MarginRequest margin,
-	@Schema(description = "Review Column Background", requiredMode = Schema.RequiredMode.REQUIRED, example = "#FFFFFF")
+	@Schema(description = "Review Column Background", requiredMode = Schema.RequiredMode.REQUIRED,
+			example = "#FFFFFF")
 	@NotBlank String background,
 	@Schema(description = "Review Column Border", requiredMode = Schema.RequiredMode.REQUIRED)
 	@Valid BorderRequest border,
-	@Schema(description = "Review Column Border Color", requiredMode = Schema.RequiredMode.REQUIRED, example = "#000000")
+	@Schema(description = "Review Column Border Color", requiredMode = Schema.RequiredMode.REQUIRED,
+			example = "#000000")
 	@NotBlank String borderColor,
 	@Schema(description = "Review Column Shadow", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull Shadow shadow
