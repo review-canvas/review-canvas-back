@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.presentation.v1;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetFontInfoResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyForShopAdminResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyForUserResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,4 +40,14 @@ public interface ReviewPropertyApi {
 	ResponseEntity<SuccessResponse<GetReviewPropertyForUserResponse>> getReviewPropertyForUser(
 		@PathVariable String mallId
 	);
+
+	@Operation(summary = "폰트 정보 조회 API", description = "폰트의 이름과 두께 정보를 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 폰트 정보 조회가 완료되었습니다.")
+	})
+	@GetMapping("/font-info")
+	ResponseEntity<SuccessResponse<GetFontInfoResponse>> getFontInfo();
 }
