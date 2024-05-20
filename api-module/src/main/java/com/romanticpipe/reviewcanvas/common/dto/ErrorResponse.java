@@ -19,7 +19,6 @@ public class ErrorResponse {
 	private final boolean success = false;
 	private final ErrorInfo data;
 
-
 	public static ErrorResponse of(ErrorCode errorCode) {
 		return new ErrorResponse(new ErrorInfo(errorCode.getCode(), errorCode.getMessage(), null));
 	}

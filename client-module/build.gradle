@@ -1,0 +1,9 @@
+dependencies {
+    implementation project(':common-module')
+    implementation project(':domain-module')
+    implementation project(':domain-module:review')
+    implementation project(':domain-module:shopadmin')
+
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}

@@ -1,11 +1,47 @@
 bootJar.enabled = true
-jar.enabled = false
+jar.enabled = true
 
 dependencies {
+    implementation project(':domain-module')
     implementation project(':domain-module:review')
     implementation project(':domain-module:shopadmin')
     implementation project(':common-module')
+    implementation project(':client-module')
+    implementation project(':scheduler-module')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework:spring-tx'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation testFixtures(project(':domain-module:review'))
+    testImplementation testFixtures(project(':domain-module:shopadmin'))
+}
+
+apply plugin: 'com.google.cloud.tools.jib'
+
+jib {
+    def jibTag = System.getProperty("jib-tag")
+    def ecrUri = System.getenv("ECR_URI") ?: "none"
+
+    from {
+        image = "eclipse-temurin:17-jre"
+    }
+    to {
+        image = ecrUri
+        credHelper = "ecr-login"
+        tags = ["${project.version.toString()}", jibTag]
+    }
+    container {
+        jvmFlags = ['-Dspring.profiles.active=prod', '-XX:+UseContainerSupport']
+        ports = ['8080']
+        mainClass = 'com.romanticpipe.reviewcanvas.ReviewCanvasBackApplication'
+        // Jib이 보안이 적용되지 않은 Docker 레지스트리와의 통신을 허용함
+        allowInsecureRegistries = true
+    }
 }

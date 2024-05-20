@@ -7,7 +7,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
 @Getter
 @Schema(description = "성공 Response")
@@ -28,7 +31,17 @@ public class SuccessResponse<T> {
 		return successResponse;
 	}
 
+	public static SuccessResponse<Void> ofNoData() {
+		return new SuccessResponse<>();
+	}
+
 	public ResponseEntity<SuccessResponse<T>> asHttp(HttpStatus httpStatus) {
 		return ResponseEntity.status(httpStatus).body(this);
+	}
+
+	public ResponseEntity<SuccessResponse<T>> okWithCookie(ResponseCookie responseCookie) {
+		return ResponseEntity.ok()
+			.header(SET_COOKIE, responseCookie.toString())
+			.body(this);
 	}
 }
