@@ -73,6 +73,15 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Review review = reviewService.validById(reviewId);
 		review.setScore(updateReviewRequest.score());
 		review.setContent(updateReviewRequest.content());
+
+		// TODO 공통 코드인데 private 메서드로 빼는 것이 좋을지?
+		Product product = productService.findProduct(review.getProductId())
+			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
+		String dirPath = "public-view/shop-admin" + product.getShopAdminId() + "/product-" + review.getProductId();
+		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
+		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
+			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
+		review.setImageVideoUrls(savedFileNames);
 	}
 
 	@Override

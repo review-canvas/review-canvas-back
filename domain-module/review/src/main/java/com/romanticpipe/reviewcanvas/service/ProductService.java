@@ -24,6 +24,10 @@ public class ProductService {
 		return productRepository.findByMallIdAndProductNo(mallId, productNo);
 	}
 
+	public Optional<Product> findProduct(Long productId) {
+		return productRepository.findById(productId);
+	}
+
 	public List<Product> findProducts(Integer shopAdminId) {
 		return productRepository.findAllByShopAdminId(shopAdminId);
 	}

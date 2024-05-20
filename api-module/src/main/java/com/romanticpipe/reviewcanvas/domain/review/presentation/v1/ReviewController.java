@@ -87,10 +87,14 @@ class ReviewController implements ReviewApi {
 	}
 
 	@Override
-	@PatchMapping("/reviews/{reviewId}")
-	public ResponseEntity<SuccessResponse<Void>> updateReview(long reviewId,
+	@PatchMapping(value = "/reviews/{reviewId}", consumes = "multipart/form-data")
+	public ResponseEntity<SuccessResponse<Void>> updateReview(
+		@PathVariable("reviewId") long reviewId,
 		UpdateReviewRequest updateReviewRequest,
 		List<MultipartFile> reviewImages) {
+		if (reviewImages == null) {
+			reviewImages = List.of();
+		}
 		reviewUseCase.updateReview(reviewId, updateReviewRequest, reviewImages);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
