@@ -1,16 +1,18 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -25,16 +27,12 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 
 	@Override
 	public void createReplyForUser(Long reviewId, CreateReplyRequest createReplyRequest) {
-		//TODO: sonarCloud 정적분석 통과 안된 코드
-		// Optional<User> optionalUser = readTransactionTemplate.execute(status -> {
-		// 	reviewService.validById(reviewId);
-		// 	return userService.findUser(createReplyRequest.memberId(), createReplyRequest.mallId());
-		// });
-		// User user = optionalUser.orElseGet(
-		// 	() -> userUseCase.createSaveUser(createReplyRequest.mallId(), createReplyRequest.memberId())
-		// );
+		Optional<User> optionalUser = Optional.ofNullable(readTransactionTemplate.execute(status -> {
+			reviewService.validById(reviewId);
+			return userService.findUser(createReplyRequest.memberId(), createReplyRequest.mallId());
+		})).orElseThrow(() -> new BusinessException(CommonErrorCode.INTERNAL_SERVER_ERROR));
 
-		User user = userService.findUser(createReplyRequest.memberId(), createReplyRequest.mallId()).orElseGet(
+		User user = optionalUser.orElseGet(
 			() -> userUseCase.createSaveUser(createReplyRequest.mallId(), createReplyRequest.memberId())
 		);
 
