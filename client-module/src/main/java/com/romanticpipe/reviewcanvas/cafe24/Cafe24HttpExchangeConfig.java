@@ -12,6 +12,7 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 import com.romanticpipe.reviewcanvas.cafe24.application.Cafe24ApplicationClient;
 import com.romanticpipe.reviewcanvas.cafe24.authentication.Cafe24AuthenticationClient;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
+import com.romanticpipe.reviewcanvas.cafe24.users.Cafe24UserClient;
 import com.romanticpipe.reviewcanvas.config.RestClientLoggingInterceptor;
 
 @Configuration
@@ -64,4 +65,15 @@ class Cafe24HttpExchangeConfig {
 			.requestInterceptor(cafe24TokenInterceptor)
 			.build();
 	}
+
+	@Bean
+	public Cafe24UserClient cafe24UserClient(
+		ClientHttpRequestFactory clientHttpRequestFactory, RestClientLoggingInterceptor restClientLoggingInterceptor,
+		Cafe24TokenInterceptor cafe24TokenInterceptor) {
+		RestClient restClient = createRestClient(clientHttpRequestFactory, restClientLoggingInterceptor,
+			cafe24TokenInterceptor);
+
+		return getHttpExchange(restClient, Cafe24UserClient.class);
+	}
+
 }

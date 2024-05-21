@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +31,7 @@ public class Reply extends BaseEntityWithUpdate {
 	private User user;
 	private String content;
 
+	@Builder
 	public Reply(Review review, User user, String content) {
 		this.review = review;
 		this.user = user;
