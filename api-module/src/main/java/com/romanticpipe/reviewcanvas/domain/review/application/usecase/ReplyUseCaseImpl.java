@@ -11,18 +11,14 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

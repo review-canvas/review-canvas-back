@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ public class ReplyController implements ReplyApi {
 	}
 
 	@Override
+	@GetMapping("/reviews/{reviewId}/replies")
 	public ResponseEntity<SuccessResponse<List<GetReplyForUserResponse>>> getReplyForUser(
 		@PathVariable("reviewId") Long reviewId) {
 		return SuccessResponse.of(
