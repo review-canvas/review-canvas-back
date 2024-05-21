@@ -8,6 +8,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Component
 @RequiredArgsConstructor
@@ -38,10 +39,10 @@ public class TransactionUtils {
 		})).orElseThrow(() -> new BusinessException(CommonErrorCode.INTERNAL_SERVER_ERROR));
 	}
 
-	public void executeWithoutResultInReadTransaction(TransactionCallback<Void> action) {
+	public void executeWithoutResultInReadTransaction(Consumer<TransactionStatus> action) {
 		readTransactionTemplate.executeWithoutResult(status -> {
 			try {
-				action.doInTransaction(status);
+				action.accept(status);
 			} catch (RuntimeException e) {
 				status.setRollbackOnly();
 				throw e;
@@ -49,10 +50,10 @@ public class TransactionUtils {
 		});
 	}
 
-	public void executeWithoutResultInWriteTransaction(TransactionCallback<Void> action) {
+	public void executeWithoutResultInWriteTransaction(Consumer<TransactionStatus> action) {
 		writeTransactionTemplate.executeWithoutResult(status -> {
 			try {
-				action.doInTransaction(status);
+				action.accept(status);
 			} catch (RuntimeException e) {
 				status.setRollbackOnly();
 				throw e;
