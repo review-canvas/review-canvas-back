@@ -3,7 +3,6 @@ package com.romanticpipe.reviewcanvas.service;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
-import com.romanticpipe.reviewcanvas.dto.ReviewInfo;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
@@ -25,8 +24,8 @@ public class ReviewService {
 		reviewRepository.save(review);
 	}
 
-	public PageResponse<ReviewInfo> findAllByProductId(Long productId, PageableRequest pageableRequest,
-													   ReviewFilter filter) {
+	public PageResponse<Review> findAllByProductId(Long productId, PageableRequest pageableRequest,
+												   ReviewFilter filter) {
 		Sort sort = SortUtils.getSort(pageableRequest.sort());
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
 		return PageableUtils.toPageResponse(reviewRepository.findAllReview(productId, pageable, filter));
@@ -42,8 +41,8 @@ public class ReviewService {
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.REVIEW_NOT_FOUND));
 	}
 
-	public ReviewInfo validateUserInfoById(Long reviewId) {
-		return reviewRepository.findReviewInfoById(reviewId)
+	public Review validateUserInfoById(Long reviewId) {
+		return reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.REVIEW_NOT_FOUND));
 	}
 }
