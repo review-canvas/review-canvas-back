@@ -25,15 +25,18 @@ public class Reply extends BaseEntityWithUpdate {
 	@Column(name = "users_id")
 	private Long userId;
 	private String content;
+	private Boolean deleted;
 
 	@Builder
-	public Reply(Long reviewId, Long userId, String content) {
+	public Reply(Long reviewId, Long userId, String content, Boolean deleted) {
 		this.reviewId = reviewId;
 		this.userId = userId;
 		this.content = content;
+		this.deleted = deleted;
 	}
 
-	public void update(String content) {
+	public void update(String content, Boolean deleted) {
 		this.content = content;
+		this.deleted = deleted;
 	}
 }
