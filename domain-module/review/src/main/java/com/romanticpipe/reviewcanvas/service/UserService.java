@@ -7,14 +7,26 @@ import com.romanticpipe.reviewcanvas.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+import java.util.Optional;
+
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
 	private final UserRepository userRepository;
 
+
 	public User validByUserIdAndMallId(String memberId, String mallId) {
 		return userRepository.findByMemberIdAndMallId(memberId, mallId)
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.USER_NOT_FOUND));
+
+	public Optional<User> findUser(String memberId, String mallId) {
+		return userRepository.findByMemberIdAndMallId(memberId, mallId);
+	}
+
+	public User save(User user) {
+		return userRepository.save(user);
 	}
 }

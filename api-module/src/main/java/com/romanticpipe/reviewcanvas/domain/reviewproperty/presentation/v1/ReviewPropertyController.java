@@ -4,6 +4,7 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewPropertyUseCase;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetFontInfoResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyForShopAdminResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyForUserResponse;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,14 @@ public class ReviewPropertyController implements ReviewPropertyApi {
 	) {
 		return SuccessResponse.of(
 			reviewPropertyUsecase.getReviewPropertyForUser(mallId)
+		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/font-info")
+	public ResponseEntity<SuccessResponse<GetFontInfoResponse>> getFontInfo() {
+		return SuccessResponse.of(
+			reviewPropertyUsecase.getFontInfo()
 		).asHttp(HttpStatus.OK);
 	}
 

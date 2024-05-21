@@ -28,9 +28,9 @@ class ReviewContainerUseCaseImpl implements ReviewContainerUseCase {
 		ReviewContainer reviewContainer = reviewContainerService.validateByShopAdminId(shopAdminId);
 		reviewContainer.update(
 			updateContainerRequest.width(),
-			updateContainerRequest.padding(),
+			updateContainerRequest.padding().toVO(),
 			updateContainerRequest.background(),
-			updateContainerRequest.border(),
+			updateContainerRequest.border().toVO(),
 			updateContainerRequest.borderColor(),
 			updateContainerRequest.shadow()
 		);

@@ -27,10 +27,10 @@ public class ReviewColumnUseCaseImpl implements ReviewColumnUseCase {
 	public void updateReviewColumn(Integer shopAdminId, UpdateColumnRequest updateColumnRequest) {
 		ReviewColumn reviewColumn = reviewColumnService.validateByShopAdminId(shopAdminId);
 		reviewColumn.update(updateColumnRequest.width(),
-			updateColumnRequest.padding(),
-			updateColumnRequest.margin(),
+			updateColumnRequest.padding().toVO(),
+			updateColumnRequest.margin().toVO(),
 			updateColumnRequest.background(),
-			updateColumnRequest.border(),
+			updateColumnRequest.border().toVO(),
 			updateColumnRequest.borderColor(),
 			updateColumnRequest.shadow());
 	}
