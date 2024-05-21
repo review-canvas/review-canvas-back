@@ -22,6 +22,7 @@ public class UserService {
 		return userRepository.findByMemberIdAndMallId(memberId, mallId)
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.USER_NOT_FOUND));
 
+	}
 	public Optional<User> findUser(String memberId, String mallId) {
 		return userRepository.findByMemberIdAndMallId(memberId, mallId);
 	}
