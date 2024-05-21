@@ -48,6 +48,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 					.reviewId(reviewId)
 					.userId(user.getId())
 					.content(createReplyRequest.content())
+					.deleted(false)
 					.build();
 				replyService.save(reply);
 			} catch (RuntimeException e) {
