@@ -19,9 +19,9 @@ public record GetReplyForUserResponse(@Schema(description = "댓글 id", require
 									  LocalDateTime updatedAt,
 									  @Schema(description = "댓글 삭제 여부", requiredMode = Schema.RequiredMode.REQUIRED)
 									  Boolean deleted,
-									  @Schema(description = "댓글을 작성한 user 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
+									  @Schema(description = "작성자 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
 									  String memberId,
-									  @Schema(description = "댓글을 작성한 user 닉네임", requiredMode = Schema.RequiredMode.REQUIRED)
+									  @Schema(description = "작성자 닉네임", requiredMode = Schema.RequiredMode.REQUIRED)
 									  String nickName) {
 
 	public static GetReplyForUserResponse from(Reply reply, User user) {
