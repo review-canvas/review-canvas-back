@@ -90,7 +90,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		List<MultipartFile> reviewImages) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
-		User user = userService.validByUserIdAndMallId(createReviewRequest.memberId(), mallId);
+		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
 
 		String saveImagePath = "public-view/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
 		String savedFileNames = s3Service.uploadFiles(reviewImages, saveImagePath).stream()
