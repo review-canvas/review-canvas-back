@@ -38,7 +38,8 @@ public class Review extends BaseEntityWithUpdate {
 	private String imageVideoUrls;
 
 	@Builder
-	public Review(Long productId, Long userId, String content, int score, ReviewStatus status, String imageVideoUrls) {
+	public Review(Long productId, Long userId, String content, int score, ReviewStatus status,
+		String imageVideoUrls) {
 		this.userId = userId;
 		this.productId = productId;
 		this.content = content;

@@ -1,13 +1,14 @@
 package com.romanticpipe.reviewcanvas.repository;
 
-import com.romanticpipe.reviewcanvas.domain.Review;
-import com.romanticpipe.reviewcanvas.dto.ReviewInfo;
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.Optional;
+import com.romanticpipe.reviewcanvas.domain.Review;
+import com.romanticpipe.reviewcanvas.dto.ReviewInfo;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
@@ -32,4 +33,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	@Query("SELECT r.id as reviewId, r.content as content, r.score as score, u.id as userId, u.nickName as nickname "
 		+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.id = :reviewId")
 	Optional<ReviewInfo> findReviewInfoById(Long reviewId);
+
+	Optional<Review> findByIdAndUserId(long reviewId, Long userId);
 }
