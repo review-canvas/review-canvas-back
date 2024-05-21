@@ -9,6 +9,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
@@ -17,10 +18,10 @@ public class TransactionUtils {
 	private final TransactionTemplate readTransactionTemplate;
 	private final TransactionTemplate writeTransactionTemplate;
 
-	public <T> T executeInReadTransaction(TransactionCallback<T> action) {
+	public <T> T executeInReadTransaction(Function<TransactionStatus, T> action) {
 		return Optional.ofNullable(readTransactionTemplate.execute(status -> {
 			try {
-				return action.doInTransaction(status);
+				return action.apply(status);
 			} catch (RuntimeException e) {
 				status.setRollbackOnly();
 				throw e;
@@ -28,10 +29,10 @@ public class TransactionUtils {
 		})).orElseThrow(() -> new BusinessException(CommonErrorCode.INTERNAL_SERVER_ERROR));
 	}
 
-	public <T> T executeInWriteTransaction(TransactionCallback<T> action) {
+	public <T> T executeInWriteTransaction(Function<TransactionStatus, T> action) {
 		return Optional.ofNullable(writeTransactionTemplate.execute(status -> {
 			try {
-				return action.doInTransaction(status);
+				return action.apply(status);
 			} catch (RuntimeException e) {
 				status.setRollbackOnly();
 				throw e;
@@ -59,11 +60,6 @@ public class TransactionUtils {
 				throw e;
 			}
 		});
-	}
-
-	@FunctionalInterface
-	public interface TransactionCallback<T> {
-		T doInTransaction(TransactionStatus status) throws RuntimeException;
 	}
 }
 
