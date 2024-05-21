@@ -11,6 +11,7 @@ import com.romanticpipe.reviewcanvas.dto.ReviewInfo;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
+import com.romanticpipe.reviewcanvas.exception.ReviewNotFoundException;
 import com.romanticpipe.reviewcanvas.repository.ReviewRepository;
 import com.romanticpipe.reviewcanvas.util.PageableUtils;
 import com.romanticpipe.reviewcanvas.util.SortUtils;
@@ -52,7 +53,7 @@ public class ReviewService {
 
 	public Review validByIdAndUserId(long reviewId, Long id) {
 		return reviewRepository.findByIdAndUserId(reviewId, id)
-			.orElseThrow(() -> new BusinessException(ReviewErrorCode.REVIEW_NOT_FOUND));
+			.orElseThrow(ReviewNotFoundException::new);
 	}
 
 	public ReviewInfo validateUserInfoById(Long reviewId) {

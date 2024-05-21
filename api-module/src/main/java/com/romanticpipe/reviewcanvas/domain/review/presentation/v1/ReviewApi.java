@@ -77,7 +77,7 @@ interface ReviewApi {
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 리뷰 조회가 완료되었습니다.")
+			description = "성공적으로 리뷰 수정이 완료되었습니다.")
 	})
 	@PatchMapping("/shop/{mallId}/users/{memberId}/reviews/{reviewId}")
 	ResponseEntity<SuccessResponse<Void>> updateReview(
