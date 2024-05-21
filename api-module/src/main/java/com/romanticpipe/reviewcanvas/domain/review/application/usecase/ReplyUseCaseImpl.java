@@ -9,6 +9,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
@@ -29,10 +31,11 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 
 	@Override
 	public void createReplyForUser(Long reviewId, CreateReplyRequest createReplyRequest) {
-		Optional<User> optionalUser = readTransactionTemplate.execute(status -> {
+		Optional<User> optionalUser = Optional.ofNullable(readTransactionTemplate.execute(status -> {
 			reviewService.validById(reviewId);
 			return userService.findUser(createReplyRequest.memberId(), createReplyRequest.mallId());
-		});
+		})).orElseThrow(() -> new BusinessException(CommonErrorCode.INTERNAL_SERVER_ERROR));
+
 		User user = optionalUser.orElseGet(
 			() -> userUseCase.createSaveUser(createReplyRequest.mallId(), createReplyRequest.memberId())
 		);
