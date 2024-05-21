@@ -12,16 +12,16 @@ import jakarta.validation.constraints.NotNull;
 @Schema(name = "UpdateColumnRequest", description = "Column 속성 값 요청")
 public record UpdateColumnRequest(
 	@Schema(description = "Review Column Width", requiredMode = Schema.RequiredMode.REQUIRED)
-	@NotNull String width,
+	@NotBlank String width,
 	@Schema(description = "Review Column Padding", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid PaddingRequest padding,
+	@NotNull @Valid PaddingRequest padding,
 	@Schema(description = "Review Column Margin", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid MarginRequest margin,
+	@NotNull @Valid MarginRequest margin,
 	@Schema(description = "Review Column Background", requiredMode = Schema.RequiredMode.REQUIRED,
 			example = "#FFFFFF")
 	@NotBlank String background,
 	@Schema(description = "Review Column Border", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid BorderRequest border,
+	@NotNull @Valid BorderRequest border,
 	@Schema(description = "Review Column Border Color", requiredMode = Schema.RequiredMode.REQUIRED,
 			example = "#000000")
 	@NotBlank String borderColor,
