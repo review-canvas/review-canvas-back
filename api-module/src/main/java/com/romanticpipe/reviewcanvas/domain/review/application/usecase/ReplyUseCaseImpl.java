@@ -2,7 +2,6 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,6 +64,6 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 		return replyService.findAllByReviewId(reviewId)
 			.stream()
 			.map(reply -> GetReplyForUserResponse.from(reply, userService.findUserByUserId(reply.getUserId())))
-			.collect(Collectors.toList());
+			.toList();
 	}
 }
