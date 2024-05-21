@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum FontBold {
 
-	NONE("적용안함"),
 	ONE_HUNDRED("100"),
 	TWO_HUNDRED("200"),
 	THREE_HUNDRED("300"),

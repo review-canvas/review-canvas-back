@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum FontName {
-	NONE("적용안함"),
 	NOTO_SANS_KR("noto-sans-kr"),
 	ROBOTO("roboto");
 
