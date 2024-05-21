@@ -1,10 +1,8 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetFontInfoResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyForShopAdminResponse;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewPropertyForUserResponse;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewColumn;
@@ -12,13 +10,19 @@ import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewContainer;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewDesignView;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewLayout;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewTitle;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FontBold;
+import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FontName;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewColumnService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewContainerService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewDesignViewService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewLayoutService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewTitleService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -53,5 +57,12 @@ public class ReviewPropertyUseCaseImpl implements ReviewPropertyUseCase {
 		ReviewDesignView reviewDesignView = reviewDesignViewService.validateByShopAdminId(shopAdmin.getId());
 		return GetReviewPropertyForUserResponse.from(reviewLayout, reviewContainer, reviewTitle, reviewDescription,
 			reviewColumn, reviewDesignView);
+	}
+
+	@Override
+	public GetFontInfoResponse getFontInfo() {
+		List<FontName> fontNames = Arrays.stream(FontName.values()).toList();
+		List<FontBold> fontBolds = Arrays.stream(FontBold.values()).toList();
+		return new GetFontInfoResponse(fontNames, fontBolds);
 	}
 }
