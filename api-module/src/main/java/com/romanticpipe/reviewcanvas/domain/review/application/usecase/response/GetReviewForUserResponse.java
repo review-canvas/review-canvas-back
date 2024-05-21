@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase.response;
 
 import com.romanticpipe.reviewcanvas.dto.ReviewInfo;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -13,17 +14,20 @@ public record GetReviewForUserResponse(@Schema(description = "리뷰 id", requir
 									   @Schema(description = "리뷰 점수", requiredMode = Schema.RequiredMode.REQUIRED)
 									   Integer score,
 									   @Schema(description = "리뷰 작성자 id", requiredMode = Schema.RequiredMode.REQUIRED)
-									   Long userId,
+									   String memberId,
 									   @Schema(description = "리뷰 작성자 닉네임", requiredMode = Schema.RequiredMode.REQUIRED)
-									   String nickname) {
+									   String nickname,
+									   @Schema(description = "본인 작성 여부", requiredMode = Schema.RequiredMode.REQUIRED)
+									   boolean isMine) {
 
-	public static GetReviewForUserResponse from(ReviewInfo reviewInfo) {
+	public static GetReviewForUserResponse from(ReviewInfo reviewInfo, boolean isMine) {
 		return GetReviewForUserResponse.builder()
 			.reviewId(reviewInfo.getReviewId())
 			.content(reviewInfo.getContent())
 			.score(reviewInfo.getScore())
-			.userId(reviewInfo.getUserId())
+			.memberId(reviewInfo.getMemberId())
 			.nickname(reviewInfo.getNickname())
+			.isMine(isMine)
 			.build();
 	}
 }
