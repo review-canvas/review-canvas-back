@@ -73,7 +73,6 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
-
 		review.setScore(updateReviewRequest.score());
 		review.setContent(updateReviewRequest.content());
 
