@@ -16,6 +16,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.dto.ReviewInfo;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
@@ -33,20 +34,23 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	private final TransactionTemplate writeTransactionTemplate;
 
 	@Override
+	//TODO: 이거 왜 transactional 없냐
 	public PageResponse<GetReviewForUserResponse> getReviewsForUser(String mallId, Long productNo,
-		PageableRequest pageableRequest,
+		String memberId, PageableRequest pageableRequest,
 		ReviewFilter filter) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseGet(() -> createProduct(mallId, productNo));
 
 		return reviewService.findAllByProductId(product.getId(), pageableRequest, filter)
-			.map(GetReviewForUserResponse::from);
+			.map((reviewInfo) -> GetReviewForUserResponse.from(reviewInfo, reviewInfo.getMemberId().equals(memberId)));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public GetReviewForUserResponse getReviewForUser(Long reviewId) {
-		return GetReviewForUserResponse.from(reviewService.validateUserInfoById(reviewId));
+	public GetReviewForUserResponse getReviewForUser(Long reviewId, String memberId) {
+		ReviewInfo reviewInfo = reviewService.validateUserInfoById(reviewId);
+		return GetReviewForUserResponse.from(reviewService.validateUserInfoById(reviewId),
+			reviewInfo.getMemberId().equals(memberId));
 	}
 
 	@Override
