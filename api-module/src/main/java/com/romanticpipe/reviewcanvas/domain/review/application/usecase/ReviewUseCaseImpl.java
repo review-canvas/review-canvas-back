@@ -69,8 +69,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
-		Review review = reviewService.validById(reviewId);
+	public void updateReview(String mallId, String memberId, long reviewId,
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
+		User user = userService.validByMemberIdAndMallId(memberId, mallId);
+		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
+
 		review.setScore(updateReviewRequest.score());
 		review.setContent(updateReviewRequest.content());
 

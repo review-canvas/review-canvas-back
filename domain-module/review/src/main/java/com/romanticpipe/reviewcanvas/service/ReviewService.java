@@ -50,8 +50,14 @@ public class ReviewService {
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.REVIEW_NOT_FOUND));
 	}
 
+	public Review validByIdAndUserId(long reviewId, Long id) {
+		return reviewRepository.findByIdAndUserId(reviewId, id)
+			.orElseThrow(() -> new BusinessException(ReviewErrorCode.REVIEW_NOT_FOUND));
+	}
+
 	public ReviewInfo validateUserInfoById(Long reviewId) {
 		return reviewRepository.findReviewInfoById(reviewId)
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.REVIEW_NOT_FOUND));
 	}
+
 }

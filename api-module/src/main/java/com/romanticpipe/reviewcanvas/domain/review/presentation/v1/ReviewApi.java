@@ -79,9 +79,11 @@ interface ReviewApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 조회가 완료되었습니다.")
 	})
-	@PatchMapping("/reviews/{reviewId}")
+	@PatchMapping("/shop/{mallId}/users/{memberId}/reviews/{reviewId}")
 	ResponseEntity<SuccessResponse<Void>> updateReview(
-		@PathVariable("reviewId") long productId,
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@PathVariable("reviewId") long reviewId,
 		@RequestPart UpdateReviewRequest updateReviewRequest,
 		@RequestPart(required = false) List<MultipartFile> reviewImages
 	);

@@ -21,7 +21,8 @@ public interface ReviewUseCase {
 	void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
 		List<MultipartFile> reviewImages);
 
-	void updateReview(long reviewId, UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages);
+	void updateReview(String mallId, String memberId, long reviewId,
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages);
 
 	GetReviewForUserResponse getReviewForUser(Long reviewId);
 }
