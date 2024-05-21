@@ -1,9 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
@@ -19,8 +15,10 @@ import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 @Component
 @RequiredArgsConstructor
@@ -34,8 +32,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewForUserResponse> getReviewsForUser(String mallId, Long productNo,
-		PageableRequest pageableRequest,
-		ReviewFilter filter) {
+																	PageableRequest pageableRequest, ReviewFilter filter) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseGet(() -> createProduct(mallId, productNo));
 

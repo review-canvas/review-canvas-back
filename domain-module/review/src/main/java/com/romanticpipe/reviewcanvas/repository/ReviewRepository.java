@@ -9,27 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface ReviewRepository extends JpaRepository<Review, Long> {
-
-	@Query("SELECT r.id as reviewId, r.content as content, r.score as score, u.id as userId, u.nickName as nickname "
-		+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.productId = :productId")
-	Page<ReviewInfo> findAllReview(Long productId, Pageable pageable);
-
-	@Query("SELECT r.id as reviewId, r.content as content, r.score as score, u.id as userId, u.nickName as nickname "
-		+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.productId = :productId "
-		+ "AND r.imageVideoUrls IS NULL")
-	Page<ReviewInfo> findAllGeneralReview(Long productId, Pageable pageable);
-
-	@Query("SELECT r.id as reviewId, r.content as content, r.score as score, u.id as userId, u.nickName as nickname "
-		+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.productId = :productId "
-		+ "AND r.imageVideoUrls IS NOT NULL")
-	Page<ReviewInfo> findAllImageVideoReview(Long productId, Pageable pageable);
+public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewQueryRepository {
 
 	Page<Review> findAllByUserId(String userId, Pageable pageable);
 
 	Optional<Review> findById(Long reviewId);
 
-	@Query("SELECT r.id as reviewId, r.content as content, r.score as score, u.id as userId, u.nickName as nickname "
+	@Query("SELECT new com.romanticpipe.reviewcanvas.dto.ReviewInfo(r.id, r.content, r.score, u.id, u.nickName) "
 		+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.id = :reviewId")
 	Optional<ReviewInfo> findReviewInfoById(Long reviewId);
 }

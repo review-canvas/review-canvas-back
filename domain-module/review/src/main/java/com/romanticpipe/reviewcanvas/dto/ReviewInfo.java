@@ -1,13 +1,10 @@
 package com.romanticpipe.reviewcanvas.dto;
 
-public interface ReviewInfo {
-	Long getReviewId();
+import com.querydsl.core.annotations.QueryProjection;
 
-	String getContent();
+public record ReviewInfo(Long reviewId, String content, Integer score, Long userId, String nickname) {
 
-	Integer getScore();
-
-	Long getUserId();
-
-	String getNickname();
+	@QueryProjection
+	public ReviewInfo {
+	}
 }
