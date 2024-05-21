@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
@@ -49,6 +50,15 @@ public class S3Service {
 				throw new BusinessException(CommonErrorCode.FILE_UPLOAD_FAILED, e);
 			}
 		}).toList();
+	}
+
+	public void fileDelete(String fileName, String dirPath) {
+		DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+			.bucket(bucketName)
+			.key(dirPath + "/" + fileName)
+			.build();
+
+		s3Client.deleteObject(deleteObjectRequest);
 	}
 
 	private String createRandomFileName(String fileName) {
