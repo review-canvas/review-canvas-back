@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.ReplyErrorCode;
 import com.romanticpipe.reviewcanvas.exception.ReplyNotFoundException;
+import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
+import com.romanticpipe.reviewcanvas.exception.UserNotFoundException;
 import com.romanticpipe.reviewcanvas.repository.ReplyRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -27,13 +28,16 @@ public class ReplyService {
 		return replyRepository.findById(replyId).orElseThrow(ReplyNotFoundException::new);
 	}
 
-	public void validateUserIsWriter(Reply reply, Optional<User> optionalUser) {
+	public void validateUpdatable(Reply reply, Optional<User> optionalUser) {
+		if (reply.getDeleted())
+			throw new BusinessException(ReviewErrorCode.REPLY_CAN_NOT_UPDATE);
 		optionalUser.ifPresentOrElse(
 			user -> {
-				if (user.getId() != reply.getUserId())
-					throw new BusinessException(ReplyErrorCode.WRITER_NOT_MATCH);
+				System.out.println("test::::" + user.getId());
+				if (!user.getId().equals(reply.getUserId()))
+					throw new BusinessException(ReviewErrorCode.WRITER_NOT_MATCH);
 			}, () -> {
-				throw new BusinessException(ReplyErrorCode.WRITER_NOT_MATCH);
+				throw new UserNotFoundException();
 			}
 		);
 	}
