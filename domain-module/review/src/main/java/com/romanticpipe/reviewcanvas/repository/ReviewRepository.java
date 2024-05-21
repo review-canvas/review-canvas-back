@@ -13,18 +13,19 @@ import com.romanticpipe.reviewcanvas.dto.ReviewInfo;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 	@Query(
-		"SELECT r.id as reviewId, r.content as content, r.score as score, u.memberId as memberId, u.nickName as nickname "
-			+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.productId = :productId")
+		"SELECT r.id as reviewId, r.content as content, r.score as score, u.memberId as memberId, "
+			+ "u.nickName as nickname FROM Review r JOIN User u ON r.userId = u.id WHERE r.productId = :productId")
 	Page<ReviewInfo> findAllReview(Long productId, Pageable pageable);
 
 	@Query(
-		"SELECT r.id as reviewId, r.content as content, r.score as score, u.memberId as memberId, u.nickName as nickname "
-			+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.productId = :productId "
-			+ "AND r.imageVideoUrls IS NULL")
+		"SELECT r.id as reviewId, r.content as content, r.score as score, u.memberId as memberId, "
+			+ "u.nickName as nickname FROM Review r JOIN User u ON r.userId = u.id "
+			+ "WHERE r.productId = :productId AND r.imageVideoUrls IS NULL")
 	Page<ReviewInfo> findAllGeneralReview(Long productId, Pageable pageable);
 
 	@Query(
-		"SELECT r.id as reviewId, r.content as content, r.score as score, u.memberId as memberId, u.nickName as nickname "
+		"SELECT r.id as reviewId, r.content as content, r.score as score, "
+			+ "u.memberId as memberId, u.nickName as nickname "
 			+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.productId = :productId "
 			+ "AND r.imageVideoUrls IS NOT NULL")
 	Page<ReviewInfo> findAllImageVideoReview(Long productId, Pageable pageable);
@@ -34,7 +35,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 	Optional<Review> findById(Long reviewId);
 
 	@Query(
-		"SELECT r.id as reviewId, r.content as content, r.score as score, u.memberId as memberId, u.nickName as nickname "
+		"SELECT r.id as reviewId, r.content as content, r.score as score, "
+			+ "u.memberId as memberId, u.nickName as nickname "
 			+ "FROM Review r JOIN User u ON r.userId = u.id WHERE r.id = :reviewId")
 	Optional<ReviewInfo> findReviewInfoById(Long reviewId);
 }
