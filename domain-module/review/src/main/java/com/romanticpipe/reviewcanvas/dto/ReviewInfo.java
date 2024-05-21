@@ -7,7 +7,7 @@ public interface ReviewInfo {
 
 	Integer getScore();
 
-	String getMemberId();
+	Long getUserId();
 
 	String getNickname();
 }
