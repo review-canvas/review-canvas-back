@@ -3,7 +3,10 @@ package com.romanticpipe.reviewcanvas.service;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
-import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
+import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
+import com.romanticpipe.reviewcanvas.enumeration.Score;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.exception.ReviewNotFoundException;
@@ -14,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.EnumSet;
 
 @Service
 @RequiredArgsConstructor
@@ -26,15 +31,10 @@ public class ReviewService {
 	}
 
 	public PageResponse<Review> findAllByProductId(Long productId, PageableRequest pageableRequest,
-												   ReviewFilter filter) {
+												   ReviewFilterForUser filter) {
 		Sort sort = SortUtils.getSort(pageableRequest.sort());
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
 		return PageableUtils.toPageResponse(reviewRepository.findAllReview(productId, pageable, filter));
-	}
-
-	public PageResponse<Review> findByUserId(String userId, PageableRequest pageableRequest) {
-		Pageable pageable = PageableUtils.toPageable(pageableRequest, SortUtils.getSort(pageableRequest.sort()));
-		return PageableUtils.toPageResponse(reviewRepository.findAllByUserId(userId, pageable));
 	}
 
 	public Review validById(long reviewId) {
@@ -52,4 +52,13 @@ public class ReviewService {
 			.orElseThrow(ReviewNotFoundException::new);
 	}
 
+	public PageResponse<Review> findByProductId(Long productId, PageableRequest pageableRequest,
+												EnumSet<ReviewFilterForShopAdmin> reviewFilters,
+												EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
+		Sort sort = SortUtils.getSort(pageableRequest.sort());
+		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
+		return PageableUtils.toPageResponse(
+			reviewRepository.findByProductId(productId, pageable, reviewFilters, score, replyFilters)
+		);
+	}
 }

@@ -2,14 +2,14 @@ package com.romanticpipe.reviewcanvas.enumeration;
 
 import java.util.Arrays;
 
-public enum ReviewFilter {
+public enum ReviewFilterForUser {
 	ALL, IMAGE_VIDEO, GENERAL;
 
-	public static ReviewFilter of(String reviewFilter) {
+	public static ReviewFilterForUser of(String reviewFilter) {
 		if (reviewFilter == null) {
 			return ALL;
 		}
-		return Arrays.stream(ReviewFilter.values())
+		return Arrays.stream(ReviewFilterForUser.values())
 			.filter(r -> r.name().equals(reviewFilter.toUpperCase()))
 			.findFirst()
 			.orElseGet(() -> ALL);
