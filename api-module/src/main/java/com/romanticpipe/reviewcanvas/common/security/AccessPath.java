@@ -25,6 +25,7 @@ public final class AccessPath {
 		MultiValueMap<String, HttpMethod> shopAdminAllowedPath = new LinkedMultiValueMap<>();
 		// review
 		shopAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
+		shopAdminAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET));
 		// shop-admin
 		shopAdminAllowedPath.put("/api/v1/shop-admin", List.of(HttpMethod.GET, HttpMethod.PATCH));
 		// auth
@@ -60,6 +61,7 @@ public final class AccessPath {
 		LinkedMultiValueMap<String, HttpMethod> superAdminAllowedPath = new LinkedMultiValueMap<>();
 		// review
 		superAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
+		superAdminAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET));
 		// shop-admin
 		// auth
 		// review-property
