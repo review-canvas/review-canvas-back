@@ -4,11 +4,16 @@ import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductDto;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Product;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetProductResponse;
+import com.romanticpipe.reviewcanvas.dto.PageResponse;
+import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -29,5 +34,14 @@ public class ProductUseCaseImpl implements ProductUseCase {
 			Product product = new Product(productNo, cafe24ProductDto.product().productName(), shopAdmin.getId());
 			return productService.save(product);
 		});
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PageResponse<GetProductResponse> getProducts(JwtInfo jwtInfo, Integer loginAdminId,
+														PageableRequest pageable) {
+		shopAdminService.validateIsMyIdOrSuperAdmin(jwtInfo.adminId(), jwtInfo.adminRole(), loginAdminId);
+		return productService.getProducts(jwtInfo.adminId(), pageable)
+			.map(GetProductResponse::from);
 	}
 }

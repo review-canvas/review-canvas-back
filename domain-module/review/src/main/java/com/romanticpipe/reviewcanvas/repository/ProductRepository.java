@@ -1,12 +1,13 @@
 package com.romanticpipe.reviewcanvas.repository;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.romanticpipe.reviewcanvas.domain.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.romanticpipe.reviewcanvas.domain.Product;
+import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
@@ -15,4 +16,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	Optional<Product> findByMallIdAndProductNo(String mallId, Long productNo);
 
 	List<Product> findAllByShopAdminId(Integer shopAdminId);
+
+	Page<Product> findAllByShopAdminId(Integer shopAdminId, Pageable pageable);
 }

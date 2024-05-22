@@ -25,8 +25,11 @@ public final class AccessPath {
 		MultiValueMap<String, HttpMethod> shopAdminAllowedPath = new LinkedMultiValueMap<>();
 		// review
 		shopAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
+		shopAdminAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET));
 		// shop-admin
 		shopAdminAllowedPath.put("/api/v1/shop-admin", List.of(HttpMethod.GET, HttpMethod.PATCH));
+		// product
+		shopAdminAllowedPath.put("/api/v1/shops/{shopAdminId}/products", List.of(HttpMethod.GET));
 		// auth
 		shopAdminAllowedPath.put("/api/v1/logout", List.of(HttpMethod.POST));
 		shopAdminAllowedPath.put("/api/v1/auth/check", List.of(HttpMethod.GET));
@@ -60,7 +63,10 @@ public final class AccessPath {
 		LinkedMultiValueMap<String, HttpMethod> superAdminAllowedPath = new LinkedMultiValueMap<>();
 		// review
 		superAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
+		superAdminAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET));
 		// shop-admin
+		// product
+		superAdminAllowedPath.put("/api/v1/shops/{shopAdminId}/products", List.of(HttpMethod.GET));
 		// auth
 		// review-property
 		superAdminAllowedPath.put("/api/v1/font-info", List.of(HttpMethod.GET));

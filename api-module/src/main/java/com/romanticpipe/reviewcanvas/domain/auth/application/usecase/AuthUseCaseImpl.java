@@ -1,11 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.auth.application.usecase;
 
-import java.util.Objects;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.romanticpipe.reviewcanvas.admin.domain.Admin;
 import com.romanticpipe.reviewcanvas.admin.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
@@ -16,8 +10,12 @@ import com.romanticpipe.reviewcanvas.admin.service.SuperAdminService;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -58,7 +56,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
 		if (Objects.equals(AdminRole.ROLE_SUPER_ADMIN, adminRole)) {
 			return superAdminService.validById(adminId);
 		}
-		return shopAdminService.validById(adminId);
+		return shopAdminService.validateById(adminId);
 	}
 
 	private Admin validateAdminByEmail(String email, AdminRole adminRole) {

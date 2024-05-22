@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,7 +60,8 @@ interface ReviewApi {
 	@GetMapping("/reviews/{reviewId}")
 	ResponseEntity<SuccessResponse<GetReviewDetailResponse>> getReviewForUser(@PathVariable Long reviewId);
 
-	@Operation(summary = "shop admin 대시보드 리뷰 조회 API", description = "shop admin 대시보드에서 리뷰를 조회한다.")
+	@Operation(summary = "shop admin 대시보드 리뷰 조회 API", description = "shop admin 대시보드에서 리뷰를 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
