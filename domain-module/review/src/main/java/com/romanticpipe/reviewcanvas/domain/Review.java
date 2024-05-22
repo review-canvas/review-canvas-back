@@ -1,19 +1,25 @@
 package com.romanticpipe.reviewcanvas.domain;
 
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,8 +33,11 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(name = "review_id")
 	private Long id;
 	private Long productId;
-	@Column(name = "users_id")
-	private Long userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "users_id")
+	private User user;
+	@OneToMany(mappedBy = "review")
+	private List<Reply> replyList;
 
 	private int score;
 	private String content;
@@ -38,10 +47,10 @@ public class Review extends BaseEntityWithUpdate {
 	private String imageVideoUrls;
 
 	@Builder
-	public Review(Long productId, Long userId, String content, int score, ReviewStatus status,
-		String imageVideoUrls) {
-		this.userId = userId;
+	public Review(Long productId, User user, String content, int score, ReviewStatus status, String imageVideoUrls) {
 		this.productId = productId;
+		this.user = user;
+		this.replyList = new ArrayList<>();
 		this.content = content;
 		this.score = score;
 		this.status = status;
