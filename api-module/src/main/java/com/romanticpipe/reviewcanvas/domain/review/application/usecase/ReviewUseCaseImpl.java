@@ -1,16 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
-import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
-import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductDto;
 import com.romanticpipe.reviewcanvas.common.storage.S3Service;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Product;
@@ -29,23 +18,22 @@ import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 class ReviewUseCaseImpl implements ReviewUseCase {
 
-	private final ShopAdminService shopAdminService;
 	private final ProductService productService;
 	private final ReviewService reviewService;
 	private final ProductUseCase productUseCase;
 	private final TransactionUtils transactionUtils;
 	private final UserService userService;
-	private final Cafe24ProductClient cafe24ProductClient;
-	private final TransactionTemplate writeTransactionTemplate;
 	private final S3Service s3Service;
 
 	@Override
@@ -77,8 +65,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public void updateReview(String mallId, String memberId, long reviewId,
-		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
+	public void updateReview(String mallId, String memberId, Long reviewId,
+							 UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 		review.setScore(updateReviewRequest.score());
@@ -96,7 +84,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-		List<MultipartFile> reviewImages) {
+							 List<MultipartFile> reviewImages) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
@@ -107,7 +95,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 		Review review = Review.builder()
 			.productId(product.getId())
-			.userId(user.getId())
+			.user(user)
 			.content(createReviewRequest.content())
 			.score(createReviewRequest.score())
 			.status(ReviewStatus.APPROVED)
