@@ -8,11 +8,13 @@ import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewForUserResponse;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewDetailResponse;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
-import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
+import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
+import com.romanticpipe.reviewcanvas.enumeration.Score;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.service.ProductService;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.EnumSet;
 import java.util.List;
 
 @Component
@@ -37,30 +40,33 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	private final S3Service s3Service;
 
 	@Override
-	public PageResponse<GetReviewForUserResponse> getReviewsForUser(String mallId, Long productNo,
-																	PageableRequest pageableRequest,
-																	ReviewFilter filter) {
+	public PageResponse<GetReviewDetailResponse> getReviewsForUser(String mallId, Long productNo,
+																   PageableRequest pageableRequest,
+																   ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
 
 		return transactionUtils.executeInReadTransaction(
 			status -> reviewService.findAllByProductId(product.getId(), pageableRequest, filter)
-				.map(GetReviewForUserResponse::from)
+				.map(GetReviewDetailResponse::from)
 		);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public GetReviewForUserResponse getReviewForUser(Long reviewId) {
-		return GetReviewForUserResponse.from(reviewService.validateUserInfoById(reviewId));
+	public GetReviewDetailResponse getReviewForUser(Long reviewId) {
+		return GetReviewDetailResponse.from(reviewService.validateUserInfoById(reviewId));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public PageResponse<GetReviewResponse> getReviewsByUserId(String userId, PageableRequest pageableRequest) {
-		return reviewService.findByUserId(userId, pageableRequest)
-			.map(GetReviewResponse::from);
+	public PageResponse<GetReviewDetailResponse> getReviewsForDashboard(
+		Long productId, PageableRequest pageable, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
+		EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters
+	) {
+		return reviewService.findByProductId(productId, pageable, reviewFilters, score, replyFilters)
+			.map(GetReviewDetailResponse::from);
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
 import com.romanticpipe.reviewcanvas.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -45,13 +47,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, CommonErrorCode.INVALID_INPUT_VALUE);
 	}
 
-
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 																  HttpHeaders headers, HttpStatusCode status,
 																  WebRequest request) {
 		log.error("HttpMessageNotReadableException", ex);
 		return handleExceptionInternal(CommonErrorCode.INVALID_INPUT_VALUE);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
+														HttpStatusCode status, WebRequest request) {
+		log.info("TypeMismatchException", ex);
+		return handleExceptionInternal(ex, CommonErrorCode.INVALID_INPUT_VALUE);
+
 	}
 
 	@ExceptionHandler(HttpClientErrorException.class)
@@ -88,6 +97,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return ResponseEntity.status(errorCode.getStatus())
 			.body(ErrorResponse.of(errorCode, validationErrorList));
+	}
+
+	private ResponseEntity<Object> handleExceptionInternal(TypeMismatchException ex, ErrorCode errorCode) {
+		String mismatchedValue = Optional.ofNullable(ex.getValue())
+			.map(Object::toString)
+			.orElse("");
+		return ResponseEntity.status(errorCode.getStatus())
+			.body(ErrorResponse.of(errorCode, mismatchedValue));
 	}
 
 }

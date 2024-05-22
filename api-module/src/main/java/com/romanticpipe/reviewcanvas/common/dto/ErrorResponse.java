@@ -27,6 +27,11 @@ public class ErrorResponse {
 		return new ErrorResponse(new ErrorInfo(errorCode.getCode(), errorCode.getMessage(), validationErrorList));
 	}
 
+	public static ErrorResponse of(ErrorCode errorCode, String additionalMessage) {
+		return new ErrorResponse(new ErrorInfo(errorCode.getCode(),
+			errorCode.getMessage() + " : " + additionalMessage, null));
+	}
+
 	public record ValidationError(String field, String message) {
 
 		public static ValidationError of(final FieldError fieldError) {

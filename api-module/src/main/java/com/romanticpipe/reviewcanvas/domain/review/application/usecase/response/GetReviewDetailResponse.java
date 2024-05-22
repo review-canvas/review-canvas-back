@@ -7,8 +7,8 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-@Schema(name = "GetReviewForUserResponse", description = "public view의 유저에게 보일 리뷰 조회 response")
-public record GetReviewForUserResponse(
+@Schema(name = "GetReviewDetailResponse", description = "리뷰 및 댓글 조회 response")
+public record GetReviewDetailResponse(
 	@Schema(description = "리뷰 id", requiredMode = Schema.RequiredMode.REQUIRED)
 	Long reviewId,
 	@Schema(description = "리뷰 설명", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -23,8 +23,8 @@ public record GetReviewForUserResponse(
 	List<ReplyResponse> replies
 ) {
 
-	public static GetReviewForUserResponse from(Review review) {
-		return GetReviewForUserResponse.builder()
+	public static GetReviewDetailResponse from(Review review) {
+		return GetReviewDetailResponse.builder()
 			.reviewId(review.getId())
 			.content(review.getContent())
 			.score(review.getScore())
