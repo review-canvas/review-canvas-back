@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +20,10 @@ import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 
 @Entity
 @Getter
-@Setter
 @FieldNameConstants
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Review extends BaseEntityWithUpdate {
@@ -46,11 +45,11 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewStatus status;
 	private String imageVideoUrls;
-	private boolean deleted;
+	private LocalDateTime deletedAt;
 
 	@Builder
 	public Review(Long productId, User user, String content, int score, ReviewStatus status,
-		String imageVideoUrls, boolean deleted) {
+		String imageVideoUrls) {
 		this.productId = productId;
 		this.user = user;
 		this.replyList = new ArrayList<>();
@@ -58,6 +57,16 @@ public class Review extends BaseEntityWithUpdate {
 		this.score = score;
 		this.status = status;
 		this.imageVideoUrls = imageVideoUrls;
-		this.deleted = deleted;
+		this.deletedAt = null;
+	}
+
+	public void delete() {
+		this.deletedAt = LocalDateTime.now();
+	}
+
+	public void update(int score, String content, String savedFileNames) {
+		this.score = score;
+		this.content = content;
+		this.imageVideoUrls = savedFileNames;
 	}
 }
