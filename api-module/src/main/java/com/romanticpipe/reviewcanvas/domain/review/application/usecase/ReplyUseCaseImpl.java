@@ -1,24 +1,17 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
-import java.util.Optional;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
-
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
-import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
@@ -65,6 +58,6 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 		Reply reply = replyService.findById(replyId);
 		Optional<User> optionalUser = userService.findUser(updateReplyRequest.memberId(), updateReplyRequest.mallId());
 		replyService.validateUpdatable(reply, optionalUser);
-		reply.update(updateReplyRequest.content(), reply.getDeleted());
+		reply.update(updateReplyRequest.content());
 	}
 }
