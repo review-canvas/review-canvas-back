@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -80,8 +81,6 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
-		review.setScore(updateReviewRequest.score());
-		review.setContent(updateReviewRequest.content());
 
 		Product product = productService.findProduct(review.getProductId())
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
@@ -89,7 +88,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
 		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
-		review.setImageVideoUrls(savedFileNames);
+		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileNames);
 	}
 
 	@Override
@@ -111,21 +110,19 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.score(createReviewRequest.score())
 			.status(ReviewStatus.APPROVED)
 			.imageVideoUrls(savedFileNames)
-			.deleted(false)
 			.build();
 		reviewService.save(review);
 	}
 
 	@Override
 	@Transactional
-	public void deleteReviewByPublicView(String mallId, String memberId, long reviewId) {
+	public void deleteReviewByPublicView(String mallId, String memberId, long reviewId, LocalDateTime localDateTime) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 		/**
 		 * TODO 댓글 먼저 삭제 후 리뷰 삭제
 		 * replyService.deleteReply(reviewId);
 		 */
-		review.setContent("삭제된 리뷰입니다.");
-		review.setDeleted(true);
+		review.delete(localDateTime);
 	}
 }

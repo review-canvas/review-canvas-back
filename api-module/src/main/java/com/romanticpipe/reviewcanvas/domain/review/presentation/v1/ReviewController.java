@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
+import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -118,7 +119,7 @@ class ReviewController implements ReviewApi {
 		@PathVariable("memberId") String memberId,
 		@PathVariable("reviewId") long reviewId
 	) {
-		reviewUseCase.deleteReviewByPublicView(mallId, memberId, reviewId);
+		reviewUseCase.deleteReviewByPublicView(mallId, memberId, reviewId, LocalDateTime.now());
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 

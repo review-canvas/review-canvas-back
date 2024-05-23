@@ -22,8 +22,6 @@ public record GetReviewDetailResponse(
 	String nickname,
 	@Schema(description = "본인 작성 리뷰 여부", requiredMode = Schema.RequiredMode.REQUIRED)
 	Boolean isMine,
-	@Schema(description = "리뷰 삭제 여부", requiredMode = Schema.RequiredMode.REQUIRED)
-	Boolean deleted,
 	@Schema(description = "리뷰에 해당하는 댓글 리스트", requiredMode = Schema.RequiredMode.REQUIRED)
 	List<ReplyResponse> replies
 ) {
@@ -36,7 +34,6 @@ public record GetReviewDetailResponse(
 			.memberId(review.getUser().getMemberId())
 			.nickname(review.getUser().getNickName())
 			.isMine(isMine)
-			.deleted(review.isDeleted())
 			.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())
 			.build();
 	}

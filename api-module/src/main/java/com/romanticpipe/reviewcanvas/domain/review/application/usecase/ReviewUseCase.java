@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -31,5 +32,5 @@ public interface ReviewUseCase {
 
 	GetReviewDetailResponse getReviewForUser(Long reviewId, String memberId);
 
-	void deleteReviewByPublicView(String mallId, String memberId, long reviewId);
+	void deleteReviewByPublicView(String mallId, String memberId, long reviewId, LocalDateTime localDateTime);
 }
