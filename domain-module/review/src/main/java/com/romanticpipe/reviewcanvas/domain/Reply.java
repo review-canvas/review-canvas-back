@@ -1,6 +1,9 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import java.time.LocalDateTime;
+
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,19 +33,16 @@ public class Reply extends BaseEntityWithUpdate {
 	@JoinColumn(name = "users_id")
 	private User user;
 	private String content;
-	private Boolean deleted;
+	private LocalDateTime deletedAt;
 
 	@Builder
-	public Reply(Review review, User user, String content, Boolean deleted) {
+	public Reply(Review review, User user, String content) {
 		this.review = review;
 		this.user = user;
 		this.content = content;
-		this.deleted = deleted;
-		this.deleted = deleted;
 	}
 
-	public void update(String content, Boolean deleted) {
+	public void update(String content) {
 		this.content = content;
-		this.deleted = deleted;
 	}
 }
