@@ -1,7 +1,6 @@
 package com.romanticpipe.reviewcanvas.service;
 
 import java.util.List;
-
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -35,7 +34,6 @@ public class ReplyService {
 			.review(entityManager.getReference(Review.class, reviewId))
 			.user(entityManager.getReference(User.class, userId))
 			.content(content)
-			.deleted(false)
 			.build();
 		replyRepository.save(reply);
 	}
@@ -49,13 +47,14 @@ public class ReplyService {
 	}
 
 	public void validateUpdatable(Reply reply, Optional<User> optionalUser) {
-		if (reply.getDeleted())
+		if (reply.getDeletedAt() != null) {
 			throw new BusinessException(ReviewErrorCode.REPLY_CAN_NOT_UPDATE);
+		}
 		optionalUser.ifPresentOrElse(
 			user -> {
-				System.out.println("test::::" + user.getId());
-				if (!user.getId().equals(reply.getUserId()))
+				if (!user.getId().equals(reply.getUser().getId())) {
 					throw new BusinessException(ReviewErrorCode.WRITER_NOT_MATCH);
+				}
 			}, () -> {
 				throw new UserNotFoundException();
 			}
