@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -115,5 +116,18 @@ interface ReviewApi {
 		@PathVariable("reviewId") long reviewId,
 		@RequestPart UpdateReviewRequest updateReviewRequest,
 		@RequestPart(required = false) List<MultipartFile> reviewImages
+	);
+
+	@Operation(summary = "리뷰 삭제 API", description = "자신이 작성한 리뷰를 삭제한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 삭제가 완료되었습니다.")
+	})
+	@DeleteMapping("/shop/{mallId}/users/{memberId}/reviews/{reviewId}")
+	ResponseEntity<SuccessResponse<Void>> deleteReviewByPublicView(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@PathVariable("reviewId") long reviewId
 	);
 }
