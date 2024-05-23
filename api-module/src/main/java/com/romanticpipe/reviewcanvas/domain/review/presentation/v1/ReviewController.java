@@ -1,27 +1,34 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewForUserResponse;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewResponse;
-import com.romanticpipe.reviewcanvas.dto.PageResponse;
-import com.romanticpipe.reviewcanvas.dto.PageableRequest;
-import com.romanticpipe.reviewcanvas.enumeration.ReviewFilter;
-import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.RequiredArgsConstructor;
+import java.util.EnumSet;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewDetailResponse;
+import com.romanticpipe.reviewcanvas.dto.PageResponse;
+import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
+import com.romanticpipe.reviewcanvas.enumeration.Score;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -32,54 +39,74 @@ class ReviewController implements ReviewApi {
 
 	@Override
 	@GetMapping("/shop/{mallId}/products/{productNo}/reviews")
-	public ResponseEntity<SuccessResponse<PageResponse<GetReviewForUserResponse>>> getReviewsForUser(
+	public ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsForUser(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productNo,
+		@RequestParam(value = "memberId", required = false) String memberId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "sort", required = false, defaultValue = "LATEST") ReviewSort sort,
-		@RequestParam(name = "filter", required = false, defaultValue = "ALL") ReviewFilter filter) {
+		@RequestParam(name = "filter", required = false, defaultValue = "ALL") ReviewFilterForUser filter) {
 		return SuccessResponse.of(
-			reviewUseCase.getReviewsForUser(mallId, productNo, PageableRequest.of(page, size, sort), filter)
+			reviewUseCase.getReviewsForUser(mallId, productNo, memberId, PageableRequest.of(page, size, sort), filter)
 		).asHttp(HttpStatus.OK);
 	}
 
 	@Override
 	@GetMapping("/reviews/{reviewId}")
-	public ResponseEntity<SuccessResponse<GetReviewForUserResponse>> getReviewsForUser(
-		@PathVariable Long reviewId) {
+	public ResponseEntity<SuccessResponse<GetReviewDetailResponse>> getReviewForUser(
+		@PathVariable Long reviewId,
+		@RequestParam(value = "memberId", required = false) String memberId) {
 		return SuccessResponse.of(
-			reviewUseCase.getReviewForUser(reviewId)
+			reviewUseCase.getReviewForUser(reviewId, memberId)
 		).asHttp(HttpStatus.OK);
 	}
 
 	@Override
-	@GetMapping("/users/{userId}/reviews")
-	public ResponseEntity<SuccessResponse<PageResponse<GetReviewResponse>>> getReviewsByUserId(
-		@PathVariable("userId") String userId,
+	@GetMapping("/products/{productId}/reviews")
+	public ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsForDashboard(
+		@PathVariable("productId") Long productId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-		@RequestParam(name = "reviewSort", required = false, defaultValue = "DESC")
-		@Schema(description = "ASC, DESC 가능") ReviewSort reviewSort
+		@RequestParam(name = "sort", required = false, defaultValue = "LATEST") ReviewSort sort,
+		@RequestParam(name = "reviewFilters", required = false, defaultValue = "PHOTO,VIDEO,TEXT")
+		EnumSet<ReviewFilterForShopAdmin> reviewFilters,
+		@RequestParam(name = "score", required = false, defaultValue = "ONE,TWO,THREE,FOUR,FIVE") EnumSet<Score> score,
+		@RequestParam(name = "replyFilters", required = false, defaultValue = "REPLIED,NOT_REPLIED")
+		EnumSet<ReplyFilter> replyFilters
 	) {
+		PageableRequest pageable = PageableRequest.of(page, size, sort);
 		return SuccessResponse.of(
-			reviewUseCase.getReviewsByUserId(userId, PageableRequest.of(page, size, reviewSort))
+			reviewUseCase.getReviewsForDashboard(productId, pageable, reviewFilters, score, replyFilters)
 		).asHttp(HttpStatus.OK);
 	}
 
 	@Override
-	@PostMapping("/products/{productId}/reviews")
+	@PostMapping(value = "/shop/{mallId}/products/{productNo}/review", consumes = "multipart/form-data")
 	public ResponseEntity<SuccessResponse<Void>> createReview(
-		@PathVariable("productId") String productId, @RequestBody CreateReviewRequest createReviewRequest) {
-		reviewUseCase.createReview(productId, createReviewRequest);
+		@PathVariable("mallId") String mallId,
+		@PathVariable("productNo") Long productId,
+		@RequestPart CreateReviewRequest createReviewRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewImages) {
+		if (reviewImages == null) {
+			reviewImages = List.of();
+		}
+		reviewUseCase.createReview(mallId, productId, createReviewRequest, reviewImages);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
 	@Override
-	@PatchMapping("/reviews/{reviewId}")
-	public ResponseEntity<SuccessResponse<Void>> updateReview(long reviewId,
-															  UpdateReviewRequest updateReviewRequest) {
-		reviewUseCase.updateReview(reviewId, updateReviewRequest);
+	@PatchMapping(value = "/shop/{mallId}/users/{memberId}/reviews/{reviewId}", consumes = "multipart/form-data")
+	public ResponseEntity<SuccessResponse<Void>> updateReview(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@PathVariable("reviewId") long reviewId,
+		UpdateReviewRequest updateReviewRequest,
+		List<MultipartFile> reviewImages) {
+		if (reviewImages == null) {
+			reviewImages = List.of();
+		}
+		reviewUseCase.updateReview(mallId, memberId, reviewId, updateReviewRequest, reviewImages);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
