@@ -29,7 +29,7 @@ public record GetReviewDetailResponse(
 	public static GetReviewDetailResponse from(Review review, boolean isMine) {
 		return GetReviewDetailResponse.builder()
 			.reviewId(review.getId())
-			.content(review.getContent())
+			.content(review.getDeletedAt() == null ? review.getContent() : " ")
 			.score(review.getScore())
 			.memberId(review.getUser().getMemberId())
 			.nickname(review.getUser().getNickName())

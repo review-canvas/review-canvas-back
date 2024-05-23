@@ -60,9 +60,8 @@ public class Review extends BaseEntityWithUpdate {
 		this.deletedAt = null;
 	}
 
-	public void delete(LocalDateTime deletedAt) {
-		this.content = " ";
-		this.deletedAt = deletedAt;
+	public void delete() {
+		this.deletedAt = LocalDateTime.now();
 	}
 
 	public void update(int score, String content, String savedFileNames) {

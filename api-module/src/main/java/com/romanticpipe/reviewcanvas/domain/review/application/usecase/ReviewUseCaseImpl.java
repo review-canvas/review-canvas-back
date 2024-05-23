@@ -61,7 +61,6 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Transactional(readOnly = true)
 	public GetReviewDetailResponse getReviewForUser(Long reviewId, String memberId) {
 		Review review = reviewService.validateUserInfoById(reviewId);
-
 		return GetReviewDetailResponse.from(review, review.getUser().getMemberId().equals(memberId));
 	}
 
@@ -123,6 +122,6 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		 * TODO 댓글 먼저 삭제 후 리뷰 삭제
 		 * replyService.deleteReply(reviewId);
 		 */
-		review.delete(localDateTime);
+		review.delete();
 	}
 }
