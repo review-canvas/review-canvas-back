@@ -25,6 +25,7 @@ import com.romanticpipe.reviewcanvas.enumeration.Score;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.service.ProductService;
+import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
 
@@ -36,6 +37,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	private final ProductService productService;
 	private final ReviewService reviewService;
+	private final ReplyService replyService;
 	private final ProductUseCase productUseCase;
 	private final TransactionUtils transactionUtils;
 	private final UserService userService;
@@ -112,5 +114,18 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.deleted(false)
 			.build();
 		reviewService.save(review);
+	}
+
+	@Override
+	@Transactional
+	public void deleteReviewByPublicView(String mallId, String memberId, long reviewId) {
+		User user = userService.validByMemberIdAndMallId(memberId, mallId);
+		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
+		/**
+		 * TODO 댓글 먼저 삭제 후 리뷰 삭제
+		 * replyService.deleteReply(reviewId);
+		 */
+		review.setContent("삭제된 리뷰입니다.");
+		review.setDeleted(true);
 	}
 }

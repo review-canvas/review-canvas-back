@@ -30,4 +30,6 @@ public interface ReviewUseCase {
 		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages);
 
 	GetReviewDetailResponse getReviewForUser(Long reviewId, String memberId);
+
+	void deleteReviewByPublicView(String mallId, String memberId, long reviewId);
 }

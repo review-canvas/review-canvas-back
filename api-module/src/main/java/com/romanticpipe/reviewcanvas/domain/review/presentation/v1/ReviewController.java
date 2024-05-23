@@ -118,7 +118,7 @@ class ReviewController implements ReviewApi {
 		@PathVariable("memberId") String memberId,
 		@PathVariable("reviewId") long reviewId
 	) {
-		
+		reviewUseCase.deleteReviewByPublicView(mallId, memberId, reviewId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
