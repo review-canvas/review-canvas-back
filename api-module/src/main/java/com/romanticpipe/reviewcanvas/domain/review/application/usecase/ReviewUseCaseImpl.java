@@ -109,6 +109,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.score(createReviewRequest.score())
 			.status(ReviewStatus.APPROVED)
 			.imageVideoUrls(savedFileNames)
+			.deleted(false)
 			.build();
 		reviewService.save(review);
 	}
