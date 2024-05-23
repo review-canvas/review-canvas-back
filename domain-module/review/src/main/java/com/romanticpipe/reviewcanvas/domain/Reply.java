@@ -30,11 +30,13 @@ public class Reply extends BaseEntityWithUpdate {
 	@JoinColumn(name = "users_id")
 	private User user;
 	private String content;
+	private Boolean deleted;
 
 	@Builder
-	public Reply(Review review, User user, String content) {
+	public Reply(Review review, User user, String content, Boolean deleted) {
 		this.review = review;
 		this.user = user;
 		this.content = content;
+		this.deleted = deleted;
 	}
 }

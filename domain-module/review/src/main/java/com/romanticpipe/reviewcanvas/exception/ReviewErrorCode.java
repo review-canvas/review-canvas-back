@@ -10,7 +10,9 @@ public enum ReviewErrorCode implements ErrorCode {
 
 	// Product
 	PRODUCT_NOT_FOUND(400, "R002", "상품을 찾을 수 없습니다."),
-	USER_NOT_FOUND(400, "R001", "사용자를 찾을 수 없습니다.");
+
+	// User
+	USER_NOT_FOUND(400, "R003", "유저를 찾을 수 없습니다.");
 
 	private final int status;
 	private final String code;

@@ -1,13 +1,19 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -31,5 +37,15 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 		transactionUtils.executeWithoutResultInWriteTransaction(
 			status -> replyService.createAndSave(reviewId, user.getId(), createReplyRequest.content())
 		);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<GetReplyForUserResponse> getReplyForUser(Long reviewId) {
+		reviewService.validById(reviewId);
+		return replyService.findAllByReviewId(reviewId)
+			.stream()
+			.map(reply -> GetReplyForUserResponse.from(reply, userService.findUserByUserId(reply.getUser().getId())))
+			.toList();
 	}
 }
