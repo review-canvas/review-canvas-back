@@ -2,14 +2,15 @@ package com.romanticpipe.reviewcanvas;
 
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
+import com.romanticpipe.reviewcanvas.domain.User;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public final class TestReviewFactory {
 
-	public static Review createReview(Long productId, Long userId, String content, int score, String imageVideoUrls) {
+	public static Review createReview(Long productId, User user, String content, int score, String imageVideoUrls) {
 		return Review.builder()
 			.productId(productId)
-			.userId(userId)
+			.user(user)
 			.content(content)
 			.score(score)
 			.status(ReviewStatus.APPROVED)
@@ -17,11 +18,11 @@ public final class TestReviewFactory {
 			.build();
 	}
 
-	public static Review createReview(Long reviewId, Long productId, Long userId, String content, int score,
+	public static Review createReview(Long reviewId, Long productId, User user, String content, int score,
 									  String imageVideoUrls) {
 		Review review = Review.builder()
 			.productId(productId)
-			.userId(userId)
+			.user(user)
 			.content(content)
 			.score(score)
 			.status(ReviewStatus.APPROVED)

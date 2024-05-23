@@ -4,7 +4,10 @@ spring:
   jpa:
     open-in-view: false
     properties:
-      hibernate.default_batch_fetch_size: 100
+      hibernate:
+        default_batch_fetch_size: 100
+        query:
+          fail_on_pagination_over_collection_fetch: true
 
 ---
 spring.config.activate.on-profile: local

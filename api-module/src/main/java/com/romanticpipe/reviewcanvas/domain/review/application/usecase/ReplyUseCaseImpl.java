@@ -1,5 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -9,6 +15,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
@@ -26,33 +33,30 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	private final ReplyService replyService;
 	private final ReviewService reviewService;
 	private final UserUseCase userUseCase;
-	private final TransactionTemplate readTransactionTemplate;
-	private final TransactionTemplate writeTransactionTemplate;
+	private final TransactionUtils transactionUtils;
 
 	@Override
 	public void createReplyForUser(Long reviewId, CreateReplyRequest createReplyRequest) {
-		Optional<User> optionalUser = Optional.ofNullable(readTransactionTemplate.execute(status -> {
+		User user = transactionUtils.executeInReadTransaction(status -> {
 			reviewService.validById(reviewId);
 			return userService.findUser(createReplyRequest.memberId(), createReplyRequest.mallId());
-		})).orElseThrow(() -> new BusinessException(CommonErrorCode.INTERNAL_SERVER_ERROR));
-
-		User user = optionalUser.orElseGet(
-			() -> userUseCase.createSaveUser(createReplyRequest.mallId(), createReplyRequest.memberId())
+		}).orElseGet(() ->
+			userUseCase.createSaveUser(createReplyRequest.mallId(), createReplyRequest.memberId())
 		);
 
-		writeTransactionTemplate.executeWithoutResult(status -> {
-			try {
-				Reply reply = Reply.builder()
-					.reviewId(reviewId)
-					.userId(user.getId())
-					.content(createReplyRequest.content())
-					.build();
-				replyService.save(reply);
-			} catch (RuntimeException e) {
-				status.setRollbackOnly();
-				throw e;
-			}
-		});
+		transactionUtils.executeWithoutResultInWriteTransaction(
+			status -> replyService.createAndSave(reviewId, user.getId(), createReplyRequest.content())
+		);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<GetReplyForUserResponse> getReplyForUser(Long reviewId) {
+		reviewService.validById(reviewId);
+		return replyService.findAllByReviewId(reviewId)
+			.stream()
+			.map(reply -> GetReplyForUserResponse.from(reply, userService.findUserByUserId(reply.getUser().getId())))
+			.toList();
 	}
 
 	@Override

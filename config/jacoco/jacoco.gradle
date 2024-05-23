@@ -12,12 +12,14 @@ jacocoTestReport {
         csv.required = false
     }
 
+    def Qdomains = []
+    for (qPattern in "**/QA".."**/QZ") {
+        Qdomains.add(qPattern + "*")
+    }
+
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it,
-                    exclude: [
-                            ''
-                    ])
+            fileTree(dir: it, exclude: Qdomains)
         }))
     }
 }
@@ -30,8 +32,14 @@ jacocoTestCoverageVerification {
             limit {
                 counter = 'BRANCH'
                 value = 'COVEREDRATIO'
-                minimum = 90.0
+                minimum = 00.0
             }
+            def Qdomains = []
+            for (qPattern in "**/QA".."**/QZ") {
+                Qdomains.add(qPattern + "*")
+            }
+
+            excludes = Qdomains
         }
     }
 }

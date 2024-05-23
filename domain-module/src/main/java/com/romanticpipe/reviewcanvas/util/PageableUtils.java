@@ -12,6 +12,10 @@ public class PageableUtils {
 		return PageRequest.of(pageableRequest.page(), pageableRequest.size(), sort);
 	}
 
+	public static Pageable toPageable(PageableRequest pageableRequest) {
+		return PageRequest.of(pageableRequest.page(), pageableRequest.size());
+	}
+
 	public static <T> PageResponse<T> toPageResponse(Page<T> page) {
 		return new PageResponse<>(page.getNumber(), page.getSize(), page.getTotalElements(), page.getContent());
 	}
