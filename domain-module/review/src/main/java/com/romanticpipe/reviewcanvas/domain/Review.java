@@ -46,6 +46,7 @@ public class Review extends BaseEntityWithUpdate {
 	private ReviewStatus status;
 	private String imageVideoUrls;
 	private LocalDateTime deletedAt;
+	private Long shopAdminId;
 
 	@Builder
 	public Review(Long productId, User user, String content, int score, ReviewStatus status,
