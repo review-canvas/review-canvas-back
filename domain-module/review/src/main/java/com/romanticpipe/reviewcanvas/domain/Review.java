@@ -1,6 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,9 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -45,9 +46,11 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewStatus status;
 	private String imageVideoUrls;
+	private boolean deleted;
 
 	@Builder
-	public Review(Long productId, User user, String content, int score, ReviewStatus status, String imageVideoUrls) {
+	public Review(Long productId, User user, String content, int score, ReviewStatus status,
+		String imageVideoUrls, boolean deleted) {
 		this.productId = productId;
 		this.user = user;
 		this.replyList = new ArrayList<>();
@@ -55,5 +58,6 @@ public class Review extends BaseEntityWithUpdate {
 		this.score = score;
 		this.status = status;
 		this.imageVideoUrls = imageVideoUrls;
+		this.deleted = deleted;
 	}
 }

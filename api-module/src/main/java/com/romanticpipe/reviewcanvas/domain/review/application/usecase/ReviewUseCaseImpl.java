@@ -1,5 +1,12 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.EnumSet;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.romanticpipe.reviewcanvas.common.storage.S3Service;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Product;
@@ -20,13 +27,8 @@ import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.EnumSet;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -41,22 +43,23 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getReviewsForUser(String mallId, Long productNo,
-																   PageableRequest pageableRequest,
-																   ReviewFilterForUser filter) {
+		String memberId, PageableRequest pageableRequest, ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
 
 		return transactionUtils.executeInReadTransaction(
 			status -> reviewService.findAllByProductId(product.getId(), pageableRequest, filter)
-				.map(GetReviewDetailResponse::from)
+				.map((review) -> GetReviewDetailResponse.from(review, review.getUser().getMemberId().equals(memberId)))
 		);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public GetReviewDetailResponse getReviewForUser(Long reviewId) {
-		return GetReviewDetailResponse.from(reviewService.validateUserInfoById(reviewId));
+	public GetReviewDetailResponse getReviewForUser(Long reviewId, String memberId) {
+		Review review = reviewService.validateUserInfoById(reviewId);
+
+		return GetReviewDetailResponse.from(review, review.getUser().getMemberId().equals(memberId));
 	}
 
 	@Override
@@ -66,13 +69,13 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters
 	) {
 		return reviewService.findByProductId(productId, pageable, reviewFilters, score, replyFilters)
-			.map(GetReviewDetailResponse::from);
+			.map((review) -> GetReviewDetailResponse.from(review, false));
 	}
 
 	@Override
 	@Transactional
 	public void updateReview(String mallId, String memberId, Long reviewId,
-							 UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 		review.setScore(updateReviewRequest.score());
@@ -90,7 +93,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-							 List<MultipartFile> reviewImages) {
+		List<MultipartFile> reviewImages) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
@@ -106,6 +109,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.score(createReviewRequest.score())
 			.status(ReviewStatus.APPROVED)
 			.imageVideoUrls(savedFileNames)
+			.deleted(false)
 			.build();
 		reviewService.save(review);
 	}
