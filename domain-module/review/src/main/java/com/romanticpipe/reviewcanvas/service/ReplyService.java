@@ -27,11 +27,12 @@ public class ReplyService {
 		return replyRepository.save(reply);
 	}
 
-	public void createAndSave(Long reviewId, Long userId, String content) {
+	public void createAndSave(Long reviewId, Long userId, Integer shopAdminId, String content) {
 		Reply reply = Reply.builder()
 			.review(entityManager.getReference(Review.class, reviewId))
 			.user(entityManager.getReference(User.class, userId))
 			.content(content)
+			.shopAdminId(shopAdminId)
 			.build();
 		replyRepository.save(reply);
 	}

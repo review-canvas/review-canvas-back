@@ -37,7 +37,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 		);
 
 		transactionUtils.executeWithoutResultInWriteTransaction(
-			status -> replyService.createAndSave(reviewId, user.getId(), createReplyRequest.content())
+			status -> replyService.createAndSave(reviewId, user.getId(), null, createReplyRequest.content())
 		);
 	}
 
