@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
@@ -11,5 +12,5 @@ public interface ReplyUseCase {
 
 	List<GetReplyForUserResponse> getReplyForUser(Long reviewId);
 
-	void deleteReplyForUser(String mallId, String memberId, Long replyId);
+	void deleteReplyForUser(String mallId, String memberId, Long replyId, LocalDateTime localDateTime);
 }
