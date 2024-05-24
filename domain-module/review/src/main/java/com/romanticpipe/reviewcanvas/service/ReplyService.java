@@ -42,7 +42,7 @@ public class ReplyService {
 		return replyRepository.findAllByReviewId(reviewId);
 	}
 
-	public Reply findById(Long replyId) {
+	public Reply validateReplyForUser(Long replyId) {
 		return replyRepository.findById(replyId).orElseThrow(ReplyNotFoundException::new);
 	}
 

@@ -55,7 +55,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	@Override
 	@Transactional
 	public void updateReplyForUser(Long replyId, UpdateReplyRequest updateReplyRequest) {
-		Reply reply = replyService.findById(replyId);
+		Reply reply = replyService.validateReplyForUser(replyId);
 		Optional<User> optionalUser = userService.findUser(updateReplyRequest.memberId(), updateReplyRequest.mallId());
 		replyService.validateUpdatable(reply, optionalUser);
 		reply.update(updateReplyRequest.content());
