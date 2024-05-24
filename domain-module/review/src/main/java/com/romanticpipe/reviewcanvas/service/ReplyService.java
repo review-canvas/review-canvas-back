@@ -48,7 +48,7 @@ public class ReplyService {
 
 	public void validateUpdatable(Reply reply, Optional<User> optionalUser) {
 		if (reply.getDeletedAt() != null) {
-			throw new BusinessException(ReviewErrorCode.REPLY_CAN_NOT_UPDATE);
+			throw new ReplyNotFoundException();
 		}
 		optionalUser.ifPresentOrElse(
 			user -> {
