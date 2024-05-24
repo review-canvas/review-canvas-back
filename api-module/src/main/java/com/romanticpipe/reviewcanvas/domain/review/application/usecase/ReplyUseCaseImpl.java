@@ -47,7 +47,8 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 		reviewService.validById(reviewId);
 		return replyService.findAllByReviewId(reviewId)
 			.stream()
-			.map(reply -> GetReplyForUserResponse.from(reply, userService.findUserByUserId(reply.getUser().getId())))
+			.map(
+				reply -> GetReplyForUserResponse.from(reply, userService.validateUserByUserId(reply.getUser().getId())))
 			.toList();
 	}
 
