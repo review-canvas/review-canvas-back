@@ -45,7 +45,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	@Transactional(readOnly = true)
 	public List<GetReplyForUserResponse> getReplyForUser(Long reviewId) {
 		reviewService.validById(reviewId);
-		return replyService.findAllByReviewId(reviewId)
+		return replyService.findAllByReviewIdForUser(reviewId)
 			.stream()
 			.map(
 				reply -> GetReplyForUserResponse.from(reply, userService.validateUserByUserId(reply.getUser().getId())))

@@ -36,8 +36,8 @@ public class ReplyService {
 		replyRepository.save(reply);
 	}
 
-	public List<Reply> findAllByReviewId(Long reviewId) {
-		return replyRepository.findAllByReviewId(reviewId);
+	public List<Reply> findAllByReviewIdForUser(Long reviewId) {
+		return replyRepository.findAllByReviewIdAndUserIdIsNotNull(reviewId);
 	}
 
 	public Reply validateReplyForUser(Long replyId) {
