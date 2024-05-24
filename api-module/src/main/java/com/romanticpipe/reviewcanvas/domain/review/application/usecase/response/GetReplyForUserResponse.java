@@ -17,8 +17,8 @@ public record GetReplyForUserResponse(@Schema(description = "댓글 id", require
 									  LocalDateTime createAt,
 									  @Schema(description = "댓글 수정 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
 									  LocalDateTime updatedAt,
-									  @Schema(description = "댓글 삭제 여부", requiredMode = Schema.RequiredMode.REQUIRED)
-									  Boolean deleted,
+									  @Schema(description = "댓글 삭제 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
+									  LocalDateTime deletedAt,
 									  @Schema(description = "작성자 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
 									  String memberId,
 									  @Schema(description = "작성자 닉네임", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -30,7 +30,7 @@ public record GetReplyForUserResponse(@Schema(description = "댓글 id", require
 			.content(reply.getContent())
 			.createAt(reply.getCreatedAt())
 			.updatedAt(reply.getUpdatedAt())
-			.deleted(reply.getDeleted())
+			.deletedAt(reply.getDeletedAt())
 			.memberId(user.getMemberId())
 			.nickName(user.getNickName())
 			.build();

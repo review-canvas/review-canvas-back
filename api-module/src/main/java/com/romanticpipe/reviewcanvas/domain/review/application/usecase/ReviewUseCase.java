@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewDetailResponse;
@@ -33,4 +34,8 @@ public interface ReviewUseCase {
 	GetReviewDetailResponse getReviewForUser(Long reviewId, String memberId);
 
 	void deleteReviewByPublicView(String mallId, String memberId, long reviewId, LocalDateTime localDateTime);
+
+	void createReviewByShopAdmin(Integer shopAdminId, Long productNo,
+		CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
+		List<MultipartFile> reviewImages);
 }
