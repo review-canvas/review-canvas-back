@@ -1,7 +1,6 @@
 package com.romanticpipe.reviewcanvas.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -11,7 +10,6 @@ import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReplyNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
-import com.romanticpipe.reviewcanvas.exception.UserNotFoundException;
 import com.romanticpipe.reviewcanvas.repository.ReplyRepository;
 
 import jakarta.persistence.EntityManager;
@@ -46,18 +44,12 @@ public class ReplyService {
 		return replyRepository.findById(replyId).orElseThrow(ReplyNotFoundException::new);
 	}
 
-	public void validateUpdatable(Reply reply, Optional<User> optionalUser) {
+	public void validateUpdateForUser(Reply reply, User user) {
 		if (reply.getDeletedAt() != null) {
 			throw new ReplyNotFoundException();
 		}
-		optionalUser.ifPresentOrElse(
-			user -> {
-				if (!user.getId().equals(reply.getUser().getId())) {
-					throw new BusinessException(ReviewErrorCode.WRITER_NOT_MATCH);
-				}
-			}, () -> {
-				throw new UserNotFoundException();
-			}
-		);
+		if (reply.getUser() == null || !user.getId().equals(reply.getUser().getId())) {
+			throw new BusinessException(ReviewErrorCode.WRITER_NOT_MATCH);
+		}
 	}
 }

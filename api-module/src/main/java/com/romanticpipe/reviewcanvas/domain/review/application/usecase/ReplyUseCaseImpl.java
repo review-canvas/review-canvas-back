@@ -1,7 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,8 +55,8 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	@Transactional
 	public void updateReplyForUser(Long replyId, UpdateReplyRequest updateReplyRequest) {
 		Reply reply = replyService.validateReplyForUser(replyId);
-		Optional<User> optionalUser = userService.findUser(updateReplyRequest.memberId(), updateReplyRequest.mallId());
-		replyService.validateUpdatable(reply, optionalUser);
+		User user = userService.validByMemberIdAndMallId(updateReplyRequest.memberId(), updateReplyRequest.mallId());
+		replyService.validateUpdateForUser(reply, user);
 		reply.update(updateReplyRequest.content());
 	}
 }
