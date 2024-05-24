@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,17 @@ public class ReplyController implements ReplyApi {
 		return SuccessResponse.of(
 			replyUseCase.getReplyForUser(reviewId)
 		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@DeleteMapping("/shop/{mallId}/users/{memberId}/replies/{replyId}")
+	public ResponseEntity<SuccessResponse<Void>> deleteReplyForUser(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@PathVariable("replyId") Long replyId
+	) {
+		replyUseCase.deleteReplyForUser(mallId, memberId, replyId);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
 }

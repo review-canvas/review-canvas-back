@@ -10,4 +10,6 @@ public interface ReplyUseCase {
 	void createReplyForUser(Long reviewId, CreateReplyRequest createReplyRequest);
 
 	List<GetReplyForUserResponse> getReplyForUser(Long reviewId);
+
+	void deleteReplyForUser(String mallId, String memberId, Long replyId);
 }

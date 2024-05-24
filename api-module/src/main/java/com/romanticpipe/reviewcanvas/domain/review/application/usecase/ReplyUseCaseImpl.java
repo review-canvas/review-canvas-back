@@ -48,4 +48,9 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 			.map(reply -> GetReplyForUserResponse.from(reply, userService.findUserByUserId(reply.getUser().getId())))
 			.toList();
 	}
+
+	@Override
+	public void deleteReplyForUser(String mallId, String memberId, Long replyId) {
+
+	}
 }
