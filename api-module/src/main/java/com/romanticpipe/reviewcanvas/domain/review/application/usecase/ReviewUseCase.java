@@ -40,4 +40,7 @@ public interface ReviewUseCase {
 		List<MultipartFile> reviewImages);
 
 	void deleteReviewByShopAdmin(Integer shopAdminId, Long reviewId, LocalDateTime localDateTime);
+
+	PageResponse<GetReviewDetailResponse> getReviewsInMyPage(String mallId, String memberId,
+		PageableRequest of, ReviewFilterForUser filter);
 }
