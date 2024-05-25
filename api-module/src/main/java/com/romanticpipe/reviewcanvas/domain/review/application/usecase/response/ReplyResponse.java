@@ -27,7 +27,7 @@ public record ReplyResponse(
 	public static ReplyResponse from(Reply reply) {
 		return ReplyResponse.builder()
 			.replyId(reply.getId())
-			.content(reply.getContent())
+			.content(reply.getDeletedAt() == null ? reply.getContent() : " ")
 			.createAt(reply.getCreatedAt())
 			.updatedAt(reply.getUpdatedAt())
 			.deleted(reply.getDeletedAt() != null)
