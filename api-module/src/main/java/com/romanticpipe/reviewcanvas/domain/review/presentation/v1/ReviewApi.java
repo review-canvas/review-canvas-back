@@ -140,10 +140,10 @@ interface ReviewApi {
 			responseCode = "200",
 			description = "성공적으로 상품의 리뷰 생성이 완료되었습니다.")
 	})
-	@PostMapping("/shop-admin/products/{productNo}/review")
+	@PostMapping("/shop-admin/products/{productId}/review")
 	ResponseEntity<SuccessResponse<Void>> createReviewByShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
-		@PathVariable("productNo") Long productNo,
+		@PathVariable("productId") Long productId,
 		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
 		@RequestPart(required = false) List<MultipartFile> reviewImages
 	);
