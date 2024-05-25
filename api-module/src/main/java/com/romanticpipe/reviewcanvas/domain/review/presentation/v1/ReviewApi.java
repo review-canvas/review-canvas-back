@@ -159,4 +159,18 @@ interface ReviewApi {
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId
 	);
+
+	@Operation(summary = "Shop Admin의 리뷰 수정 API", description = "Shop Admin이 특정 리뷰를 수정한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 수정이 완료되었습니다.")
+	})
+	@PatchMapping("/shop-admin/reviews/{reviewId}")
+	ResponseEntity<SuccessResponse<Void>> updateReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId,
+		@RequestPart UpdateReviewRequest updateReviewRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewImages
+	);
 }

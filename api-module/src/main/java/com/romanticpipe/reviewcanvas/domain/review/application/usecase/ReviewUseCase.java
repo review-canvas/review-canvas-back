@@ -40,4 +40,7 @@ public interface ReviewUseCase {
 		List<MultipartFile> reviewImages);
 
 	void deleteReviewByShopAdmin(Integer shopAdminId, Long reviewId, LocalDateTime localDateTime);
+
+	void updateReviewByShopAdmin(Integer shopAdminId, Long reviewId,
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages);
 }
