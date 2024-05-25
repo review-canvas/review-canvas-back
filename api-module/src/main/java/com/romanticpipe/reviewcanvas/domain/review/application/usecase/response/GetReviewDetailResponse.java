@@ -16,8 +16,8 @@ public record GetReviewDetailResponse(
 	String content,
 	@Schema(description = "리뷰 점수", requiredMode = Schema.RequiredMode.REQUIRED)
 	Integer score,
-	@Schema(description = "리뷰 작성자 cafe24 id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-	String memberId,
+	@Schema(description = "리뷰 작성자 id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	Long userId,
 	@Schema(description = "리뷰 작성 shop admin id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	Integer shopAdminId,
 	@Schema(description = "리뷰 작성자 닉네임", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -43,7 +43,7 @@ public record GetReviewDetailResponse(
 			.reviewId(review.getId())
 			.content(review.getDeletedAt() == null ? review.getContent() : " ")
 			.score(review.getScore())
-			.memberId(review.getUser().getMemberId())
+			.userId(review.getUser().getId())
 			.nickname(review.getUser().getNickName())
 			.isMine(isMine)
 			.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())
