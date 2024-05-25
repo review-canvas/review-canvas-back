@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase.response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.romanticpipe.reviewcanvas.domain.Review;
@@ -24,6 +25,12 @@ public record GetReviewDetailResponse(
 	String nickname,
 	@Schema(description = "본인 작성 리뷰 여부", requiredMode = Schema.RequiredMode.REQUIRED)
 	Boolean isMine,
+	@Schema(description = "리뷰 생성 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
+	LocalDateTime createAt,
+	@Schema(description = "리뷰 수정 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
+	LocalDateTime updatedAt,
+	@Schema(description = "리뷰 삭제 여부", requiredMode = Schema.RequiredMode.REQUIRED)
+	Boolean deleted,
 	@Schema(description = "리뷰에 해당하는 댓글 리스트", requiredMode = Schema.RequiredMode.REQUIRED)
 	List<ReplyResponse> replies
 ) {
@@ -36,6 +43,9 @@ public record GetReviewDetailResponse(
 				.score(review.getScore())
 				.shopAdminId(review.getShopAdminId())
 				.isMine(isMine)
+				.createAt(review.getCreatedAt())
+				.updatedAt(review.getUpdatedAt())
+				.deleted(review.getDeletedAt() != null)
 				.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())
 				.build();
 		}
@@ -46,6 +56,9 @@ public record GetReviewDetailResponse(
 			.userId(review.getUser().getId())
 			.nickname(review.getUser().getNickName())
 			.isMine(isMine)
+			.createAt(review.getCreatedAt())
+			.updatedAt(review.getUpdatedAt())
+			.deleted(review.getDeletedAt() != null)
 			.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())
 			.build();
 	}

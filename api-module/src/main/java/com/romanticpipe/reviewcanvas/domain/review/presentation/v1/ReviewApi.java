@@ -147,4 +147,16 @@ interface ReviewApi {
 		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
 		@RequestPart(required = false) List<MultipartFile> reviewImages
 	);
+
+	@Operation(summary = "Shop Admin의 리뷰 삭제 API", description = "Shop Admin이 특정 리뷰를 삭제한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 삭제가 완료되었습니다.")
+	})
+	@DeleteMapping("/shop-admin/reviews/{reviewId}")
+	ResponseEntity<SuccessResponse<Void>> deleteReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId
+	);
 }

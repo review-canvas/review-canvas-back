@@ -141,4 +141,14 @@ class ReviewController implements ReviewApi {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
+	@Override
+	@DeleteMapping(value = "/shop-admin/reviews/{reviewId}")
+	public ResponseEntity<SuccessResponse<Void>> deleteReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId
+	) {
+		reviewUseCase.deleteReviewByShopAdmin(jwtInfo.adminId(), reviewId, LocalDateTime.now());
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
 }
