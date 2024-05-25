@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.common.storage.S3Service;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
@@ -161,9 +162,12 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void deleteReviewByShopAdmin(Integer shopAdminId, Long reviewId, LocalDateTime localDateTime) {
-		shopAdminService.validateById(shopAdminId);
+		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
-		if (!shopAdminId.equals(review.getShopAdminId())) {
+		String shopAdminMallId = shopAdmin.getMallId();
+		String reviewUserMallId = review.getUser() != null ? review.getUser().getMallId() : null;
+		if (!(shopAdminMallId.equals(reviewUserMallId) || shopAdminId.equals(
+			review.getShopAdminId()))) {
 			throw new ReviewNotMatchAdminException();
 		}
 		/**
@@ -171,5 +175,26 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		 * replyService.deleteReply(reviewId);
 		 */
 		review.delete(localDateTime);
+	}
+
+	@Override
+	@Transactional
+	public void updateReviewByShopAdmin(Integer shopAdminId, Long reviewId,
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
+		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
+		Review review = reviewService.validById(reviewId);
+		String shopAdminMallId = shopAdmin.getMallId();
+		String reviewUserMallId = review.getUser() != null ? review.getUser().getMallId() : null;
+		if (!(shopAdminMallId.equals(reviewUserMallId) || shopAdminId.equals(
+			review.getShopAdminId()))) {
+			throw new ReviewNotMatchAdminException();
+		}
+		Product product = productService.findProduct(review.getProductId())
+			.orElseThrow(() -> new ProductNotFoundException());
+		String dirPath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + review.getProductId();
+		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
+		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
+			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
+		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileNames);
 	}
 }
