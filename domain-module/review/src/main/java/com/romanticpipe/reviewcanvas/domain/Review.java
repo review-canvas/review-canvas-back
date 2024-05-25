@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.SQLRestriction;
+
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
 
 import jakarta.persistence.Column;
@@ -24,6 +26,7 @@ import lombok.experimental.FieldNameConstants;
 
 @Entity
 @Getter
+@SQLRestriction("deleted_at is null")
 @FieldNameConstants
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public class Review extends BaseEntityWithUpdate {
@@ -62,8 +65,8 @@ public class Review extends BaseEntityWithUpdate {
 		this.shopAdminId = shopAdminId;
 	}
 
-	public void delete() {
-		this.deletedAt = LocalDateTime.now();
+	public void delete(LocalDateTime localDateTime) {
+		this.deletedAt = localDateTime;
 	}
 
 	public void update(int score, String content, String savedFileNames) {

@@ -38,4 +38,6 @@ public interface ReviewUseCase {
 	void createReviewByShopAdmin(Integer shopAdminId, Long productNo,
 		CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
 		List<MultipartFile> reviewImages);
+
+	void deleteReviewByShopAdmin(Integer shopAdminId, Long reviewId, LocalDateTime localDateTime);
 }

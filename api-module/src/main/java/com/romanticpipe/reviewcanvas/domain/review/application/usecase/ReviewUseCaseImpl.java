@@ -133,7 +133,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		 * TODO 댓글 먼저 삭제 후 리뷰 삭제
 		 * replyService.deleteReply(reviewId);
 		 */
-		review.delete();
+		review.delete(localDateTime);
 	}
 
 	@Override
@@ -157,5 +157,17 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.shopAdminId(shopAdminId)
 			.build();
 		reviewService.save(review);
+	}
+
+	@Override
+	@Transactional
+	public void deleteReviewByShopAdmin(Integer shopAdminId, Long reviewId, LocalDateTime localDateTime) {
+		shopAdminService.validateById(shopAdminId);
+		Review review = reviewService.validById(reviewId);
+		/**
+		 * TODO 댓글 먼저 삭제 후 리뷰 삭제???
+		 * replyService.deleteReply(reviewId);
+		 */
+		review.delete(localDateTime);
 	}
 }
