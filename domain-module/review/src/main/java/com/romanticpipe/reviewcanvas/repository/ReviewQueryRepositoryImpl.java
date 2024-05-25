@@ -38,6 +38,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			.where(review.productId.eq(productId), getFilterExpression(filter))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
+			.orderBy(getReviewOrderSpecifiers(pageable))
 			.fetch();
 
 		List<Review> reviewInfoList = queryFactory.selectFrom(review)
@@ -68,6 +69,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 				getReplyExistCondition(replyFilters))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
+			.orderBy(getReviewOrderSpecifiers(pageable))
 			.fetch();
 
 		List<Review> reviewInfoList = queryFactory.selectFrom(review)
@@ -96,6 +98,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			.where(review.user.id.eq(userId), getFilterExpression(filter))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
+			.orderBy(getReviewOrderSpecifiers(pageable))
 			.fetch();
 
 		List<Review> reviewInfoList = queryFactory.selectFrom(review)
