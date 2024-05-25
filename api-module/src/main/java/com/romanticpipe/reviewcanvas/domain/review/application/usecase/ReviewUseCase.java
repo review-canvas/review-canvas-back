@@ -35,7 +35,7 @@ public interface ReviewUseCase {
 
 	void deleteReviewByPublicView(String mallId, String memberId, long reviewId, LocalDateTime localDateTime);
 
-	void createReviewByShopAdmin(Integer shopAdminId, Long productNo,
+	void createReviewByShopAdmin(Integer shopAdminId, Long productId,
 		CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
 		List<MultipartFile> reviewImages);
 

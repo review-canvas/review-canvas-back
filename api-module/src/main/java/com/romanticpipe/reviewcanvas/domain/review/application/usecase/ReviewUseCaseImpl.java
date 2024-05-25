@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.common.storage.S3Service;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
@@ -138,10 +137,10 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public void createReviewByShopAdmin(Integer shopAdminId, Long productNo,
+	public void createReviewByShopAdmin(Integer shopAdminId, Long productId,
 		CreateReviewByShopAdminRequest createReviewByShopAdminRequest, List<MultipartFile> reviewImages) {
-		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
-		Product product = productService.findProduct(shopAdmin.getMallId(), productNo)
+		shopAdminService.validateById(shopAdminId);
+		Product product = productService.findProduct(productId)
 			.orElseThrow(() -> new ProductNotFoundException());
 
 		String saveImagePath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
