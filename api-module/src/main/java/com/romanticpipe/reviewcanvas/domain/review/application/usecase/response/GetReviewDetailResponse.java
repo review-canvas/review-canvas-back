@@ -25,11 +25,11 @@ public record GetReviewDetailResponse(
 	String nickname,
 	@Schema(description = "본인 작성 리뷰 여부", requiredMode = Schema.RequiredMode.REQUIRED)
 	Boolean isMine,
-	@Schema(description = "댓글 생성 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
+	@Schema(description = "리뷰 생성 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime createAt,
-	@Schema(description = "댓글 수정 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
+	@Schema(description = "리뷰 수정 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime updatedAt,
-	@Schema(description = "댓글 삭제 여부", requiredMode = Schema.RequiredMode.REQUIRED)
+	@Schema(description = "리뷰 삭제 여부", requiredMode = Schema.RequiredMode.REQUIRED)
 	Boolean deleted,
 	@Schema(description = "리뷰에 해당하는 댓글 리스트", requiredMode = Schema.RequiredMode.REQUIRED)
 	List<ReplyResponse> replies
