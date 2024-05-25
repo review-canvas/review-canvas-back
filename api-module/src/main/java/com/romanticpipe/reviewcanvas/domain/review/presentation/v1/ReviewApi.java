@@ -143,7 +143,7 @@ interface ReviewApi {
 	@PostMapping("/shop-admin/products/{productId}/review")
 	ResponseEntity<SuccessResponse<Void>> createReviewByShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
-		@PathVariable("productId") Long productNo,
+		@PathVariable("productId") Long productId,
 		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
 		@RequestPart(required = false) List<MultipartFile> reviewImages
 	);
