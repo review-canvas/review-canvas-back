@@ -58,6 +58,7 @@ class ReviewController implements ReviewApi {
 	}
 
 	@Override
+	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/reviews")
 	public ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsInMyPage(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,

@@ -62,8 +62,7 @@ interface ReviewApi {
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 내 리뷰 조회가 완료되었습니다."
-		)
+			description = "성공적으로 내 리뷰 조회가 완료되었습니다.")
 	})
 	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/reviews")
 	ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsInMyPage(
