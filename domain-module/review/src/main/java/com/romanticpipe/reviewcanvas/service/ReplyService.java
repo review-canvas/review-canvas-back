@@ -28,7 +28,6 @@ public class ReplyService {
 			.review(entityManager.getReference(Review.class, reviewId))
 			.user(entityManager.getReference(User.class, userId))
 			.content(content)
-			.deleted(false)
 			.build();
 		replyRepository.save(reply);
 	}

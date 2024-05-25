@@ -16,9 +16,11 @@ public record GetReviewDetailResponse(
 	String content,
 	@Schema(description = "리뷰 점수", requiredMode = Schema.RequiredMode.REQUIRED)
 	Integer score,
-	@Schema(description = "리뷰 작성자 cafe24 id", requiredMode = Schema.RequiredMode.REQUIRED)
-	String memberId,
-	@Schema(description = "리뷰 작성자 닉네임", requiredMode = Schema.RequiredMode.REQUIRED)
+	@Schema(description = "리뷰 작성자 id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	Long userId,
+	@Schema(description = "리뷰 작성 shop admin id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	Integer shopAdminId,
+	@Schema(description = "리뷰 작성자 닉네임", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	String nickname,
 	@Schema(description = "본인 작성 리뷰 여부", requiredMode = Schema.RequiredMode.REQUIRED)
 	Boolean isMine,
@@ -27,11 +29,21 @@ public record GetReviewDetailResponse(
 ) {
 
 	public static GetReviewDetailResponse from(Review review, boolean isMine) {
+		if (review.getUser() == null) {
+			return GetReviewDetailResponse.builder()
+				.reviewId(review.getId())
+				.content(review.getDeletedAt() == null ? review.getContent() : " ")
+				.score(review.getScore())
+				.shopAdminId(review.getShopAdminId())
+				.isMine(isMine)
+				.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())
+				.build();
+		}
 		return GetReviewDetailResponse.builder()
 			.reviewId(review.getId())
 			.content(review.getDeletedAt() == null ? review.getContent() : " ")
 			.score(review.getScore())
-			.memberId(review.getUser().getMemberId())
+			.userId(review.getUser().getId())
 			.nickname(review.getUser().getNickName())
 			.isMine(isMine)
 			.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())

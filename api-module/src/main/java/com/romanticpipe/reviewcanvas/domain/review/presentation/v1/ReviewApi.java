@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewDetailResponse;
@@ -98,7 +101,7 @@ interface ReviewApi {
 	@PostMapping("/shop/{mallId}/products/{productNo}/review")
 	ResponseEntity<SuccessResponse<Void>> createReview(
 		@PathVariable("mallId") String mallId,
-		@PathVariable("productNo") Long productId,
+		@PathVariable("productNo") Long productNo,
 		@RequestPart CreateReviewRequest createReviewRequest,
 		@RequestPart(required = false) List<MultipartFile> reviewImages
 	);
@@ -129,5 +132,19 @@ interface ReviewApi {
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
 		@PathVariable("reviewId") long reviewId
+	);
+
+	@Operation(summary = "Shop Admin의 상품 리뷰 생성 API", description = "Shop Admin이 특정 상품의 리뷰를 생성한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 상품의 리뷰 생성이 완료되었습니다.")
+	})
+	@PostMapping("/shop-admin/products/{productNo}/review")
+	ResponseEntity<SuccessResponse<Void>> createReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("productNo") Long productNo,
+		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewImages
 	);
 }

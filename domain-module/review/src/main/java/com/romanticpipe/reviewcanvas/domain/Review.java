@@ -46,10 +46,11 @@ public class Review extends BaseEntityWithUpdate {
 	private ReviewStatus status;
 	private String imageVideoUrls;
 	private LocalDateTime deletedAt;
+	private Integer shopAdminId;
 
 	@Builder
 	public Review(Long productId, User user, String content, int score, ReviewStatus status,
-		String imageVideoUrls) {
+		String imageVideoUrls, Integer shopAdminId) {
 		this.productId = productId;
 		this.user = user;
 		this.replyList = new ArrayList<>();
@@ -58,6 +59,7 @@ public class Review extends BaseEntityWithUpdate {
 		this.status = status;
 		this.imageVideoUrls = imageVideoUrls;
 		this.deletedAt = null;
+		this.shopAdminId = shopAdminId;
 	}
 
 	public void delete() {
