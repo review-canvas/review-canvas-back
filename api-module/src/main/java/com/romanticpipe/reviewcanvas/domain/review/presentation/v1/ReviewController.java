@@ -165,4 +165,18 @@ class ReviewController implements ReviewApi {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
+	@Override
+	@PatchMapping(value = "/shop-admin/reviews/{reviewId}", consumes = "multipart/form-data")
+	public ResponseEntity<SuccessResponse<Void>> updateReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId,
+		@RequestPart UpdateReviewRequest updateReviewRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewImages) {
+		if (reviewImages == null) {
+			reviewImages = List.of();
+		}
+		reviewUseCase.updateReviewByShopAdmin(jwtInfo.adminId(), reviewId, updateReviewRequest, reviewImages);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
 }

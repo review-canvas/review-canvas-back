@@ -43,4 +43,8 @@ public interface ReviewUseCase {
 
 	PageResponse<GetReviewDetailResponse> getReviewsInMyPage(String mallId, String memberId,
 		PageableRequest of, ReviewFilterForUser filter);
+
+	void updateReviewByShopAdmin(Integer shopAdminId, Long reviewId,
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages);
+
 }
