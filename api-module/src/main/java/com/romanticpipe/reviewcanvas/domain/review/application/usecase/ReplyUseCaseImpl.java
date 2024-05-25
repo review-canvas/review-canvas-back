@@ -1,13 +1,20 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
+import com.romanticpipe.reviewcanvas.domain.Reply;
+import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.User;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
@@ -22,6 +29,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	private final UserService userService;
 	private final ReplyService replyService;
 	private final ReviewService reviewService;
+	private final ShopAdminService shopAdminService;
 	private final UserUseCase userUseCase;
 	private final TransactionUtils transactionUtils;
 
@@ -47,5 +55,38 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 			.stream()
 			.map(reply -> GetReplyForUserResponse.from(reply, userService.findUserByUserId(reply.getUser().getId())))
 			.toList();
+	}
+
+	@Override
+	public void createReplyForShopAdmin(Integer shopAdminId, Long reviewId,
+		CreateReplyByShopAdminRequest createReplyByShopAdminRequest) {
+		shopAdminService.validateById(shopAdminId);
+		Review review = reviewService.validById(reviewId);
+
+		Reply reply = Reply.builder()
+			.content(createReplyByShopAdminRequest.content())
+			.shopAdminId(shopAdminId)
+			.review(review)
+			.build();
+		replyService.save(reply);
+	}
+
+	@Override
+	@Transactional
+	public void updateReplyForShopAdmin(Integer shopAdminId, Long replyId,
+		UpdateReplyByShopAdminRequest updateReplyByShopAdminRequest) {
+		shopAdminService.validateById(shopAdminId);
+		Reply reply = replyService.validById(replyId);
+
+		reply.update(updateReplyByShopAdminRequest.content());
+	}
+
+	@Override
+	@Transactional
+	public void deleteReplyForShopAdmin(Integer shopAdminId, Long replyId, LocalDateTime localDateTime) {
+		shopAdminService.validateById(shopAdminId);
+		Reply reply = replyService.validById(replyId);
+
+		reply.delete(localDateTime);
 	}
 }

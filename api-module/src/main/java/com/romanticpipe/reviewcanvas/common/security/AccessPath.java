@@ -27,6 +27,9 @@ public final class AccessPath {
 		// review
 		shopAdminAllowedPath.put("/api/v1/shop-admin/products/{productId}/review", List.of(HttpMethod.POST));
 		shopAdminAllowedPath.put("/api/v1/shop-admin/reviews/{reviewId}", List.of(HttpMethod.DELETE, HttpMethod.PATCH));
+		//reply
+		shopAdminAllowedPath.put("/api/v1/shop-admin/reviews/{reviewId}/reply", List.of(HttpMethod.POST));
+		shopAdminAllowedPath.put("/api/v1/shop-admin/replies/{replyId}", List.of(HttpMethod.DELETE, HttpMethod.PATCH));
 		// shopAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
 		shopAdminAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET));
 		// shop-admin

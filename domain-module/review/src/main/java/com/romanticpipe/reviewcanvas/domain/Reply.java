@@ -33,16 +33,23 @@ public class Reply extends BaseEntityWithUpdate {
 	@JoinColumn(name = "users_id")
 	private User user;
 	private String content;
+	private Integer shopAdminId;
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public Reply(Review review, User user, String content) {
+	public Reply(Review review, int shopAdminId, User user, String content) {
 		this.review = review;
 		this.user = user;
+		this.shopAdminId = shopAdminId;
 		this.content = content;
 	}
 
+
 	public void update(String content) {
 		this.content = content;
+	}
+
+	public void delete(LocalDateTime localDateTime) {
+		this.deletedAt = localDateTime;
 	}
 }
