@@ -27,8 +27,8 @@ import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
-import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
+import com.romanticpipe.reviewcanvas.exception.ProductNotFoundException;
+import com.romanticpipe.reviewcanvas.exception.ReviewNotMatchAdminException;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
@@ -93,7 +93,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 
 		Product product = productService.findProduct(review.getProductId())
-			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
+			.orElseThrow(() -> new ProductNotFoundException());
 		String dirPath = "public-view/shop-admin" + product.getShopAdminId() + "/product-" + review.getProductId();
 		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
 		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
@@ -106,7 +106,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
 		List<MultipartFile> reviewImages) {
 		Product product = productService.findProduct(mallId, productNo)
-			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
+			.orElseThrow(() -> new ProductNotFoundException());
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
 
 		String saveImagePath = "public-view/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
@@ -142,7 +142,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		CreateReviewByShopAdminRequest createReviewByShopAdminRequest, List<MultipartFile> reviewImages) {
 		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
 		Product product = productService.findProduct(shopAdmin.getMallId(), productNo)
-			.orElseThrow(() -> new BusinessException(ReviewErrorCode.PRODUCT_NOT_FOUND));
+			.orElseThrow(() -> new ProductNotFoundException());
 
 		String saveImagePath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
 		String savedFileNames = s3Service.uploadFiles(reviewImages, saveImagePath).stream()
@@ -164,6 +164,9 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	public void deleteReviewByShopAdmin(Integer shopAdminId, Long reviewId, LocalDateTime localDateTime) {
 		shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
+		if (!shopAdminId.equals(review.getShopAdminId())) {
+			throw new ReviewNotMatchAdminException();
+		}
 		/**
 		 * TODO 댓글 먼저 삭제 후 리뷰 삭제???
 		 * replyService.deleteReply(reviewId);
