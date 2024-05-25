@@ -127,16 +127,16 @@ class ReviewController implements ReviewApi {
 	}
 
 	@Override
-	@PostMapping("/shop-admin/products/{productNo}/review")
+	@PostMapping("/shop-admin/products/{productId}/review")
 	public ResponseEntity<SuccessResponse<Void>> createReviewByShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
-		@PathVariable("productNo") Long productNo,
+		@PathVariable("productId") Long productId,
 		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
 		@RequestPart(required = false) List<MultipartFile> reviewImages) {
 		if (reviewImages == null) {
 			reviewImages = List.of();
 		}
-		reviewUseCase.createReviewByShopAdmin(jwtInfo.adminId(), productNo,
+		reviewUseCase.createReviewByShopAdmin(jwtInfo.adminId(), productId,
 			createReviewByShopAdminRequest, reviewImages);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
