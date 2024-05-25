@@ -58,6 +58,26 @@ interface ReviewApi {
 			allowableValues = {"ALL", "IMAGE_VIDEO", "GENERAL"}) ReviewFilterForUser filter
 	);
 
+	@Operation(summary = "마이페이지 리뷰 전체 조회 API", description = "마이 페이지에서 구매후기와 관련된 모든 리뷰를 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 내 리뷰 조회가 완료되었습니다.")
+	})
+	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/reviews")
+	ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsInMyPage(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "sort", required = false, defaultValue = "LATEST")
+		@Schema(description = "리뷰 정렬", defaultValue = "LATEST",
+			allowableValues = {"LATEST", "HIGH_SCORE", "LOW_SCORE"}) ReviewSort sort,
+		@RequestParam(name = "filter", required = false, defaultValue = "ALL")
+		@Schema(description = "리뷰 필터", defaultValue = "ALL",
+			allowableValues = {"ALL", "IMAGE_VIDEO", "GENERAL"}) ReviewFilterForUser filter
+	);
+
 	@Operation(summary = "리뷰 조회 API", description = "단건 리뷰를 조회한다.")
 	@ApiResponses(value = {
 		@ApiResponse(

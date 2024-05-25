@@ -58,6 +58,20 @@ class ReviewController implements ReviewApi {
 	}
 
 	@Override
+	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/reviews")
+	public ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsInMyPage(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "sort", required = false, defaultValue = "LATEST") ReviewSort sort,
+		@RequestParam(name = "filter", required = false, defaultValue = "ALL") ReviewFilterForUser filter) {
+		return SuccessResponse.of(
+			reviewUseCase.getReviewsInMyPage(mallId, memberId, PageableRequest.of(page, size, sort), filter)
+		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
 	@GetMapping("/reviews/{reviewId}")
 	public ResponseEntity<SuccessResponse<GetReviewDetailResponse>> getReviewForUser(
 		@PathVariable Long reviewId,

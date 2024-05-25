@@ -1,9 +1,10 @@
 package com.romanticpipe.reviewcanvas.repository;
 
-import com.romanticpipe.reviewcanvas.domain.Review;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import com.romanticpipe.reviewcanvas.domain.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewQueryRepository {
 

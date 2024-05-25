@@ -38,6 +38,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			.where(review.productId.eq(productId), getFilterExpression(filter))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
+			.orderBy(getReviewOrderSpecifiers(pageable))
 			.fetch();
 
 		List<Review> reviewInfoList = queryFactory.selectFrom(review)
@@ -68,6 +69,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 				getReplyExistCondition(replyFilters))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
+			.orderBy(getReviewOrderSpecifiers(pageable))
 			.fetch();
 
 		List<Review> reviewInfoList = queryFactory.selectFrom(review)
@@ -85,6 +87,34 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			.from(review)
 			.where(review.productId.eq(productId), getReviewTypeCondition(reviewFilters), getScoreCondition(score),
 				getReplyExistCondition(replyFilters));
+
+		return PageableExecutionUtils.getPage(reviewInfoList, pageable, countQuery::fetchOne);
+	}
+
+	@Override
+	public Page<Review> findAllByUserId(Long userId, Pageable pageable, ReviewFilterForUser filter) {
+		List<Long> reviewIds = queryFactory.select(review.id)
+			.from(review)
+			.where(review.user.id.eq(userId), getFilterExpression(filter))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.orderBy(getReviewOrderSpecifiers(pageable))
+			.fetch();
+
+		List<Review> reviewInfoList = queryFactory.selectFrom(review)
+			.leftJoin(review.user, user)
+			.fetchJoin()
+			.leftJoin(review.replyList, reply)
+			.fetchJoin()
+			.leftJoin(reply.user, new QUser("replyUser"))
+			.fetchJoin()
+			.where(review.id.in(reviewIds))
+			.orderBy(getReviewOrderSpecifiers(pageable))
+			.fetch();
+
+		JPAQuery<Long> countQuery = queryFactory.select(review.count())
+			.from(review)
+			.where(review.user.id.eq(userId), getFilterExpression(filter));
 
 		return PageableExecutionUtils.getPage(reviewInfoList, pageable, countQuery::fetchOne);
 	}
