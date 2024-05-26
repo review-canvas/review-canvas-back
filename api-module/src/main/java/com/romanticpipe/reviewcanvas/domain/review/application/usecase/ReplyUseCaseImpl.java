@@ -1,6 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -64,10 +63,10 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 
 	@Override
 	@Transactional
-	public void deleteReplyForUser(String mallId, String memberId, Long replyId, LocalDateTime localDateTime) {
+	public void deleteReplyForUser(String mallId, String memberId, Long replyId) {
 		Reply reply = replyService.validateReplyForUser(replyId);
 		User user = userService.validByMemberIdAndMallId(mallId, memberId);
 		replyService.validateUpdateForUser(reply, user);
-		reply.delete(localDateTime);
+		reply.delete();
 	}
 }

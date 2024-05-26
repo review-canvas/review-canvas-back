@@ -1,11 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 
 public interface ReplyUseCase {
 
@@ -15,5 +14,5 @@ public interface ReplyUseCase {
 
 	void updateReplyForUser(Long replyId, UpdateReplyRequest updateReplyRequest);
 
-	void deleteReplyForUser(String mallId, String memberId, Long replyId, LocalDateTime localDateTime);
+	void deleteReplyForUser(String mallId, String memberId, Long replyId);
 }

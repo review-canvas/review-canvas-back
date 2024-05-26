@@ -1,6 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -63,7 +62,7 @@ public class ReplyController implements ReplyApi {
 		@PathVariable("memberId") String memberId,
 		@PathVariable("replyId") Long replyId
 	) {
-		replyUseCase.deleteReplyForUser(mallId, memberId, replyId, LocalDateTime.now());
+		replyUseCase.deleteReplyForUser(mallId, memberId, replyId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
