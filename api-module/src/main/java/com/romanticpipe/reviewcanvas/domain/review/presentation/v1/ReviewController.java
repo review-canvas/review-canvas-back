@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewUseCase;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewDetailResponse;
@@ -51,6 +54,20 @@ class ReviewController implements ReviewApi {
 		@RequestParam(name = "filter", required = false, defaultValue = "ALL") ReviewFilterForUser filter) {
 		return SuccessResponse.of(
 			reviewUseCase.getReviewsForUser(mallId, productNo, memberId, PageableRequest.of(page, size, sort), filter)
+		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/reviews")
+	public ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsInMyPage(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "sort", required = false, defaultValue = "LATEST") ReviewSort sort,
+		@RequestParam(name = "filter", required = false, defaultValue = "ALL") ReviewFilterForUser filter) {
+		return SuccessResponse.of(
+			reviewUseCase.getReviewsInMyPage(mallId, memberId, PageableRequest.of(page, size, sort), filter)
 		).asHttp(HttpStatus.OK);
 	}
 
@@ -120,6 +137,45 @@ class ReviewController implements ReviewApi {
 		@PathVariable("reviewId") long reviewId
 	) {
 		reviewUseCase.deleteReviewByPublicView(mallId, memberId, reviewId, LocalDateTime.now());
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@PostMapping("/shop-admin/products/{productId}/review")
+	public ResponseEntity<SuccessResponse<Void>> createReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("productId") Long productId,
+		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewImages) {
+		if (reviewImages == null) {
+			reviewImages = List.of();
+		}
+		reviewUseCase.createReviewByShopAdmin(jwtInfo.adminId(), productId,
+			createReviewByShopAdminRequest, reviewImages);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@DeleteMapping(value = "/shop-admin/reviews/{reviewId}")
+	public ResponseEntity<SuccessResponse<Void>> deleteReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId
+	) {
+		reviewUseCase.deleteReviewByShopAdmin(jwtInfo.adminId(), reviewId, LocalDateTime.now());
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@PatchMapping(value = "/shop-admin/reviews/{reviewId}", consumes = "multipart/form-data")
+	public ResponseEntity<SuccessResponse<Void>> updateReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId,
+		@RequestPart UpdateReviewRequest updateReviewRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewImages) {
+		if (reviewImages == null) {
+			reviewImages = List.of();
+		}
+		reviewUseCase.updateReviewByShopAdmin(jwtInfo.adminId(), reviewId, updateReviewRequest, reviewImages);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 

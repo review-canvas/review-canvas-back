@@ -14,6 +14,8 @@ public interface ReviewQueryRepository {
 
 	Page<Review> findAllReview(Long productId, Pageable pageable, ReviewFilterForUser filter);
 
-	Page<Review> findByProductId(Long productId, Pageable pageable, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
-								 EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters);
+	Page<Review> findAllByProductId(Long productId, Pageable pageable, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
+									EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters);
+
+	Page<Review> findAllByUserId(Long userId, Pageable pageable, ReviewFilterForUser filter);
 }

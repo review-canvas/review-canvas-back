@@ -1,8 +1,24 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
-import java.util.EnumSet;
-import java.util.List;
-
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewByShopAdminRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewDetailResponse;
+import com.romanticpipe.reviewcanvas.dto.PageResponse;
+import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
+import com.romanticpipe.reviewcanvas.enumeration.Score;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,23 +29,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReviewRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReviewDetailResponse;
-import com.romanticpipe.reviewcanvas.dto.PageResponse;
-import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
-import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
-import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
-import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
-import com.romanticpipe.reviewcanvas.enumeration.Score;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.EnumSet;
+import java.util.List;
 
 @Tag(name = "Review", description = "리뷰 API")
 interface ReviewApi {
@@ -45,6 +46,26 @@ interface ReviewApi {
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productNo,
 		@RequestParam(value = "memberId", required = false) String memberId,
+		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "sort", required = false, defaultValue = "LATEST")
+		@Schema(description = "리뷰 정렬", defaultValue = "LATEST",
+			allowableValues = {"LATEST", "HIGH_SCORE", "LOW_SCORE"}) ReviewSort sort,
+		@RequestParam(name = "filter", required = false, defaultValue = "ALL")
+		@Schema(description = "리뷰 필터", defaultValue = "ALL",
+			allowableValues = {"ALL", "IMAGE_VIDEO", "GENERAL"}) ReviewFilterForUser filter
+	);
+
+	@Operation(summary = "마이페이지 리뷰 전체 조회 API", description = "마이 페이지에서 구매후기와 관련된 모든 리뷰를 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 내 리뷰 조회가 완료되었습니다.")
+	})
+	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/reviews")
+	ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsInMyPage(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
 		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "sort", required = false, defaultValue = "LATEST")
@@ -75,7 +96,7 @@ interface ReviewApi {
 	})
 	@GetMapping("/products/{productId}/reviews")
 	ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsForDashboard(
-		@PathVariable("productId") Long productId,
+		@Schema(description = "값이 0일 시 전체 리뷰를 조회합니다.") @PathVariable("productId") Long productId,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "sort", required = false, defaultValue = "LATEST") ReviewSort sort,
@@ -98,7 +119,7 @@ interface ReviewApi {
 	@PostMapping("/shop/{mallId}/products/{productNo}/review")
 	ResponseEntity<SuccessResponse<Void>> createReview(
 		@PathVariable("mallId") String mallId,
-		@PathVariable("productNo") Long productId,
+		@PathVariable("productNo") Long productNo,
 		@RequestPart CreateReviewRequest createReviewRequest,
 		@RequestPart(required = false) List<MultipartFile> reviewImages
 	);
@@ -129,5 +150,45 @@ interface ReviewApi {
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
 		@PathVariable("reviewId") long reviewId
+	);
+
+	@Operation(summary = "Shop Admin의 상품 리뷰 생성 API", description = "Shop Admin이 특정 상품의 리뷰를 생성한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 상품의 리뷰 생성이 완료되었습니다.")
+	})
+	@PostMapping("/shop-admin/products/{productId}/review")
+	ResponseEntity<SuccessResponse<Void>> createReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("productId") Long productId,
+		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewImages
+	);
+
+	@Operation(summary = "Shop Admin의 리뷰 삭제 API", description = "Shop Admin이 특정 리뷰를 삭제한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 삭제가 완료되었습니다.")
+	})
+	@DeleteMapping("/shop-admin/reviews/{reviewId}")
+	ResponseEntity<SuccessResponse<Void>> deleteReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId
+	);
+
+	@Operation(summary = "Shop Admin의 리뷰 수정 API", description = "Shop Admin이 특정 리뷰를 수정한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 수정이 완료되었습니다.")
+	})
+	@PatchMapping("/shop-admin/reviews/{reviewId}")
+	ResponseEntity<SuccessResponse<Void>> updateReviewByShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId,
+		@RequestPart UpdateReviewRequest updateReviewRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewImages
 	);
 }

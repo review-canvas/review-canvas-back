@@ -21,7 +21,6 @@ public class ReplyService {
 
 	private final ReplyRepository replyRepository;
 	private final EntityManager entityManager;
-	private final UserService userService;
 
 	public Reply save(Reply reply) {
 		return replyRepository.save(reply);
