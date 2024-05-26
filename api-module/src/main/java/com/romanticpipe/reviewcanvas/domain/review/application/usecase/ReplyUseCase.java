@@ -14,9 +14,11 @@ public interface ReplyUseCase {
 
 	List<GetReplyForUserResponse> getReplyForUser(Long reviewId);
 
-	void createReplyForShopAdmin(Integer shopAdminId, Long reviewId, CreateReplyByShopAdminRequest createReplyByShopAdminRequest);
+	void createReplyForShopAdmin(Integer shopAdminId, Long reviewId,
+		CreateReplyByShopAdminRequest createReplyByShopAdminRequest);
 
-	void updateReplyForShopAdmin(Integer shopAdminId, Long replyId, UpdateReplyByShopAdminRequest updateReplyByShopAdminRequest);
+	void updateReplyForShopAdmin(Integer shopAdminId, Long replyId,
+		UpdateReplyByShopAdminRequest updateReplyByShopAdminRequest);
 
 	void deleteReplyForShopAdmin(Integer shopAdminId, Long replyId, LocalDateTime localDateTime);
 }
