@@ -17,6 +17,8 @@ public record GetReviewDetailResponse(
 	String content,
 	@Schema(description = "리뷰 점수", requiredMode = Schema.RequiredMode.REQUIRED)
 	Integer score,
+	@Schema(description = "리뷰 사진, 영상 url", requiredMode = Schema.RequiredMode.REQUIRED)
+	String imageVideoUrls,
 	@Schema(description = "리뷰 작성자 id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	Long userId,
 	@Schema(description = "리뷰 작성 shop admin id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -41,6 +43,7 @@ public record GetReviewDetailResponse(
 				.reviewId(review.getId())
 				.content(review.getDeletedAt() == null ? review.getContent() : " ")
 				.score(review.getScore())
+				.imageVideoUrls(review.getImageVideoUrls())
 				.shopAdminId(review.getShopAdminId())
 				.isMine(isMine)
 				.createAt(review.getCreatedAt())
@@ -53,6 +56,7 @@ public record GetReviewDetailResponse(
 			.reviewId(review.getId())
 			.content(review.getDeletedAt() == null ? review.getContent() : " ")
 			.score(review.getScore())
+			.imageVideoUrls(review.getImageVideoUrls())
 			.userId(review.getUser().getId())
 			.nickname(review.getUser().getNickName())
 			.isMine(isMine)
