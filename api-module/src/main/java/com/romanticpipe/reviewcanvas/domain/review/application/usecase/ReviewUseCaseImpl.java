@@ -100,9 +100,10 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 
-		Product product = productService.findProduct(review.getProductId())
+		Product product = productService.findProduct(review.getProduct().getId())
 			.orElseThrow(() -> new ProductNotFoundException());
-		String dirPath = "public-view/shop-admin" + product.getShopAdminId() + "/product-" + review.getProductId();
+		String dirPath = "public-view/shop-admin" + product.getShopAdminId() + "/product-"
+			+ review.getProduct().getId();
 		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
 		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
@@ -122,7 +123,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
 
 		Review review = Review.builder()
-			.productId(product.getId())
+			.product(product)
 			.user(user)
 			.content(createReviewRequest.content())
 			.score(createReviewRequest.score())
@@ -158,7 +159,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
 
 		Review review = Review.builder()
-			.productId(product.getId())
+			.product(product)
 			.content(createReviewByShopAdminRequest.content())
 			.score(createReviewByShopAdminRequest.score())
 			.status(ReviewStatus.APPROVED)
@@ -198,9 +199,9 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			review.getShopAdminId()))) {
 			throw new ReviewNotMatchAdminException();
 		}
-		Product product = productService.findProduct(review.getProductId())
+		Product product = productService.findProduct(review.getProduct().getId())
 			.orElseThrow(() -> new ProductNotFoundException());
-		String dirPath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + review.getProductId();
+		String dirPath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + review.getProduct().getId();
 		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
 		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
