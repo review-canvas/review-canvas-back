@@ -37,6 +37,13 @@ public class ReviewService {
 		return PageableUtils.toPageResponse(reviewRepository.findAllReview(productId, pageable, filter));
 	}
 
+	public PageResponse<Review> getReviewsInMyPage(Long userId, PageableRequest pageableRequest,
+												   ReviewFilterForUser filter) {
+		Sort sort = SortUtils.getSort(pageableRequest.sort());
+		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
+		return PageableUtils.toPageResponse(reviewRepository.findAllByUserId(userId, pageable, filter));
+	}
+
 	public Review validById(long reviewId) {
 		return reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new BusinessException(ReviewErrorCode.REVIEW_NOT_FOUND));
@@ -52,13 +59,14 @@ public class ReviewService {
 			.orElseThrow(ReviewNotFoundException::new);
 	}
 
-	public PageResponse<Review> findByProductId(Long productId, PageableRequest pageableRequest,
-												EnumSet<ReviewFilterForShopAdmin> reviewFilters,
-												EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
+	public PageResponse<Review> findAllByProductId(Long productId, PageableRequest pageableRequest,
+												   EnumSet<ReviewFilterForShopAdmin> reviewFilters,
+												   EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
 		Sort sort = SortUtils.getSort(pageableRequest.sort());
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
 		return PageableUtils.toPageResponse(
-			reviewRepository.findByProductId(productId, pageable, reviewFilters, score, replyFilters)
+			reviewRepository.findAllByProductId(productId, pageable, reviewFilters, score, replyFilters)
 		);
 	}
+
 }
