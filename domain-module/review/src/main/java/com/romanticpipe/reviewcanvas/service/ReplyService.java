@@ -52,4 +52,8 @@ public class ReplyService {
 			throw new BusinessException(ReviewErrorCode.WRITER_NOT_MATCH);
 		}
 	}
+
+	public void deleteAllReplyByReviewId(Long reviewId) {
+		replyRepository.findAllByReviewIdAndDeletedAtIsNull(reviewId).forEach(reply -> reply.delete());
+	}
 }

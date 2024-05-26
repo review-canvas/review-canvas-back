@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,5 +56,18 @@ public interface ReplyApi {
 	ResponseEntity<SuccessResponse<Void>> updateReplyForUser(
 		@PathVariable("replyId") Long replyId,
 		@Valid @RequestBody UpdateReplyRequest updateReplyRequest
+	);
+
+	@Operation(summary = "특정 리뷰의 댓글 삭제 API", description = "특정 리뷰의 댓글을 삭제한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 댓글 삭제가 완료되었습니다.")
+	})
+	@DeleteMapping("/shop/{mallId}/users/{memberId}/replies/{replyId}")
+	ResponseEntity<SuccessResponse<Void>> deleteReplyForUser(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@PathVariable("replyId") Long replyId
 	);
 }

@@ -1,5 +1,14 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.time.LocalDateTime;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.common.storage.S3Service;
@@ -24,15 +33,8 @@ import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -49,8 +51,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getReviewsForUser(String mallId, Long productNo,
-																   String memberId, PageableRequest pageableRequest,
-																   ReviewFilterForUser filter) {
+		String memberId, PageableRequest pageableRequest,
+		ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
@@ -67,8 +69,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getReviewsInMyPage(String mallId, String memberId,
-																	PageableRequest pageable,
-																	ReviewFilterForUser filter) {
+		PageableRequest pageable,
+		ReviewFilterForUser filter) {
 		User me = userService.validByMemberIdAndMallId(memberId, mallId);
 		return reviewService.getReviewsInMyPage(me.getId(), pageable, filter).map((review) ->
 			GetReviewDetailResponse.from(review, true));
@@ -96,7 +98,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void updateReview(String mallId, String memberId, Long reviewId,
-							 UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 
@@ -113,7 +115,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-							 List<MultipartFile> reviewImages) {
+		List<MultipartFile> reviewImages) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(ProductNotFoundException::new);
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
@@ -138,18 +140,15 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	public void deleteReviewByPublicView(String mallId, String memberId, long reviewId, LocalDateTime localDateTime) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
-		/**
-		 * TODO 댓글 먼저 삭제 후 리뷰 삭제
-		 * replyService.deleteReply(reviewId);
-		 */
+		replyService.deleteAllReplyByReviewId(review.getId());
 		review.delete(localDateTime);
 	}
 
 	@Override
 	@Transactional
 	public void createReviewByShopAdmin(Integer shopAdminId, Long productId,
-										CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
-										List<MultipartFile> reviewImages) {
+		CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
+		List<MultipartFile> reviewImages) {
 		shopAdminService.validateById(shopAdminId);
 		Product product = productService.findProduct(productId)
 			.orElseThrow(ProductNotFoundException::new);
@@ -180,17 +179,14 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			review.getShopAdminId()))) {
 			throw new ReviewNotMatchAdminException();
 		}
-		/**
-		 * TODO 댓글 먼저 삭제 후 리뷰 삭제???
-		 * replyService.deleteReply(reviewId);
-		 */
+		replyService.deleteAllReplyByReviewId(review.getId());
 		review.delete(localDateTime);
 	}
 
 	@Override
 	@Transactional
 	public void updateReviewByShopAdmin(Integer shopAdminId, Long reviewId,
-										UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
 		String shopAdminMallId = shopAdmin.getMallId();
