@@ -8,4 +8,6 @@ import com.romanticpipe.reviewcanvas.domain.Reply;
 
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
 	List<Reply> findAllByReviewIdAndUserIdIsNotNull(Long reviewId);
+
+	List<Reply> findAllByReviewIdAndDeletedAtIsNull(Long reviewId);
 }
