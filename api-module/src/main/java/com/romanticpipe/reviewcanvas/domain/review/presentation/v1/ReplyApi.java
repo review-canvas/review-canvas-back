@@ -69,7 +69,7 @@ public interface ReplyApi {
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 댓글 생성이 완료되었습니다.")
+			description = "성공적으로 댓글 수정이 완료되었습니다.")
 	})
 	@PatchMapping("/shop-admin/replies/{replyId}")
 	ResponseEntity<SuccessResponse<Void>> updateReplyForShopAdmin(
@@ -83,7 +83,7 @@ public interface ReplyApi {
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "성공적으로 댓글 생성이 완료되었습니다.")
+			description = "성공적으로 댓글 삭제가 완료되었습니다.")
 	})
 	@DeleteMapping("/shop-admin/replies/{replyId}")
 	ResponseEntity<SuccessResponse<Void>> deleteReplyForShopAdmin(

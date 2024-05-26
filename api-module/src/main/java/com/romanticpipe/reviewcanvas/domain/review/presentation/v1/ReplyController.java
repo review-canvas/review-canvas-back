@@ -76,7 +76,7 @@ public class ReplyController implements ReplyApi {
 	public ResponseEntity<SuccessResponse<Void>> deleteReplyForShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("replyId") Long replyId) {
-		replyUseCase.deleteReplyForShopAdmin(jwtInfo.adminId(), replyId, LocalDateTime.now());
+		replyUseCase.deleteReplyForShopAdmin(jwtInfo.adminId(), replyId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }

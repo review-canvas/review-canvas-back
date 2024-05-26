@@ -20,5 +20,5 @@ public interface ReplyUseCase {
 	void updateReplyForShopAdmin(Integer shopAdminId, Long replyId,
 		UpdateReplyByShopAdminRequest updateReplyByShopAdminRequest);
 
-	void deleteReplyForShopAdmin(Integer shopAdminId, Long replyId, LocalDateTime localDateTime);
+	void deleteReplyForShopAdmin(Integer shopAdminId, Long replyId);
 }

@@ -58,6 +58,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	}
 
 	@Override
+	@Transactional
 	public void createReplyForShopAdmin(Integer shopAdminId, Long reviewId,
 		CreateReplyByShopAdminRequest createReplyByShopAdminRequest) {
 		shopAdminService.validateById(shopAdminId);
@@ -83,10 +84,10 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 
 	@Override
 	@Transactional
-	public void deleteReplyForShopAdmin(Integer shopAdminId, Long replyId, LocalDateTime localDateTime) {
+	public void deleteReplyForShopAdmin(Integer shopAdminId, Long replyId) {
 		shopAdminService.validateById(shopAdminId);
 		Reply reply = replyService.validById(replyId);
 
-		reply.delete(localDateTime);
+		reply.delete();
 	}
 }

@@ -49,7 +49,7 @@ public class Reply extends BaseEntityWithUpdate {
 		this.content = content;
 	}
 
-	public void delete(LocalDateTime localDateTime) {
-		this.deletedAt = localDateTime;
+	public void delete() {
+		this.deletedAt = LocalDateTime.now();
 	}
 }

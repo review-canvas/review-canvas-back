@@ -8,7 +8,7 @@ import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-import com.romanticpipe.reviewcanvas.exception.ReplyErrorCode;
+import com.romanticpipe.reviewcanvas.exception.ReplyNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.repository.ReplyRepository;
 
@@ -41,6 +41,6 @@ public class ReplyService {
 
 	public Reply validById(Long replyId) {
 		return replyRepository.findById(replyId)
-			.orElseThrow(() -> new BusinessException(ReplyErrorCode.REPLY_NOT_FOUND));
+			.orElseThrow(() -> new ReplyNotFoundException());
 	}
 }
