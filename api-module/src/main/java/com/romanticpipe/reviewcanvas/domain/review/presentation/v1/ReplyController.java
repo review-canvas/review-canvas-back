@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReplyUseCase;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -43,4 +45,13 @@ public class ReplyController implements ReplyApi {
 		).asHttp(HttpStatus.OK);
 	}
 
+
+	@Override
+	@PostMapping("/replies/{replyId}")
+	public ResponseEntity<SuccessResponse<Void>> updateReplyForUser(
+		@PathVariable("replyId") Long replyId,
+		@Valid @RequestBody UpdateReplyRequest updateReplyRequest) {
+		replyUseCase.updateReplyForUser(replyId, updateReplyRequest);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
 }
