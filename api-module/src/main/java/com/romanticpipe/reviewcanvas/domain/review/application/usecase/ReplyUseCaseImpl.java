@@ -63,7 +63,11 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	}
 
 	@Override
+	@Transactional
 	public void deleteReplyForUser(String mallId, String memberId, Long replyId, LocalDateTime localDateTime) {
-
+		Reply reply = replyService.validateReplyForUser(replyId);
+		User user = userService.validByMemberIdAndMallId(mallId, memberId);
+		replyService.validateUpdateForUser(reply, user);
+		reply.delete(localDateTime);
 	}
 }
