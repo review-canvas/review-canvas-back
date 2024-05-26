@@ -1,14 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import java.time.LocalDateTime;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.common.storage.S3Service;
@@ -33,8 +24,15 @@ import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -51,7 +49,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getReviewsForUser(String mallId, Long productNo,
-		String memberId, PageableRequest pageableRequest, ReviewFilterForUser filter) {
+																   String memberId, PageableRequest pageableRequest,
+																   ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
@@ -68,7 +67,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getReviewsInMyPage(String mallId, String memberId,
-		PageableRequest pageable, ReviewFilterForUser filter) {
+																	PageableRequest pageable,
+																	ReviewFilterForUser filter) {
 		User me = userService.validByMemberIdAndMallId(memberId, mallId);
 		return reviewService.getReviewsInMyPage(me.getId(), pageable, filter).map((review) ->
 			GetReviewDetailResponse.from(review, true));
@@ -89,14 +89,14 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Long productId, PageableRequest pageable, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
 		EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters
 	) {
-		return reviewService.findByProductId(productId, pageable, reviewFilters, score, replyFilters)
+		return reviewService.findAllByProductId(productId, pageable, reviewFilters, score, replyFilters)
 			.map((review) -> GetReviewDetailResponse.from(review, false));
 	}
 
 	@Override
 	@Transactional
 	public void updateReview(String mallId, String memberId, Long reviewId,
-		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
+							 UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 
@@ -112,9 +112,9 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-		List<MultipartFile> reviewImages) {
+							 List<MultipartFile> reviewImages) {
 		Product product = productService.findProduct(mallId, productNo)
-			.orElseThrow(() -> new ProductNotFoundException());
+			.orElseThrow(ProductNotFoundException::new);
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
 
 		String saveImagePath = "public-view/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
@@ -147,10 +147,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReviewByShopAdmin(Integer shopAdminId, Long productId,
-		CreateReviewByShopAdminRequest createReviewByShopAdminRequest, List<MultipartFile> reviewImages) {
+										CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
+										List<MultipartFile> reviewImages) {
 		shopAdminService.validateById(shopAdminId);
 		Product product = productService.findProduct(productId)
-			.orElseThrow(() -> new ProductNotFoundException());
+			.orElseThrow(ProductNotFoundException::new);
 
 		String saveImagePath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
 		String savedFileNames = s3Service.uploadFiles(reviewImages, saveImagePath).stream()
@@ -188,7 +189,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void updateReviewByShopAdmin(Integer shopAdminId, Long reviewId,
-		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
+										UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
 		String shopAdminMallId = shopAdmin.getMallId();
