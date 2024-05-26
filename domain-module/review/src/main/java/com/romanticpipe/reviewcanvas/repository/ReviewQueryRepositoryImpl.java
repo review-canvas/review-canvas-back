@@ -19,6 +19,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.EnumSet;
 import java.util.List;
 
+import static com.romanticpipe.reviewcanvas.domain.QProduct.product;
 import static com.romanticpipe.reviewcanvas.domain.QReply.reply;
 import static com.romanticpipe.reviewcanvas.domain.QReview.review;
 import static com.romanticpipe.reviewcanvas.domain.QUser.user;
@@ -34,7 +35,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 	public Page<Review> findAllReview(Long productId, Pageable pageable, ReviewFilterForUser filter) {
 		List<Long> reviewIds = queryFactory.select(review.id)
 			.from(review)
-			.where(review.productId.eq(productId), getFilterExpression(filter))
+			.where(review.product.id.eq(productId), getFilterExpression(filter))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.orderBy(getReviewOrderSpecifiers(pageable))
@@ -53,7 +54,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
 		JPAQuery<Long> countQuery = queryFactory.select(review.count())
 			.from(review)
-			.where(review.productId.eq(productId), getFilterExpression(filter));
+			.where(review.product.id.eq(productId), getFilterExpression(filter));
 
 		return PageableExecutionUtils.getPage(reviewInfoList, pageable, countQuery::fetchOne);
 	}
@@ -72,6 +73,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			.fetch();
 
 		List<Review> reviewInfoList = queryFactory.selectFrom(review)
+			.join(review.product, product)
+			.fetchJoin()
 			.join(review.user, user)
 			.fetchJoin()
 			.leftJoin(review.replyList, reply)
@@ -179,6 +182,6 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 		if (productId == null || productId <= 0) {
 			return null;
 		}
-		return review.productId.eq(productId);
+		return review.product.id.eq(productId);
 	}
 }

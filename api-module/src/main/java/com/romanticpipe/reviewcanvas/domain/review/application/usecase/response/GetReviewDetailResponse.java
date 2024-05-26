@@ -1,12 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase.response;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.romanticpipe.reviewcanvas.domain.Review;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Schema(name = "GetReviewDetailResponse", description = "리뷰 및 댓글 조회 response")
@@ -31,6 +30,10 @@ public record GetReviewDetailResponse(
 	LocalDateTime updatedAt,
 	@Schema(description = "리뷰 삭제 여부", requiredMode = Schema.RequiredMode.REQUIRED)
 	Boolean deleted,
+	@Schema(description = "리뷰가 작성된 상품 id", requiredMode = Schema.RequiredMode.REQUIRED)
+	Long productId,
+	@Schema(description = "리뷰가 작성된 상품 이름", requiredMode = Schema.RequiredMode.REQUIRED)
+	String productName,
 	@Schema(description = "리뷰에 해당하는 댓글 리스트", requiredMode = Schema.RequiredMode.REQUIRED)
 	List<ReplyResponse> replies
 ) {
@@ -46,6 +49,8 @@ public record GetReviewDetailResponse(
 				.createAt(review.getCreatedAt())
 				.updatedAt(review.getUpdatedAt())
 				.deleted(review.getDeletedAt() != null)
+				.productId(review.getProduct().getId())
+				.productName(review.getProduct().getName())
 				.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())
 				.build();
 		}
@@ -59,6 +64,8 @@ public record GetReviewDetailResponse(
 			.createAt(review.getCreatedAt())
 			.updatedAt(review.getUpdatedAt())
 			.deleted(review.getDeletedAt() != null)
+			.productId(review.getProduct().getId())
+			.productName(review.getProduct().getName())
 			.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())
 			.build();
 	}
