@@ -100,6 +100,9 @@ interface ReviewApi {
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "sort", required = false, defaultValue = "LATEST") ReviewSort sort,
+		@Schema(description = "조회기간", defaultValue = "ALL", allowableValues =
+			{"ALL", "TODAY", "ONE_MONTH", "THREE_MONTH", "SIX_MONTH", "YYYY-MM-DD~YYYY-MM-DD"})
+		@RequestParam(name = "period", required = false, defaultValue = "ALL") String period,
 		@Schema(description = "리뷰구분")
 		@RequestParam(name = "reviewFilters", required = false, defaultValue = "PHOTO,VIDEO,TEXT")
 		EnumSet<ReviewFilterForShopAdmin> reviewFilters,
