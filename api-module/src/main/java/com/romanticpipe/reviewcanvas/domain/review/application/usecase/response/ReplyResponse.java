@@ -1,10 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase.response;
 
+import java.time.LocalDateTime;
+
 import com.romanticpipe.reviewcanvas.domain.Reply;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
-
-import java.time.LocalDateTime;
 
 @Builder
 public record ReplyResponse(
@@ -12,6 +13,8 @@ public record ReplyResponse(
 	Long replyId,
 	@Schema(description = "댓글 내용", requiredMode = Schema.RequiredMode.REQUIRED)
 	String content,
+	@Schema(description = "본인 작성 댓글 여부", requiredMode = Schema.RequiredMode.REQUIRED)
+	Boolean isMine,
 	@Schema(description = "댓글 생성 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime createAt,
 	@Schema(description = "댓글 수정 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -25,10 +28,11 @@ public record ReplyResponse(
 	@Schema(description = "작성자 닉네임", requiredMode = Schema.RequiredMode.REQUIRED)
 	String nickname) {
 
-	public static ReplyResponse from(Reply reply) {
+	public static ReplyResponse from(Reply reply, boolean isMine) {
 		return ReplyResponse.builder()
 			.replyId(reply.getId())
 			.content(reply.getDeletedAt() == null ? reply.getContent() : " ")
+			.isMine(isMine)
 			.createAt(reply.getCreatedAt())
 			.updatedAt(reply.getUpdatedAt())
 			.deleted(reply.getDeletedAt() != null)
