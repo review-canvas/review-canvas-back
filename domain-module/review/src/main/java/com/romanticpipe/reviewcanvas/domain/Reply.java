@@ -32,18 +32,17 @@ public class Reply extends BaseEntityWithUpdate {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id")
 	private User user;
-	private String content;
 	private Integer shopAdminId;
+	private String content;
 	private LocalDateTime deletedAt;
 
 	@Builder
-	public Reply(Review review, int shopAdminId, User user, String content) {
+	public Reply(Review review, User user, Integer shopAdminId, String content) {
 		this.review = review;
 		this.user = user;
 		this.shopAdminId = shopAdminId;
 		this.content = content;
 	}
-
 
 	public void update(String content) {
 		this.content = content;

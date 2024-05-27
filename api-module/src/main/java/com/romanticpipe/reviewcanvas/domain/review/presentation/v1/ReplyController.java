@@ -22,8 +22,10 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReplyUseC
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -49,6 +51,26 @@ public class ReplyController implements ReplyApi {
 		return SuccessResponse.of(
 			replyUseCase.getReplyForUser(reviewId)
 		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@PostMapping("/replies/{replyId}")
+	public ResponseEntity<SuccessResponse<Void>> updateReplyForUser(
+		@PathVariable("replyId") Long replyId,
+		@Valid @RequestBody UpdateReplyRequest updateReplyRequest) {
+		replyUseCase.updateReplyForUser(replyId, updateReplyRequest);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@DeleteMapping("/shop/{mallId}/users/{memberId}/replies/{replyId}")
+	public ResponseEntity<SuccessResponse<Void>> deleteReplyForUser(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@PathVariable("replyId") Long replyId
+	) {
+		replyUseCase.deleteReplyForUser(mallId, memberId, replyId);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
 	@Override

@@ -27,7 +27,7 @@ public record GetReplyForUserResponse(@Schema(description = "댓글 id", require
 	public static GetReplyForUserResponse from(Reply reply, User user) {
 		return GetReplyForUserResponse.builder()
 			.replyId(reply.getId())
-			.content(reply.getContent())
+			.content(reply.getDeletedAt() == null ? reply.getContent() : " ")
 			.createAt(reply.getCreatedAt())
 			.updatedAt(reply.getUpdatedAt())
 			.deletedAt(reply.getDeletedAt())

@@ -1,11 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,6 +17,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldNameConstants;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @FieldNameConstants
@@ -32,7 +31,9 @@ public class Review extends BaseEntityWithUpdate {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "review_id")
 	private Long id;
-	private Long productId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_id")
+	private Product product;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id")
 	private User user;
@@ -49,9 +50,9 @@ public class Review extends BaseEntityWithUpdate {
 	private Integer shopAdminId;
 
 	@Builder
-	public Review(Long productId, User user, String content, int score, ReviewStatus status,
-		String imageVideoUrls, Integer shopAdminId) {
-		this.productId = productId;
+	public Review(Product product, User user, String content, int score, ReviewStatus status,
+				  String imageVideoUrls, Integer shopAdminId) {
+		this.product = product;
 		this.user = user;
 		this.replyList = new ArrayList<>();
 		this.content = content;

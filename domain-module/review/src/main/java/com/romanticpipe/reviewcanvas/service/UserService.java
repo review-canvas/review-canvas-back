@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.service;
 
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.romanticpipe.reviewcanvas.domain.User;
@@ -26,7 +27,7 @@ public class UserService {
 		return userRepository.findByMemberIdAndMallId(memberId, mallId);
 	}
 
-	public User findUserByUserId(Long userId) {
+	public User validateUserByUserId(Long userId) {
 		return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 	}
 

@@ -11,10 +11,12 @@ import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.Review;
+import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
@@ -43,7 +45,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 		);
 
 		transactionUtils.executeWithoutResultInWriteTransaction(
-			status -> replyService.createAndSave(reviewId, user.getId(), createReplyRequest.content())
+			status -> replyService.createAndSave(reviewId, user.getId(), null, createReplyRequest.content())
 		);
 	}
 
@@ -51,9 +53,10 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	@Transactional(readOnly = true)
 	public List<GetReplyForUserResponse> getReplyForUser(Long reviewId) {
 		reviewService.validById(reviewId);
-		return replyService.findAllByReviewId(reviewId)
+		return replyService.findAllByReviewIdForUser(reviewId)
 			.stream()
-			.map(reply -> GetReplyForUserResponse.from(reply, userService.findUserByUserId(reply.getUser().getId())))
+			.map(
+				reply -> GetReplyForUserResponse.from(reply, userService.validateUserByUserId(reply.getUser().getId())))
 			.toList();
 	}
 
@@ -88,6 +91,24 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 		shopAdminService.validateById(shopAdminId);
 		Reply reply = replyService.validById(replyId);
 
+		reply.delete();
+	}
+
+	@Override
+	@Transactional
+	public void updateReplyForUser(Long replyId, UpdateReplyRequest updateReplyRequest) {
+		Reply reply = replyService.validateReplyForUser(replyId);
+		User user = userService.validByMemberIdAndMallId(updateReplyRequest.memberId(), updateReplyRequest.mallId());
+		replyService.validateUpdateForUser(reply, user);
+		reply.update(updateReplyRequest.content());
+	}
+
+	@Override
+	@Transactional
+	public void deleteReplyForUser(String mallId, String memberId, Long replyId) {
+		Reply reply = replyService.validateReplyForUser(replyId);
+		User user = userService.validByMemberIdAndMallId(memberId, mallId);
+		replyService.validateUpdateForUser(reply, user);
 		reply.delete();
 	}
 }
