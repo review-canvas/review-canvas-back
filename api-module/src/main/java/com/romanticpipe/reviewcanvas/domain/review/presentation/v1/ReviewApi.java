@@ -110,7 +110,8 @@ interface ReviewApi {
 		@RequestParam(name = "score", required = false, defaultValue = "ONE,TWO,THREE,FOUR,FIVE") EnumSet<Score> score,
 		@Schema(description = "답글여부")
 		@RequestParam(name = "replyFilters", required = false, defaultValue = "REPLIED,NOT_REPLIED")
-		EnumSet<ReplyFilter> replyFilters
+		EnumSet<ReplyFilter> replyFilters,
+		@AuthInfo JwtInfo jwtInfo
 	);
 
 	@Operation(summary = "상품 리뷰 생성 API", description = "특정 상품의 리뷰를 생성한다.")

@@ -22,7 +22,7 @@ public interface ReviewUseCase {
 		String mallId, Long productNo, String memberId, PageableRequest pageableRequest, ReviewFilterForUser filter);
 
 	PageResponse<GetReviewDetailResponse> getReviewsForDashboard(
-		Long productId, PageableRequest pageable, ReviewPeriod reviewPeriod,
+		Integer integer, Long productId, PageableRequest pageable, ReviewPeriod reviewPeriod,
 		EnumSet<ReviewFilterForShopAdmin> reviewFilters, EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters);
 
 	void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,

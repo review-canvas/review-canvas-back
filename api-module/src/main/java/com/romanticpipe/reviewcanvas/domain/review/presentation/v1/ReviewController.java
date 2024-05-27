@@ -92,12 +92,14 @@ class ReviewController implements ReviewApi {
 		EnumSet<ReviewFilterForShopAdmin> reviewFilters,
 		@RequestParam(name = "score", required = false, defaultValue = "ONE,TWO,THREE,FOUR,FIVE") EnumSet<Score> score,
 		@RequestParam(name = "replyFilters", required = false, defaultValue = "REPLIED,NOT_REPLIED")
-		EnumSet<ReplyFilter> replyFilters
+		EnumSet<ReplyFilter> replyFilters,
+		@AuthInfo JwtInfo jwtInfo
 	) {
 		PageableRequest pageable = PageableRequest.of(page, size, sort);
 		ReviewPeriod reviewPeriod = ReviewPeriod.of(period);
 		return SuccessResponse.of(
-			reviewUseCase.getReviewsForDashboard(productId, pageable, reviewPeriod, reviewFilters, score, replyFilters)
+			reviewUseCase.getReviewsForDashboard(jwtInfo.adminId(), productId, pageable, reviewPeriod, reviewFilters,
+				score, replyFilters)
 		).asHttp(HttpStatus.OK);
 	}
 

@@ -61,12 +61,13 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 	}
 
 	@Override
-	public Page<Review> findAllByProductId(Long productId, Pageable pageable,
+	public Page<Review> findAllByProductId(Integer shopAdminId, Long productId, Pageable pageable,
 										   ReviewPeriod reviewPeriod, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
 										   EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
 		List<Long> reviewIds = queryFactory.select(review.id)
 			.from(review)
-			.where(joinProductCondition(productId), getReviewPeriodCondition(reviewPeriod),
+			.where(review.product.shopAdminId.eq(shopAdminId),
+				joinProductCondition(productId), getReviewPeriodCondition(reviewPeriod),
 				getReviewTypeCondition(reviewFilters), getScoreCondition(score), getReplyExistCondition(replyFilters))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -88,7 +89,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
 		JPAQuery<Long> countQuery = queryFactory.select(review.count())
 			.from(review)
-			.where(joinProductCondition(productId), getReviewPeriodCondition(reviewPeriod),
+			.where(review.product.shopAdminId.eq(shopAdminId),
+				joinProductCondition(productId), getReviewPeriodCondition(reviewPeriod),
 				getReviewTypeCondition(reviewFilters), getScoreCondition(score), getReplyExistCondition(replyFilters));
 
 		return PageableExecutionUtils.getPage(reviewInfoList, pageable, countQuery::fetchOne);
