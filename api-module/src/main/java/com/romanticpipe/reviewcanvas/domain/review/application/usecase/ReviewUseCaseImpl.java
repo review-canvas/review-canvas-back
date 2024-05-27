@@ -17,6 +17,7 @@ import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewPeriod;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
 import com.romanticpipe.reviewcanvas.exception.ProductNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ReviewNotMatchAdminException;
@@ -86,10 +87,10 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public PageResponse<GetReviewDetailResponse> getReviewsForDashboard(
-		Long productId, PageableRequest pageable, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
-		EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters
+		Long productId, PageableRequest pageable, ReviewPeriod reviewPeriod,
+		EnumSet<ReviewFilterForShopAdmin> reviewFilters, EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters
 	) {
-		return reviewService.findAllByProductId(productId, pageable, reviewFilters, score, replyFilters)
+		return reviewService.findAllByProductId(productId, pageable, reviewPeriod, reviewFilters, score, replyFilters)
 			.map((review) -> GetReviewDetailResponse.from(review, false));
 	}
 
