@@ -1,12 +1,10 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.service;
 
-import org.springframework.stereotype.Service;
-
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewContainer;
 import com.romanticpipe.reviewcanvas.reviewproperty.exception.ReviewContainerNotFoundException;
 import com.romanticpipe.reviewcanvas.reviewproperty.repository.ReviewContainerRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

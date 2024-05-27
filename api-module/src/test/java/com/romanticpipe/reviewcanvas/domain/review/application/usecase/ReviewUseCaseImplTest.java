@@ -1,5 +1,8 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
+import com.romanticpipe.reviewcanvas.service.ProductService;
+import com.romanticpipe.reviewcanvas.service.ReviewService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -7,10 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
-import com.romanticpipe.reviewcanvas.service.ProductService;
-import com.romanticpipe.reviewcanvas.service.ReviewService;
 
 @ExtendWith(MockitoExtension.class)
 class ReviewUseCaseImplTest {

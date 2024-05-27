@@ -1,9 +1,5 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.User;
@@ -11,9 +7,11 @@ import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReplyNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.repository.ReplyRepository;
-
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -55,5 +53,10 @@ public class ReplyService {
 
 	public void deleteAllReplyByReviewId(Long reviewId) {
 		replyRepository.findAllByReviewIdAndDeletedAtIsNull(reviewId).forEach(reply -> reply.delete());
+	}
+
+	public Reply validById(Long replyId) {
+		return replyRepository.findById(replyId)
+			.orElseThrow(() -> new ReplyNotFoundException());
 	}
 }

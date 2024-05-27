@@ -3,7 +3,6 @@ package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.FocusAreaLayout;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ImageReviewAreaLayout;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewLayoutDesign;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

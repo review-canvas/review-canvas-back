@@ -1,7 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,6 +12,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Table(name = "users")
 @Entity
@@ -38,7 +38,7 @@ public class User {
 
 	@Builder
 	public User(String memberId, String mallId, String name, String nickName, Gender gender, String nationality,
-		LocalDate birth) {
+				LocalDate birth) {
 		this.memberId = memberId;
 		this.mallId = mallId;
 		this.name = name;
