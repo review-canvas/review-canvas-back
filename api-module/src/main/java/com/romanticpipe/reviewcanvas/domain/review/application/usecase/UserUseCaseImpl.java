@@ -1,7 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import com.romanticpipe.reviewcanvas.cafe24.users.Cafe24User;
 import com.romanticpipe.reviewcanvas.cafe24.users.Cafe24UserClient;
-import com.romanticpipe.reviewcanvas.cafe24.users.Cafe24UserDto;
 import com.romanticpipe.reviewcanvas.config.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.service.UserService;
@@ -18,11 +18,11 @@ class UserUseCaseImpl implements UserUseCase {
 
 	@Override
 	public User createSaveUser(String mallId, String memberId) {
-		Cafe24UserDto cafe24User = cafe24UserClient.getUser(mallId, memberId);
+		Cafe24User cafe24User = cafe24UserClient.getUser(mallId, memberId).cafe24User();
 		cafe24User.validateContent();
 
 		return transactionUtils.executeInWriteTransaction(
-			status -> userService.save(cafe24User.toUserEntity())
+			status -> userService.save(cafe24User.toUserEntity(mallId))
 		);
 	}
 }

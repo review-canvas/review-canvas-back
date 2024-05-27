@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 
@@ -40,10 +41,10 @@ public class User {
 		this.memberId = memberId;
 		this.mallId = mallId;
 		this.name = userEncryptor.encrypt(name);
-		this.nickName = userEncryptor.encrypt(nickName);
-		this.gender = userEncryptor.encrypt(gender.name());
-		this.nationality = userEncryptor.encrypt(nationality);
-		this.birth = userEncryptor.encrypt(birth.toString());
+		this.nickName = StringUtils.hasText(nickName) ? userEncryptor.encrypt(nickName) : null;
+		this.gender = gender != null ? userEncryptor.encrypt(gender.name()) : null;
+		this.nationality = StringUtils.hasText(nationality) ? userEncryptor.encrypt(nationality) : null;
+		this.birth = birth != null ? userEncryptor.encrypt(birth.toString()) : null;
 	}
 
 	public String getName() {
@@ -51,18 +52,26 @@ public class User {
 	}
 
 	public String getNickName() {
-		return userEncryptor.decrypt(nickName);
+		return StringUtils.hasText(nickName) ? userEncryptor.decrypt(nickName) : null;
 	}
 
 	public Gender getGender() {
-		return Gender.valueOf(userEncryptor.decrypt(gender));
+		return gender != null ? Gender.valueOf(userEncryptor.decrypt(gender)) : null;
 	}
 
 	public String getNationality() {
-		return userEncryptor.decrypt(nationality);
+		return StringUtils.hasText(nationality) ? userEncryptor.decrypt(nationality) : null;
 	}
 
 	public LocalDate getBirth() {
-		return LocalDate.parse(userEncryptor.decrypt(birth));
+		return birth != null ? LocalDate.parse(userEncryptor.decrypt(birth)) : null;
+	}
+
+	public void update(String name, String nickName, String gender, String nationality, LocalDate birthday) {
+		this.name = userEncryptor.encrypt(name);
+		this.nickName = StringUtils.hasText(nickName) ? userEncryptor.encrypt(nickName) : null;
+		this.gender = gender != null ? userEncryptor.encrypt(gender) : null;
+		this.nationality = StringUtils.hasText(nationality) ? userEncryptor.encrypt(nationality) : null;
+		this.birth = StringUtils.hasText(birth) ? userEncryptor.encrypt(birthday.toString()) : null;
 	}
 }
