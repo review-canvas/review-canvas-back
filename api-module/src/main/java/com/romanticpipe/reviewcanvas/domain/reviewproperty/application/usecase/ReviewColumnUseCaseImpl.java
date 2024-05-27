@@ -1,13 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateColumnRequest;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewColumn;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewColumnService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor

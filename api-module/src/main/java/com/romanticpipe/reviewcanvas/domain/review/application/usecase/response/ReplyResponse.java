@@ -1,11 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase.response;
 
-import java.time.LocalDateTime;
-
 import com.romanticpipe.reviewcanvas.domain.Reply;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+
+import java.time.LocalDateTime;
 
 @Builder
 public record ReplyResponse(

@@ -1,14 +1,12 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateReviewTitleRequest;
 import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewTitleResponse;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewTitle;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewTitleService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -19,7 +17,7 @@ public class ReviewTitleUseCaseImpl implements ReviewTitleUseCase {
 	@Override
 	@Transactional
 	public void updateReviewTitle(Integer shopAdminId,
-		UpdateReviewTitleRequest updateReviewTitleRequest) {
+								  UpdateReviewTitleRequest updateReviewTitleRequest) {
 
 		ReviewTitle reviewTitle = reviewTitleService.validateTitleByShopAdminId(shopAdminId);
 		reviewTitle.update(

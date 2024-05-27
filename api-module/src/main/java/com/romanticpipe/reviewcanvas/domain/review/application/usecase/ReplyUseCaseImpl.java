@@ -1,17 +1,9 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.Review;
-import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
@@ -21,8 +13,11 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -63,7 +58,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	@Override
 	@Transactional
 	public void createReplyForShopAdmin(Integer shopAdminId, Long reviewId,
-		CreateReplyByShopAdminRequest createReplyByShopAdminRequest) {
+										CreateReplyByShopAdminRequest createReplyByShopAdminRequest) {
 		shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
 
@@ -78,7 +73,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	@Override
 	@Transactional
 	public void updateReplyForShopAdmin(Integer shopAdminId, Long replyId,
-		UpdateReplyByShopAdminRequest updateReplyByShopAdminRequest) {
+										UpdateReplyByShopAdminRequest updateReplyByShopAdminRequest) {
 		shopAdminService.validateById(shopAdminId);
 		Reply reply = replyService.validById(replyId);
 
