@@ -1,11 +1,13 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase.response;
 
-import com.romanticpipe.reviewcanvas.domain.Review;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
+import com.romanticpipe.reviewcanvas.domain.Review;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 @Builder
 @Schema(name = "GetReviewDetailResponse", description = "리뷰 및 댓글 조회 response")
@@ -38,7 +40,7 @@ public record GetReviewDetailResponse(
 	List<ReplyResponse> replies
 ) {
 
-	public static GetReviewDetailResponse from(Review review, boolean isMine) {
+	public static GetReviewDetailResponse from(Review review, boolean isMine, String memberId) {
 		if (review.getUser() == null) {
 			return GetReviewDetailResponse.builder()
 				.reviewId(review.getId())
@@ -51,7 +53,10 @@ public record GetReviewDetailResponse(
 				.deleted(review.getDeletedAt() != null)
 				.productId(review.getProduct().getId())
 				.productName(review.getProduct().getName())
-				.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())
+				.replies(review.getReplyList().stream().map(reply -> ReplyResponse.from(reply,
+					Optional.ofNullable(reply.getUser())
+						.map(user -> user.getMemberId().equals(memberId))
+						.orElse(false))).toList())
 				.build();
 		}
 		return GetReviewDetailResponse.builder()
@@ -66,7 +71,10 @@ public record GetReviewDetailResponse(
 			.deleted(review.getDeletedAt() != null)
 			.productId(review.getProduct().getId())
 			.productName(review.getProduct().getName())
-			.replies(review.getReplyList().stream().map(ReplyResponse::from).toList())
+			.replies(review.getReplyList().stream().map(reply -> ReplyResponse.from(reply,
+				Optional.ofNullable(reply.getUser())
+					.map(user -> user.getMemberId().equals(memberId))
+					.orElse(false))).toList())
 			.build();
 	}
 }
