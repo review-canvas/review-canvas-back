@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewLikeUseCase;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewLikeRequest;
 
@@ -28,6 +30,15 @@ public class ReviewLikeController implements ReviewLikeApi {
 		@RequestBody CreateReviewLikeRequest createReviewLikeRequest
 	) {
 		reviewLikeUseCase.createReviewLikeForUser(reviewId, createReviewLikeRequest);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@PostMapping("/shop-admin/{reviewId}/like")
+	public ResponseEntity<SuccessResponse<Void>> createReviewLikeForShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId
+	) {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }
