@@ -21,6 +21,7 @@ public class ReviewLikeController implements ReviewLikeApi {
 
 	private final ReviewLikeUseCase reviewLikeUseCase;
 
+	@Override
 	@GetMapping("/reviews/{reviewId}/like/count")
 	public ResponseEntity<SuccessResponse<Map<String, Integer>>> getReviewLikeCount(
 		@PathVariable("reviewId") Long reviewId
