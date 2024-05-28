@@ -113,12 +113,6 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
-	public int getReviewLikeCount(Long reviewId) {
-		return 0;
-	}
-
-	@Override
 	@Transactional
 	public void updateReview(String mallId, String memberId, Long reviewId,
 		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {

@@ -51,5 +51,4 @@ public interface ReviewUseCase {
 	PageResponse<GetReviewDetailResponse> getProductReviewsInMyPage(String mallId, String memberId, Long productNo,
 		PageableRequest of, ReviewFilterForUser filter);
 
-	int getReviewLikeCount(Long reviewId);
 }
