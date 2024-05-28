@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @Tag(name = "ReviewLike", description = "리뷰 좋아요 API")
 public interface ReviewLikeApi {
@@ -27,7 +28,7 @@ public interface ReviewLikeApi {
 	@PostMapping("/reviews/{reviewId}/like")
 	ResponseEntity<SuccessResponse<Void>> createReviewLikeForUser(
 		@PathVariable("reviewId") Long reviewId,
-		@RequestBody CreateReviewLikeRequest createReviewLikeRequest
+		@Valid @RequestBody CreateReviewLikeRequest createReviewLikeRequest
 	);
 
 	@Operation(summary = "리뷰 좋아요 생성(ShopAdmin) API", description = "ShopAdmin이 특정 리뷰에 좋아요를 누른다.")

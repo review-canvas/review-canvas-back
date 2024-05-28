@@ -14,6 +14,7 @@ import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewLikeUseCase;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewLikeRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -27,7 +28,7 @@ public class ReviewLikeController implements ReviewLikeApi {
 	@PostMapping("/reviews/{reviewId}/like/")
 	public ResponseEntity<SuccessResponse<Void>> createReviewLikeForUser(
 		@PathVariable("reviewId") Long reviewId,
-		@RequestBody CreateReviewLikeRequest createReviewLikeRequest
+		@Valid @RequestBody CreateReviewLikeRequest createReviewLikeRequest
 	) {
 		reviewLikeUseCase.createReviewLikeForUser(reviewId, createReviewLikeRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
