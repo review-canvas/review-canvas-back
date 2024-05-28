@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -201,4 +202,10 @@ class ReviewController implements ReviewApi {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
+	@GetMapping("/reviews/{reviewId}/like/count")
+	public ResponseEntity<SuccessResponse<Map<String, Integer>>> getReviewLikeCount(
+		@PathVariable("reviewId") Long reviewId
+	) {
+		return null;
+	}
 }
