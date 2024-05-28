@@ -206,6 +206,9 @@ class ReviewController implements ReviewApi {
 	public ResponseEntity<SuccessResponse<Map<String, Integer>>> getReviewLikeCount(
 		@PathVariable("reviewId") Long reviewId
 	) {
-		return null;
+		int likeCount = reviewUseCase.getReviewLikeCount(reviewId);
+		return SuccessResponse.of(
+			Map.of("count", likeCount)
+		).asHttp(HttpStatus.OK);
 	}
 }
