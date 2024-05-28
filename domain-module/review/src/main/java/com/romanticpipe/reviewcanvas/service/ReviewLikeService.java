@@ -12,7 +12,4 @@ public class ReviewLikeService {
 
 	private final ReviewLikeRepository reviewLikeRepository;
 
-	public int getReviewLikeCount(Long reviewId) {
-		return reviewLikeRepository.countAllByReviewId(reviewId);
-	}
 }
