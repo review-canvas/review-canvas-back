@@ -1,5 +1,18 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
+import java.util.EnumSet;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
@@ -13,24 +26,13 @@ import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.EnumSet;
-import java.util.List;
 
 @Tag(name = "Review", description = "리뷰 API")
 interface ReviewApi {
@@ -112,6 +114,27 @@ interface ReviewApi {
 		@RequestParam(name = "replyFilters", required = false, defaultValue = "REPLIED,NOT_REPLIED")
 		EnumSet<ReplyFilter> replyFilters,
 		@AuthInfo JwtInfo jwtInfo
+	);
+
+	@Operation(summary = "my page 상품 리뷰 조회 API", description = "my page에서 상품에 대한 자신의 리뷰를 조회한다.")
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 리뷰 조회가 완료되었습니다.")
+	})
+	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/{productId}/reviews")
+	ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getProductReviewsInMyPage(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@PathVariable("productId") Long productId,
+		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
+		@RequestParam(name = "sort", required = false, defaultValue = "LATEST")
+		@Schema(description = "리뷰 정렬", defaultValue = "LATEST",
+			allowableValues = {"LATEST", "HIGH_SCORE", "LOW_SCORE"}) ReviewSort sort,
+		@RequestParam(name = "filter", required = false, defaultValue = "ALL")
+		@Schema(description = "리뷰 필터", defaultValue = "ALL",
+			allowableValues = {"ALL", "IMAGE_VIDEO", "GENERAL"}) ReviewFilterForUser filter
 	);
 
 	@Operation(summary = "상품 리뷰 생성 API", description = "특정 상품의 리뷰를 생성한다.")
