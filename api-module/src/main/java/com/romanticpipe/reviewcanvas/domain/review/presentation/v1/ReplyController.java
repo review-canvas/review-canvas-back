@@ -1,16 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
-import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReplyUseCase;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyByShopAdminRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReplyUseCase;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyByShopAdminRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -42,11 +44,16 @@ public class ReplyController implements ReplyApi {
 
 	@Override
 	@GetMapping("/reviews/{reviewId}/replies")
-	public ResponseEntity<SuccessResponse<List<GetReplyForUserResponse>>> getReplyForUser(
+	public ResponseEntity<SuccessResponse<List<GetReplyForUserResponse>>> getRepliesForUser(
 		@PathVariable("reviewId") Long reviewId) {
 		return SuccessResponse.of(
 			replyUseCase.getReplyForUser(reviewId)
 		).asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<SuccessResponse<GetReplyForUserResponse>> getReplyForUser(Long reviewId) {
+		return null;
 	}
 
 	@Override
