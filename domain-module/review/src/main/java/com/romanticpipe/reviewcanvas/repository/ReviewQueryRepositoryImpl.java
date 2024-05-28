@@ -1,5 +1,18 @@
 package com.romanticpipe.reviewcanvas.repository;
 
+import static com.romanticpipe.reviewcanvas.domain.QProduct.*;
+import static com.romanticpipe.reviewcanvas.domain.QReply.*;
+import static com.romanticpipe.reviewcanvas.domain.QReview.*;
+import static com.romanticpipe.reviewcanvas.domain.QUser.*;
+import static com.romanticpipe.reviewcanvas.util.FileExtensionUtils.*;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
+
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -12,20 +25,8 @@ import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewPeriod;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
 import com.romanticpipe.reviewcanvas.util.QueryDslUtils;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
-
-import java.util.EnumSet;
-import java.util.List;
-
-import static com.romanticpipe.reviewcanvas.domain.QProduct.product;
-import static com.romanticpipe.reviewcanvas.domain.QReply.reply;
-import static com.romanticpipe.reviewcanvas.domain.QReview.review;
-import static com.romanticpipe.reviewcanvas.domain.QUser.user;
-import static com.romanticpipe.reviewcanvas.util.FileExtensionUtils.IMAGE_EXTENSIONS;
-import static com.romanticpipe.reviewcanvas.util.FileExtensionUtils.VIDEO_EXTENSIONS;
 
 @RequiredArgsConstructor
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
@@ -62,8 +63,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
 	@Override
 	public Page<Review> findAllByProductId(Integer shopAdminId, Long productId, Pageable pageable,
-										   ReviewPeriod reviewPeriod, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
-										   EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
+		ReviewPeriod reviewPeriod, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
+		EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
 		List<Long> reviewIds = queryFactory.select(review.id)
 			.from(review)
 			.where(review.product.shopAdminId.eq(shopAdminId),
@@ -120,6 +121,37 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 		JPAQuery<Long> countQuery = queryFactory.select(review.count())
 			.from(review)
 			.where(review.user.id.eq(userId), getFilterExpression(filter));
+
+		return PageableExecutionUtils.getPage(reviewInfoList, pageable, countQuery::fetchOne);
+	}
+
+	@Override
+	public Page<Review> findAllByUserIdAndProductId(Long userId, Long productId, Pageable pageable,
+		ReviewFilterForUser filter) {
+		List<Long> reviewIds = queryFactory.select(review.id)
+			.from(review)
+			.where(review.user.id.eq(userId).and(review.product.id.eq(productId)), getFilterExpression(filter))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.orderBy(getReviewOrderSpecifiers(pageable))
+			.fetch();
+
+		List<Review> reviewInfoList = queryFactory.selectFrom(review)
+			.leftJoin(review.product, product)
+			.fetchJoin()
+			.leftJoin(review.user, user)
+			.fetchJoin()
+			.leftJoin(review.replyList, reply)
+			.fetchJoin()
+			.leftJoin(reply.user, new QUser("replyUser"))
+			.fetchJoin()
+			.where(review.id.in(reviewIds))
+			.orderBy(getReviewOrderSpecifiers(pageable))
+			.fetch();
+
+		JPAQuery<Long> countQuery = queryFactory.select(review.count())
+			.from(review)
+			.where(review.user.id.eq(userId).and(review.product.id.eq(productId)), getFilterExpression(filter));
 
 		return PageableExecutionUtils.getPage(reviewInfoList, pageable, countQuery::fetchOne);
 	}
