@@ -52,12 +52,15 @@ public class ReplyController implements ReplyApi {
 	}
 
 	@Override
-	public ResponseEntity<SuccessResponse<GetReplyForUserResponse>> getReplyForUser(Long reviewId) {
+	@GetMapping("/replies/{replyId}")
+	public ResponseEntity<SuccessResponse<GetReplyForUserResponse>> getReplyForUser(
+		@PathVariable("reviewId") Long reviewId
+	) {
 		return SuccessResponse.of(replyUseCase.getReplyForUser(reviewId)).asHttp(HttpStatus.OK);
 	}
 
 	@Override
-	@PostMapping("/replies/{replyId}")
+	@PatchMapping("/replies/{replyId}")
 	public ResponseEntity<SuccessResponse<Void>> updateReplyForUser(
 		@PathVariable("replyId") Long replyId,
 		@Valid @RequestBody UpdateReplyRequest updateReplyRequest) {

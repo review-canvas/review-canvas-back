@@ -69,7 +69,7 @@ public interface ReplyApi {
 			responseCode = "200",
 			description = "성공적으로 댓글 수정이 완료되었습니다.")
 	})
-	@PostMapping("/replies/{replyId}")
+	@PatchMapping("/replies/{replyId}")
 	ResponseEntity<SuccessResponse<Void>> updateReplyForUser(
 		@PathVariable("replyId") Long replyId,
 		@Valid @RequestBody UpdateReplyRequest updateReplyRequest

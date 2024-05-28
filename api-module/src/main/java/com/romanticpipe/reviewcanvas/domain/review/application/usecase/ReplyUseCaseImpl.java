@@ -58,8 +58,11 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public GetReplyForUserResponse getReplyForUser(Long reviewId) {
-		return null;
+		Reply reply = replyService.validateReplyForUser(reviewId);
+		User user = userService.validateUserByUserId(reply.getUser().getId());
+		return GetReplyForUserResponse.from(reply, user);
 	}
 
 	@Override
