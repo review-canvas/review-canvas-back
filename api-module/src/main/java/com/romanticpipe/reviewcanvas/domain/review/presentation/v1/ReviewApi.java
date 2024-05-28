@@ -122,11 +122,11 @@ interface ReviewApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 조회가 완료되었습니다.")
 	})
-	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/{productId}/reviews")
+	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/{productNo}/reviews")
 	ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getProductReviewsInMyPage(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
-		@PathVariable("productId") Long productId,
+		@PathVariable("productNo") Long productNo,
 		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "sort", required = false, defaultValue = "LATEST")

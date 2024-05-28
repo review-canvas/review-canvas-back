@@ -106,18 +106,18 @@ class ReviewController implements ReviewApi {
 	}
 
 	@Override
-	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/{productId}/reviews")
+	@GetMapping("/shop/{mallId}/users/{memberId}/mypage/{productNo}/reviews")
 	public ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getProductReviewsInMyPage(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
-		@PathVariable("productId") Long productId,
+		@PathVariable("productNo") Long productNo,
 		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "sort", required = false, defaultValue = "LATEST") ReviewSort sort,
 		@RequestParam(name = "filter", required = false, defaultValue = "ALL") ReviewFilterForUser filter
 	) {
 		return SuccessResponse.of(
-			reviewUseCase.getProductReviewsInMyPage(mallId, memberId, productId,
+			reviewUseCase.getProductReviewsInMyPage(mallId, memberId, productNo,
 				PageableRequest.of(page, size, sort), filter)
 		).asHttp(HttpStatus.OK);
 	}

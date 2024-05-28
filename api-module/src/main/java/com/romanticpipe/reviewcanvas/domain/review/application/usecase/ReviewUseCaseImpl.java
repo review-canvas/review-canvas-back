@@ -98,12 +98,17 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public PageResponse<GetReviewDetailResponse> getProductReviewsInMyPage(String mallId, String memberId,
-		Long productId, PageableRequest pageable, ReviewFilterForUser filter) {
+		Long productNo, PageableRequest pageable, ReviewFilterForUser filter) {
+		Product product = transactionUtils.executeInWriteTransaction(
+			status -> productService.findProduct(mallId, productNo)
+		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
+
 		User me = userService.validByMemberIdAndMallId(memberId, mallId);
-		return reviewService.getProductReviewsInMyPage(me.getId(), productId, pageable, filter)
-			.map((review) -> GetReviewDetailResponse.from(review, true, memberId));
+		
+		return transactionUtils.executeInReadTransaction(
+			status -> reviewService.getProductReviewsInMyPage(me.getId(), product.getId(), pageable, filter)
+				.map((review) -> GetReviewDetailResponse.from(review, true, memberId)));
 	}
 
 	@Override
