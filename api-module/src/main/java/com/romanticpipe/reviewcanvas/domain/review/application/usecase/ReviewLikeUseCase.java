@@ -4,5 +4,5 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.C
 
 public interface ReviewLikeUseCase {
 
-	void createReviewLike(Long reviewId, CreateReviewLikeRequest createReviewLikeRequest);
+	void createReviewLikeForUser(Long reviewId, CreateReviewLikeRequest createReviewLikeRequest);
 }

@@ -23,11 +23,11 @@ public class ReviewLikeController implements ReviewLikeApi {
 
 	@Override
 	@PostMapping("/reviews/{reviewId}/like/")
-	public ResponseEntity<SuccessResponse<Void>> createReviewLike(
+	public ResponseEntity<SuccessResponse<Void>> createReviewLikeForUser(
 		@PathVariable("reviewId") Long reviewId,
 		@RequestBody CreateReviewLikeRequest createReviewLikeRequest
 	) {
-		reviewLikeUseCase.createReviewLike(reviewId, createReviewLikeRequest);
+		reviewLikeUseCase.createReviewLikeForUser(reviewId, createReviewLikeRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }

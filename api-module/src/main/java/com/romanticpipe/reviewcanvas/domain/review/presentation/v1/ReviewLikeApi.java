@@ -23,7 +23,7 @@ public interface ReviewLikeApi {
 			description = "성공적으로 리뷰 좋아요 생성(User)이 완료되었습니다.")
 	})
 	@PostMapping("/reviews/{reviewId}/like/")
-	ResponseEntity<SuccessResponse<Void>> createReviewLike(
+	ResponseEntity<SuccessResponse<Void>> createReviewLikeForUser(
 		@PathVariable("reviewId") Long reviewId,
 		@RequestBody CreateReviewLikeRequest createReviewLikeRequest
 	);

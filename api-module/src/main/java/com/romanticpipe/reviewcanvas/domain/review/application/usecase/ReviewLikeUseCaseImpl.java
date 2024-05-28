@@ -16,7 +16,7 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 	private final ReviewService reviewService;
 
 	@Override
-	public void createReviewLike(Long reviewId, CreateReviewLikeRequest createReviewLikeRequest) {
+	public void createReviewLikeForUser(Long reviewId, CreateReviewLikeRequest createReviewLikeRequest) {
 
 	}
 }
