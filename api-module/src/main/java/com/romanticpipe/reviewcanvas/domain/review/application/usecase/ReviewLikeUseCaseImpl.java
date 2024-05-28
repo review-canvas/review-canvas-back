@@ -3,6 +3,8 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
+import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewLikeRequest;
@@ -20,6 +22,7 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 	private final ReviewService reviewService;
 	private final UserService userService;
 	private final UserUseCase userUseCase;
+	private final ShopAdminService shopAdminService;
 	private final TransactionUtils transactionUtils;
 
 	@Override
@@ -42,6 +45,7 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 	@Override
 	@Transactional
 	public void createReviewLikeForShopAdmin(Integer shopAdminId, Long reviewId) {
+		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
 
 	}
 }
