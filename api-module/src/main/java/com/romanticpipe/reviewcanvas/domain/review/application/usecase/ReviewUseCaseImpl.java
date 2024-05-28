@@ -104,11 +104,12 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
 
-		User me = userService.validByMemberIdAndMallId(memberId, mallId);
-		
 		return transactionUtils.executeInReadTransaction(
-			status -> reviewService.getProductReviewsInMyPage(me.getId(), product.getId(), pageable, filter)
-				.map((review) -> GetReviewDetailResponse.from(review, true, memberId)));
+			status -> {
+				User me = userService.validByMemberIdAndMallId(memberId, mallId);
+				return reviewService.getProductReviewsInMyPage(me.getId(), product.getId(), pageable, filter)
+					.map((review) -> GetReviewDetailResponse.from(review, true, memberId));
+			});
 	}
 
 	@Override
