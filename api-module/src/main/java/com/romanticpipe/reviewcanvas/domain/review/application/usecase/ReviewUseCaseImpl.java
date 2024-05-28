@@ -17,6 +17,7 @@ import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewPeriod;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
 import com.romanticpipe.reviewcanvas.exception.ProductNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ReviewNotMatchAdminException;
@@ -60,7 +61,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 				.map((review) -> GetReviewDetailResponse.from(review,
 					Optional.ofNullable(review.getUser())
 						.map(user -> user.getMemberId().equals(memberId))
-						.orElse(false)
+						.orElse(false), memberId
 				))
 		);
 	}
@@ -71,7 +72,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 																	ReviewFilterForUser filter) {
 		User me = userService.validByMemberIdAndMallId(memberId, mallId);
 		return reviewService.getReviewsInMyPage(me.getId(), pageable, filter).map((review) ->
-			GetReviewDetailResponse.from(review, true));
+			GetReviewDetailResponse.from(review, true, memberId));
 	}
 
 	@Override
@@ -80,17 +81,18 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Review review = reviewService.validateUserInfoById(reviewId);
 		return GetReviewDetailResponse.from(review,
 			Optional.ofNullable(review.getUser())
-				.map(user -> user.getMemberId().equals(memberId)).orElse(false));
+				.map(user -> user.getMemberId().equals(memberId)).orElse(false), memberId);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public PageResponse<GetReviewDetailResponse> getReviewsForDashboard(
-		Long productId, PageableRequest pageable, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
-		EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters
+		Integer shopAdminId, Long productId, PageableRequest pageable, ReviewPeriod reviewPeriod,
+		EnumSet<ReviewFilterForShopAdmin> reviewFilters, EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters
 	) {
-		return reviewService.findAllByProductId(productId, pageable, reviewFilters, score, replyFilters)
-			.map((review) -> GetReviewDetailResponse.from(review, false));
+		return reviewService.findAllByProductId(shopAdminId, productId, pageable, reviewPeriod, reviewFilters, score,
+				replyFilters)
+			.map((review) -> GetReviewDetailResponse.from(review, false, ""));
 	}
 
 	@Override

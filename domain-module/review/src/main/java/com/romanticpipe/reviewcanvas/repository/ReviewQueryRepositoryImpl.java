@@ -9,6 +9,7 @@ import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewPeriod;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
 import com.romanticpipe.reviewcanvas.util.QueryDslUtils;
 import lombok.RequiredArgsConstructor;
@@ -60,13 +61,14 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 	}
 
 	@Override
-	public Page<Review> findAllByProductId(Long productId, Pageable pageable,
-										   EnumSet<ReviewFilterForShopAdmin> reviewFilters,
+	public Page<Review> findAllByProductId(Integer shopAdminId, Long productId, Pageable pageable,
+										   ReviewPeriod reviewPeriod, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
 										   EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
 		List<Long> reviewIds = queryFactory.select(review.id)
 			.from(review)
-			.where(joinProductCondition(productId), getReviewTypeCondition(reviewFilters), getScoreCondition(score),
-				getReplyExistCondition(replyFilters))
+			.where(review.product.shopAdminId.eq(shopAdminId),
+				joinProductCondition(productId), getReviewPeriodCondition(reviewPeriod),
+				getReviewTypeCondition(reviewFilters), getScoreCondition(score), getReplyExistCondition(replyFilters))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.orderBy(getReviewOrderSpecifiers(pageable))
@@ -87,8 +89,9 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
 		JPAQuery<Long> countQuery = queryFactory.select(review.count())
 			.from(review)
-			.where(joinProductCondition(productId), getReviewTypeCondition(reviewFilters), getScoreCondition(score),
-				getReplyExistCondition(replyFilters));
+			.where(review.product.shopAdminId.eq(shopAdminId),
+				joinProductCondition(productId), getReviewPeriodCondition(reviewPeriod),
+				getReviewTypeCondition(reviewFilters), getScoreCondition(score), getReplyExistCondition(replyFilters));
 
 		return PageableExecutionUtils.getPage(reviewInfoList, pageable, countQuery::fetchOne);
 	}
@@ -132,6 +135,13 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			return review.imageVideoUrls.isNotNull();
 		}
 		return null;
+	}
+
+	private BooleanExpression getReviewPeriodCondition(ReviewPeriod reviewPeriod) {
+		if (reviewPeriod == null) {
+			return null;
+		}
+		return review.createdAt.between(reviewPeriod.startDate(), reviewPeriod.endDate());
 	}
 
 	private BooleanExpression getReviewTypeCondition(EnumSet<ReviewFilterForShopAdmin> filters) {

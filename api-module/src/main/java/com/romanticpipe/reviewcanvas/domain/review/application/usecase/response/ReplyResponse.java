@@ -13,6 +13,8 @@ public record ReplyResponse(
 	Long replyId,
 	@Schema(description = "댓글 내용", requiredMode = Schema.RequiredMode.REQUIRED)
 	String content,
+	@Schema(description = "본인 작성 댓글 여부", requiredMode = Schema.RequiredMode.REQUIRED)
+	Boolean isMine,
 	@Schema(description = "댓글 생성 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime createAt,
 	@Schema(description = "댓글 수정 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -21,17 +23,21 @@ public record ReplyResponse(
 	Boolean deleted,
 	@Schema(description = "작성자 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
 	Long userId,
+	@Schema(description = "작성자 mall 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
+	String mallId,
 	@Schema(description = "작성자 닉네임", requiredMode = Schema.RequiredMode.REQUIRED)
 	String nickname) {
 
-	public static ReplyResponse from(Reply reply) {
+	public static ReplyResponse from(Reply reply, boolean isMine) {
 		return ReplyResponse.builder()
 			.replyId(reply.getId())
 			.content(reply.getDeletedAt() == null ? reply.getContent() : " ")
+			.isMine(isMine)
 			.createAt(reply.getCreatedAt())
 			.updatedAt(reply.getUpdatedAt())
 			.deleted(reply.getDeletedAt() != null)
 			.userId(reply.getUser().getId())
+			.mallId(reply.getUser().getMallId())
 			.nickname(reply.getUser().getNickName())
 			.build();
 	}

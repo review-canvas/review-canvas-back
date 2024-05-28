@@ -1,12 +1,16 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
-import static org.springframework.http.HttpHeaders.*;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
+import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
+import com.romanticpipe.reviewcanvas.common.security.exception.SecurityErrorCode;
+import com.romanticpipe.reviewcanvas.common.security.exception.TokenException;
+import com.romanticpipe.reviewcanvas.common.security.exception.TokenExpiredException;
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,18 +20,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
-import com.romanticpipe.reviewcanvas.common.security.exception.SecurityErrorCode;
-import com.romanticpipe.reviewcanvas.common.security.exception.TokenException;
-import com.romanticpipe.reviewcanvas.common.security.exception.TokenExpiredException;
-import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RequiredArgsConstructor
 public class AuthFilter extends OncePerRequestFilter {
@@ -38,7 +36,7 @@ public class AuthFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-		FilterChain filterChain) throws BusinessException, ServletException, IOException {
+									FilterChain filterChain) throws BusinessException, ServletException, IOException {
 		authentication(request, response);
 		filterChain.doFilter(request, response);
 	}

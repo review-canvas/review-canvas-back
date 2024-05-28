@@ -1,11 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
-import java.time.LocalDateTime;
-
 import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
+
+import java.time.LocalDateTime;
 
 public interface ShopAdminUseCase {
 

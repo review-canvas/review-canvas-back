@@ -1,8 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request;
 
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Border;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Margin;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.Padding;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.Shadow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -18,12 +15,12 @@ public record UpdateColumnRequest(
 	@Schema(description = "Review Column Margin", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull @Valid MarginRequest margin,
 	@Schema(description = "Review Column Background", requiredMode = Schema.RequiredMode.REQUIRED,
-			example = "#FFFFFF")
+		example = "#FFFFFF")
 	@NotBlank String background,
 	@Schema(description = "Review Column Border", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull @Valid BorderRequest border,
 	@Schema(description = "Review Column Border Color", requiredMode = Schema.RequiredMode.REQUIRED,
-			example = "#000000")
+		example = "#000000")
 	@NotBlank String borderColor,
 	@Schema(description = "Review Column Shadow", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull Shadow shadow

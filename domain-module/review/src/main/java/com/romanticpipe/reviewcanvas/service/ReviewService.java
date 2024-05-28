@@ -6,6 +6,7 @@ import com.romanticpipe.reviewcanvas.dto.PageableRequest;
 import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
+import com.romanticpipe.reviewcanvas.enumeration.ReviewPeriod;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
@@ -59,13 +60,15 @@ public class ReviewService {
 			.orElseThrow(ReviewNotFoundException::new);
 	}
 
-	public PageResponse<Review> findAllByProductId(Long productId, PageableRequest pageableRequest,
+	public PageResponse<Review> findAllByProductId(Integer shopAdminId, Long productId, PageableRequest pageableRequest,
+												   ReviewPeriod reviewPeriod,
 												   EnumSet<ReviewFilterForShopAdmin> reviewFilters,
 												   EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
 		Sort sort = SortUtils.getSort(pageableRequest.sort());
 		Pageable pageable = PageableUtils.toPageable(pageableRequest, sort);
 		return PageableUtils.toPageResponse(
-			reviewRepository.findAllByProductId(productId, pageable, reviewFilters, score, replyFilters)
+			reviewRepository.findAllByProductId(shopAdminId, productId, pageable, reviewPeriod, reviewFilters, score,
+				replyFilters)
 		);
 	}
 

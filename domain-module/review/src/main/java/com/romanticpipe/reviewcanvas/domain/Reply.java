@@ -1,9 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain;
 
-import java.time.LocalDateTime;
-
 import com.romanticpipe.reviewcanvas.entity.BaseEntityWithUpdate;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
