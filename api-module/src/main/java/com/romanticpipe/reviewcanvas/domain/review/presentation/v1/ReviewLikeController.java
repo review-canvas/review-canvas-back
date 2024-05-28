@@ -40,6 +40,7 @@ public class ReviewLikeController implements ReviewLikeApi {
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId
 	) {
+		reviewLikeUseCase.createReviewLikeForShopAdmin(jwtInfo.adminId(), reviewId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }
