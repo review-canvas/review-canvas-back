@@ -2,6 +2,9 @@ package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,9 +22,12 @@ public class ReviewLikeController implements ReviewLikeApi {
 	private final ReviewLikeUseCase reviewLikeUseCase;
 
 	@Override
-	public ResponseEntity<SuccessResponse<Void>> createReviewLike(Long reviewId,
-		CreateReviewLikeRequest createReviewLikeRequest) {
-
+	@PostMapping("/reviews/{reviewId}/like/")
+	public ResponseEntity<SuccessResponse<Void>> createReviewLike(
+		@PathVariable("reviewId") Long reviewId,
+		@RequestBody CreateReviewLikeRequest createReviewLikeRequest
+	) {
+		reviewLikeUseCase.createReviewLike(reviewId, createReviewLikeRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }
