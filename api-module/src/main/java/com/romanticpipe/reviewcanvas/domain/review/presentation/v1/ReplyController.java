@@ -47,7 +47,7 @@ public class ReplyController implements ReplyApi {
 	public ResponseEntity<SuccessResponse<List<GetReplyForUserResponse>>> getRepliesForUser(
 		@PathVariable("reviewId") Long reviewId) {
 		return SuccessResponse.of(
-			replyUseCase.getReplyForUser(reviewId)
+			replyUseCase.getRepliesForUser(reviewId)
 		).asHttp(HttpStatus.OK);
 	}
 
