@@ -58,6 +58,11 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	}
 
 	@Override
+	public GetReplyForUserResponse getReplyForUser(Long reviewId) {
+		return null;
+	}
+
+	@Override
 	@Transactional
 	public void createReplyForShopAdmin(Integer shopAdminId, Long reviewId,
 		CreateReplyByShopAdminRequest createReplyByShopAdminRequest) {

@@ -53,7 +53,7 @@ public class ReplyController implements ReplyApi {
 
 	@Override
 	public ResponseEntity<SuccessResponse<GetReplyForUserResponse>> getReplyForUser(Long reviewId) {
-		return null;
+		return SuccessResponse.of(replyUseCase.getReplyForUser(reviewId)).asHttp(HttpStatus.OK);
 	}
 
 	@Override

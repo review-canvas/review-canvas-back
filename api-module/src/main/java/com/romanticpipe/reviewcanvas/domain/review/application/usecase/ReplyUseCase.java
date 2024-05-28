@@ -14,6 +14,8 @@ public interface ReplyUseCase {
 
 	List<GetReplyForUserResponse> getRepliesForUser(Long reviewId);
 
+	GetReplyForUserResponse getReplyForUser(Long reviewId);
+
 	void updateReplyForUser(Long replyId, UpdateReplyRequest updateReplyRequest);
 
 	void deleteReplyForUser(String mallId, String memberId, Long replyId);
