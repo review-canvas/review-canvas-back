@@ -28,7 +28,6 @@ public class Cafe24UserScheduler {
 
 	@SchedulerLock(name = "UpdateUser", lockAtLeastFor = "1m", lockAtMostFor = "1m")
 	@Scheduled(cron = "${scheduler.update-user.cron}")
-	@Scheduled(fixedRate = 1000 * 60 * 60 * 24)
 	public void processUpdateUser() {
 		log.info("user 정보 업데이트 scheduler 시작");
 		List<ShopAdmin> shopAdmins = shopAdminService.findAll();
