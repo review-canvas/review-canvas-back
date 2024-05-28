@@ -14,7 +14,7 @@ public interface ReplyUseCase {
 
 	List<GetReplyForUserResponse> getRepliesForUser(Long reviewId);
 
-	GetReplyForUserResponse getReplyForUser(Long reviewId);
+	GetReplyForUserResponse getReplyForUser(Long replyId);
 
 	void updateReplyForUser(Long replyId, UpdateReplyRequest updateReplyRequest);
 

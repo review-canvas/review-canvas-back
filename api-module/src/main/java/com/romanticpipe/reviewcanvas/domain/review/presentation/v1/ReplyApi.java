@@ -60,7 +60,7 @@ public interface ReplyApi {
 	})
 	@GetMapping("/replies/{replyId}")
 	ResponseEntity<SuccessResponse<GetReplyForUserResponse>> getReplyForUser(
-		@PathVariable("reviewId") Long reviewId
+		@PathVariable("replyId") Long replyId
 	);
 
 	@Operation(summary = "리뷰 댓글 수정 API", description = "리뷰의 자신의 댓글을 수정한다.")

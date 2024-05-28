@@ -54,9 +54,9 @@ public class ReplyController implements ReplyApi {
 	@Override
 	@GetMapping("/replies/{replyId}")
 	public ResponseEntity<SuccessResponse<GetReplyForUserResponse>> getReplyForUser(
-		@PathVariable("reviewId") Long reviewId
+		@PathVariable("replyId") Long replyId
 	) {
-		return SuccessResponse.of(replyUseCase.getReplyForUser(reviewId)).asHttp(HttpStatus.OK);
+		return SuccessResponse.of(replyUseCase.getReplyForUser(replyId)).asHttp(HttpStatus.OK);
 	}
 
 	@Override
