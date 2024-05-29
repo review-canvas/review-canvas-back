@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.common.util;
+package com.romanticpipe.reviewcanvas.config;
 
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;

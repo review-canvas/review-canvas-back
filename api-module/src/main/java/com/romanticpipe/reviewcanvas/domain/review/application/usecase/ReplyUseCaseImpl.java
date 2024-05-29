@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
-import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
+import com.romanticpipe.reviewcanvas.config.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.User;

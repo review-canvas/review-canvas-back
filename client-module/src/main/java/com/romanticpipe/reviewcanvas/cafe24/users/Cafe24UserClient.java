@@ -11,4 +11,7 @@ public interface Cafe24UserClient {
 
 	@GetExchange(value = "/customersprivacy/{memberId}")
 	Cafe24UserDto getUser(@PathVariable String mallId, @PathVariable String memberId);
+
+	@GetExchange(value = "/customersprivacy")
+	Cafe24UsersDto getUsers(@PathVariable String mallId);
 }
