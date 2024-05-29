@@ -33,7 +33,7 @@ public final class AccessPath {
 		// shopAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
 		shopAdminAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET));
 		// review like
-		shopAdminAllowedPath.put("/api/v1/shop-admin/{reviewId}/like", List.of(HttpMethod.POST));
+		shopAdminAllowedPath.put("/api/v1/shop-admin/reviews/{reviewId}/like", List.of(HttpMethod.POST));
 		// shop-admin
 		shopAdminAllowedPath.put("/api/v1/shop-admin", List.of(HttpMethod.GET, HttpMethod.PATCH));
 		// product
