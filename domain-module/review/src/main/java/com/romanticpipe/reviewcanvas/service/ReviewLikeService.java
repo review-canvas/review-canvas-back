@@ -14,9 +14,9 @@ public class ReviewLikeService {
 
 	private final ReviewLikeRepository reviewLikeRepository;
 
-	public void deleteReviewLike(Long userId, Long reviewId, Integer shopAdminId) {
+	public void deleteReviewLike(Long reviewId, Long userId, Integer shopAdminId) {
 		reviewLikeRepository.delete(
-			reviewLikeRepository.findByReviewIdAndUserIdAndShopAdminId(userId, reviewId, shopAdminId)
+			reviewLikeRepository.findByReviewIdAndUserIdAndShopAdminId(reviewId, userId, shopAdminId)
 				.orElseThrow(() -> new BusinessException(ReviewErrorCode.ALREADY_UNLIKED_REVIEW))
 		);
 	}
