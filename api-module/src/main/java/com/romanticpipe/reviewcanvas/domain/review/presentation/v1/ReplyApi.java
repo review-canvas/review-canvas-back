@@ -17,7 +17,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.C
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -48,7 +48,7 @@ public interface ReplyApi {
 			description = "성공적으로 댓글 조회가 완료되었습니다.")
 	})
 	@GetMapping("/reviews/{reviewId}/replies")
-	ResponseEntity<SuccessResponse<List<GetReplyForUserResponse>>> getRepliesForUser(
+	ResponseEntity<SuccessResponse<List<GetReplyResponse>>> getReplies(
 		@PathVariable("reviewId") Long reviewId
 	);
 
@@ -59,7 +59,7 @@ public interface ReplyApi {
 			description = "성공적으로 댓글 단건 조회가 완료되었습니다.")
 	})
 	@GetMapping("/replies/{replyId}")
-	ResponseEntity<SuccessResponse<GetReplyForUserResponse>> getReplyForUser(
+	ResponseEntity<SuccessResponse<GetReplyResponse>> getReply(
 		@PathVariable("replyId") Long replyId
 	);
 
