@@ -8,6 +8,7 @@ import com.romanticpipe.reviewcanvas.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,5 +32,9 @@ public class UserService {
 
 	public User save(User user) {
 		return userRepository.save(user);
+	}
+
+	public List<User> findAllByMallId(String mallId) {
+		return userRepository.findAllByMallId(mallId);
 	}
 }
