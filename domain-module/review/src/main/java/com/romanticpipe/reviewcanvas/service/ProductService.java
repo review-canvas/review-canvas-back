@@ -3,6 +3,7 @@ package com.romanticpipe.reviewcanvas.service;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.dto.PageResponse;
 import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.exception.ProductNotFoundException;
 import com.romanticpipe.reviewcanvas.repository.ProductRepository;
 import com.romanticpipe.reviewcanvas.util.PageableUtils;
 import lombok.RequiredArgsConstructor;
@@ -39,4 +40,7 @@ public class ProductService {
 		);
 	}
 
+	public Product validateById(Long productId) {
+		return productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+	}
 }

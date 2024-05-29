@@ -32,18 +32,17 @@ public class S3Service {
 	public List<String> uploadFiles(List<MultipartFile> multipartFiles, String dirPath) {
 		return multipartFiles.stream().map(multipartFile -> {
 			try {
-				String fileName = multipartFile.getOriginalFilename();
-				String saveFileName = createRandomFileName(fileName);
+				String key = dirPath + "/" + createRandomFileName(multipartFile.getOriginalFilename());
 
 				PutObjectRequest putObjectRequest = PutObjectRequest.builder()
 					.bucket(bucketName)
-					.key(dirPath + "/" + saveFileName)
+					.key(key)
 					.contentType(multipartFile.getContentType())
 					.contentLength(multipartFile.getSize())
 					.build();
 				s3Client.putObject(putObjectRequest,
 					RequestBody.fromInputStream(multipartFile.getInputStream(), multipartFile.getSize()));
-				return saveFileName;
+				return key;
 			} catch (IOException | S3Exception e) {
 				throw new BusinessException(CommonErrorCode.FILE_UPLOAD_FAILED, e);
 			}

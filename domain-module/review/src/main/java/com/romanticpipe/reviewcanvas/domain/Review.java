@@ -46,12 +46,15 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewStatus status;
 	private String imageVideoUrls;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR")
+	private ReviewType reviewType;
 	private LocalDateTime deletedAt;
 	private Integer shopAdminId;
 
 	@Builder
 	public Review(Product product, User user, String content, int score, ReviewStatus status,
-				  String imageVideoUrls, Integer shopAdminId) {
+				  String imageVideoUrls, ReviewType reviewType, Integer shopAdminId) {
 		this.product = product;
 		this.user = user;
 		this.replyList = new ArrayList<>();
@@ -59,6 +62,7 @@ public class Review extends BaseEntityWithUpdate {
 		this.score = score;
 		this.status = status;
 		this.imageVideoUrls = imageVideoUrls;
+		this.reviewType = reviewType;
 		this.deletedAt = null;
 		this.shopAdminId = shopAdminId;
 	}
@@ -67,9 +71,9 @@ public class Review extends BaseEntityWithUpdate {
 		this.deletedAt = localDateTime;
 	}
 
-	public void update(int score, String content, String savedFileNames) {
+	public void update(int score, String content, String imageVideoUrls) {
 		this.score = score;
 		this.content = content;
-		this.imageVideoUrls = savedFileNames;
+		this.imageVideoUrls = imageVideoUrls;
 	}
 }

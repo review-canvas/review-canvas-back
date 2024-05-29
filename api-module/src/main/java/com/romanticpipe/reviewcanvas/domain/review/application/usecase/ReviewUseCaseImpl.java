@@ -2,10 +2,11 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
-import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
+import com.romanticpipe.reviewcanvas.config.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
+import com.romanticpipe.reviewcanvas.domain.ReviewType;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewRequest;
@@ -18,12 +19,15 @@ import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewPeriod;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
+import com.romanticpipe.reviewcanvas.exception.BusinessException;
+import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
 import com.romanticpipe.reviewcanvas.exception.ProductNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ReviewNotMatchAdminException;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
+import com.romanticpipe.reviewcanvas.storage.FileExtensionUtils;
 import com.romanticpipe.reviewcanvas.storage.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -97,7 +101,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getProductReviewsInMyPage(String mallId, String memberId,
-																		   Long productNo, PageableRequest pageable, ReviewFilterForUser filter) {
+																		   Long productNo, PageableRequest pageable,
+																		   ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
@@ -122,9 +127,9 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		String dirPath = "public-view/shop-admin" + product.getShopAdminId() + "/product-"
 			+ review.getProduct().getId();
 		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
-		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
+		String savedFileKeys = s3Service.uploadFiles(reviewImages, dirPath).stream()
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
-		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileNames);
+		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys);
 	}
 
 	@Override
@@ -134,8 +139,9 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(ProductNotFoundException::new);
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
+		ReviewType reviewType = this.getReviewType(reviewImages);
 
-		String saveImagePath = "public-view/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
+		String saveImagePath = "shop/" + product.getShopAdminId() + "/product/" + product.getId();
 		String savedFileNames = s3Service.uploadFiles(reviewImages, saveImagePath).stream()
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
 
@@ -146,6 +152,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.score(createReviewRequest.score())
 			.status(ReviewStatus.APPROVED)
 			.imageVideoUrls(savedFileNames)
+			.reviewType(reviewType)
 			.build();
 		reviewService.save(review);
 	}
@@ -165,8 +172,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 										CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
 										List<MultipartFile> reviewImages) {
 		shopAdminService.validateById(shopAdminId);
-		Product product = productService.findProduct(productId)
-			.orElseThrow(ProductNotFoundException::new);
+		Product product = productService.validateById(productId);
 
 		String saveImagePath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
 		String savedFileNames = s3Service.uploadFiles(reviewImages, saveImagePath).stream()
@@ -217,6 +223,21 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
 		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileNames);
+	}
+
+	private ReviewType getReviewType(List<MultipartFile> reviewImages) {
+		ReviewType reviewType = ReviewType.TEXT;
+		for (MultipartFile reviewImage : reviewImages) {
+			String filename = reviewImage.getOriginalFilename();
+			if (FileExtensionUtils.isImage(filename)) {
+				reviewType = reviewType == ReviewType.VIDEO ? ReviewType.VIDEO : ReviewType.PHOTO;
+			} else if (FileExtensionUtils.isVideo(filename)) {
+				reviewType = ReviewType.VIDEO;
+			} else {
+				throw new BusinessException(CommonErrorCode.INCOMPATIBLE_FORMAT_TYPE);
+			}
+		}
+		return reviewType;
 	}
 
 }

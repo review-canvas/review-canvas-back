@@ -1,32 +1,30 @@
 package com.romanticpipe.reviewcanvas.repository;
 
-import static com.romanticpipe.reviewcanvas.domain.QProduct.*;
-import static com.romanticpipe.reviewcanvas.domain.QReply.*;
-import static com.romanticpipe.reviewcanvas.domain.QReview.*;
-import static com.romanticpipe.reviewcanvas.domain.QUser.*;
-import static com.romanticpipe.reviewcanvas.util.FileExtensionUtils.*;
-
-import java.util.EnumSet;
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
-
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.romanticpipe.reviewcanvas.domain.QUser;
 import com.romanticpipe.reviewcanvas.domain.Review;
+import com.romanticpipe.reviewcanvas.domain.ReviewType;
 import com.romanticpipe.reviewcanvas.enumeration.ReplyFilter;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewPeriod;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
 import com.romanticpipe.reviewcanvas.util.QueryDslUtils;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
+
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.romanticpipe.reviewcanvas.domain.QProduct.product;
+import static com.romanticpipe.reviewcanvas.domain.QReply.reply;
+import static com.romanticpipe.reviewcanvas.domain.QReview.review;
+import static com.romanticpipe.reviewcanvas.domain.QUser.user;
 
 @RequiredArgsConstructor
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
@@ -63,8 +61,8 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
 	@Override
 	public Page<Review> findAllByProductId(Integer shopAdminId, Long productId, Pageable pageable,
-		ReviewPeriod reviewPeriod, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
-		EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
+										   ReviewPeriod reviewPeriod, EnumSet<ReviewFilterForShopAdmin> reviewFilters,
+										   EnumSet<Score> score, EnumSet<ReplyFilter> replyFilters) {
 		List<Long> reviewIds = queryFactory.select(review.id)
 			.from(review)
 			.where(review.product.shopAdminId.eq(shopAdminId),
@@ -127,7 +125,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
 	@Override
 	public Page<Review> findAllByUserIdAndProductId(Long userId, Long productId, Pageable pageable,
-		ReviewFilterForUser filter) {
+													ReviewFilterForUser filter) {
 		List<Long> reviewIds = queryFactory.select(review.id)
 			.from(review)
 			.where(review.user.id.eq(userId).and(review.product.id.eq(productId)), getFilterExpression(filter))
@@ -179,19 +177,19 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 	private BooleanExpression getReviewTypeCondition(EnumSet<ReviewFilterForShopAdmin> filters) {
 		if (filters.size() == 1) {
 			if (filters.contains(ReviewFilterForShopAdmin.PHOTO)) {
-				return getExtensionsExpression(IMAGE_EXTENSIONS);
+				return review.reviewType.eq(ReviewType.PHOTO);
 			} else if (filters.contains(ReviewFilterForShopAdmin.VIDEO)) {
-				return getExtensionsExpression(VIDEO_EXTENSIONS);
+				return review.reviewType.eq(ReviewType.VIDEO);
 			} else if (filters.contains(ReviewFilterForShopAdmin.TEXT)) {
-				return review.imageVideoUrls.isNull();
+				return review.reviewType.eq(ReviewType.TEXT);
 			}
 		} else if (filters.size() == 2) {
 			if (filters.containsAll(EnumSet.of(ReviewFilterForShopAdmin.PHOTO, ReviewFilterForShopAdmin.VIDEO))) {
-				return review.imageVideoUrls.isNotNull();
+				return review.reviewType.in(ReviewType.PHOTO, ReviewType.VIDEO);
 			} else if (filters.containsAll(EnumSet.of(ReviewFilterForShopAdmin.PHOTO, ReviewFilterForShopAdmin.TEXT))) {
-				return review.imageVideoUrls.isNull().or(getExtensionsExpression(IMAGE_EXTENSIONS));
+				return review.reviewType.in(ReviewType.PHOTO, ReviewType.TEXT);
 			} else if (filters.containsAll(EnumSet.of(ReviewFilterForShopAdmin.VIDEO, ReviewFilterForShopAdmin.TEXT))) {
-				return review.imageVideoUrls.isNull().or(getExtensionsExpression(VIDEO_EXTENSIONS));
+				return review.reviewType.in(ReviewType.VIDEO, ReviewType.TEXT);
 			}
 		}
 		return null;
