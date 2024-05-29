@@ -14,4 +14,8 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 	private final ReviewLikeService reviewLikeService;
 	private final ReviewService reviewService;
 
+	@Override
+	public void deleteReviewLike(String mallId, String memberId, long reviewId) {
+		
+	}
 }

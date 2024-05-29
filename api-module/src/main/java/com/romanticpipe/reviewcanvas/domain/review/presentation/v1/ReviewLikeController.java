@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ public class ReviewLikeController implements ReviewLikeApi {
 		@PathVariable("memberId") String memberId,
 		@PathVariable("reviewId") long reviewId
 	) {
-		return null;
+		reviewLikeUseCase.deleteReviewLike(mallId, memberId, reviewId);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }
