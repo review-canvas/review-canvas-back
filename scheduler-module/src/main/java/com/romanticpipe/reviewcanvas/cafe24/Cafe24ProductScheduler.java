@@ -1,22 +1,19 @@
 package com.romanticpipe.reviewcanvas.cafe24;
 
-import java.util.List;
-
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24Product;
 import com.romanticpipe.reviewcanvas.cafe24.product.Cafe24ProductClient;
+import com.romanticpipe.reviewcanvas.config.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.service.ProductService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * TASK: 매일 새벽 3시에 cafe24에서 제공하는 product 정보를 조회하여 db에 저장하거나, 업데이트한다.
@@ -31,7 +28,7 @@ public class Cafe24ProductScheduler {
 	private final ShopAdminService shopAdminService;
 	private final ProductService productService;
 	private final Cafe24ProductClient productClient;
-	private final TransactionTemplate writeTransactionTemplate;
+	private final TransactionUtils transactionUtils;
 
 	@SchedulerLock(name = "UpdateProduct", lockAtLeastFor = "1m", lockAtMostFor = "1m")
 	@Scheduled(cron = "${scheduler.update-product.cron}")
@@ -56,17 +53,12 @@ public class Cafe24ProductScheduler {
 	}
 
 	private void updateProductsInTransaction(List<Cafe24Product> cafe24Products, ShopAdmin shopAdmin) {
-		writeTransactionTemplate.executeWithoutResult(transactionStatus -> {
-			try {
-				List<Product> products = productService.findProducts(shopAdmin.getId());
-				int savedCount = cafe24Products.stream()
-					.reduce(0, (count, cafe24Product) ->
-						count + updateOrSaveProduct(cafe24Product, products, shopAdmin), Integer::sum);
-				log.info("[{}] 쇼핑몰 상품 업데이트 성공 - 새롭게 추가된 상품 수: {}", shopAdmin.getMallName(), savedCount);
-			} catch (RuntimeException e) {
-				transactionStatus.setRollbackOnly();
-				throw e;
-			}
+		transactionUtils.executeWithoutResultInWriteTransaction(transactionStatus -> {
+			List<Product> products = productService.findProducts(shopAdmin.getId());
+			int savedCount = cafe24Products.stream()
+				.reduce(0, (count, cafe24Product) ->
+					count + updateOrSaveProduct(cafe24Product, products, shopAdmin), Integer::sum);
+			log.info("[{}] 쇼핑몰 상품 업데이트 성공 - 새롭게 추가된 상품 수: {}", shopAdmin.getMallName(), savedCount);
 		});
 	}
 
