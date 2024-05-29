@@ -35,7 +35,7 @@ public class ReviewLikeController implements ReviewLikeApi {
 	}
 
 	@Override
-	@PostMapping("/shop-admin/{reviewId}/like")
+	@PostMapping("/shop-admin/reviews/{reviewId}/like")
 	public ResponseEntity<SuccessResponse<Void>> createReviewLikeForShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId
