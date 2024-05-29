@@ -37,7 +37,7 @@ public interface ReviewLikeApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 좋아요 생성(ShopAdmin)이 완료되었습니다.")
 	})
-	@PostMapping("/shop-admin/{reviewId}/like")
+	@PostMapping("/shop-admin/reviews/{reviewId}/like")
 	ResponseEntity<SuccessResponse<Void>> createReviewLikeForShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId
