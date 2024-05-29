@@ -17,7 +17,10 @@ public enum ReviewErrorCode implements ErrorCode {
 
 	// Reply
 	REPLY_NOT_FOUND(400, "R005", "댓글을 찾을 수 없습니다."),
-	WRITER_NOT_MATCH(400, "R006", "댓글의 작성자가 아닙니다.");
+	WRITER_NOT_MATCH(400, "R006", "댓글의 작성자가 아닙니다."),
+
+	// Review Like
+	ALREADY_UNLIKED_REVIEW(400, "R007", "이미 좋아요 하지 않은 리뷰입니다.");
 
 	private final int status;
 	private final String code;
