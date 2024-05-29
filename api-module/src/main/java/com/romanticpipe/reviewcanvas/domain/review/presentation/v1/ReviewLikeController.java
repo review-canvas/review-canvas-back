@@ -28,7 +28,7 @@ public class ReviewLikeController implements ReviewLikeApi {
 		@PathVariable("memberId") String memberId,
 		@PathVariable("reviewId") long reviewId
 	) {
-		reviewLikeUseCase.deleteReviewLike(mallId, memberId, reviewId);
+		reviewLikeUseCase.deleteReviewLikeForUser(mallId, memberId, reviewId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
@@ -38,6 +38,7 @@ public class ReviewLikeController implements ReviewLikeApi {
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId
 	) {
-		return null;
+		reviewLikeUseCase.deleteReviewLikeForShopAdmin(jwtInfo.adminId(), reviewId);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 }

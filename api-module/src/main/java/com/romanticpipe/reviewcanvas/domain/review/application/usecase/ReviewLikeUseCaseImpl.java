@@ -1,6 +1,7 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.User;
@@ -19,9 +20,15 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 	private final UserService userService;
 
 	@Override
-	public void deleteReviewLike(String mallId, String memberId, long reviewId) {
+	@Transactional
+	public void deleteReviewLikeForUser(String mallId, String memberId, long reviewId) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validById(reviewId);
 		reviewLikeService.deleteReviewLike(user.getId(), review.getId(), null);
+	}
+
+	@Override
+	public void deleteReviewLikeForShopAdmin(Integer adminId, Long reviewId) {
+
 	}
 }
