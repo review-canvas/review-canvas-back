@@ -1,12 +1,13 @@
 package com.romanticpipe.reviewcanvas.common.security;
 
-import lombok.Getter;
+import java.util.List;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.util.List;
+import lombok.Getter;
 
 @Component
 public final class AccessPath {
@@ -31,6 +32,8 @@ public final class AccessPath {
 		shopAdminAllowedPath.put("/api/v1/shop-admin/replies/{replyId}", List.of(HttpMethod.DELETE, HttpMethod.PATCH));
 		// shopAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
 		shopAdminAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET));
+		// review like
+		shopAdminAllowedPath.put("/api/v1/shop-admin/reviews/{reviewId}/like", List.of(HttpMethod.DELETE));
 		// shop-admin
 		shopAdminAllowedPath.put("/api/v1/shop-admin", List.of(HttpMethod.GET, HttpMethod.PATCH));
 		// product
