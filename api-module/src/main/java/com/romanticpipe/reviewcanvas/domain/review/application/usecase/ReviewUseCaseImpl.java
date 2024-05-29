@@ -98,6 +98,21 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	}
 
 	@Override
+	public PageResponse<GetReviewDetailResponse> getProductReviewsInMyPage(String mallId, String memberId,
+		Long productNo, PageableRequest pageable, ReviewFilterForUser filter) {
+		Product product = transactionUtils.executeInWriteTransaction(
+			status -> productService.findProduct(mallId, productNo)
+		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
+
+		return transactionUtils.executeInReadTransaction(
+			status -> {
+				User me = userService.validByMemberIdAndMallId(memberId, mallId);
+				return reviewService.getProductReviewsInMyPage(me.getId(), product.getId(), pageable, filter)
+					.map((review) -> GetReviewDetailResponse.from(review, true, memberId));
+			});
+	}
+
+	@Override
 	@Transactional
 	public void updateReview(String mallId, String memberId, Long reviewId,
 		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
@@ -205,4 +220,5 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
 		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileNames);
 	}
+
 }
