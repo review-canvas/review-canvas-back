@@ -6,15 +6,15 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.C
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyResponse;
 
 public interface ReplyUseCase {
 
 	void createReplyForUser(Long reviewId, CreateReplyRequest createReplyRequest);
 
-	List<GetReplyForUserResponse> getRepliesForUser(Long reviewId);
+	List<GetReplyResponse> getReplies(Long reviewId);
 
-	GetReplyForUserResponse getReplyForUser(Long replyId);
+	GetReplyResponse getReply(Long replyId);
 
 	void updateReplyForUser(Long replyId, UpdateReplyRequest updateReplyRequest);
 

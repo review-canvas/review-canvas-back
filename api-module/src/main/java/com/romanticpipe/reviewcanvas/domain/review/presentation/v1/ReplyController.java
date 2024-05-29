@@ -21,7 +21,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.C
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,19 +44,19 @@ public class ReplyController implements ReplyApi {
 
 	@Override
 	@GetMapping("/reviews/{reviewId}/replies")
-	public ResponseEntity<SuccessResponse<List<GetReplyForUserResponse>>> getRepliesForUser(
+	public ResponseEntity<SuccessResponse<List<GetReplyResponse>>> getReplies(
 		@PathVariable("reviewId") Long reviewId) {
 		return SuccessResponse.of(
-			replyUseCase.getRepliesForUser(reviewId)
+			replyUseCase.getReplies(reviewId)
 		).asHttp(HttpStatus.OK);
 	}
 
 	@Override
 	@GetMapping("/replies/{replyId}")
-	public ResponseEntity<SuccessResponse<GetReplyForUserResponse>> getReplyForUser(
+	public ResponseEntity<SuccessResponse<GetReplyResponse>> getReply(
 		@PathVariable("replyId") Long replyId
 	) {
-		return SuccessResponse.of(replyUseCase.getReplyForUser(replyId)).asHttp(HttpStatus.OK);
+		return SuccessResponse.of(replyUseCase.getReply(replyId)).asHttp(HttpStatus.OK);
 	}
 
 	@Override

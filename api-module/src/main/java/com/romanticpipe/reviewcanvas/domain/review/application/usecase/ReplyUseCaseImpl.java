@@ -14,7 +14,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.C
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyResponse;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
@@ -48,21 +48,19 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<GetReplyForUserResponse> getRepliesForUser(Long reviewId) {
+	public List<GetReplyResponse> getReplies(Long reviewId) {
 		reviewService.validById(reviewId);
-		return replyService.findAllByReviewIdForUser(reviewId)
+		return replyService.findAllByReviewId(reviewId)
 			.stream()
 			.map(
-				reply -> GetReplyForUserResponse.from(reply, userService.validateUserByUserId(reply.getUser().getId())))
+				GetReplyResponse::from)
 			.toList();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public GetReplyForUserResponse getReplyForUser(Long replyId) {
-		Reply reply = replyService.validateReplyForUser(replyId);
-		User user = userService.validateUserByUserId(reply.getUser().getId());
-		return GetReplyForUserResponse.from(reply, user);
+	public GetReplyResponse getReply(Long replyId) {
+		return GetReplyResponse.from(replyService.validateReplyForUser(replyId));
 	}
 
 	@Override
