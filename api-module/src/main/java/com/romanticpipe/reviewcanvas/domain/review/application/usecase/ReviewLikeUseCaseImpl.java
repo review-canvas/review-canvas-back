@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
+import com.romanticpipe.reviewcanvas.domain.Review;
+import com.romanticpipe.reviewcanvas.domain.ReviewLike;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewLikeRequest;
 import com.romanticpipe.reviewcanvas.service.ReviewLikeService;
@@ -36,7 +38,7 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 
 		transactionUtils.executeWithoutResultInWriteTransaction(
 			status -> {
-				reviewLikeService.validateIsLike(reviewId, user.getId());
+				reviewLikeService.validateIsLike(reviewId, user.getId(), null);
 				reviewLikeService.createAndSave(reviewId, user.getId(), null);
 			}
 		);
@@ -46,6 +48,12 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 	@Transactional
 	public void createReviewLikeForShopAdmin(Integer shopAdminId, Long reviewId) {
 		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
-
+		Review review = reviewService.validById(reviewId);
+		reviewLikeService.validateIsLike(reviewId, null, shopAdminId);
+		ReviewLike reviewLike = ReviewLike.builder()
+			.review(review)
+			.shopAdminId(shopAdmin.getId())
+			.build();
+		reviewLikeService.save(reviewLike);
 	}
 }

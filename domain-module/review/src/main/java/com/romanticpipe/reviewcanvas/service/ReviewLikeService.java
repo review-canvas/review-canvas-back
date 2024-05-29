@@ -19,8 +19,12 @@ public class ReviewLikeService {
 	private final ReviewLikeRepository reviewLikeRepository;
 	private final EntityManager entityManager;
 
-	public void validateIsLike(Long reviewId, Long userId) {
-		reviewLikeRepository.findByReviewIdAndUserId(reviewId, userId)
+	public void save(ReviewLike reviewLike) {
+		reviewLikeRepository.save(reviewLike);
+	}
+
+	public void validateIsLike(Long reviewId, Long userId, Integer shopAdminId) {
+		reviewLikeRepository.findByReviewIdAndUserIdAndShopAdminId(reviewId, userId, shopAdminId)
 			.ifPresent(reviewLike -> {
 				throw new BusinessException(ReviewErrorCode.ALREADY_LIKED_REVIEW);
 			});

@@ -8,5 +8,5 @@ import com.romanticpipe.reviewcanvas.domain.ReviewLike;
 
 public interface ReviewLikeRepository extends JpaRepository<ReviewLike, Long> {
 
-	Optional<ReviewLike> findByReviewIdAndUserId(Long reviewId, Long userId);
+	Optional<ReviewLike> findByReviewIdAndUserIdAndShopAdminId(Long reviewId, Long userId, Integer shopAdminId);
 }
