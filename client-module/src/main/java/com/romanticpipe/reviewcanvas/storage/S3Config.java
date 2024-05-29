@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.common.config;
+package com.romanticpipe.reviewcanvas.storage;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.common.storage;
+package com.romanticpipe.reviewcanvas.storage;
 
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;

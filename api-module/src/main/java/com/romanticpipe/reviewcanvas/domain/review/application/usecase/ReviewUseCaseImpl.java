@@ -2,8 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
-import com.romanticpipe.reviewcanvas.common.storage.S3Service;
-import com.romanticpipe.reviewcanvas.config.TransactionUtils;
+import com.romanticpipe.reviewcanvas.common.util.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Product;
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.ReviewStatus;
@@ -25,6 +24,7 @@ import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
+import com.romanticpipe.reviewcanvas.storage.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,7 +97,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getProductReviewsInMyPage(String mallId, String memberId,
-		Long productNo, PageableRequest pageable, ReviewFilterForUser filter) {
+																		   Long productNo, PageableRequest pageable, ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
