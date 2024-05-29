@@ -71,9 +71,10 @@ public class Review extends BaseEntityWithUpdate {
 		this.deletedAt = localDateTime;
 	}
 
-	public void update(int score, String content, String imageVideoUrls) {
+	public void update(int score, String content, String imageVideoUrls, ReviewType reviewType) {
 		this.score = score;
 		this.content = content;
 		this.imageVideoUrls = imageVideoUrls;
+		this.reviewType = reviewType;
 	}
 }

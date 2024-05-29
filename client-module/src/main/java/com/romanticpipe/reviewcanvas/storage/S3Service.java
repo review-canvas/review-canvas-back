@@ -49,13 +49,22 @@ public class S3Service {
 		}).toList();
 	}
 
-	public void fileDelete(String fileName, String dirPath) {
-		DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
-			.bucket(bucketName)
-			.key(dirPath + "/" + fileName)
-			.build();
+	public void fileDeletes(List<String> fileNames) {
+		fileNames.forEach(fileName -> {
+			try {
+				DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+					.bucket(bucketName)
+					.key(fileName)
+					.build();
+				s3Client.deleteObject(deleteObjectRequest);
+			} catch (S3Exception e) {
+				log.info("S3 파일 삭제 시도 중 에러가 발생했습니다.", e);
+			}
+		});
+	}
 
-		s3Client.deleteObject(deleteObjectRequest);
+	public String getReviewDirPath(Integer shopAdminId, Long productId) {
+		return "shop/" + shopAdminId + "/product/" + productId;
 	}
 
 	private String createRandomFileName(String fileName) {

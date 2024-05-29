@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
@@ -121,15 +122,15 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 							 UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
+		Product product = review.getProduct();
+		ReviewType reviewType = this.getReviewType(reviewImages);
 
-		Product product = productService.findProduct(review.getProduct().getId())
-			.orElseThrow(() -> new ProductNotFoundException());
-		String dirPath = "public-view/shop-admin" + product.getShopAdminId() + "/product-"
-			+ review.getProduct().getId();
-		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
-		String savedFileKeys = s3Service.uploadFiles(reviewImages, dirPath).stream()
+		String reviewFilePath = s3Service.getReviewDirPath(product.getShopAdminId(), product.getId());
+		List<String> fileNames = Arrays.stream(review.getImageVideoUrls().split(",")).toList();
+		s3Service.fileDeletes(fileNames);
+		String savedFileKeys = s3Service.uploadFiles(reviewImages, reviewFilePath).stream()
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
-		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys);
+		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys, reviewType);
 	}
 
 	@Override
@@ -141,8 +142,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
 		ReviewType reviewType = this.getReviewType(reviewImages);
 
-		String saveImagePath = "shop/" + product.getShopAdminId() + "/product/" + product.getId();
-		String savedFileNames = s3Service.uploadFiles(reviewImages, saveImagePath).stream()
+		String reviewDirPath = s3Service.getReviewDirPath(product.getShopAdminId(), product.getId());
+		String savedFileKeys = s3Service.uploadFiles(reviewImages, reviewDirPath).stream()
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
 
 		Review review = Review.builder()
@@ -151,7 +152,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.content(createReviewRequest.content())
 			.score(createReviewRequest.score())
 			.status(ReviewStatus.APPROVED)
-			.imageVideoUrls(savedFileNames)
+			.imageVideoUrls(savedFileKeys)
 			.reviewType(reviewType)
 			.build();
 		reviewService.save(review);
@@ -216,13 +217,13 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			review.getShopAdminId()))) {
 			throw new ReviewNotMatchAdminException();
 		}
-		Product product = productService.findProduct(review.getProduct().getId())
-			.orElseThrow(() -> new ProductNotFoundException());
-		String dirPath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + review.getProduct().getId();
-		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
-		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
-			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
-		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileNames);
+//		Product product = productService.findProduct(review.getProduct().getId())
+//			.orElseThrow(() -> new ProductNotFoundException());
+//		String dirPath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + review.getProduct().getId();
+//		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
+//		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
+//			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
+//		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileNames, reviewType);
 	}
 
 	private ReviewType getReviewType(List<MultipartFile> reviewImages) {
