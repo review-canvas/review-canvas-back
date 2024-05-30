@@ -20,6 +20,7 @@ import lombok.experimental.FieldNameConstants;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -76,5 +77,13 @@ public class Review extends BaseEntityWithUpdate {
 		this.content = content;
 		this.imageVideoUrls = imageVideoUrls;
 		this.reviewType = reviewType;
+	}
+
+	public boolean isThisShopReview(String mallId) {
+		return user != null && Objects.equals(user.getMallId(), mallId);
+	}
+
+	public boolean isThisShopAdminReview(Integer shopAdminId) {
+		return Objects.equals(this.shopAdminId, shopAdminId);
 	}
 }

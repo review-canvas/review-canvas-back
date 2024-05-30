@@ -125,11 +125,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Product product = review.getProduct();
 		ReviewType reviewType = this.getReviewType(reviewImages);
 
-		String reviewFilePath = s3Service.getReviewDirPath(product.getShopAdminId(), product.getId());
-		List<String> fileNames = Arrays.stream(review.getImageVideoUrls().split(",")).toList();
-		s3Service.fileDeletes(fileNames);
-		String savedFileKeys = s3Service.uploadFiles(reviewImages, reviewFilePath).stream()
-			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
+		String savedFileKeys = updateReviewFiles(reviewImages, review, product);
 		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys, reviewType);
 	}
 
@@ -211,19 +207,23 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 										UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
 		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
-		String shopAdminMallId = shopAdmin.getMallId();
-		String reviewUserMallId = review.getUser() != null ? review.getUser().getMallId() : null;
-		if (!(shopAdminMallId.equals(reviewUserMallId) || shopAdminId.equals(
-			review.getShopAdminId()))) {
+		if (!review.isThisShopReview(shopAdmin.getMallId()) || !review.isThisShopAdminReview(shopAdminId)) {
 			throw new ReviewNotMatchAdminException();
 		}
-//		Product product = productService.findProduct(review.getProduct().getId())
-//			.orElseThrow(() -> new ProductNotFoundException());
-//		String dirPath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + review.getProduct().getId();
-//		s3Service.fileDelete(review.getImageVideoUrls(), dirPath);
-//		String savedFileNames = s3Service.uploadFiles(reviewImages, dirPath).stream()
-//			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
-//		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileNames, reviewType);
+		Product product = review.getProduct();
+		ReviewType reviewType = this.getReviewType(reviewImages);
+
+		String savedFileKeys = updateReviewFiles(reviewImages, review, product);
+		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys, reviewType);
+	}
+
+	private String updateReviewFiles(List<MultipartFile> reviewImages, Review review, Product product) {
+		String reviewFilePath = s3Service.getReviewDirPath(product.getShopAdminId(), product.getId());
+		List<String> fileNames = Arrays.stream(review.getImageVideoUrls().split(",")).toList();
+		s3Service.fileDeletes(fileNames);
+		return s3Service.uploadFiles(reviewImages, reviewFilePath).stream()
+			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2)
+			.orElse("");
 	}
 
 	private ReviewType getReviewType(List<MultipartFile> reviewImages) {
