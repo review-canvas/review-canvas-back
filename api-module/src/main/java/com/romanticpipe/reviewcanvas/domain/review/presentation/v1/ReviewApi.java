@@ -222,4 +222,5 @@ interface ReviewApi {
 		@Schema(description = "리뷰 이미지/동영상 MultipartFile 배열")
 		@RequestPart(required = false) List<MultipartFile> reviewFiles
 	);
+
 }
