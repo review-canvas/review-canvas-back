@@ -1,22 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
-import java.time.LocalDateTime;
-import java.util.EnumSet;
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
@@ -33,8 +16,22 @@ import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewPeriod;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.EnumSet;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -75,10 +72,9 @@ class ReviewController implements ReviewApi {
 	@Override
 	@GetMapping("/reviews/{reviewId}")
 	public ResponseEntity<SuccessResponse<GetReviewDetailResponse>> getReviewForUser(
-		@PathVariable Long reviewId,
-		@RequestParam(value = "memberId", required = false) String memberId) {
+		@PathVariable Long reviewId, @RequestParam String memberId, @RequestParam String mallId) {
 		return SuccessResponse.of(
-			reviewUseCase.getReviewForUser(reviewId, memberId)
+			reviewUseCase.getReviewForUser(reviewId, mallId, memberId)
 		).asHttp(HttpStatus.OK);
 	}
 
@@ -128,11 +124,11 @@ class ReviewController implements ReviewApi {
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productId,
 		@RequestPart CreateReviewRequest createReviewRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages) {
-		if (reviewImages == null) {
-			reviewImages = List.of();
+		@RequestPart(required = false) List<MultipartFile> reviewFiles) {
+		if (reviewFiles == null) {
+			reviewFiles = List.of();
 		}
-		reviewUseCase.createReview(mallId, productId, createReviewRequest, reviewImages);
+		reviewUseCase.createReview(mallId, productId, createReviewRequest, reviewFiles);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
@@ -141,13 +137,13 @@ class ReviewController implements ReviewApi {
 	public ResponseEntity<SuccessResponse<Void>> updateReview(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
-		@PathVariable("reviewId") long reviewId,
-		UpdateReviewRequest updateReviewRequest,
-		List<MultipartFile> reviewImages) {
-		if (reviewImages == null) {
-			reviewImages = List.of();
+		@PathVariable("reviewId") Long reviewId,
+		@RequestPart UpdateReviewRequest updateReviewRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewFiles) {
+		if (reviewFiles == null) {
+			reviewFiles = List.of();
 		}
-		reviewUseCase.updateReview(mallId, memberId, reviewId, updateReviewRequest, reviewImages);
+		reviewUseCase.updateReview(mallId, memberId, reviewId, updateReviewRequest, reviewFiles);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
@@ -156,24 +152,24 @@ class ReviewController implements ReviewApi {
 	public ResponseEntity<SuccessResponse<Void>> deleteReviewByPublicView(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
-		@PathVariable("reviewId") long reviewId
+		@PathVariable("reviewId") Long reviewId
 	) {
-		reviewUseCase.deleteReviewByPublicView(mallId, memberId, reviewId, LocalDateTime.now());
+		reviewUseCase.deleteReviewByPublicView(mallId, memberId, reviewId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
 	@Override
-	@PostMapping("/shop-admin/products/{productId}/review")
+	@PostMapping(value = "/shop-admin/products/{productId}/review", consumes = "multipart/form-data")
 	public ResponseEntity<SuccessResponse<Void>> createReviewByShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("productId") Long productId,
 		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages) {
-		if (reviewImages == null) {
-			reviewImages = List.of();
+		@RequestPart(required = false) List<MultipartFile> reviewFiles) {
+		if (reviewFiles == null) {
+			reviewFiles = List.of();
 		}
 		reviewUseCase.createReviewByShopAdmin(jwtInfo.adminId(), productId,
-			createReviewByShopAdminRequest, reviewImages);
+			createReviewByShopAdminRequest, reviewFiles);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
@@ -183,7 +179,7 @@ class ReviewController implements ReviewApi {
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId
 	) {
-		reviewUseCase.deleteReviewByShopAdmin(jwtInfo.adminId(), reviewId, LocalDateTime.now());
+		reviewUseCase.deleteReviewByShopAdmin(jwtInfo.adminId(), reviewId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
@@ -193,11 +189,11 @@ class ReviewController implements ReviewApi {
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId,
 		@RequestPart UpdateReviewRequest updateReviewRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages) {
-		if (reviewImages == null) {
-			reviewImages = List.of();
+		@RequestPart(required = false) List<MultipartFile> reviewFiles) {
+		if (reviewFiles == null) {
+			reviewFiles = List.of();
 		}
-		reviewUseCase.updateReviewByShopAdmin(jwtInfo.adminId(), reviewId, updateReviewRequest, reviewImages);
+		reviewUseCase.updateReviewByShopAdmin(jwtInfo.adminId(), reviewId, updateReviewRequest, reviewFiles);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
