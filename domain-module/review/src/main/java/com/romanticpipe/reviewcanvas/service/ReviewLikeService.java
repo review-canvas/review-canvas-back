@@ -43,4 +43,10 @@ public class ReviewLikeService {
 		reviewLikeRepository.save(reviewLike);
 	}
 
+	public void deleteReviewLike(Long reviewId, Long userId, Integer shopAdminId) {
+		reviewLikeRepository.delete(
+			reviewLikeRepository.findByReviewIdAndUserIdAndShopAdminId(reviewId, userId, shopAdminId)
+				.orElseThrow(() -> new BusinessException(ReviewErrorCode.ALREADY_UNLIKED_REVIEW))
+		);
+	}
 }

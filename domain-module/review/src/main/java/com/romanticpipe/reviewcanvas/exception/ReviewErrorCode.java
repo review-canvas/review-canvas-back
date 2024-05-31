@@ -20,7 +20,9 @@ public enum ReviewErrorCode implements ErrorCode {
 	WRITER_NOT_MATCH(400, "R006", "댓글의 작성자가 아닙니다."),
 
 	// Review Like
-	ALREADY_LIKED_REVIEW(400, "R007", "이미 좋아요한 리뷰입니다.");
+	ALREADY_LIKED_REVIEW(400, "R007", "이미 좋아요한 리뷰입니다."),
+  ALREADY_UNLIKED_REVIEW(400, "R008", "이미 좋아요 하지 않은 리뷰입니다.");
+
 
 	private final int status;
 	private final String code;

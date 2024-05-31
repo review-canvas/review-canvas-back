@@ -23,8 +23,8 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 	private final ReviewLikeService reviewLikeService;
 	private final ReviewService reviewService;
 	private final UserService userService;
-	private final UserUseCase userUseCase;
 	private final ShopAdminService shopAdminService;
+	private final UserUseCase userUseCase;
 	private final TransactionUtils transactionUtils;
 
 	@Override
@@ -64,4 +64,19 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 		reviewLikeService.save(reviewLike);
 	}
 
+	@Override
+	@Transactional
+	public void deleteReviewLikeForUser(String mallId, String memberId, long reviewId) {
+		User user = userService.validByMemberIdAndMallId(memberId, mallId);
+		Review review = reviewService.validById(reviewId);
+		reviewLikeService.deleteReviewLike(review.getId(), user.getId(), null);
+	}
+
+	@Override
+	@Transactional
+	public void deleteReviewLikeForShopAdmin(Integer shopAdminId, Long reviewId) {
+		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
+		Review review = reviewService.validById(reviewId);
+		reviewLikeService.deleteReviewLike(review.getId(), null, shopAdmin.getId());
+	}
 }

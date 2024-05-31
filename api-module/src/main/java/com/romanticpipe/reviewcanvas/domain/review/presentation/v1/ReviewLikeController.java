@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,4 +59,24 @@ public class ReviewLikeController implements ReviewLikeApi {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
+	@Override
+	@DeleteMapping("/shop/{mallId}/users/{memberId}/reviews/{reviewId}/like")
+	public ResponseEntity<SuccessResponse<Void>> deleteReviewLikeForUser(
+		@PathVariable("mallId") String mallId,
+		@PathVariable("memberId") String memberId,
+		@PathVariable("reviewId") long reviewId
+	) {
+		reviewLikeUseCase.deleteReviewLikeForUser(mallId, memberId, reviewId);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
+
+	@Override
+	@DeleteMapping("/shop-admin/reviews/{reviewId}/like")
+	public ResponseEntity<SuccessResponse<Void>> deleteReviewLikeForShopAdmin(
+		@AuthInfo JwtInfo jwtInfo,
+		@PathVariable("reviewId") Long reviewId
+	) {
+		reviewLikeUseCase.deleteReviewLikeForShopAdmin(jwtInfo.adminId(), reviewId);
+		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
+	}
 }
