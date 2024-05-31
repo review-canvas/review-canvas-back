@@ -1,7 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +18,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewLik
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewLikeRequest;
 
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,6 +28,17 @@ public class ReviewLikeController implements ReviewLikeApi {
 
 	private final ReviewLikeUseCase reviewLikeUseCase;
 
+  @Override
+	@GetMapping("/reviews/{reviewId}/like/count")
+	public ResponseEntity<SuccessResponse<Map<String, Integer>>> getReviewLikeCount(
+		@PathVariable("reviewId") Long reviewId
+	) {
+		int likeCount = reviewLikeUseCase.getReviewLikeCount(reviewId);
+		return SuccessResponse.of(
+			Map.of("count", likeCount)
+		).asHttp(HttpStatus.OK);
+	}
+  
 	@Override
 	@PostMapping("/reviews/{reviewId}/like/")
 	public ResponseEntity<SuccessResponse<Void>> createReviewLikeForUser(
@@ -42,5 +57,5 @@ public class ReviewLikeController implements ReviewLikeApi {
 	) {
 		reviewLikeUseCase.createReviewLikeForShopAdmin(jwtInfo.adminId(), reviewId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
-	}
+  }
 }
