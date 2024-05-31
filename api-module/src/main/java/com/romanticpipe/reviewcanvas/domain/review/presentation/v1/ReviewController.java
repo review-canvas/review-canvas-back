@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -125,11 +124,11 @@ class ReviewController implements ReviewApi {
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productId,
 		@RequestPart CreateReviewRequest createReviewRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages) {
-		if (reviewImages == null) {
-			reviewImages = List.of();
+		@RequestPart(required = false) List<MultipartFile> reviewFiles) {
+		if (reviewFiles == null) {
+			reviewFiles = List.of();
 		}
-		reviewUseCase.createReview(mallId, productId, createReviewRequest, reviewImages);
+		reviewUseCase.createReview(mallId, productId, createReviewRequest, reviewFiles);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
@@ -139,12 +138,12 @@ class ReviewController implements ReviewApi {
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
 		@PathVariable("reviewId") Long reviewId,
-		UpdateReviewRequest updateReviewRequest,
-		List<MultipartFile> reviewImages) {
-		if (reviewImages == null) {
-			reviewImages = List.of();
+		@RequestPart UpdateReviewRequest updateReviewRequest,
+		@RequestPart(required = false) List<MultipartFile> reviewFiles) {
+		if (reviewFiles == null) {
+			reviewFiles = List.of();
 		}
-		reviewUseCase.updateReview(mallId, memberId, reviewId, updateReviewRequest, reviewImages);
+		reviewUseCase.updateReview(mallId, memberId, reviewId, updateReviewRequest, reviewFiles);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
@@ -153,24 +152,24 @@ class ReviewController implements ReviewApi {
 	public ResponseEntity<SuccessResponse<Void>> deleteReviewByPublicView(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
-		@PathVariable("reviewId") long reviewId
+		@PathVariable("reviewId") Long reviewId
 	) {
-		reviewUseCase.deleteReviewByPublicView(mallId, memberId, reviewId, LocalDateTime.now());
+		reviewUseCase.deleteReviewByPublicView(mallId, memberId, reviewId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
 	@Override
-	@PostMapping("/shop-admin/products/{productId}/review")
+	@PostMapping(value = "/shop-admin/products/{productId}/review", consumes = "multipart/form-data")
 	public ResponseEntity<SuccessResponse<Void>> createReviewByShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("productId") Long productId,
 		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages) {
-		if (reviewImages == null) {
-			reviewImages = List.of();
+		@RequestPart(required = false) List<MultipartFile> reviewFiles) {
+		if (reviewFiles == null) {
+			reviewFiles = List.of();
 		}
 		reviewUseCase.createReviewByShopAdmin(jwtInfo.adminId(), productId,
-			createReviewByShopAdminRequest, reviewImages);
+			createReviewByShopAdminRequest, reviewFiles);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
@@ -180,7 +179,7 @@ class ReviewController implements ReviewApi {
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId
 	) {
-		reviewUseCase.deleteReviewByShopAdmin(jwtInfo.adminId(), reviewId, LocalDateTime.now());
+		reviewUseCase.deleteReviewByShopAdmin(jwtInfo.adminId(), reviewId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
@@ -190,11 +189,11 @@ class ReviewController implements ReviewApi {
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId,
 		@RequestPart UpdateReviewRequest updateReviewRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages) {
-		if (reviewImages == null) {
-			reviewImages = List.of();
+		@RequestPart(required = false) List<MultipartFile> reviewFiles) {
+		if (reviewFiles == null) {
+			reviewFiles = List.of();
 		}
-		reviewUseCase.updateReviewByShopAdmin(jwtInfo.adminId(), reviewId, updateReviewRequest, reviewImages);
+		reviewUseCase.updateReviewByShopAdmin(jwtInfo.adminId(), reviewId, updateReviewRequest, reviewFiles);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 

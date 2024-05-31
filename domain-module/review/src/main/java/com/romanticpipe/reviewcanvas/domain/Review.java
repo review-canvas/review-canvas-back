@@ -38,6 +38,7 @@ public class Review extends BaseEntityWithUpdate {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id")
 	private User user;
+	private Integer shopAdminId;
 	@OneToMany(mappedBy = "review")
 	private List<Reply> replyList;
 
@@ -51,7 +52,6 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewType reviewType;
 	private LocalDateTime deletedAt;
-	private Integer shopAdminId;
 
 	@Builder
 	public Review(Product product, User user, String content, int score, ReviewStatus status,
@@ -68,8 +68,8 @@ public class Review extends BaseEntityWithUpdate {
 		this.shopAdminId = shopAdminId;
 	}
 
-	public void delete(LocalDateTime localDateTime) {
-		this.deletedAt = localDateTime;
+	public void delete() {
+		this.deletedAt = LocalDateTime.now();
 	}
 
 	public void update(int score, String content, String imageVideoUrls, ReviewType reviewType) {
@@ -79,12 +79,8 @@ public class Review extends BaseEntityWithUpdate {
 		this.reviewType = reviewType;
 	}
 
-	public boolean isThisShopReview(String mallId) {
-		return user != null && Objects.equals(user.getMallId(), mallId);
-	}
-
-	public boolean isThisShopAdminReview(Integer shopAdminId) {
-		return Objects.equals(this.shopAdminId, shopAdminId);
+	public boolean isThisShopReview(Integer shopAdminId) {
+		return Objects.equals(product.getShopAdminId(), shopAdminId);
 	}
 
 	public boolean isThisUserReview(String mallId, String memberId) {
@@ -92,6 +88,6 @@ public class Review extends BaseEntityWithUpdate {
 	}
 
 	public boolean isShopAdminReview() {
-		return user != null;
+		return shopAdminId != null;
 	}
 }

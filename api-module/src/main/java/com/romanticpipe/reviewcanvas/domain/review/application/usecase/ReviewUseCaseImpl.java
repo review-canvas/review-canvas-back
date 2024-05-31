@@ -1,6 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.config.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Product;
@@ -35,7 +34,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -63,7 +61,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 		return transactionUtils.executeInReadTransaction(
 			status -> reviewService.findAllByProductId(product.getId(), pageableRequest, filter)
-				.map(review -> convertGetReviewDetailResponse(review,
+				.map(review -> this.convertGetReviewDetailResponse(review,
 					review.isThisUserReview(mallId, memberId), memberId))
 		);
 	}
@@ -75,14 +73,14 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 																	ReviewFilterForUser filter) {
 		User me = userService.validByMemberIdAndMallId(memberId, mallId);
 		return reviewService.getReviewsInMyPage(me.getId(), pageable, filter)
-			.map(review -> convertGetReviewDetailResponse(review, true, memberId));
+			.map(review -> this.convertGetReviewDetailResponse(review, true, memberId));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public GetReviewDetailResponse getReviewForUser(Long reviewId, String mallId, String memberId) {
 		Review review = reviewService.validateById(reviewId);
-		return convertGetReviewDetailResponse(review, review.isThisUserReview(mallId, memberId), memberId);
+		return this.convertGetReviewDetailResponse(review, review.isThisUserReview(mallId, memberId), memberId);
 	}
 
 	@Override
@@ -93,7 +91,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	) {
 		return reviewService.findAllByProductId(shopAdminId, productId, pageable, reviewPeriod, reviewFilters, score,
 				replyFilters)
-			.map(review -> convertGetReviewDetailResponse(review, false, ""));
+			.map(review -> this.convertGetReviewDetailResponse(review, false, ""));
 	}
 
 	@Override
@@ -108,36 +106,33 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			status -> {
 				User me = userService.validByMemberIdAndMallId(memberId, mallId);
 				return reviewService.getProductReviewsInMyPage(me.getId(), product.getId(), pageable, filter)
-					.map(review -> convertGetReviewDetailResponse(review, true, memberId));
+					.map(review -> this.convertGetReviewDetailResponse(review, true, memberId));
 			});
 	}
 
 	@Override
 	@Transactional
 	public void updateReview(String mallId, String memberId, Long reviewId,
-							 UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
+							 UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 		Product product = review.getProduct();
-		ReviewType reviewType = this.getReviewType(reviewImages);
+		ReviewType reviewType = this.getReviewType(reviewFiles);
 
-		String savedFileKeys = updateReviewFiles(reviewImages, review, product);
+		String savedFileKeys = this.uploadReviewFiles(reviewFiles, product);
 		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys, reviewType);
 	}
 
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-							 List<MultipartFile> reviewImages) {
+							 List<MultipartFile> reviewFiles) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(ProductNotFoundException::new);
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
-		ReviewType reviewType = this.getReviewType(reviewImages);
+		ReviewType reviewType = this.getReviewType(reviewFiles);
 
-		String reviewDirPath = s3Service.getReviewDirPath(product.getShopAdminId(), product.getId());
-		String savedFileKeys = s3Service.uploadFiles(reviewImages, reviewDirPath).stream()
-			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
-
+		String savedFileKeys = this.uploadReviewFiles(reviewFiles, product);
 		Review review = Review.builder()
 			.product(product)
 			.user(user)
@@ -152,31 +147,30 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public void deleteReviewByPublicView(String mallId, String memberId, long reviewId, LocalDateTime localDateTime) {
+	public void deleteReviewByPublicView(String mallId, String memberId, Long reviewId) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 		replyService.deleteAllReplyByReviewId(review.getId());
-		review.delete(localDateTime);
+		review.delete();
 	}
 
 	@Override
 	@Transactional
 	public void createReviewByShopAdmin(Integer shopAdminId, Long productId,
 										CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
-										List<MultipartFile> reviewImages) {
+										List<MultipartFile> reviewFiles) {
 		shopAdminService.validateById(shopAdminId);
 		Product product = productService.validateById(productId);
+		ReviewType reviewType = this.getReviewType(reviewFiles);
 
-		String saveImagePath = "admin-page/shop-admin" + product.getShopAdminId() + "/product-" + product.getId();
-		String savedFileNames = s3Service.uploadFiles(reviewImages, saveImagePath).stream()
-			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
-
+		String savedFileKeys = this.uploadReviewFiles(reviewFiles, product);
 		Review review = Review.builder()
 			.product(product)
 			.content(createReviewByShopAdminRequest.content())
 			.score(createReviewByShopAdminRequest.score())
 			.status(ReviewStatus.APPROVED)
-			.imageVideoUrls(savedFileNames)
+			.imageVideoUrls(savedFileKeys)
+			.reviewType(reviewType)
 			.shopAdminId(shopAdminId)
 			.build();
 		reviewService.save(review);
@@ -184,47 +178,41 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	@Transactional
-	public void deleteReviewByShopAdmin(Integer shopAdminId, Long reviewId, LocalDateTime localDateTime) {
-		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
+	public void deleteReviewByShopAdmin(Integer shopAdminId, Long reviewId) {
+		shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
-		String shopAdminMallId = shopAdmin.getMallId();
-		String reviewUserMallId = review.getUser() != null ? review.getUser().getMallId() : null;
-		if (!(shopAdminMallId.equals(reviewUserMallId) || shopAdminId.equals(
-			review.getShopAdminId()))) {
+		if (!review.isThisShopReview(shopAdminId)) {
 			throw new ReviewNotMatchAdminException();
 		}
+
 		replyService.deleteAllReplyByReviewId(review.getId());
-		review.delete(localDateTime);
+		review.delete();
 	}
 
 	@Override
 	@Transactional
 	public void updateReviewByShopAdmin(Integer shopAdminId, Long reviewId,
-										UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewImages) {
-		ShopAdmin shopAdmin = shopAdminService.validateById(shopAdminId);
+										UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
+		shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
-		if (!review.isThisShopReview(shopAdmin.getMallId()) || !review.isThisShopAdminReview(shopAdminId)) {
+		if (!review.isThisShopReview(shopAdminId)) {
 			throw new ReviewNotMatchAdminException();
 		}
-		Product product = review.getProduct();
-		ReviewType reviewType = this.getReviewType(reviewImages);
+		ReviewType reviewType = this.getReviewType(reviewFiles);
 
-		String savedFileKeys = updateReviewFiles(reviewImages, review, product);
+		String savedFileKeys = uploadReviewFiles(reviewFiles, review.getProduct());
 		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys, reviewType);
 	}
 
-	private String updateReviewFiles(List<MultipartFile> reviewImages, Review review, Product product) {
-		String reviewFilePath = s3Service.getReviewDirPath(product.getShopAdminId(), product.getId());
-		List<String> fileNames = Arrays.stream(review.getImageVideoUrls().split(",")).toList();
-		s3Service.fileDeletes(fileNames);
-		return s3Service.uploadFiles(reviewImages, reviewFilePath).stream()
-			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2)
-			.orElse("");
+	private String uploadReviewFiles(List<MultipartFile> reviewFiles, Product product) {
+		String reviewDirPath = s3Service.getReviewDirPath(product.getShopAdminId(), product.getId());
+		return s3Service.uploadFiles(reviewFiles, reviewDirPath).stream()
+			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
 	}
 
-	private ReviewType getReviewType(List<MultipartFile> reviewImages) {
+	private ReviewType getReviewType(List<MultipartFile> reviewFiles) {
 		ReviewType reviewType = ReviewType.TEXT;
-		for (MultipartFile reviewImage : reviewImages) {
+		for (MultipartFile reviewImage : reviewFiles) {
 			String filename = reviewImage.getOriginalFilename();
 			if (FileExtensionUtils.isImage(filename)) {
 				reviewType = reviewType == ReviewType.VIDEO ? ReviewType.VIDEO : ReviewType.PHOTO;
