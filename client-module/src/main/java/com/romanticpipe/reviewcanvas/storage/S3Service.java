@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
@@ -96,14 +95,9 @@ public class S3Service {
 
 	private List<String> getPresignedUrls(List<String> objectKeys, String bucketName) {
 		return objectKeys.stream().map(objectKey -> {
-			GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-				.bucket(bucketName)
-				.key(objectKey)
-				.build();
-
 			GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
 				.signatureDuration(Duration.ofMinutes(15))
-				.getObjectRequest(getObjectRequest)
+				.getObjectRequest(builder -> builder.bucket(bucketName).key(objectKey).build())
 				.build();
 
 			return s3Presigner.presignGetObject(getObjectPresignRequest)

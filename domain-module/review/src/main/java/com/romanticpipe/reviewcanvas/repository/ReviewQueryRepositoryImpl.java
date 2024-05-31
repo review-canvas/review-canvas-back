@@ -211,13 +211,6 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 		return null;
 	}
 
-	private BooleanExpression getExtensionsExpression(List<String> imageExtensions) {
-		return imageExtensions.stream()
-			.map(ext -> review.imageVideoUrls.like("%." + ext))
-			.reduce(BooleanExpression::or)
-			.orElse(null);
-	}
-
 	private BooleanExpression joinProductCondition(Long productId) {
 		if (productId == null || productId <= 0) {
 			return null;
