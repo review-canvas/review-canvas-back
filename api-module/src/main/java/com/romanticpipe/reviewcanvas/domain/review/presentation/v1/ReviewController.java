@@ -73,10 +73,9 @@ class ReviewController implements ReviewApi {
 	@Override
 	@GetMapping("/reviews/{reviewId}")
 	public ResponseEntity<SuccessResponse<GetReviewDetailResponse>> getReviewForUser(
-		@PathVariable Long reviewId,
-		@RequestParam(value = "memberId", required = false) String memberId) {
+		@PathVariable Long reviewId, @RequestParam String memberId, @RequestParam String mallId) {
 		return SuccessResponse.of(
-			reviewUseCase.getReviewForUser(reviewId, memberId)
+			reviewUseCase.getReviewForUser(reviewId, mallId, memberId)
 		).asHttp(HttpStatus.OK);
 	}
 

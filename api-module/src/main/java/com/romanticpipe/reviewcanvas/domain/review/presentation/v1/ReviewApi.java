@@ -76,7 +76,7 @@ interface ReviewApi {
 			allowableValues = {"ALL", "IMAGE_VIDEO", "GENERAL"}) ReviewFilterForUser filter
 	);
 
-	@Operation(summary = "리뷰 조회 API", description = "단건 리뷰를 조회한다.")
+	@Operation(summary = "public view 리뷰 조회 API", description = "단건 리뷰를 조회한다.")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
@@ -84,8 +84,7 @@ interface ReviewApi {
 	})
 	@GetMapping("/reviews/{reviewId}")
 	ResponseEntity<SuccessResponse<GetReviewDetailResponse>> getReviewForUser(
-		@PathVariable Long reviewId,
-		@RequestParam(value = "memberId", required = false) String memberId);
+		@PathVariable Long reviewId, @RequestParam String memberId, @RequestParam String mallId);
 
 	@Operation(summary = "shop admin 대시보드 리뷰 조회 API", description = "shop admin 대시보드에서 리뷰를 조회한다.",
 		security = @SecurityRequirement(name = "Bearer Authentication"))

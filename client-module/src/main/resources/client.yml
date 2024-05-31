@@ -3,6 +3,6 @@ aws:
     accessKey: ${S3_ACCESS_KEY}
     secretKey: ${S3_SECRET_ACCESS_KEY}
   s3:
-    bucket: romantic-pipe-review-bucket
+    bucket: ${S3_BUCKET}
   region:
     static: ap-northeast-2
