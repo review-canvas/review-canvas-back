@@ -1,13 +1,13 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase.response;
 
+import com.romanticpipe.reviewcanvas.domain.Reply;
+import com.romanticpipe.reviewcanvas.domain.Review;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
-import com.romanticpipe.reviewcanvas.domain.Review;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 
 @Builder
 @Schema(name = "GetReviewDetailResponse", description = "리뷰 및 댓글 조회 response")
@@ -36,45 +36,48 @@ public record GetReviewDetailResponse(
 	Long productId,
 	@Schema(description = "리뷰가 작성된 상품 이름", requiredMode = Schema.RequiredMode.REQUIRED)
 	String productName,
+	@Schema(description = "리뷰 이미지/비디오 url dto", requiredMode = Schema.RequiredMode.REQUIRED)
+	FileContentsResponse imageVideoUrls,
 	@Schema(description = "리뷰에 해당하는 댓글 리스트", requiredMode = Schema.RequiredMode.REQUIRED)
 	List<ReplyResponse> replies
 ) {
 
-	public static GetReviewDetailResponse from(Review review, boolean isMine, String memberId) {
-		if (review.getUser() == null) {
-			return GetReviewDetailResponse.builder()
-				.reviewId(review.getId())
-				.content(review.getDeletedAt() == null ? review.getContent() : " ")
-				.score(review.getScore())
-				.shopAdminId(review.getShopAdminId())
-				.isMine(isMine)
-				.createAt(review.getCreatedAt())
-				.updatedAt(review.getUpdatedAt())
-				.deleted(review.getDeletedAt() != null)
-				.productId(review.getProduct().getId())
-				.productName(review.getProduct().getName())
-				.replies(review.getReplyList().stream().map(reply -> ReplyResponse.from(reply,
-					Optional.ofNullable(reply.getUser())
-						.map(user -> user.getMemberId().equals(memberId))
-						.orElse(false))).toList())
-				.build();
-		}
-		return GetReviewDetailResponse.builder()
+	public static GetReviewDetailResponse from(Review review, boolean isMyReview, String memberId,
+											   FileContentsResponse imageVideoUrls) {
+		var replyResponses = review.getReplyList().stream()
+			.map(reply -> createReplyResponse(memberId, reply))
+			.toList();
+
+		var responseBuilder = GetReviewDetailResponse.builder()
 			.reviewId(review.getId())
 			.content(review.getDeletedAt() == null ? review.getContent() : " ")
 			.score(review.getScore())
-			.userId(review.getUser().getId())
-			.nickname(review.getUser().getNickName())
-			.isMine(isMine)
+			.isMine(isMyReview)
 			.createAt(review.getCreatedAt())
 			.updatedAt(review.getUpdatedAt())
 			.deleted(review.getDeletedAt() != null)
 			.productId(review.getProduct().getId())
 			.productName(review.getProduct().getName())
-			.replies(review.getReplyList().stream().map(reply -> ReplyResponse.from(reply,
-				Optional.ofNullable(reply.getUser())
-					.map(user -> user.getMemberId().equals(memberId))
-					.orElse(false))).toList())
-			.build();
+			.imageVideoUrls(imageVideoUrls)
+			.replies(replyResponses);
+
+		if (review.isShopAdminReview()) {
+			responseBuilder.shopAdminId(review.getShopAdminId());
+		} else {
+			responseBuilder
+				.userId(review.getUser().getId())
+				.nickname(review.getUser().getNickName());
+		}
+
+		return responseBuilder.build();
 	}
+
+	private static ReplyResponse createReplyResponse(String memberId, Reply reply) {
+		return ReplyResponse.from(reply,
+			Optional.ofNullable(reply.getUser())
+				.map(user -> user.getMemberId().equals(memberId))
+				.orElse(false)
+		);
+	}
+
 }

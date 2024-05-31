@@ -1,18 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.presentation.v1;
 
-import java.util.EnumSet;
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
@@ -26,18 +13,29 @@ import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForShopAdmin;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewFilterForUser;
 import com.romanticpipe.reviewcanvas.enumeration.ReviewSort;
 import com.romanticpipe.reviewcanvas.enumeration.Score;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.EnumSet;
+import java.util.List;
 
 @Tag(name = "Review", description = "리뷰 API")
 interface ReviewApi {
 
-	@Operation(summary = "상품 리뷰 리스트 조회 API", description = "특정 상품의 리뷰 리스트를 조회한다.")
+	@Operation(summary = "public view 리뷰 리스트 조회 API", description = "특정 상품의 리뷰 리스트를 조회한다.")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
@@ -78,7 +76,7 @@ interface ReviewApi {
 			allowableValues = {"ALL", "IMAGE_VIDEO", "GENERAL"}) ReviewFilterForUser filter
 	);
 
-	@Operation(summary = "리뷰 조회 API", description = "단건 리뷰를 조회한다.")
+	@Operation(summary = "public view 리뷰 조회 API", description = "단건 리뷰를 조회한다.")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
@@ -87,7 +85,8 @@ interface ReviewApi {
 	@GetMapping("/reviews/{reviewId}")
 	ResponseEntity<SuccessResponse<GetReviewDetailResponse>> getReviewForUser(
 		@PathVariable Long reviewId,
-		@RequestParam(value = "memberId", required = false) String memberId);
+		@Schema(description = "내 리뷰인지 확인하기 위해 받는 파라미터") @RequestParam String memberId,
+		@Schema(description = "내 리뷰인지 확인하기 위해 받는 파라미터") @RequestParam String mallId);
 
 	@Operation(summary = "shop admin 대시보드 리뷰 조회 API", description = "shop admin 대시보드에서 리뷰를 조회한다.",
 		security = @SecurityRequirement(name = "Bearer Authentication"))
@@ -137,18 +136,19 @@ interface ReviewApi {
 			allowableValues = {"ALL", "IMAGE_VIDEO", "GENERAL"}) ReviewFilterForUser filter
 	);
 
-	@Operation(summary = "상품 리뷰 생성 API", description = "특정 상품의 리뷰를 생성한다.")
+	@Operation(summary = "public view 상품 리뷰 생성 API", description = "특정 상품의 리뷰를 생성한다.")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
 			description = "성공적으로 상품의 리뷰 생성이 완료되었습니다.")
 	})
-	@PostMapping("/shop/{mallId}/products/{productNo}/review")
+	@PostMapping(value = "/shop/{mallId}/products/{productNo}/review", consumes = "multipart/form-data")
 	ResponseEntity<SuccessResponse<Void>> createReview(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productNo,
-		@RequestPart CreateReviewRequest createReviewRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages
+		@Schema(description = "하단 Schemas 참고") @RequestPart CreateReviewRequest createReviewRequest,
+		@Schema(description = "리뷰 이미지/동영상 MultipartFile 배열")
+		@RequestPart(required = false) List<MultipartFile> reviewFiles
 	);
 
 	@Operation(summary = "리뷰 수정 API", description = "특정 상품의 리뷰를 수정한다.")
@@ -157,13 +157,14 @@ interface ReviewApi {
 			responseCode = "200",
 			description = "성공적으로 리뷰 수정이 완료되었습니다.")
 	})
-	@PatchMapping("/shop/{mallId}/users/{memberId}/reviews/{reviewId}")
+	@PatchMapping(value = "/shop/{mallId}/users/{memberId}/reviews/{reviewId}", consumes = "multipart/form-data")
 	ResponseEntity<SuccessResponse<Void>> updateReview(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
-		@PathVariable("reviewId") long reviewId,
-		@RequestPart UpdateReviewRequest updateReviewRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages
+		@PathVariable("reviewId") Long reviewId,
+		@Schema(description = "하단 Schemas 참고") @RequestPart UpdateReviewRequest updateReviewRequest,
+		@Schema(description = "리뷰 이미지/동영상 MultipartFile 배열")
+		@RequestPart(required = false) List<MultipartFile> reviewFiles
 	);
 
 	@Operation(summary = "리뷰 삭제 API", description = "자신이 작성한 리뷰를 삭제한다.")
@@ -176,7 +177,7 @@ interface ReviewApi {
 	ResponseEntity<SuccessResponse<Void>> deleteReviewByPublicView(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("memberId") String memberId,
-		@PathVariable("reviewId") long reviewId
+		@PathVariable("reviewId") Long reviewId
 	);
 
 	@Operation(summary = "Shop Admin의 상품 리뷰 생성 API", description = "Shop Admin이 특정 상품의 리뷰를 생성한다.")
@@ -185,12 +186,14 @@ interface ReviewApi {
 			responseCode = "200",
 			description = "성공적으로 상품의 리뷰 생성이 완료되었습니다.")
 	})
-	@PostMapping("/shop-admin/products/{productId}/review")
+	@PostMapping(value = "/shop-admin/products/{productId}/review", consumes = "multipart/form-data")
 	ResponseEntity<SuccessResponse<Void>> createReviewByShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("productId") Long productId,
+		@Schema(description = "하단 Schemas 참고")
 		@RequestPart CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages
+		@Schema(description = "리뷰 이미지/동영상 MultipartFile 배열")
+		@RequestPart(required = false) List<MultipartFile> reviewFiles
 	);
 
 	@Operation(summary = "Shop Admin의 리뷰 삭제 API", description = "Shop Admin이 특정 리뷰를 삭제한다.")
@@ -205,18 +208,19 @@ interface ReviewApi {
 		@PathVariable("reviewId") Long reviewId
 	);
 
-	@Operation(summary = "Shop Admin의 리뷰 수정 API", description = "Shop Admin이 특정 리뷰를 수정한다.")
+	@Operation(summary = "Shop Admin 리뷰 수정 API", description = "Shop Admin이 특정 리뷰를 수정한다.")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
 			description = "성공적으로 리뷰 수정이 완료되었습니다.")
 	})
-	@PatchMapping("/shop-admin/reviews/{reviewId}")
+	@PatchMapping(value = "/shop-admin/reviews/{reviewId}", consumes = "multipart/form-data")
 	ResponseEntity<SuccessResponse<Void>> updateReviewByShopAdmin(
 		@AuthInfo JwtInfo jwtInfo,
 		@PathVariable("reviewId") Long reviewId,
-		@RequestPart UpdateReviewRequest updateReviewRequest,
-		@RequestPart(required = false) List<MultipartFile> reviewImages
+		@Schema(description = "하단 Schemas 참고") @RequestPart UpdateReviewRequest updateReviewRequest,
+		@Schema(description = "리뷰 이미지/동영상 MultipartFile 배열")
+		@RequestPart(required = false) List<MultipartFile> reviewFiles
 	);
 
 }

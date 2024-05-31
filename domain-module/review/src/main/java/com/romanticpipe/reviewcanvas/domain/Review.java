@@ -20,6 +20,7 @@ import lombok.experimental.FieldNameConstants;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -37,6 +38,7 @@ public class Review extends BaseEntityWithUpdate {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_id")
 	private User user;
+	private Integer shopAdminId;
 	@OneToMany(mappedBy = "review")
 	private List<Reply> replyList;
 
@@ -46,12 +48,14 @@ public class Review extends BaseEntityWithUpdate {
 	@Column(columnDefinition = "VARCHAR")
 	private ReviewStatus status;
 	private String imageVideoUrls;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR")
+	private ReviewType reviewType;
 	private LocalDateTime deletedAt;
-	private Integer shopAdminId;
 
 	@Builder
 	public Review(Product product, User user, String content, int score, ReviewStatus status,
-				  String imageVideoUrls, Integer shopAdminId) {
+				  String imageVideoUrls, ReviewType reviewType, Integer shopAdminId) {
 		this.product = product;
 		this.user = user;
 		this.replyList = new ArrayList<>();
@@ -59,17 +63,31 @@ public class Review extends BaseEntityWithUpdate {
 		this.score = score;
 		this.status = status;
 		this.imageVideoUrls = imageVideoUrls;
+		this.reviewType = reviewType;
 		this.deletedAt = null;
 		this.shopAdminId = shopAdminId;
 	}
 
-	public void delete(LocalDateTime localDateTime) {
-		this.deletedAt = localDateTime;
+	public void delete() {
+		this.deletedAt = LocalDateTime.now();
 	}
 
-	public void update(int score, String content, String savedFileNames) {
+	public void update(int score, String content, String imageVideoUrls, ReviewType reviewType) {
 		this.score = score;
 		this.content = content;
-		this.imageVideoUrls = savedFileNames;
+		this.imageVideoUrls = imageVideoUrls;
+		this.reviewType = reviewType;
+	}
+
+	public boolean isThisShopReview(Integer shopAdminId) {
+		return Objects.equals(product.getShopAdminId(), shopAdminId);
+	}
+
+	public boolean isThisUserReview(String mallId, String memberId) {
+		return user != null && Objects.equals(user.getMallId(), mallId) && Objects.equals(user.getMemberId(), memberId);
+	}
+
+	public boolean isShopAdminReview() {
+		return shopAdminId != null;
 	}
 }

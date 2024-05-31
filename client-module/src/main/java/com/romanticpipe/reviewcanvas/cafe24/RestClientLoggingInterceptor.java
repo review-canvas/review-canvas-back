@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.config;
+package com.romanticpipe.reviewcanvas.cafe24;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
