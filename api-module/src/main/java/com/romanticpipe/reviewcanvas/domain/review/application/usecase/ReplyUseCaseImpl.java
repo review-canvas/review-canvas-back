@@ -1,5 +1,10 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.config.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Reply;
@@ -9,15 +14,12 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.C
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReplyRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyByShopAdminRequest;
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.UpdateReplyRequest;
-import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyForUserResponse;
+import com.romanticpipe.reviewcanvas.domain.review.application.usecase.response.GetReplyResponse;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -46,19 +48,25 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<GetReplyForUserResponse> getReplyForUser(Long reviewId) {
+	public List<GetReplyResponse> getReplies(Long reviewId) {
 		reviewService.validById(reviewId);
-		return replyService.findAllByReviewIdForUser(reviewId)
+		return replyService.findAllByReviewId(reviewId)
 			.stream()
 			.map(
-				reply -> GetReplyForUserResponse.from(reply, userService.validateUserByUserId(reply.getUser().getId())))
+				GetReplyResponse::from)
 			.toList();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public GetReplyResponse getReply(Long replyId) {
+		return GetReplyResponse.from(replyService.validateReplyForUser(replyId));
 	}
 
 	@Override
 	@Transactional
 	public void createReplyForShopAdmin(Integer shopAdminId, Long reviewId,
-										CreateReplyByShopAdminRequest createReplyByShopAdminRequest) {
+		CreateReplyByShopAdminRequest createReplyByShopAdminRequest) {
 		shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
 
@@ -73,7 +81,7 @@ public class ReplyUseCaseImpl implements ReplyUseCase {
 	@Override
 	@Transactional
 	public void updateReplyForShopAdmin(Integer shopAdminId, Long replyId,
-										UpdateReplyByShopAdminRequest updateReplyByShopAdminRequest) {
+		UpdateReplyByShopAdminRequest updateReplyByShopAdminRequest) {
 		shopAdminService.validateById(shopAdminId);
 		Reply reply = replyService.validById(replyId);
 
