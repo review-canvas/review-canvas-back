@@ -10,7 +10,6 @@ import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.repository.ReviewLikeRepository;
 
 import jakarta.persistence.EntityManager;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,10 +23,10 @@ public class ReviewLikeService {
 		reviewLikeRepository.save(reviewLike);
 	}
 
-  public int getReviewLikeCount(Long reviewId) {
+	public int getReviewLikeCount(Long reviewId) {
 		return reviewLikeRepository.countAllByReviewId(reviewId);
 	}
-  
+
 	public void validateIsLike(Long reviewId, Long userId, Integer shopAdminId) {
 		reviewLikeRepository.findByReviewIdAndUserIdAndShopAdminId(reviewId, userId, shopAdminId)
 			.ifPresent(reviewLike -> {

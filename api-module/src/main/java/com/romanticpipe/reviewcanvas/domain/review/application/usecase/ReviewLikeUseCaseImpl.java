@@ -2,6 +2,7 @@ package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.config.TransactionUtils;
@@ -12,6 +13,7 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.C
 import com.romanticpipe.reviewcanvas.service.ReviewLikeService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
+
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -25,13 +27,13 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 	private final ShopAdminService shopAdminService;
 	private final TransactionUtils transactionUtils;
 
-  @Override
+	@Override
 	@Transactional(readOnly = true)
 	public int getReviewLikeCount(Long reviewId) {
 		reviewService.validById(reviewId);
 		return reviewLikeService.getReviewLikeCount(reviewId);
 	}
-  
+
 	@Override
 	public void createReviewLikeForUser(Long reviewId, CreateReviewLikeRequest createReviewLikeRequest) {
 		User user = transactionUtils.executeInReadTransaction(status -> {
@@ -60,6 +62,6 @@ public class ReviewLikeUseCaseImpl implements ReviewLikeUseCase {
 			.shopAdminId(shopAdmin.getId())
 			.build();
 		reviewLikeService.save(reviewLike);
-  }
-  
+	}
+
 }

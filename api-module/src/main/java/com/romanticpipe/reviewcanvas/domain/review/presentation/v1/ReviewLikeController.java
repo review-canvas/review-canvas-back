@@ -18,7 +18,6 @@ import com.romanticpipe.reviewcanvas.domain.review.application.usecase.ReviewLik
 import com.romanticpipe.reviewcanvas.domain.review.application.usecase.request.CreateReviewLikeRequest;
 
 import jakarta.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,7 +27,7 @@ public class ReviewLikeController implements ReviewLikeApi {
 
 	private final ReviewLikeUseCase reviewLikeUseCase;
 
-  @Override
+	@Override
 	@GetMapping("/reviews/{reviewId}/like/count")
 	public ResponseEntity<SuccessResponse<Map<String, Integer>>> getReviewLikeCount(
 		@PathVariable("reviewId") Long reviewId
@@ -38,7 +37,7 @@ public class ReviewLikeController implements ReviewLikeApi {
 			Map.of("count", likeCount)
 		).asHttp(HttpStatus.OK);
 	}
-  
+
 	@Override
 	@PostMapping("/reviews/{reviewId}/like/")
 	public ResponseEntity<SuccessResponse<Void>> createReviewLikeForUser(
@@ -57,5 +56,6 @@ public class ReviewLikeController implements ReviewLikeApi {
 	) {
 		reviewLikeUseCase.createReviewLikeForShopAdmin(jwtInfo.adminId(), reviewId);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
-  }
+	}
+
 }
