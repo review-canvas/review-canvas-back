@@ -2,18 +2,14 @@ package com.romanticpipe.reviewcanvas.service;
 
 import org.springframework.stereotype.Service;
 
-
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.ReviewLike;
 import com.romanticpipe.reviewcanvas.domain.User;
-
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.repository.ReviewLikeRepository;
 
-
 import jakarta.persistence.EntityManager;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -47,7 +43,7 @@ public class ReviewLikeService {
 		reviewLikeRepository.save(reviewLike);
 	}
 
-  public void deleteReviewLike(Long reviewId, Long userId, Integer shopAdminId) {
+	public void deleteReviewLike(Long reviewId, Long userId, Integer shopAdminId) {
 		reviewLikeRepository.delete(
 			reviewLikeRepository.findByReviewIdAndUserIdAndShopAdminId(reviewId, userId, shopAdminId)
 				.orElseThrow(() -> new BusinessException(ReviewErrorCode.ALREADY_UNLIKED_REVIEW))

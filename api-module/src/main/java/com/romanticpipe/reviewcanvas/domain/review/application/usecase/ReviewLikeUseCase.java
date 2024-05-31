@@ -9,8 +9,8 @@ public interface ReviewLikeUseCase {
 	void createReviewLikeForUser(Long reviewId, CreateReviewLikeRequest createReviewLikeRequest);
 
 	void createReviewLikeForShopAdmin(Integer shopAdminId, Long reviewId);
-  
-  void deleteReviewLikeForUser(String mallId, String memberId, long reviewId);
+
+	void deleteReviewLikeForUser(String mallId, String memberId, long reviewId);
 
 	void deleteReviewLikeForShopAdmin(Integer adminId, Long reviewId);
 
