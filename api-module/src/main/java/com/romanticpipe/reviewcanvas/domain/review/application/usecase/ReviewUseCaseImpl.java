@@ -1,13 +1,5 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.config.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Product;
@@ -38,8 +30,15 @@ import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
 import com.romanticpipe.reviewcanvas.storage.FileExtensionUtils;
 import com.romanticpipe.reviewcanvas.storage.S3Service;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -57,8 +56,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getReviewsForUser(String mallId, Long productNo,
-		String memberId, PageableRequest pageableRequest,
-		ReviewFilterForUser filter) {
+																   String memberId, PageableRequest pageableRequest,
+																   ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
@@ -74,8 +73,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional(readOnly = true)
 	public PageResponse<GetReviewDetailResponse> getReviewsInMyPage(String mallId, String memberId,
-		PageableRequest pageable,
-		ReviewFilterForUser filter) {
+																	PageableRequest pageable,
+																	ReviewFilterForUser filter) {
 		User me = userService.validByMemberIdAndMallId(memberId, mallId);
 		return reviewService.getReviewsInMyPage(me.getId(), pageable, filter)
 			.map(review -> this.convertGetReviewDetailResponse(review, true,
@@ -104,8 +103,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getProductReviewsInMyPage(String mallId, String memberId,
-		Long productNo, PageableRequest pageable,
-		ReviewFilterForUser filter) {
+																		   Long productNo, PageableRequest pageable,
+																		   ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
@@ -122,20 +121,25 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void updateReview(String mallId, String memberId, Long reviewId,
-		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
+							 UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 		Product product = review.getProduct();
 		ReviewType reviewType = this.getReviewType(reviewFiles);
 
 		String savedFileKeys = this.uploadReviewFiles(reviewFiles, product);
-		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys, reviewType);
+		if (StringUtils.hasText(savedFileKeys)) {
+			review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys, reviewType);
+		} else {
+			review.update(updateReviewRequest.score(), updateReviewRequest.content(), review.getImageVideoUrls(),
+				reviewType);
+		}
 	}
 
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-		List<MultipartFile> reviewFiles) {
+							 List<MultipartFile> reviewFiles) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(ProductNotFoundException::new);
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
@@ -166,8 +170,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReviewByShopAdmin(Integer shopAdminId, Long productId,
-		CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
-		List<MultipartFile> reviewFiles) {
+										CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
+										List<MultipartFile> reviewFiles) {
 		shopAdminService.validateById(shopAdminId);
 		Product product = productService.validateById(productId);
 		ReviewType reviewType = this.getReviewType(reviewFiles);
@@ -201,7 +205,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void updateReviewByShopAdmin(Integer shopAdminId, Long reviewId,
-		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
+										UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
 		shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
 		if (!review.isThisShopReview(shopAdminId)) {
@@ -209,8 +213,13 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		}
 		ReviewType reviewType = this.getReviewType(reviewFiles);
 
-		String savedFileKeys = uploadReviewFiles(reviewFiles, review.getProduct());
-		review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys, reviewType);
+		String savedFileKeys = this.uploadReviewFiles(reviewFiles, review.getProduct());
+		if (StringUtils.hasText(savedFileKeys)) {
+			review.update(updateReviewRequest.score(), updateReviewRequest.content(), savedFileKeys, reviewType);
+		} else {
+			review.update(updateReviewRequest.score(), updateReviewRequest.content(), review.getImageVideoUrls(),
+				reviewType);
+		}
 	}
 
 	private String uploadReviewFiles(List<MultipartFile> reviewFiles, Product product) {
@@ -235,7 +244,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	}
 
 	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, boolean isMyReview, int likeCount,
-		String memberId) {
+																   String memberId) {
 		if (review.getReviewType() == ReviewType.TEXT) {
 			return GetReviewDetailResponse.from(review, isMyReview, memberId, FileContentsResponse.empty(), likeCount);
 		}
