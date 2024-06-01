@@ -1,5 +1,13 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.config.TransactionUtils;
 import com.romanticpipe.reviewcanvas.domain.Product;
@@ -25,18 +33,13 @@ import com.romanticpipe.reviewcanvas.exception.ProductNotFoundException;
 import com.romanticpipe.reviewcanvas.exception.ReviewNotMatchAdminException;
 import com.romanticpipe.reviewcanvas.service.ProductService;
 import com.romanticpipe.reviewcanvas.service.ReplyService;
+import com.romanticpipe.reviewcanvas.service.ReviewLikeService;
 import com.romanticpipe.reviewcanvas.service.ReviewService;
 import com.romanticpipe.reviewcanvas.service.UserService;
 import com.romanticpipe.reviewcanvas.storage.FileExtensionUtils;
 import com.romanticpipe.reviewcanvas.storage.S3Service;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -50,11 +53,12 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	private final TransactionUtils transactionUtils;
 	private final UserService userService;
 	private final S3Service s3Service;
+	private final ReviewLikeService reviewLikeService;
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getReviewsForUser(String mallId, Long productNo,
-																   String memberId, PageableRequest pageableRequest,
-																   ReviewFilterForUser filter) {
+		String memberId, PageableRequest pageableRequest,
+		ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
@@ -62,25 +66,28 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		return transactionUtils.executeInReadTransaction(
 			status -> reviewService.findAllByProductId(product.getId(), pageableRequest, filter)
 				.map(review -> this.convertGetReviewDetailResponse(review,
-					review.isThisUserReview(mallId, memberId), memberId))
+					review.isThisUserReview(mallId, memberId), reviewLikeService.getReviewLikeCount(review.getId()),
+					memberId))
 		);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public PageResponse<GetReviewDetailResponse> getReviewsInMyPage(String mallId, String memberId,
-																	PageableRequest pageable,
-																	ReviewFilterForUser filter) {
+		PageableRequest pageable,
+		ReviewFilterForUser filter) {
 		User me = userService.validByMemberIdAndMallId(memberId, mallId);
 		return reviewService.getReviewsInMyPage(me.getId(), pageable, filter)
-			.map(review -> this.convertGetReviewDetailResponse(review, true, memberId));
+			.map(review -> this.convertGetReviewDetailResponse(review, true,
+				reviewLikeService.getReviewLikeCount(review.getId()), memberId));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public GetReviewDetailResponse getReviewForUser(Long reviewId, String mallId, String memberId) {
 		Review review = reviewService.validateById(reviewId);
-		return this.convertGetReviewDetailResponse(review, review.isThisUserReview(mallId, memberId), memberId);
+		return this.convertGetReviewDetailResponse(review, review.isThisUserReview(mallId, memberId),
+			reviewLikeService.getReviewLikeCount(review.getId()), memberId);
 	}
 
 	@Override
@@ -91,13 +98,14 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	) {
 		return reviewService.findAllByProductId(shopAdminId, productId, pageable, reviewPeriod, reviewFilters, score,
 				replyFilters)
-			.map(review -> this.convertGetReviewDetailResponse(review, false, ""));
+			.map(review -> this.convertGetReviewDetailResponse(review, false,
+				reviewLikeService.getReviewLikeCount(review.getId()), ""));
 	}
 
 	@Override
 	public PageResponse<GetReviewDetailResponse> getProductReviewsInMyPage(String mallId, String memberId,
-																		   Long productNo, PageableRequest pageable,
-																		   ReviewFilterForUser filter) {
+		Long productNo, PageableRequest pageable,
+		ReviewFilterForUser filter) {
 		Product product = transactionUtils.executeInWriteTransaction(
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
@@ -106,14 +114,15 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			status -> {
 				User me = userService.validByMemberIdAndMallId(memberId, mallId);
 				return reviewService.getProductReviewsInMyPage(me.getId(), product.getId(), pageable, filter)
-					.map(review -> this.convertGetReviewDetailResponse(review, true, memberId));
+					.map(review -> this.convertGetReviewDetailResponse(review, true,
+						reviewLikeService.getReviewLikeCount(review.getId()), memberId));
 			});
 	}
 
 	@Override
 	@Transactional
 	public void updateReview(String mallId, String memberId, Long reviewId,
-							 UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 		Product product = review.getProduct();
@@ -126,7 +135,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReview(String mallId, Long productNo, CreateReviewRequest createReviewRequest,
-							 List<MultipartFile> reviewFiles) {
+		List<MultipartFile> reviewFiles) {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(ProductNotFoundException::new);
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
@@ -157,8 +166,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void createReviewByShopAdmin(Integer shopAdminId, Long productId,
-										CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
-										List<MultipartFile> reviewFiles) {
+		CreateReviewByShopAdminRequest createReviewByShopAdminRequest,
+		List<MultipartFile> reviewFiles) {
 		shopAdminService.validateById(shopAdminId);
 		Product product = productService.validateById(productId);
 		ReviewType reviewType = this.getReviewType(reviewFiles);
@@ -192,7 +201,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	@Override
 	@Transactional
 	public void updateReviewByShopAdmin(Integer shopAdminId, Long reviewId,
-										UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
+		UpdateReviewRequest updateReviewRequest, List<MultipartFile> reviewFiles) {
 		shopAdminService.validateById(shopAdminId);
 		Review review = reviewService.validById(reviewId);
 		if (!review.isThisShopReview(shopAdminId)) {
@@ -225,15 +234,16 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		return reviewType;
 	}
 
-	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, boolean isMyReview, String memberId) {
+	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, boolean isMyReview, int likeCount,
+		String memberId) {
 		if (review.getReviewType() == ReviewType.TEXT) {
-			return GetReviewDetailResponse.from(review, isMyReview, memberId, FileContentsResponse.empty());
+			return GetReviewDetailResponse.from(review, isMyReview, memberId, FileContentsResponse.empty(), likeCount);
 		}
 
 		List<String> objectKeys = Arrays.stream(review.getImageVideoUrls().split(",")).toList();
 		List<String> reviewFileUrls = s3Service.getReviewFileUrls(objectKeys);
 		List<String> reviewResizeImageUrls = s3Service.getReviewResizeImageUrls(objectKeys);
 		var fileContentsResponse = new FileContentsResponse(reviewFileUrls, reviewResizeImageUrls);
-		return GetReviewDetailResponse.from(review, isMyReview, memberId, fileContentsResponse);
+		return GetReviewDetailResponse.from(review, isMyReview, memberId, fileContentsResponse, likeCount);
 	}
 }
