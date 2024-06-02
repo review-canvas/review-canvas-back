@@ -1,13 +1,13 @@
 package com.romanticpipe.reviewcanvas.domain.auth.presentation.v1;
 
-import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.CustomCookieName;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.AuthUseCase;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.request.LoginRequest;
-import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;
+import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.ShopAdminLoginResponse;
+import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.SuperAdminLoginResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,23 +28,22 @@ class AuthController implements AuthApi {
 
 	@Override
 	@PostMapping("/shop-admin/login")
-	public ResponseEntity<SuccessResponse<LoginResponse>> loginForShopAdmin(
+	public ResponseEntity<SuccessResponse<ShopAdminLoginResponse>> loginForShopAdmin(
 		@Valid @RequestBody LoginRequest loginRequest
 	) {
-		var loginResponse = authUseCase.login(loginRequest.email(), loginRequest.password(), AdminRole.ROLE_SHOP_ADMIN);
-		var refreshTokenResponseCookie = getRefreshTokenResponseCookie(loginResponse);
-		return SuccessResponse.of(loginResponse).okWithCookie(refreshTokenResponseCookie);
+		var shopAdminLoginResponse = authUseCase.shopAdminLogin(loginRequest.email(), loginRequest.password());
+		var refreshTokenResponseCookie = getRefreshTokenResponseCookie(shopAdminLoginResponse.refreshToken());
+		return SuccessResponse.of(shopAdminLoginResponse).okWithCookie(refreshTokenResponseCookie);
 	}
 
 	@Override
 	@PostMapping("/super-admin/login")
-	public ResponseEntity<SuccessResponse<LoginResponse>> loginForSuperAdmin(
+	public ResponseEntity<SuccessResponse<SuperAdminLoginResponse>> loginForSuperAdmin(
 		@Valid @RequestBody LoginRequest loginRequest
 	) {
-		var loginResponse = authUseCase.login(loginRequest.email(), loginRequest.password(),
-			AdminRole.ROLE_SUPER_ADMIN);
-		var refreshTokenResponseCookie = getRefreshTokenResponseCookie(loginResponse);
-		return SuccessResponse.of(loginResponse).okWithCookie(refreshTokenResponseCookie);
+		var superAdminLoginResponse = authUseCase.superAdminLogin(loginRequest.email(), loginRequest.password());
+		var refreshTokenResponseCookie = getRefreshTokenResponseCookie(superAdminLoginResponse.refreshToken());
+		return SuccessResponse.of(superAdminLoginResponse).okWithCookie(refreshTokenResponseCookie);
 	}
 
 	@Override
@@ -60,8 +59,8 @@ class AuthController implements AuthApi {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
-	private ResponseCookie getRefreshTokenResponseCookie(LoginResponse loginResponse) {
-		return ResponseCookie.from(CustomCookieName.REFRESH_TOKEN, loginResponse.refreshToken())
+	private ResponseCookie getRefreshTokenResponseCookie(String refreshToken) {
+		return ResponseCookie.from(CustomCookieName.REFRESH_TOKEN, refreshToken)
 			.httpOnly(true)
 			.secure(true)
 			.path("/")
