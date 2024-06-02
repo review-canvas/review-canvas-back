@@ -45,7 +45,7 @@ interface ReviewApi {
 	ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsForUser(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productNo,
-		@RequestParam(value = "memberId", required = false) String memberId,
+		@RequestParam(value = "memberId") String memberId,
 		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "sort", required = false, defaultValue = "LATEST")

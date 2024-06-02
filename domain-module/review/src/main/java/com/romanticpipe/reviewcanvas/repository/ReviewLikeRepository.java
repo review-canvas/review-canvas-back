@@ -1,10 +1,9 @@
 package com.romanticpipe.reviewcanvas.repository;
 
-import java.util.Optional;
-
+import com.romanticpipe.reviewcanvas.domain.ReviewLike;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.romanticpipe.reviewcanvas.domain.ReviewLike;
+import java.util.Optional;
 
 public interface ReviewLikeRepository extends JpaRepository<ReviewLike, Long> {
 
@@ -12,4 +11,7 @@ public interface ReviewLikeRepository extends JpaRepository<ReviewLike, Long> {
 
 	Optional<ReviewLike> findByReviewIdAndUserIdAndShopAdminId(Long reviewId, Long userId, Integer shopAdminId);
 
+	boolean existsByReviewIdAndUserId(Long reviewId, Long userId);
+
+	boolean existsByReviewIdAndShopAdminId(Long reviewId, Integer shopAdminId);
 }

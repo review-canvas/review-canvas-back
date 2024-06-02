@@ -1,16 +1,14 @@
 package com.romanticpipe.reviewcanvas.service;
 
-import org.springframework.stereotype.Service;
-
 import com.romanticpipe.reviewcanvas.domain.Review;
 import com.romanticpipe.reviewcanvas.domain.ReviewLike;
 import com.romanticpipe.reviewcanvas.domain.User;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import com.romanticpipe.reviewcanvas.exception.ReviewErrorCode;
 import com.romanticpipe.reviewcanvas.repository.ReviewLikeRepository;
-
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +46,13 @@ public class ReviewLikeService {
 			reviewLikeRepository.findByReviewIdAndUserIdAndShopAdminId(reviewId, userId, shopAdminId)
 				.orElseThrow(() -> new BusinessException(ReviewErrorCode.ALREADY_UNLIKED_REVIEW))
 		);
+	}
+
+	public boolean isUserLikeThisReview(Long reviewId, Long userId) {
+		return reviewLikeRepository.existsByReviewIdAndUserId(reviewId, userId);
+	}
+
+	public boolean isShopAdminLikeThisReview(Long reviewId, Integer shopAdminId) {
+		return reviewLikeRepository.existsByReviewIdAndShopAdminId(reviewId, shopAdminId);
 	}
 }

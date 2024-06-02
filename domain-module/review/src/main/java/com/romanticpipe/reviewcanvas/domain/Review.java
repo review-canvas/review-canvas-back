@@ -87,6 +87,10 @@ public class Review extends BaseEntityWithUpdate {
 		return user != null && Objects.equals(user.getMallId(), mallId) && Objects.equals(user.getMemberId(), memberId);
 	}
 
+	public boolean isThisUserReview(Long userId) {
+		return user != null && Objects.equals(user.getId(), userId);
+	}
+
 	public boolean isShopAdminReview() {
 		return shopAdminId != null;
 	}
