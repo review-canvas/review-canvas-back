@@ -8,7 +8,8 @@ import com.romanticpipe.reviewcanvas.admin.service.AdminAuthService;
 import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.admin.service.SuperAdminService;
 import com.romanticpipe.reviewcanvas.common.security.TokenProvider;
-import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;
+import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.ShopAdminLoginResponse;
+import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.SuperAdminLoginResponse;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,8 +30,18 @@ public class AuthUseCaseImpl implements AuthUseCase {
 
 	@Override
 	@Transactional
-	public LoginResponse login(String email, String password, AdminRole adminRole) {
-		Admin admin = validateAdminByEmail(email, adminRole);
+	public ShopAdminLoginResponse shopAdminLogin(String email, String password) {
+		return login(email, password, AdminRole.ROLE_SHOP_ADMIN, ShopAdminLoginResponse::new);
+	}
+
+	@Override
+	@Transactional
+	public SuperAdminLoginResponse superAdminLogin(String email, String password) {
+		return login(email, password, AdminRole.ROLE_SUPER_ADMIN, SuperAdminLoginResponse::new);
+	}
+
+	private <T> T login(String email, String password, AdminRole role, LoginResponseFactory<T> responseFactory) {
+		Admin admin = validateAdminByEmail(email, role);
 		if (!passwordEncoder.matches(password, admin.getPassword())) {
 			throw new BusinessException(ShopAdminErrorCode.ADMIN_WRONG_PASSWORD);
 		}
@@ -41,7 +52,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
 		AdminAuth adminAuth = adminAuthService.findByAdminId(admin.getId(), admin.getRole());
 		adminAuth.updateRefreshToken(refreshToken);
 
-		return new LoginResponse(admin.getId(), accessToken, refreshToken);
+		return responseFactory.create(admin.getId(), accessToken, refreshToken);
 	}
 
 	@Override
@@ -64,5 +75,10 @@ public class AuthUseCaseImpl implements AuthUseCase {
 			return superAdminService.validByEmail(email);
 		}
 		return shopAdminService.validByEmail(email);
+	}
+
+	@FunctionalInterface
+	private interface LoginResponseFactory<T> {
+		T create(Integer adminId, String accessToken, String refreshToken);
 	}
 }
