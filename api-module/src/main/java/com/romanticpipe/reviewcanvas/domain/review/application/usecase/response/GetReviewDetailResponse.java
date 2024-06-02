@@ -1,14 +1,14 @@
 package com.romanticpipe.reviewcanvas.domain.review.application.usecase.response;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
 import com.romanticpipe.reviewcanvas.domain.Reply;
 import com.romanticpipe.reviewcanvas.domain.Review;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Builder
 @Schema(name = "GetReviewDetailResponse", description = "리뷰 및 댓글 조회 response")
@@ -25,10 +25,12 @@ public record GetReviewDetailResponse(
 	Integer shopAdminId,
 	@Schema(description = "리뷰 작성자 닉네임", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	String nickname,
-	@Schema(description = "본인 작성 리뷰 여부", requiredMode = Schema.RequiredMode.REQUIRED)
+	@Schema(description = "본인(user) 작성 리뷰 여부 [shop admin 해당사항 없음]", requiredMode = Schema.RequiredMode.REQUIRED)
 	Boolean isMine,
 	@Schema(description = "좋아요 수", requiredMode = Schema.RequiredMode.REQUIRED)
 	Integer likeCount,
+	@Schema(description = "본인(user 또는 shop admin)이 좋아요를 눌렀는지 여부", requiredMode = Schema.RequiredMode.REQUIRED)
+	Boolean isLiked,
 	@Schema(description = "리뷰 생성 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime createAt,
 	@Schema(description = "리뷰 수정 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
@@ -45,18 +47,20 @@ public record GetReviewDetailResponse(
 	List<ReplyResponse> replies
 ) {
 
-	public static GetReviewDetailResponse from(Review review, boolean isMyReview, String memberId,
-		FileContentsResponse imageVideoUrls, int likeCount) {
+	public static GetReviewDetailResponse from(Review review, Optional<Long> requestUserId,
+											   FileContentsResponse imageVideoUrls,
+											   int reviewLikeCount, boolean isLikeThisReview) {
 		var replyResponses = review.getReplyList().stream()
-			.map(reply -> createReplyResponse(memberId, reply))
+			.map(reply -> createReplyResponse(requestUserId, reply))
 			.toList();
 
 		var responseBuilder = GetReviewDetailResponse.builder()
 			.reviewId(review.getId())
 			.content(review.getDeletedAt() == null ? review.getContent() : " ")
 			.score(review.getScore())
-			.isMine(isMyReview)
-			.likeCount(likeCount)
+			.isMine(requestUserId.map(review::isThisUserReview).orElse(false))
+			.likeCount(reviewLikeCount)
+			.isLiked(isLikeThisReview)
 			.createAt(review.getCreatedAt())
 			.updatedAt(review.getUpdatedAt())
 			.deleted(review.getDeletedAt() != null)
@@ -76,11 +80,9 @@ public record GetReviewDetailResponse(
 		return responseBuilder.build();
 	}
 
-	private static ReplyResponse createReplyResponse(String memberId, Reply reply) {
+	private static ReplyResponse createReplyResponse(Optional<Long> requestUserId, Reply reply) {
 		return ReplyResponse.from(reply,
-			Optional.ofNullable(reply.getUser())
-				.map(user -> user.getMemberId().equals(memberId))
-				.orElse(false)
+			requestUserId.map(userId -> Objects.equals(userId, reply.getUser().getId())).orElse(false)
 		);
 	}
 
