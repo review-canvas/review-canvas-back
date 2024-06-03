@@ -76,7 +76,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 		List<Review> reviewInfoList = queryFactory.selectFrom(review)
 			.join(review.product, product)
 			.fetchJoin()
-			.join(review.user, user)
+			.leftJoin(review.user, user)
 			.fetchJoin()
 			.leftJoin(review.replyList, reply)
 			.fetchJoin()
