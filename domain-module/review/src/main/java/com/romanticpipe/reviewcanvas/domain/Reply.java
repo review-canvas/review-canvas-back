@@ -50,4 +50,8 @@ public class Reply extends BaseEntityWithUpdate {
 	public void delete() {
 		this.deletedAt = LocalDateTime.now();
 	}
+
+	public boolean isThisUserReply(Long userId) {
+		return user != null && user.getId().equals(userId);
+	}
 }

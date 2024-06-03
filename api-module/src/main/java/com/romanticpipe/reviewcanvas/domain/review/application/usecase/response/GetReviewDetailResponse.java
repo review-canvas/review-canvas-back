@@ -7,7 +7,6 @@ import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Builder
@@ -47,18 +46,20 @@ public record GetReviewDetailResponse(
 	List<ReplyResponse> replies
 ) {
 
-	public static GetReviewDetailResponse from(Review review, Optional<Long> requestUserId,
-											   FileContentsResponse imageVideoUrls,
-											   int reviewLikeCount, boolean isLikeThisReview) {
+	public static GetReviewDetailResponse forUser(Review review, Optional<Long> requestUserId,
+												  FileContentsResponse fileContentsResponse,
+												  int reviewLikeCount, boolean isLikeThisReview) {
+		boolean isThisRequestUserReview = requestUserId.map(review::isThisUserReview).orElse(false);
+		String content = review.getDeletedAt() == null ? review.getContent() : " ";
 		var replyResponses = review.getReplyList().stream()
 			.map(reply -> createReplyResponse(requestUserId, reply))
 			.toList();
 
-		var responseBuilder = GetReviewDetailResponse.builder()
+		var builder = GetReviewDetailResponse.builder()
 			.reviewId(review.getId())
-			.content(review.getDeletedAt() == null ? review.getContent() : " ")
+			.content(content)
 			.score(review.getScore())
-			.isMine(requestUserId.map(review::isThisUserReview).orElse(false))
+			.isMine(isThisRequestUserReview)
 			.likeCount(reviewLikeCount)
 			.isLiked(isLikeThisReview)
 			.createAt(review.getCreatedAt())
@@ -66,24 +67,49 @@ public record GetReviewDetailResponse(
 			.deleted(review.getDeletedAt() != null)
 			.productId(review.getProduct().getId())
 			.productName(review.getProduct().getName())
-			.imageVideoUrls(imageVideoUrls)
+			.imageVideoUrls(fileContentsResponse)
 			.replies(replyResponses);
 
+		return addDetails(builder, review).build();
+	}
+
+	public static GetReviewDetailResponse forShopAdmin(Review review, FileContentsResponse fileContentsResponse,
+													   int reviewLikeCount, boolean isLikeThisReview) {
+		var replyResponses = review.getReplyList().stream()
+			.map(reply -> ReplyResponse.from(reply, false))
+			.toList();
+
+		var builder = GetReviewDetailResponse.builder()
+			.reviewId(review.getId())
+			.content(review.getContent())
+			.score(review.getScore())
+			.isMine(false)
+			.likeCount(reviewLikeCount)
+			.isLiked(isLikeThisReview)
+			.createAt(review.getCreatedAt())
+			.updatedAt(review.getUpdatedAt())
+			.deleted(review.getDeletedAt() != null)
+			.productId(review.getProduct().getId())
+			.productName(review.getProduct().getName())
+			.imageVideoUrls(fileContentsResponse)
+			.replies(replyResponses);
+
+		return addDetails(builder, review).build();
+	}
+
+	private static GetReviewDetailResponse.GetReviewDetailResponseBuilder addDetails(
+		GetReviewDetailResponse.GetReviewDetailResponseBuilder builder, Review review) {
 		if (review.isShopAdminReview()) {
-			responseBuilder.shopAdminId(review.getShopAdminId());
+			builder.shopAdminId(review.getShopAdminId());
 		} else {
-			responseBuilder
-				.userId(review.getUser().getId())
+			builder.userId(review.getUser().getId())
 				.nickname(review.getUser().getNickName());
 		}
-
-		return responseBuilder.build();
+		return builder;
 	}
 
 	private static ReplyResponse createReplyResponse(Optional<Long> requestUserId, Reply reply) {
-		return ReplyResponse.from(reply,
-			requestUserId.map(userId -> Objects.equals(userId, reply.getUser().getId())).orElse(false)
-		);
+		boolean isRequestUserReply = requestUserId.map(reply::isThisUserReply).orElse(false);
+		return ReplyResponse.from(reply, isRequestUserReply);
 	}
-
 }

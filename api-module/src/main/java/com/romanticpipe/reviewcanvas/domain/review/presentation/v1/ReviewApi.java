@@ -45,7 +45,7 @@ interface ReviewApi {
 	ResponseEntity<SuccessResponse<PageResponse<GetReviewDetailResponse>>> getReviewsForUser(
 		@PathVariable("mallId") String mallId,
 		@PathVariable("productNo") Long productNo,
-		@RequestParam(value = "memberId") String memberId,
+		@RequestParam(value = "memberId", required = false) String memberId,
 		@RequestParam(value = "size", required = false, defaultValue = "20") int size,
 		@RequestParam(value = "page", required = false, defaultValue = "0") int page,
 		@RequestParam(name = "sort", required = false, defaultValue = "LATEST")
@@ -85,7 +85,7 @@ interface ReviewApi {
 	@GetMapping("/reviews/{reviewId}")
 	ResponseEntity<SuccessResponse<GetReviewDetailResponse>> getReviewForUser(
 		@PathVariable Long reviewId,
-		@Schema(description = "내 리뷰인지 확인하기 위해 받는 파라미터") @RequestParam String memberId,
+		@Schema(description = "내 리뷰인지 확인하기 위해 받는 파라미터") @RequestParam(required = false) String memberId,
 		@Schema(description = "내 리뷰인지 확인하기 위해 받는 파라미터") @RequestParam String mallId);
 
 	@Operation(summary = "shop admin 대시보드 리뷰 조회 API", description = "shop admin 대시보드에서 리뷰를 조회한다.",

@@ -63,13 +63,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
 
-		return transactionUtils.executeInReadTransaction(
-			status -> {
-				User requestUser = userService.validByMemberIdAndMallId(memberId, mallId);
-				return reviewService.findAllByProductId(product.getId(), pageableRequest, filter)
-					.map(review -> this.convertGetReviewDetailResponse(review, requestUser));
-			}
-		);
+		return transactionUtils.executeInReadTransaction(status -> {
+			Optional<Long> requestUserId = this.getRequestUserId(memberId, mallId);
+			return reviewService.findAllByProductId(product.getId(), pageableRequest, filter)
+				.map(review -> this.convertGetReviewDetailResponse(review, requestUserId));
+		});
 	}
 
 	@Override
@@ -79,15 +77,15 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 																	ReviewFilterForUser filter) {
 		User requestUser = userService.validByMemberIdAndMallId(memberId, mallId);
 		return reviewService.getReviewsInMyPage(requestUser.getId(), pageable, filter)
-			.map(review -> this.convertGetReviewDetailResponse(review, requestUser));
+			.map(review -> this.convertGetReviewDetailResponse(review, Optional.of(requestUser.getId())));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public GetReviewDetailResponse getReviewForUser(Long reviewId, String mallId, String memberId) {
 		Review review = reviewService.validateById(reviewId);
-		User requestUser = userService.validByMemberIdAndMallId(memberId, mallId);
-		return this.convertGetReviewDetailResponse(review, requestUser);
+		Optional<Long> requestUserId = this.getRequestUserId(memberId, mallId);
+		return this.convertGetReviewDetailResponse(review, requestUserId);
 	}
 
 	@Override
@@ -98,7 +96,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 	) {
 		return reviewService.findAllByProductId(shopAdminId, productId, pageable, reviewPeriod, reviewFilters, score,
 				replyFilters)
-			.map(review -> convertGetReviewDetailResponse(review, shopAdminId));
+			.map(review -> this.convertGetReviewDetailResponse(review, shopAdminId));
 	}
 
 	@Override
@@ -113,7 +111,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			status -> {
 				User requestUser = userService.validByMemberIdAndMallId(memberId, mallId);
 				return reviewService.getProductReviewsInMyPage(requestUser.getId(), product.getId(), pageable, filter)
-					.map(review -> this.convertGetReviewDetailResponse(review, requestUser));
+					.map(review -> this.convertGetReviewDetailResponse(review, Optional.of(requestUser.getId())));
 			});
 	}
 
@@ -242,33 +240,45 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		return reviewType;
 	}
 
-	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, User user) {
+	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, Optional<Long> requestUserId) {
 		int reviewLikeCount = reviewLikeService.getReviewLikeCount(review.getId());
-		boolean isLikeThisReview = reviewLikeService.isUserLikeThisReview(review.getId(), user.getId());
+		boolean isRequestUserLikeThisReview = requestUserId
+			.map(userId -> reviewLikeService.isUserLikeThisReview(review.getId(), userId))
+			.orElse(false);
 
-		return getGetReviewDetailResponse(review, Optional.of(user.getId()), reviewLikeCount, isLikeThisReview);
-	}
-
-	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, Integer shopAdminId) {
-		int reviewLikeCount = reviewLikeService.getReviewLikeCount(review.getId());
-		boolean isLikeThisReview = reviewLikeService.isShopAdminLikeThisReview(review.getId(), shopAdminId);
-
-		return getGetReviewDetailResponse(review, Optional.empty(), reviewLikeCount, isLikeThisReview);
-	}
-
-	private GetReviewDetailResponse getGetReviewDetailResponse(Review review, Optional<Long> requestUserId,
-															   int reviewLikeCount, boolean isLikeThisReview) {
 		if (review.getReviewType() == ReviewType.TEXT) {
-			return GetReviewDetailResponse.from(review, requestUserId, FileContentsResponse.empty(),
-				reviewLikeCount, isLikeThisReview);
+			return GetReviewDetailResponse.forUser(review, requestUserId, FileContentsResponse.empty(),
+				reviewLikeCount, isRequestUserLikeThisReview);
 		}
 
-		List<String> objectKeys = Arrays.stream(review.getImageVideoUrls().split(",")).toList();
-		List<String> reviewFileUrls = s3Service.getReviewFileUrls(objectKeys);
-		List<String> reviewResizeImageUrls = s3Service.getReviewResizeImageUrls(objectKeys);
-		FileContentsResponse fileContentsResponse = new FileContentsResponse(reviewFileUrls, reviewResizeImageUrls);
-		return GetReviewDetailResponse.from(review, requestUserId, fileContentsResponse, reviewLikeCount,
+		return GetReviewDetailResponse.forUser(review, requestUserId, this.getFileContentsResponse(review),
+			reviewLikeCount, isRequestUserLikeThisReview);
+	}
+
+	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, Integer requestShopAdminId) {
+		int reviewLikeCount = reviewLikeService.getReviewLikeCount(review.getId());
+		boolean isLikeThisReview = reviewLikeService.isShopAdminLikeThisReview(review.getId(), requestShopAdminId);
+
+		if (review.getReviewType() == ReviewType.TEXT) {
+			return GetReviewDetailResponse.forShopAdmin(review, FileContentsResponse.empty(), reviewLikeCount,
+				isLikeThisReview);
+		}
+
+		return GetReviewDetailResponse.forShopAdmin(review, this.getFileContentsResponse(review), reviewLikeCount,
 			isLikeThisReview);
 	}
 
+	private FileContentsResponse getFileContentsResponse(Review review) {
+		List<String> objectKeys = Arrays.stream(review.getImageVideoUrls().split(",")).toList();
+		List<String> reviewFileUrls = s3Service.getReviewFileUrls(objectKeys);
+		List<String> reviewResizeImageUrls = s3Service.getReviewResizeImageUrls(objectKeys);
+		return new FileContentsResponse(reviewFileUrls, reviewResizeImageUrls);
+	}
+
+	private Optional<Long> getRequestUserId(String memberId, String mallId) {
+		if (StringUtils.hasText(memberId)) {
+			return Optional.of(userService.validByMemberIdAndMallId(memberId, mallId).getId());
+		}
+		return Optional.empty();
+	}
 }
