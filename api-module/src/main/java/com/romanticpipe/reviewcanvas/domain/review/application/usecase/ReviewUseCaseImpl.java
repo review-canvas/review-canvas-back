@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -62,13 +63,11 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			status -> productService.findProduct(mallId, productNo)
 		).orElseGet(() -> productUseCase.createProduct(mallId, productNo));
 
-		return transactionUtils.executeInReadTransaction(
-			status -> {
-				User requestUser = userService.validByMemberIdAndMallId(memberId, mallId);
-				return reviewService.findAllByProductId(product.getId(), pageableRequest, filter)
-					.map(review -> this.convertGetReviewDetailResponse(review, requestUser.getId()));
-			}
-		);
+		return transactionUtils.executeInReadTransaction(status -> {
+			Optional<Long> requestUserId = this.getRequestUserId(memberId, mallId);
+			return reviewService.findAllByProductId(product.getId(), pageableRequest, filter)
+				.map(review -> this.convertGetReviewDetailResponse(review, requestUserId));
+		});
 	}
 
 	@Override
@@ -78,15 +77,15 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 																	ReviewFilterForUser filter) {
 		User requestUser = userService.validByMemberIdAndMallId(memberId, mallId);
 		return reviewService.getReviewsInMyPage(requestUser.getId(), pageable, filter)
-			.map(review -> this.convertGetReviewDetailResponse(review, requestUser.getId()));
+			.map(review -> this.convertGetReviewDetailResponse(review, Optional.of(requestUser.getId())));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public GetReviewDetailResponse getReviewForUser(Long reviewId, String mallId, String memberId) {
 		Review review = reviewService.validateById(reviewId);
-		User requestUser = userService.validByMemberIdAndMallId(memberId, mallId);
-		return this.convertGetReviewDetailResponse(review, requestUser.getId());
+		Optional<Long> requestUserId = this.getRequestUserId(memberId, mallId);
+		return this.convertGetReviewDetailResponse(review, requestUserId);
 	}
 
 	@Override
@@ -112,7 +111,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			status -> {
 				User requestUser = userService.validByMemberIdAndMallId(memberId, mallId);
 				return reviewService.getProductReviewsInMyPage(requestUser.getId(), product.getId(), pageable, filter)
-					.map(review -> this.convertGetReviewDetailResponse(review, requestUser.getId()));
+					.map(review -> this.convertGetReviewDetailResponse(review, Optional.of(requestUser.getId())));
 			});
 	}
 
@@ -241,17 +240,19 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		return reviewType;
 	}
 
-	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, Long requestUserId) {
+	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, Optional<Long> requestUserId) {
 		int reviewLikeCount = reviewLikeService.getReviewLikeCount(review.getId());
-		boolean isLikeThisReview = reviewLikeService.isUserLikeThisReview(review.getId(), requestUserId);
+		boolean isRequestUserLikeThisReview = requestUserId
+			.map(userId -> reviewLikeService.isUserLikeThisReview(review.getId(), userId))
+			.orElse(false);
 
 		if (review.getReviewType() == ReviewType.TEXT) {
 			return GetReviewDetailResponse.forUser(review, requestUserId, FileContentsResponse.empty(),
-				reviewLikeCount, isLikeThisReview);
+				reviewLikeCount, isRequestUserLikeThisReview);
 		}
 
 		return GetReviewDetailResponse.forUser(review, requestUserId, this.getFileContentsResponse(review),
-			reviewLikeCount, isLikeThisReview);
+			reviewLikeCount, isRequestUserLikeThisReview);
 	}
 
 	private GetReviewDetailResponse convertGetReviewDetailResponse(Review review, Integer requestShopAdminId) {
@@ -274,4 +275,10 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		return new FileContentsResponse(reviewFileUrls, reviewResizeImageUrls);
 	}
 
+	private Optional<Long> getRequestUserId(String memberId, String mallId) {
+		if (StringUtils.hasText(memberId)) {
+			return Optional.of(userService.validByMemberIdAndMallId(memberId, mallId).getId());
+		}
+		return Optional.empty();
+	}
 }

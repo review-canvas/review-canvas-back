@@ -7,7 +7,7 @@ import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 @Builder
 @Schema(name = "GetReviewDetailResponse", description = "리뷰 및 댓글 조회 response")
@@ -46,11 +46,10 @@ public record GetReviewDetailResponse(
 	List<ReplyResponse> replies
 ) {
 
-	public static GetReviewDetailResponse forUser(Review review, Long requestUserId,
+	public static GetReviewDetailResponse forUser(Review review, Optional<Long> requestUserId,
 												  FileContentsResponse fileContentsResponse,
 												  int reviewLikeCount, boolean isLikeThisReview) {
-		boolean isThisRequestUserReview = !review.isShopAdminReview()
-			&& Objects.equals(requestUserId, review.getUser().getId());
+		boolean isThisRequestUserReview = requestUserId.map(review::isThisUserReview).orElse(false);
 		String content = review.getDeletedAt() == null ? review.getContent() : " ";
 		var replyResponses = review.getReplyList().stream()
 			.map(reply -> createReplyResponse(requestUserId, reply))
@@ -109,8 +108,8 @@ public record GetReviewDetailResponse(
 		return builder;
 	}
 
-	private static ReplyResponse createReplyResponse(Long requestUserId, Reply reply) {
-		boolean isRequestUserReply = Objects.equals(requestUserId, reply.getUser().getId());
+	private static ReplyResponse createReplyResponse(Optional<Long> requestUserId, Reply reply) {
+		boolean isRequestUserReply = requestUserId.map(reply::isThisUserReply).orElse(false);
 		return ReplyResponse.from(reply, isRequestUserReply);
 	}
 }
