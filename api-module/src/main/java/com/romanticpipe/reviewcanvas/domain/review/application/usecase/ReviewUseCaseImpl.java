@@ -122,7 +122,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		User user = userService.validByMemberIdAndMallId(memberId, mallId);
 		Review review = reviewService.validByIdAndUserId(reviewId, user.getId());
 		Product product = review.getProduct();
-		ReviewType reviewType = this.getReviewType(reviewFiles);
+		ReviewType reviewType = this.getReviewType(review.getReviewType(), reviewFiles);
 
 		String savedFileKeys = this.uploadReviewFiles(reviewFiles, product);
 		if (StringUtils.hasText(savedFileKeys)) {
@@ -140,7 +140,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		Product product = productService.findProduct(mallId, productNo)
 			.orElseThrow(ProductNotFoundException::new);
 		User user = userService.validByMemberIdAndMallId(createReviewRequest.memberId(), mallId);
-		ReviewType reviewType = this.getReviewType(reviewFiles);
+		ReviewType reviewType = this.getReviewType(ReviewType.TEXT, reviewFiles);
 
 		String savedFileKeys = this.uploadReviewFiles(reviewFiles, product);
 		Review review = Review.builder()
@@ -171,7 +171,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 										List<MultipartFile> reviewFiles) {
 		shopAdminService.validateById(shopAdminId);
 		Product product = productService.validateById(productId);
-		ReviewType reviewType = this.getReviewType(reviewFiles);
+		ReviewType reviewType = this.getReviewType(ReviewType.TEXT, reviewFiles);
 
 		String savedFileKeys = this.uploadReviewFiles(reviewFiles, product);
 		Review review = Review.builder()
@@ -208,7 +208,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 		if (!review.isThisShopReview(shopAdminId)) {
 			throw new ReviewNotMatchAdminException();
 		}
-		ReviewType reviewType = this.getReviewType(reviewFiles);
+		ReviewType reviewType = this.getReviewType(review.getReviewType(), reviewFiles);
 
 		String savedFileKeys = this.uploadReviewFiles(reviewFiles, review.getProduct());
 		if (StringUtils.hasText(savedFileKeys)) {
@@ -225,8 +225,8 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 			.reduce((fileName1, fileName2) -> fileName1 + "," + fileName2).orElse("");
 	}
 
-	private ReviewType getReviewType(List<MultipartFile> reviewFiles) {
-		ReviewType reviewType = ReviewType.TEXT;
+	private ReviewType getReviewType(ReviewType defaultReviewType, List<MultipartFile> reviewFiles) {
+		ReviewType reviewType = defaultReviewType;
 		for (MultipartFile reviewImage : reviewFiles) {
 			String filename = reviewImage.getOriginalFilename();
 			if (FileExtensionUtils.isImage(filename)) {
