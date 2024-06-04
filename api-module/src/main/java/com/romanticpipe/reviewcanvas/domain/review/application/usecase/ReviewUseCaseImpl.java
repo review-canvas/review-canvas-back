@@ -277,7 +277,7 @@ class ReviewUseCaseImpl implements ReviewUseCase {
 
 	private Optional<Long> getRequestUserId(String memberId, String mallId) {
 		if (StringUtils.hasText(memberId)) {
-			return Optional.of(userService.validByMemberIdAndMallId(memberId, mallId).getId());
+			return userService.findUser(memberId, mallId).map(User::getId);
 		}
 		return Optional.empty();
 	}
