@@ -1,5 +1,12 @@
 package com.romanticpipe.reviewcanvas.domain.reviewproperty.presentation.v1;
 
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewColumnUseCase;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateColumnRequest;
+import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewColumnResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,16 +14,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
-import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.ReviewColumnUseCase;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.request.UpdateColumnRequest;
-import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.response.GetReviewColumnResponse;
-import com.romanticpipe.reviewcanvas.reviewproperty.domain.ReviewColumn;
-
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -37,7 +34,7 @@ public class ReviewColumnController implements ReviewColumnApi {
 	@Override
 	@PatchMapping("/shop-admin/review-column")
 	public ResponseEntity<SuccessResponse<Void>> updateColumn(@AuthInfo JwtInfo jwtInfo,
-		@RequestBody UpdateColumnRequest updateColumnRequest) {
+															  @RequestBody UpdateColumnRequest updateColumnRequest) {
 		reviewColumnUseCase.updateReviewColumn(jwtInfo.adminId(), updateColumnRequest);
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}

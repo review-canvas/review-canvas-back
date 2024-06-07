@@ -4,7 +4,8 @@ import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.request.LoginRequest;
-import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.LoginResponse;
+import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.ShopAdminLoginResponse;
+import com.romanticpipe.reviewcanvas.domain.auth.application.usecase.response.SuperAdminLoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,7 +27,7 @@ interface AuthApi {
 			description = "성공적으로 로그인이 완료되었습니다.")
 	})
 	@PostMapping("/shop-admin/login")
-	ResponseEntity<SuccessResponse<LoginResponse>> loginForShopAdmin(
+	ResponseEntity<SuccessResponse<ShopAdminLoginResponse>> loginForShopAdmin(
 		@Valid @RequestBody LoginRequest loginRequest
 	);
 
@@ -37,7 +38,7 @@ interface AuthApi {
 			description = "성공적으로 로그인이 완료되었습니다.")
 	})
 	@PostMapping("/super-admin/login")
-	ResponseEntity<SuccessResponse<LoginResponse>> loginForSuperAdmin(
+	ResponseEntity<SuccessResponse<SuperAdminLoginResponse>> loginForSuperAdmin(
 		@Valid @RequestBody LoginRequest loginRequest
 	);
 

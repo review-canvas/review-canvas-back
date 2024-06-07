@@ -1,23 +1,24 @@
 package com.romanticpipe.reviewcanvas.admin.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
+import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
 import com.romanticpipe.reviewcanvas.admin.exception.AdminNotFoundException;
 import com.romanticpipe.reviewcanvas.admin.exception.ShopAdminErrorCode;
 import com.romanticpipe.reviewcanvas.admin.repository.ShopAdminRepository;
 import com.romanticpipe.reviewcanvas.exception.BusinessException;
-
+import com.romanticpipe.reviewcanvas.exception.CommonErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ShopAdminService {
 
 	private final ShopAdminRepository shopAdminRepository;
+	private final SuperAdminService superAdminService;
 
 	public ShopAdmin save(ShopAdmin shopAdmin) {
 		return shopAdminRepository.save(shopAdmin);
@@ -36,7 +37,7 @@ public class ShopAdminService {
 			.orElseThrow(() -> new AdminNotFoundException());
 	}
 
-	public ShopAdmin validById(Integer shopAdminId) {
+	public ShopAdmin validateById(Integer shopAdminId) {
 		return shopAdminRepository.findById(shopAdminId)
 			.orElseThrow(AdminNotFoundException::new);
 	}
@@ -55,5 +56,18 @@ public class ShopAdminService {
 			.ifPresent(admin -> {
 				throw new BusinessException(ShopAdminErrorCode.DUPLICATED_EMAIL);
 			});
+	}
+
+	public void validateIsMyIdOrSuperAdmin(Integer adminId, AdminRole adminRole, Integer loginAdminId) {
+		if (adminRole == AdminRole.ROLE_SUPER_ADMIN) {
+			superAdminService.validById(loginAdminId);
+			return;
+		}
+
+		if (!adminId.equals(loginAdminId)) {
+			throw new BusinessException(CommonErrorCode.UNAUTHORIZED);
+		}
+
+		this.validateById(loginAdminId);
 	}
 }

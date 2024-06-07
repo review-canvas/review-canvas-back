@@ -6,7 +6,7 @@ import com.romanticpipe.reviewcanvas.domain.reviewproperty.application.usecase.r
 public interface ReviewTitleUseCase {
 
 	void updateReviewTitle(Integer shopAdminId,
-		UpdateReviewTitleRequest updateReviewTitleRequest);
+						   UpdateReviewTitleRequest updateReviewTitleRequest);
 
 	void initializeReviewTitle(Integer shopAdminId);
 
