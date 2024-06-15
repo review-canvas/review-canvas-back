@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Font {
 
+	@Transient
+	private static final String DEFAULT_FONT_COLOR = "#000000";
+	
 	@Column(name = "font_name", columnDefinition = "VARCHAR")
 	@Enumerated(EnumType.STRING)
 	private FontName name;
@@ -34,14 +38,14 @@ public class Font {
 	}
 
 	public static Font createDefaultReviewTitle() {
-		return new Font(FontName.NOTO_SANS_KR, "16px", FontBold.FOUR_HUNDRED, "#000000");
+		return new Font(FontName.NOTO_SANS_KR, "16px", FontBold.FOUR_HUNDRED, DEFAULT_FONT_COLOR);
 	}
 
 	public static Font createDefaultReviewDescription() {
-		return new Font(FontName.NOTO_SANS_KR, "12px", FontBold.FOUR_HUNDRED, "#000000");
+		return new Font(FontName.NOTO_SANS_KR, "12px", FontBold.FOUR_HUNDRED, DEFAULT_FONT_COLOR);
 	}
 
 	public static Font createDefaultReviewDesignView() {
-		return new Font(FontName.NOTO_SANS_KR, "12px", FontBold.FOUR_HUNDRED, "#000000");
+		return new Font(FontName.NOTO_SANS_KR, "12px", FontBold.FOUR_HUNDRED, DEFAULT_FONT_COLOR);
 	}
 }
