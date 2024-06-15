@@ -93,7 +93,8 @@ interface ShopAdminApi {
 		@AuthInfo JwtInfo jwtInfo
 	);
 
-	@Operation(summary = "샵 목록 조회 API", description = "회원가입된 샵들을 조회한다.")
+	@Operation(summary = "샵 목록 조회 API", description = "회원가입된 샵들을 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
