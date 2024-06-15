@@ -160,9 +160,9 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
 	private BooleanExpression getFilterExpression(ReviewFilterForUser filter) {
 		if (filter == ReviewFilterForUser.IMAGE_VIDEO) {
-			return review.imageVideoUrls.isNull();
+			return review.reviewType.eq(ReviewType.PHOTO).or(review.reviewType.eq(ReviewType.VIDEO));
 		} else if (filter == ReviewFilterForUser.GENERAL) {
-			return review.imageVideoUrls.isNotNull();
+			return review.reviewType.eq(ReviewType.TEXT);
 		}
 		return null;
 	}
