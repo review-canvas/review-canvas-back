@@ -1,4 +1,4 @@
-package com.romanticpipe.reviewcanvas.domain.superadmin.application.usecase.response;
+package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response;
 
 import java.time.LocalDateTime;
 

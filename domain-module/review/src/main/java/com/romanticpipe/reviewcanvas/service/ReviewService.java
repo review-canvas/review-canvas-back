@@ -1,7 +1,6 @@
 package com.romanticpipe.reviewcanvas.service;
 
 import java.util.EnumSet;
-import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -83,7 +82,7 @@ public class ReviewService {
 		);
 	}
 
-	public List<Review> findAll() {
-		return reviewRepository.findAll();
+	public Integer countByShopAdminId(Integer shopAdminId) {
+		return Math.toIntExact(reviewRepository.countByShopAdminId(shopAdminId));
 	}
 }
