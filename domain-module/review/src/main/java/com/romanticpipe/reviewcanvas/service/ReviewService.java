@@ -83,6 +83,6 @@ public class ReviewService {
 	}
 
 	public Integer countByShopAdminId(Integer shopAdminId) {
-		return Math.toIntExact(reviewRepository.countByShopAdminId(shopAdminId));
+		return reviewRepository.countByShopAdminId(shopAdminId).intValue();
 	}
 }

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewLayoutDesign;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -26,6 +25,6 @@ public record GetShopInfoResponse(
 	@Schema(description = "리뷰 갯수", requiredMode = Schema.RequiredMode.REQUIRED)
 	@NotNull Integer reviewsAmount,
 	@Schema(description = "리뷰 레이아웃 디자인", requiredMode = Schema.RequiredMode.REQUIRED)
-	@Valid ReviewLayoutDesign reviewLayoutDesign
+	@NotNull ReviewLayoutDesign reviewLayoutDesign
 ) {
 }

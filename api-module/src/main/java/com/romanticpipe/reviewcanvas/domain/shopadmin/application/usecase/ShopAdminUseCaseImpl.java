@@ -94,11 +94,7 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	public PageResponse<GetShopInfoResponse> getShopInfos(PageableRequest pageable) {
 		PageResponse<ShopAdmin> shopAdmins = shopAdminService.findAll(pageable);
 
-		return shopAdmins.map(shopAdmin -> this.convertToGetShopInfoResponse(shopAdmin));
-	}
-
-	private GetShopInfoResponse convertToGetShopInfoResponse(ShopAdmin shopAdmin) {
-		return GetShopInfoResponse.builder()
+		return shopAdmins.map(shopAdmin -> GetShopInfoResponse.builder()
 			.mallId(shopAdmin.getMallId())
 			.createdAt(shopAdmin.getCreatedAt())
 			.mallName(shopAdmin.getMallName())
@@ -107,6 +103,6 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 			.reviewsAmount(reviewService.countByShopAdminId(shopAdmin.getId()))
 			.reviewLayoutDesign(
 				reviewLayoutService.validateByShopAdminId(shopAdmin.getId()).getReviewLayoutDesign())
-			.build();
+			.build());
 	}
 }
