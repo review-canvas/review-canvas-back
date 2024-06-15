@@ -1,14 +1,10 @@
 package com.romanticpipe.reviewcanvas.cafe24.product;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public record Cafe24ProductDto(@Getter Cafe24Product product) {
-	@JsonCreator
-	public Cafe24ProductDto {
-	}
 
 	public void validateIsFullContent(String mallId, Long productNo) {
 		if (!product.isFullContent()) {

@@ -15,6 +15,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.romanticpipe.reviewcanvas.enumeration.Color.BLACK;
+import static com.romanticpipe.reviewcanvas.enumeration.Color.BLUE;
+import static com.romanticpipe.reviewcanvas.enumeration.Color.LIGHT_BLACK;
+import static com.romanticpipe.reviewcanvas.enumeration.Color.WHITE;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -82,20 +87,20 @@ public class ReviewDesignWrite {
 			.pageType(ReviewDesignWritePageType.MODAL)
 			.widthSizePc("500px")
 			.widthSizeMobile("100%")
-			.backgroundColor("#ffffff")
+			.backgroundColor(BLACK.getHex())
 			.padding(Padding.createDefaultReviewDesignWrite())
 			.border(Border.createDefaultReviewDesignWrite())
-			.borderColor("#222222")
-			.starRateBackgroundColor("#ffffff")
-			.starRateColor("#000000")
-			.detailEvaluationCheckBoxBackgroundColor("#ffffff")
-			.detailEvaluationCheckBoxColor("#3F21BD")
+			.borderColor(LIGHT_BLACK.getHex())
+			.starRateBackgroundColor(BLACK.getHex())
+			.starRateColor(WHITE.getHex())
+			.detailEvaluationCheckBoxBackgroundColor(BLACK.getHex())
+			.detailEvaluationCheckBoxColor(BLUE.getHex())
 			.detailEvaluationCategory("")
-			.cancelButtonBackgroundColor("#222222")
-			.cancelButtonBorderColor("#ffffff")
-			.cancelButtonTextColor("#ffffff")
-			.completedButtonBackgroundColor("#3F21BD")
-			.completedButtonTextColor("#ffffff")
+			.cancelButtonBackgroundColor(LIGHT_BLACK.getHex())
+			.cancelButtonBorderColor(BLACK.getHex())
+			.cancelButtonTextColor(BLACK.getHex())
+			.completedButtonBackgroundColor(BLUE.getHex())
+			.completedButtonTextColor(BLACK.getHex())
 			.shopAdminId(shopAdminId)
 			.build();
 	}
@@ -124,19 +129,19 @@ public class ReviewDesignWrite {
 		this.pageType = ReviewDesignWritePageType.MODAL;
 		this.widthSizePc = "500px";
 		this.widthSizeMobile = "100%";
-		this.backgroundColor = "#ffffff";
+		this.backgroundColor = BLACK.getHex();
 		this.padding = Padding.createDefaultReviewDesignWrite();
 		this.border = Border.createDefaultReviewDesignWrite();
-		this.borderColor = "#222222";
-		this.starRateBackgroundColor = "#ffffff";
-		this.starRateColor = "#000000";
-		this.detailEvaluationCheckBoxBackgroundColor = "#ffffff";
-		this.detailEvaluationCheckBoxColor = "#3F21BD";
+		this.borderColor = LIGHT_BLACK.getHex();
+		this.starRateBackgroundColor = BLACK.getHex();
+		this.starRateColor = WHITE.getHex();
+		this.detailEvaluationCheckBoxBackgroundColor = BLACK.getHex();
+		this.detailEvaluationCheckBoxColor = BLUE.getHex();
 		this.detailEvaluationCategory = "";
-		this.cancelButtonBackgroundColor = "#222222";
-		this.cancelButtonBorderColor = "#ffffff";
-		this.cancelButtonTextColor = "#ffffff";
-		this.completedButtonBackgroundColor = "#3F21BD";
-		this.completedButtonTextColor = "#ffffff";
+		this.cancelButtonBackgroundColor = LIGHT_BLACK.getHex();
+		this.cancelButtonBorderColor = BLACK.getHex();
+		this.cancelButtonTextColor = BLACK.getHex();
+		this.completedButtonBackgroundColor = BLUE.getHex();
+		this.completedButtonTextColor = BLACK.getHex();
 	}
 }
