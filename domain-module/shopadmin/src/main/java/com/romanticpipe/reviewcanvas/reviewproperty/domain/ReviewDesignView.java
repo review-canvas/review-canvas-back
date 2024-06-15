@@ -19,6 +19,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.romanticpipe.reviewcanvas.enumeration.Color.BLUE;
+import static com.romanticpipe.reviewcanvas.enumeration.Color.GRAY;
+import static com.romanticpipe.reviewcanvas.enumeration.Color.WHITE;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -96,18 +100,18 @@ public class ReviewDesignView {
 			.detailViewType(DetailViewType.MODAL)
 			.pagingType(PagingType.PAGE_NUMBER)
 			.filterType(FilterType.LIST)
-			.filterActiveTextColor("#3F21BD")
-			.reviewBackgroundColor("#ffffff")
+			.filterActiveTextColor(BLUE.getHex())
+			.reviewBackgroundColor(WHITE.getHex())
 			.margin(Margin.createDefaultReviewDesignView())
 			.padding(Padding.createDefaultReviewDesignView())
-			.detailInfoTextColor("#8d8d8d")
+			.detailInfoTextColor(GRAY.getHex())
 			.font(Font.createDefaultReviewDesignView())
 			.border(Border.createDefaultReviewDesignView())
 			.round(Round.createDefaultReviewDesignView())
-			.borderColor("#ffffff")
+			.borderColor(WHITE.getHex())
 			.shadow(Shadow.SMALL)
 			.seeMoreButtonType(SeeMoreButtonType.SEE_MORE_TOGGLE)
-			.replyBackgroundColor("#ffffff")
+			.replyBackgroundColor(WHITE.getHex())
 			.reviewPreviewTextMaxSize(150)
 			.reviewLike(ReviewLike.createDefaultReviewLike())
 			.shopAdminId(shopAdminId)
@@ -138,17 +142,17 @@ public class ReviewDesignView {
 		this.detailViewType = DetailViewType.MODAL;
 		this.pagingType = PagingType.PAGE_NUMBER;
 		this.filterType = FilterType.LIST;
-		this.filterActiveTextColor = "#3F21BD";
-		this.reviewBackgroundColor = "#ffffff";
+		this.filterActiveTextColor = BLUE.getHex();
+		this.reviewBackgroundColor = WHITE.getHex();
 		this.margin = Margin.createDefaultReviewDesignView();
 		this.padding = Padding.createDefaultReviewDesignView();
-		this.detailInfoTextColor = "#8d8d8d";
+		this.detailInfoTextColor = GRAY.getHex();
 		this.font = Font.createDefaultReviewDesignView();
 		this.border = Border.createDefaultReviewDesignView();
 		this.round = Round.createDefaultReviewDesignView();
-		this.borderColor = "#ffffff";
+		this.borderColor = WHITE.getHex();
 		this.shadow = Shadow.SMALL;
-		this.replyBackgroundColor = "#ffffff";
+		this.replyBackgroundColor = WHITE.getHex();
 		this.reviewPreviewTextMaxSize = 150;
 		this.seeMoreButtonType = SeeMoreButtonType.SEE_MORE_TOGGLE;
 		this.reviewLike = ReviewLike.createDefaultReviewLike();

@@ -11,14 +11,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.romanticpipe.reviewcanvas.enumeration.Color.BLACK;
+
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Font {
 
 	@Transient
-	private static final String DEFAULT_FONT_COLOR = "#000000";
-	
+	private static final String DEFAULT_FONT_COLOR = BLACK.getHex();
+
 	@Column(name = "font_name", columnDefinition = "VARCHAR")
 	@Enumerated(EnumType.STRING)
 	private FontName name;
