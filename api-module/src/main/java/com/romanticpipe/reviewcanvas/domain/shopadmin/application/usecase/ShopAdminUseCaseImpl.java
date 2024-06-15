@@ -1,5 +1,11 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase;
 
+import java.time.LocalDateTime;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.romanticpipe.reviewcanvas.admin.domain.AdminAuth;
 import com.romanticpipe.reviewcanvas.admin.domain.AdminRole;
 import com.romanticpipe.reviewcanvas.admin.domain.ShopAdmin;
@@ -8,15 +14,16 @@ import com.romanticpipe.reviewcanvas.admin.service.ShopAdminService;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopInfoResponse;
+import com.romanticpipe.reviewcanvas.dto.PageResponse;
+import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewLayoutService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.ReviewPropertyService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.TermsConsentService;
 import com.romanticpipe.reviewcanvas.reviewproperty.service.TermsService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import com.romanticpipe.reviewcanvas.service.ReviewService;
 
-import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +35,8 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 	private final ReviewPropertyService reviewPropertyService;
 	private final TermsService termsService;
 	private final TermsConsentService termsConsentService;
+	private final ReviewService reviewService;
+	private final ReviewLayoutService reviewLayoutService;
 
 	@Override
 	@Transactional
@@ -78,5 +87,22 @@ class ShopAdminUseCaseImpl implements ShopAdminUseCase {
 		shopAdmin.delete(localDateTime);
 		AdminAuth adminAuth = adminAuthService.findByAdminId(adminId, adminRole);
 		adminAuth.logout();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public PageResponse<GetShopInfoResponse> getShopInfos(PageableRequest pageable) {
+		PageResponse<ShopAdmin> shopAdmins = shopAdminService.findAll(pageable);
+
+		return shopAdmins.map(shopAdmin -> GetShopInfoResponse.builder()
+			.mallId(shopAdmin.getMallId())
+			.createdAt(shopAdmin.getCreatedAt())
+			.mallName(shopAdmin.getMallName())
+			.mallNumber(shopAdmin.getMallNumber())
+			.approveStatus(shopAdmin.isApproveStatus())
+			.reviewsAmount(reviewService.countByShopAdminId(shopAdmin.getId()))
+			.reviewLayoutDesign(
+				reviewLayoutService.validateByShopAdminId(shopAdmin.getId()).getReviewLayoutDesign())
+			.build());
 	}
 }
