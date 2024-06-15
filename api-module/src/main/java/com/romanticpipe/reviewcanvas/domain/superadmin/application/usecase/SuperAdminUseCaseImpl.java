@@ -36,8 +36,8 @@ public class SuperAdminUseCaseImpl implements SuperAdminUseCase {
 	private Integer countReviews(ShopAdmin shopAdmin, List<Review> reviews) {
 		return Math.toIntExact(reviews.stream()
 			.filter(review ->
-				(review.getShopAdminId() != null && review.getShopAdminId().equals(shopAdmin.getId())) ||
-					(review.getUser() != null && review.getUser().getMallId().equals(shopAdmin.getMallId())))
+				(review.getShopAdminId() != null && review.getShopAdminId().equals(shopAdmin.getId()))
+					|| (review.getUser() != null && review.getUser().getMallId().equals(shopAdmin.getMallId())))
 			.count());
 	}
 
