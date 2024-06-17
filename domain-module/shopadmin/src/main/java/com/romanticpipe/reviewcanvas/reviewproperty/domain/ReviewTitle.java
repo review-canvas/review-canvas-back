@@ -1,5 +1,6 @@
 package com.romanticpipe.reviewcanvas.reviewproperty.domain;
 
+import com.romanticpipe.reviewcanvas.enumeration.Color;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.AlignmentPosition;
 import com.romanticpipe.reviewcanvas.reviewproperty.domain.value.ReviewTitleType;
 import jakarta.persistence.Column;
@@ -64,8 +65,8 @@ public class ReviewTitle {
 			.padding(Padding.createDefaultReviewTitle())
 			.font(Font.createDefaultReviewTitle())
 			.border(Border.createDefaultReviewTitle())
-			.borderColor("#ffffff")
-			.background("#ffffff")
+			.borderColor(Color.WHITE.getHex())
+			.background(Color.WHITE.getHex())
 			.shopAdminId(shopAdminId)
 			.build();
 	}
@@ -78,8 +79,8 @@ public class ReviewTitle {
 			.padding(Padding.createDefaultReviewDescription())
 			.font(Font.createDefaultReviewDescription())
 			.border(Border.createDefaultReviewDescription())
-			.borderColor("#ffffff")
-			.background("#ffffff")
+			.borderColor(Color.WHITE.getHex())
+			.background(Color.WHITE.getHex())
 			.shopAdminId(shopAdminId)
 			.build();
 	}
@@ -101,8 +102,8 @@ public class ReviewTitle {
 		this.padding = Padding.createDefaultReviewTitle();
 		this.font = Font.createDefaultReviewTitle();
 		this.border = Border.createDefaultReviewTitle();
-		this.borderColor = "#ffffff";
-		this.background = "#ffffff";
+		this.borderColor = Color.WHITE.getHex();
+		this.background = Color.WHITE.getHex();
 	}
 
 	public void initializeDescription() {
@@ -111,7 +112,7 @@ public class ReviewTitle {
 		this.padding = Padding.createDefaultReviewDescription();
 		this.font = Font.createDefaultReviewDescription();
 		this.border = Border.createDefaultReviewDescription();
-		this.borderColor = "#ffffff";
-		this.background = "#ffffff";
+		this.borderColor = Color.WHITE.getHex();
+		this.background = Color.WHITE.getHex();
 	}
 }

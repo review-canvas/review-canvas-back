@@ -1,6 +1,8 @@
 package com.romanticpipe.reviewcanvas.exception;
 
-public interface ErrorCode {
+import java.io.Serializable;
+
+public interface ErrorCode extends Serializable {
 	int getStatus();
 
 	String getCode();
