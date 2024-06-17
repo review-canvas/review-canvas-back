@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static com.romanticpipe.reviewcanvas.enumeration.Color.WHITE;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -56,9 +58,9 @@ public class ReviewColumn {
 			.width("100%")
 			.padding(Padding.createDefaultReviewColumn())
 			.margin(Margin.createDefaultReviewColumn())
-			.background("#ffffff")
+			.background(WHITE.getHex())
 			.border(Border.createDefaultReviewColumn())
-			.borderColor("#ffffff")
+			.borderColor(WHITE.getHex())
 			.shadow(Shadow.NONE)
 			.shopAdminId(shopAdminId)
 			.build();
@@ -68,9 +70,9 @@ public class ReviewColumn {
 		this.width = "100%";
 		this.padding = Padding.createDefaultReviewColumn();
 		this.margin = Margin.createDefaultReviewColumn();
-		this.background = "#ffffff";
+		this.background = WHITE.getHex();
 		this.border = Border.createDefaultReviewColumn();
-		this.borderColor = "#ffffff";
+		this.borderColor = WHITE.getHex();
 		this.shadow = Shadow.NONE;
 	}
 

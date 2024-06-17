@@ -74,6 +74,7 @@ public final class AccessPath {
 		superAdminAllowedPath.put("/api/v1/users/{userId}/reviews", List.of(HttpMethod.GET));
 		superAdminAllowedPath.put("/api/v1/products/{productId}/reviews", List.of(HttpMethod.GET));
 		// shop-admin
+		superAdminAllowedPath.put("/api/v1/super-admin/shops", List.of(HttpMethod.GET));
 		// product
 		superAdminAllowedPath.put("/api/v1/shops/{shopAdminId}/products", List.of(HttpMethod.GET));
 		// auth

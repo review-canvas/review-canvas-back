@@ -29,6 +29,7 @@ import static com.romanticpipe.reviewcanvas.domain.QUser.user;
 @RequiredArgsConstructor
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
+	private static final QUser replyUser = new QUser("replyUser");
 	private final JPAQueryFactory queryFactory;
 
 	@Override
@@ -46,7 +47,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			.fetchJoin()
 			.leftJoin(review.replyList, reply)
 			.fetchJoin()
-			.leftJoin(reply.user, new QUser("replyUser"))
+			.leftJoin(reply.user, replyUser)
 			.fetchJoin()
 			.where(review.id.in(reviewIds))
 			.orderBy(getReviewOrderSpecifiers(pageable))
@@ -80,7 +81,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			.fetchJoin()
 			.leftJoin(review.replyList, reply)
 			.fetchJoin()
-			.leftJoin(reply.user, new QUser("replyUser"))
+			.leftJoin(reply.user, replyUser)
 			.fetchJoin()
 			.where(review.id.in(reviewIds))
 			.orderBy(getReviewOrderSpecifiers(pageable))
@@ -110,7 +111,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			.fetchJoin()
 			.leftJoin(review.replyList, reply)
 			.fetchJoin()
-			.leftJoin(reply.user, new QUser("replyUser"))
+			.leftJoin(reply.user, replyUser)
 			.fetchJoin()
 			.where(review.id.in(reviewIds))
 			.orderBy(getReviewOrderSpecifiers(pageable))
@@ -141,7 +142,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 			.fetchJoin()
 			.leftJoin(review.replyList, reply)
 			.fetchJoin()
-			.leftJoin(reply.user, new QUser("replyUser"))
+			.leftJoin(reply.user, replyUser)
 			.fetchJoin()
 			.where(review.id.in(reviewIds))
 			.orderBy(getReviewOrderSpecifiers(pageable))
@@ -160,9 +161,9 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository {
 
 	private BooleanExpression getFilterExpression(ReviewFilterForUser filter) {
 		if (filter == ReviewFilterForUser.IMAGE_VIDEO) {
-			return review.imageVideoUrls.isNull();
+			return review.reviewType.eq(ReviewType.PHOTO).or(review.reviewType.eq(ReviewType.VIDEO));
 		} else if (filter == ReviewFilterForUser.GENERAL) {
-			return review.imageVideoUrls.isNotNull();
+			return review.reviewType.eq(ReviewType.TEXT);
 		}
 		return null;
 	}

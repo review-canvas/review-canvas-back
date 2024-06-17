@@ -1,13 +1,8 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
-import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
-import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
-import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
-import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,8 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.Map;
+import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
+import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
+import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.ShopAdminUseCase;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopInfoResponse;
+import com.romanticpipe.reviewcanvas.dto.PageResponse;
+import com.romanticpipe.reviewcanvas.dto.PageableRequest;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -72,4 +77,12 @@ class ShopAdminController implements ShopAdminApi {
 		return SuccessResponse.ofNoData().asHttp(HttpStatus.OK);
 	}
 
+	@Override
+	@GetMapping("/super-admin/shops")
+	public ResponseEntity<SuccessResponse<PageResponse<GetShopInfoResponse>>> getShopInfos(
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page
+	) {
+		return SuccessResponse.of(shopAdminUseCase.getShopInfos(PageableRequest.of(page, size))).asHttp(HttpStatus.OK);
+	}
 }

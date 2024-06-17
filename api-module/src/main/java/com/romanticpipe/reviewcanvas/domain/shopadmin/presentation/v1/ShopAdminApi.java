@@ -1,11 +1,24 @@
 package com.romanticpipe.reviewcanvas.domain.shopadmin.presentation.v1;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.romanticpipe.reviewcanvas.common.dto.SuccessResponse;
 import com.romanticpipe.reviewcanvas.common.security.AuthInfo;
 import com.romanticpipe.reviewcanvas.common.security.JwtInfo;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.SignUpRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.request.UpdateShopAdminInfoRequest;
 import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopAdminInfoResponse;
+import com.romanticpipe.reviewcanvas.domain.shopadmin.application.usecase.response.GetShopInfoResponse;
+import com.romanticpipe.reviewcanvas.dto.PageResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,15 +28,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Map;
 
 @Tag(name = "ShopAdmin", description = "샵 어드민 API")
 interface ShopAdminApi {
@@ -87,5 +91,18 @@ interface ShopAdminApi {
 	@DeleteMapping("/shop-admin/quit")
 	ResponseEntity<SuccessResponse<Void>> quit(
 		@AuthInfo JwtInfo jwtInfo
+	);
+
+	@Operation(summary = "샵 목록 조회 API", description = "회원가입된 샵들을 조회한다.",
+		security = @SecurityRequirement(name = "Bearer Authentication"))
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "성공적으로 샵 조회가 완료되었습니다.")
+	})
+	@GetMapping("/super-admin/shops")
+	ResponseEntity<SuccessResponse<PageResponse<GetShopInfoResponse>>> getShopInfos(
+		@RequestParam(value = "size", required = false, defaultValue = "10") int size,
+		@RequestParam(value = "page", required = false, defaultValue = "0") int page
 	);
 }
